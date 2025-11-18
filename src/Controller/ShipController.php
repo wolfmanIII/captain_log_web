@@ -65,4 +65,13 @@ final class ShipController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    #[Route('/ship/delete/{id}', name: 'app_ship_delete', methods: ['GET', 'POST'])]
+    public function delete(Ship $ship, Request $request, EntityManagerInterface $em): Response
+    {
+        $em->remove($ship);
+        $em->flush();
+
+        return $this->redirectToRoute('app_ship_index');
+    }
 }

@@ -10,15 +10,15 @@
     <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xl border p-4">
         <legend class="fieldset-legend">Ship</legend>
 
-        <label class="label">Name</label>
-        {{ form_widget(form.name) }}
-        {{ form_errors(form.name) }}
-
         {% if ship.id %}
             <label class="label">Code</label>
             {{ form_widget(form.code) }}
             {{ form_errors(form.code) }}
         {% endif %}
+
+        <label class="label">Name</label>
+        {{ form_widget(form.name) }}
+        {{ form_errors(form.name) }}
 
         <label class="label">Type</label>
         {{ form_widget(form.type) }}
@@ -34,7 +34,8 @@
 
     </fieldset>
 
-    <button type="submit" class="btn btn-primary mt-5 mb-5">Save</button>
+    <button type="submit" class="btn btn-outline btn-primary mt-4 mb-4 mr-4">Save</button>
+    <a href="{{ path('app_ship_index') }}" role="button" class="btn btn-outline btn-default mt-4 mb-4 mr-4">Cancel</a>
 
     {{ form_end(form, { render_rest: false }) }}
 
