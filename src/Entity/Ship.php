@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ShipRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -28,6 +30,17 @@ class Ship
 
     #[ORM\Column(type: Types::DECIMAL, precision: 11, scale: 2)]
     private ?float $price = null;
+
+    /**
+     * @var Collection<int, Mortgage>
+     */
+    #[ORM\OneToMany(targetEntity: Mortgage::class, mappedBy: 'ship', orphanRemoval: true)]
+    private Collection $mortgages;
+
+    public function __construct()
+    {
+        $this->mortgages = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -90,6 +103,36 @@ class Ship
     public function setPrice(float $price): static
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Mortgage>
+     */
+    public function getMortgages(): Collection
+    {
+        return $this->mortgages;
+    }
+
+    public function addMortgage(Mortgage $mortgage): static
+    {
+        if (!$this->mortgages->contains($mortgage)) {
+            $this->mortgages->add($mortgage);
+            $mortgage->setShip($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMortgage(Mortgage $mortgage): static
+    {
+        if ($this->mortgages->removeElement($mortgage)) {
+            // set the owning side to null (unless already changed)
+            if ($mortgage->getShip() === $this) {
+                $mortgage->setShip(null);
+            }
+        }
 
         return $this;
     }
