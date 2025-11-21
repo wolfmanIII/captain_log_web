@@ -65,7 +65,9 @@
             <div class="min-h-full w-64 bg-base-200 flex flex-col items-start">
                 <ul class="menu w-full grow">
                     <li>
-                        <a href="{{ path('app_home') }}">
+                        <a href="{{ path('app_home') }}"
+                           class="{% if controller_name == constant('App\\Controller\\HomeController::CONTROLLER_NAME') %}menu-active{% endif %}"
+                        >
                             <!-- icona home -->
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                                  stroke-linejoin="round" stroke-linecap="round"
@@ -80,7 +82,9 @@
                     </li>
 
                     <li>
-                        <a href="{{ path('app_ship_index') }}">
+                        <a href="{{ path('app_ship_index') }}"
+                           class="{% if controller_name == constant('App\\Controller\\ShipController::CONTROLLER_NAME') %}menu-active{% endif %}"
+                        >
                             <!-- icona settings -->
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                                  stroke-linejoin="round" stroke-linecap="round"
@@ -96,7 +100,9 @@
                     </li>
 
                     <li>
-                        <a href="{{ path('app_crew_index') }}">
+                        <a href="{{ path('app_crew_index') }}"
+                           class="{% if controller_name == constant('App\\Controller\\CrewController::CONTROLLER_NAME') %}menu-active{% endif %}"
+                        >
                             <!-- icona settings -->
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                                  stroke-linejoin="round" stroke-linecap="round"
@@ -108,6 +114,24 @@
                                 <circle cx="7" cy="7" r="3"></circle>
                             </svg>
                             <span>Crew</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ path('app_mortgage_index') }}"
+                           class="{% if controller_name == constant('App\\Controller\\MortgageController::CONTROLLER_NAME') %}menu-active{% endif %}"
+                        >
+                            <!-- icona settings -->
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                 stroke-linejoin="round" stroke-linecap="round"
+                                 stroke-width="2" fill="none" stroke="currentColor"
+                                 class="my-1.5 inline-block size-4">
+                                <path d="M20 7h-9"></path>
+                                <path d="M14 17H5"></path>
+                                <circle cx="17" cy="17" r="3"></circle>
+                                <circle cx="7" cy="7" r="3"></circle>
+                            </svg>
+                            <span>Mortgages</span>
                         </a>
                     </li>
 
