@@ -34,7 +34,7 @@ class Ship
     /**
      * @var Collection<int, Mortgage>
      */
-    #[ORM\OneToMany(targetEntity: Mortgage::class, mappedBy: 'ship', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Mortgage::class, mappedBy: 'ship')]
     private Collection $mortgages;
 
     /**

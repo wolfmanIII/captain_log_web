@@ -3,7 +3,9 @@
 namespace App\Form;
 
 use App\Entity\Ship;
+use App\Form\Type\TravellerMoneyType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -15,11 +17,11 @@ class ShipType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('code', TextType::class, ['attr' => ['class' => 'input m-1 w-full', 'readonly' => true], 'required' => false])
             ->add('name', TextType::class, ['attr' => ['class' => 'input m-1 w-full']])
             ->add('type', TextType::class, ['attr' => ['class' => 'input m-1 w-full']])
             ->add('class', TextType::class, ['attr' => ['class' => 'input m-1 w-full']])
-            ->add('price', NumberType::class, [
+            ->add('price', TravellerMoneyType::class, [
+                'label' => 'Price(Cr)',
                 'attr' => ['class' => 'input m-1 w-full'],
             ])
         ;

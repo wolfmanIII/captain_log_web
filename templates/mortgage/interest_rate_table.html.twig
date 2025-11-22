@@ -1,0 +1,57 @@
+<div
+    data-controller="interest-rate-table"
+    class="w-full"
+>
+    <label class="label">
+        <span class="label-text">
+            {{ form.interestRate.vars.label ?? 'Interest Rate' }}
+        </span>
+    </label>
+
+    <div class="overflow-x-auto">
+        <table class="table table-zebra w-full">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Duration (years)</th>
+                    <th>Price Multiplier</th>
+                    <th>Price Divider</th>
+                    <th>Annual Interest Rate (%)</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for choice in form.interestRate.vars.choices %}
+                {% set rate = choice.data %}
+                {% set isSelected = (form.interestRate.vars.value == choice.value) %}
+                <tr>
+                    <td>
+                        <input
+                            type="radio"
+                            class="radio radio-sm"
+                            name="interestRate_radio"  {# nome “finto”, solo per il gruppo #}
+                            data-interest-rate-table-target="radio"
+                            data-action="change->interest-rate-table#select"
+                            data-value="{{ choice.value }}"
+                            {% if isSelected %}checked{% endif %}
+                        >
+                    </td>
+                    <td class="text-right">{{ rate.duration }}</td>
+                    <td class="text-right">{{ rate.priceMultiplier }}</td>
+                    <td class="text-right">{{ rate.priceDivider }}</td>
+                    <td class="text-right">{{ rate.annualInterestRate }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {# Hidden effettivamente legato al campo Symfony #}
+    <input
+        type="hidden"
+        name="{{ form.interestRate.vars.full_name }}"
+        value="{{ form.interestRate.vars.value }}"
+        data-interest-rate-table-target="hidden"
+    >
+
+    {{ form_errors(form.interestRate) }}
+</div>

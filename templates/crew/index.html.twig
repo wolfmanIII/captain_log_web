@@ -28,6 +28,7 @@
                         <th>Surname</th>
                         <th>Nickname</th>
                         <th>Ship</th>
+                        <th>Roles</th>
                         <th>Action</th>
                     </tr>
                     </thead>
@@ -40,6 +41,14 @@
                                 <td>{{ member.surname }}</td>
                                 <td>{{ member.nickname }}</td>
                                 <td>{% if member.ship %}{{ member.ship.name }}{% endif %}</td>
+                                <td>
+                                    {% for role in member.shipRoles %}
+                                        {{ role.name }}
+                                        {% if loop.index != loop.last %}
+                                            -
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
                                 <td>
                                     <a href="{{ path('app_crew_edit', {id: member.id}) }}" role="button" class="btn btn-outline btn-primary btn-xs">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="16 3 21 8 8 21 3 21 3 16 16 3"></polygon></svg>

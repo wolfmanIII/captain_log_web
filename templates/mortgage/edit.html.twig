@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Captain Log - Mortgage{% endblock %}
+
+{% block pageContent %}
+
+    {{ form_start(form) }}
+
+    <fieldset class="fieldset bg-base-200 border-base-300 gap-4 p-4 border rounded w-full">
+        <legend class="fieldset-legend">Ship</legend>
+
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label class="label">Name</label>
+                {{ form_widget(form.name) }}
+                {{ form_errors(form.name) }}
+            </div>
+            <div></div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label class="label">Start Day</label>
+                {{ form_widget(form.startDay) }}
+                {{ form_errors(form.startDay) }}
+            </div>
+            <div>
+                <label class="label">Start Year</label>
+                {{ form_widget(form.startYear) }}
+                {{ form_errors(form.startYear) }}
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+            {{ include('mortgage/interest_rate_table.html.twig') }}
+        </div>
+
+
+    </fieldset>
+
+    <button type="submit" class="btn btn-outline btn-primary mt-4 mb-4 mr-4">Save</button>
+    <a href="{{ path('app_mortgage_index') }}" role="button" class="btn btn-outline btn-default mt-4 mb-4 mr-4">Cancel</a>
+
+    {{ form_end(form) }}
+
+{% endblock %}
