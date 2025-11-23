@@ -174,4 +174,14 @@ class Crew
 
         return $this;
     }
+
+    public function isCaptain()
+    {
+        foreach($this->getShipRoles() as $role) {
+            if ($role->getCode() === "CAP") {
+                return true;
+            }
+        }
+        return false;
+    }
 }

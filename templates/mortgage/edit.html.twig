@@ -6,8 +6,15 @@
 
     {{ form_start(form) }}
 
-    <fieldset class="fieldset bg-base-200 border-base-300 gap-4 p-4 border rounded w-310">
+    <fieldset class="fieldset bg-base-200 border-base-300 gap-4 p-4 border rounded w-315">
         <legend class="fieldset-legend">Mortgage</legend>
+
+        {% if mortgage.id %}
+            <div>
+                <label class="label">Code</label>
+                <div><b>{{ mortgage.code }}</b></div>
+            </div>
+        {% endif %}
 
         <div class="grid grid-cols-3 gap-4">
             <div>
@@ -54,11 +61,73 @@
             <div class="grid grid-cols-1 gap-4">
                 {{ include('mortgage/mortgage_summary.html.twig') }}
             </div>
+
+            <div class="grid grid-cols-1 gap-4">
+                <div class="w-full">
+                    <label class="label">
+                        <span class="label-text">
+                            Crew
+                        </span>
+                    </label>
+
+                    <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 m-1">
+                        <table class="table border-separate border-spacing-0 inner-bordered-table">
+                            <thead>
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Name</th>
+                                    <th>Roles</th>
+                                    <th>Captain</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for member in mortgage.ship.crews %}
+                                <tr>
+                                    <td>{{ member.code }}</td>
+                                    <td>{{ member.name }} "{{ member.nickname }}" {{ member.surname }}</td>
+                                    <td>
+                                        {% for role in member.shipRoles %}
+                                            {{ role.name }}
+                                            {% if loop.index != loop.last %}
+                                                -
+                                            {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                    <td>
+                                        {% if member.captain %}
+                                            <div class="flex justify-center">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" 
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                                </svg>
+                                            </div>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         {% endif %}
 
     </fieldset>
 
-    <button type="submit" class="btn btn-outline btn-primary mt-4 mb-4 mr-4">Save</button>
+    <button 
+        type="submit" 
+        name="action" value="save" 
+        class="btn btn-outline btn-primary mt-4 mb-4 mr-4"
+        {% if not is_granted("MORTGAGE_EDIT", mortgage) %} disabled {% endif %}
+    >Save</button>
+
+    <button 
+        type="submit" 
+        name="action" value="sign" 
+        class="btn btn-outline btn-warning mt-4 mb-4 mr-4"
+        {% if not is_granted("MORTGAGE_SIGN", mortgage) %} disabled {% endif %}
+    >Sign</button>
     <a href="{{ path('app_mortgage_index') }}" role="button" class="btn btn-outline btn-default mt-4 mb-4 mr-4">Cancel</a>
 
     {{ form_end(form) }}

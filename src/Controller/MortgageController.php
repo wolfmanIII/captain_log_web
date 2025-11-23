@@ -11,12 +11,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class MortgageController extends AbstractController
 {
     const CONTROLLER_NAME = "MortgageController";
 
-    #[Route('/mortgage', name: 'app_mortgage_index')]
+    #[Route('/mortgage/index', name: 'app_mortgage_index')]
     public function index(EntityManagerInterface $em): Response
     {
         $mortgages = $em->getRepository(Mortgage::class)->findAll();
@@ -58,29 +59,18 @@ final class MortgageController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $em->persist($mortgage);
-            $em->flush();
-            return $this->redirectToRoute('app_mortgage_edit', ['id' => $mortgage->getId()]);
-        }
 
-        $summary = $mortgage->calculate();
+            if (!$this->isGranted('MORTGAGE_EDIT', $mortgage)) {
+                $this->addFlash('error', 'Mortgage Signed, Action Denied!');
+                return $this->redirectToRoute('app_mortgage_edit', ['id' => $mortgage->getId()]);
+            }
+            
+            $action = $request->request->get('action');
 
-        return $this->render('mortgage/edit.html.twig', [
-            'controller_name' => self::CONTROLLER_NAME,
-            'mortgage' => $mortgage,
-            'summary' => $summary,
-            'form' => $form->createView(),
-        ]);
-    }
+            if ($action === 'sign') {
+                $mortgage->setSigned(true);
+            }
 
-    #[Route('/mortgage/sign/{id}', name: 'app_mortgage_sign', methods: ['GET', 'POST'])]
-    public function sign(Mortgage $mortgage, Request $request, EntityManagerInterface $em): Response
-    {
-        $form = $this->createForm(MortgageType::class, $mortgage);
-
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $mortgage->setSigned(true);
             $em->persist($mortgage);
             $em->flush();
             return $this->redirectToRoute('app_mortgage_edit', ['id' => $mortgage->getId()]);
@@ -97,6 +87,7 @@ final class MortgageController extends AbstractController
     }
 
     #[Route('/mortgage/delete/{id}', name: 'app_mortgage_delete', methods: ['GET', 'POST'])]
+    #[IsGranted('MORTGAGE_DELETE', 'mortgage')]
     public function delete(Mortgage $mortgage, Request $request, EntityManagerInterface $em): Response
     {
         $em->remove($mortgage);

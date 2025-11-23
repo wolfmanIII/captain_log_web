@@ -216,6 +216,8 @@ class Mortgage
 
         $totalMonthlyPayment = $monthlyPayment + $insuranceMonthlyPayment;
         $totalAnnualPayment = $annualPayment + $insuranceAnnualPayment;
+        
+        $totalMortgage = $shipCost * $this->getInterestRate()->getPriceMultiplier();
 
         return [
             'ship_cost' => round($shipCost, 2, PHP_ROUND_HALF_DOWN),
@@ -225,6 +227,7 @@ class Mortgage
             'insurance_annual' => round($insuranceAnnualPayment, 2, PHP_ROUND_HALF_DOWN),
             'total_monthly_payment' => round($totalMonthlyPayment, 2, PHP_ROUND_HALF_DOWN),
             'total_annual_payment' => round($totalAnnualPayment, 2, PHP_ROUND_HALF_DOWN),
+            'total_mortgage' => round($totalMortgage, 2, PHP_ROUND_HALF_DOWN),
         ];
     }
 

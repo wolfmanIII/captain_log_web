@@ -16,7 +16,7 @@ final class CrewController extends AbstractController
 {
     const CONTROLLER_NAME = "CrewController";
 
-    #[Route('/crew', name: 'app_crew_index', methods: ['GET'])]
+    #[Route('/crew/index', name: 'app_crew_index', methods: ['GET'])]
     public function index(EntityManagerInterface $em): Response
     {
         $crew = $em->getRepository(Crew::class)->findAll();

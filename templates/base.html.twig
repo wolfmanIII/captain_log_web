@@ -47,6 +47,15 @@
             </nav>
 
             <div class="p-4">
+
+                {% for label, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div role="alert" class="alert alert-{{ label }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+
                 {% block pageContent %}{% endblock %}
             </div>
 
