@@ -52,7 +52,7 @@ final class MortgageController extends AbstractController
     }
 
     #[Route('/mortgage/edit/{id}', name: 'app_mortgage_edit', methods: ['GET', 'POST'])]
-    public function edit(Mortgage $mortgage, Request $request, EntityManagerInterface $em, MortgageManager $mortgageManager): Response
+    public function edit(Mortgage $mortgage, Request $request, EntityManagerInterface $em): Response
     {
         $form = $this->createForm(MortgageType::class, $mortgage);
 
@@ -63,8 +63,7 @@ final class MortgageController extends AbstractController
             return $this->redirectToRoute('app_mortgage_index');
         }
 
-        $mortgageManager->setMortgage($mortgage);
-        $summary = $mortgageManager->calculate();
+        $summary = $mortgage->calculate();
 
         return $this->render('mortgage/edit.html.twig', [
             'controller_name' => self::CONTROLLER_NAME,

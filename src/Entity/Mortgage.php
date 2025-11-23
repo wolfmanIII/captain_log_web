@@ -9,6 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: MortgageRepository::class)]
 class Mortgage
 {
+    private const SHIP_SHARE_VALUE = 1000000;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -117,7 +119,7 @@ class Mortgage
         return $this->shipShares;
     }
 
-    public function setShipShares(int $shipShares): static
+    public function setShipShares(?int $shipShares): static
     {
         $this->shipShares = $shipShares;
 
@@ -129,7 +131,7 @@ class Mortgage
         return $this->advancePayment;
     }
 
-    public function setAdvancePayment(string $advancePayment): static
+    public function setAdvancePayment(?string $advancePayment): static
     {
         $this->advancePayment = $advancePayment;
 
@@ -170,5 +172,65 @@ class Mortgage
         $this->insurance = $insurance;
 
         return $this;
+    }
+
+    public function calculateShipCost()
+    {
+        $shipCost = 0.00;
+        $shipCost = $this->getShip()->getPrice();
+        $shipCost = $shipCost - ($this->getShipShares() * self::SHIP_SHARE_VALUE);
+        if ($this->getAdvancePayment()) {
+            $shipCost = $shipCost - $this->getAdvancePayment();
+        }
+
+        if ($this->getDiscount()) {
+            $discount = $this->getShip()->getPrice() * $this->getDiscount() / 100;
+            $shipCost = $shipCost - $discount;
+        }
+
+        return $shipCost;
+
+    }
+
+    public function calculate()
+    {
+        $shipCost = $this->calculateShipCost();
+        $monthlyPayment = 
+            $shipCost
+            * $this->getInterestRate()->getPriceMultiplier()
+            / $this->getInterestRate()->getDuration()
+            / 12
+        ;
+
+        $annualPayment = $monthlyPayment * 12;
+
+        $insuranceMonthlyPayment = 0.00;
+        $insuranceAnnualPayment = 0.00;
+        if ($this->getInsurance()) {
+            $insuranceMonthlyPayment = $this->calculateInsuranceCost();
+            $insuranceAnnualPayment = $insuranceMonthlyPayment * 12;
+        }
+
+        $totalMonthlyPayment = $monthlyPayment + $insuranceMonthlyPayment;
+        $totalAnnualPayment = $annualPayment + $insuranceAnnualPayment;
+
+        return [
+            'ship_cost' => round($shipCost, 2, PHP_ROUND_HALF_DOWN),
+            'mortgage_monthly' => round($monthlyPayment, 2, PHP_ROUND_HALF_DOWN),
+            'mortgage_annual' => round($annualPayment, 2 , PHP_ROUND_HALF_DOWN),
+            'insurance_monthly' => round($insuranceMonthlyPayment, 2 , PHP_ROUND_HALF_DOWN),
+            'insurance_annual' => round($insuranceAnnualPayment, 2, PHP_ROUND_HALF_DOWN),
+            'total_monthly_payment' => round($totalMonthlyPayment, 2, PHP_ROUND_HALF_DOWN),
+            'total_annual_payment' => round($totalAnnualPayment, 2, PHP_ROUND_HALF_DOWN),
+        ];
+    }
+
+    public function calculateInsuranceCost()
+    {
+        return $this->getShip()->getPrice() 
+            / 100
+            * $this->getInsurance()->getAnnualCost()
+            / 12
+        ;
     }
 }
