@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Mortgage;
 use App\Form\MortgageType;
+use App\Manager\MortgageManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,6 +37,7 @@ final class MortgageController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $mortgage->setCode(Uuid::v7());
+            $mortgage->setName("MOR - " . $mortgage->getShip()->getName());
 
             $em->persist($mortgage);
             $em->flush();
@@ -50,7 +52,7 @@ final class MortgageController extends AbstractController
     }
 
     #[Route('/mortgage/edit/{id}', name: 'app_mortgage_edit', methods: ['GET', 'POST'])]
-    public function edit(Mortgage $mortgage, Request $request, EntityManagerInterface $em): Response
+    public function edit(Mortgage $mortgage, Request $request, EntityManagerInterface $em, MortgageManager $mortgageManager): Response
     {
         $form = $this->createForm(MortgageType::class, $mortgage);
 
@@ -61,9 +63,13 @@ final class MortgageController extends AbstractController
             return $this->redirectToRoute('app_mortgage_index');
         }
 
+        $mortgageManager->setMortgage($mortgage);
+        $summary = $mortgageManager->calculate();
+
         return $this->render('mortgage/edit.html.twig', [
             'controller_name' => self::CONTROLLER_NAME,
             'mortgage' => $mortgage,
+            'summary' => $summary,
             'form' => $form->createView(),
         ]);
     }

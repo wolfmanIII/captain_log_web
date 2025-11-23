@@ -38,7 +38,7 @@ class MortgageType extends AbstractType
                     sprintf('%s - %s - %s',
                         $ship->getName(),
                         $ship->getType(),
-                        $ship->getClass()
+                        number_format($ship->getPrice(), 2, ',', '.') . " Cr"
                 ),
                 'attr' => ['class' => 'select m-1 w-full'],
             ])
@@ -59,7 +59,7 @@ class MortgageType extends AbstractType
                 'choice_label' => fn (Insurance $insurance) =>
                     sprintf('%s - %d%% Ship Price',
                         $insurance->getName(),
-                        $insurance->getAnnualCost()
+                        $insurance->getAnnualCost(),
                     ),
                 'multiple' => false,
                 'expanded' => false,

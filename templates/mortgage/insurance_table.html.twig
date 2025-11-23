@@ -1,20 +1,22 @@
 <div
-    data-controller="insurance-table"
+    data-controller="single-select-table"
     class="w-full"
 >
-    <label class="label m-1">
+    <label class="label">
         <span class="label-text">
             {{ form.insurance.vars.label ?? 'Insurance' }}
+            <button type="button" class="btn badge badge-sm badge-outline badge-info ml-2" onclick="coverage_modal.showModal()">?</button>
         </span>
     </label>
 
-    <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
-        <table class="table w-full">
+    <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 m-1">
+        <table class="table w-full border-separate border-spacing-0 inner-bordered-table">
             <thead>
                 <tr>
-                    <th></th>
+                    <th class="w-10"></th>
                     <th>Name</th>
                     <th>Annual Cost(%)</th>
+                    {#<th>Coverage</th>#}
                 </tr>
             </thead>
             <tbody>
@@ -27,14 +29,23 @@
                             type="radio"
                             class="radio radio-sm"
                             name="insurance_radio"  {# nome “finto”, solo per il gruppo #}
-                            data-insurance-table-target="radio"
-                            data-action="change->insurance-table#select"
+                            data-single-select-table-target="radio"
+                            data-action="change->single-select-table#select"
                             data-value="{{ choice.value }}"
                             {% if isSelected %}checked{% endif %}
                         >
                     </td>
                     <td>{{ insurance.name }}</td>
                     <td class="text-right">{{ insurance.annualCost }}</td>
+                    {#
+                    <td>
+                        <ul>
+                        {% for cov in insurance.coverage %}
+                            <li>{{ cov }}</li>
+                        {% endfor %}
+                        </ul>
+                    </td>
+                    #}
                 </tr>
             {% endfor %}
             </tbody>
@@ -46,7 +57,7 @@
         type="hidden"
         name="{{ form.insurance.vars.full_name }}"
         value="{{ form.insurance.vars.value }}"
-        data-insurance-table-target="hidden"
+        data-single-select-table-target="hidden"
     >
 
     {{ form_errors(form.insurance) }}

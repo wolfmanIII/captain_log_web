@@ -22,8 +22,8 @@ class Insurance
     #[ORM\Column(type: Types::DECIMAL, precision: 11, scale: 2)]
     private ?string $annual_cost = null;
 
-    #[ORM\Column(type: Types::TEXT)]
-    private ?string $coverage = null;
+    #[ORM\Column(type: Types::JSON, nullable: true)]
+    private ?array $coverage = null;
 
     /**
      * @var Collection<int, Mortgage>
@@ -65,12 +65,12 @@ class Insurance
         return $this;
     }
 
-    public function getCoverage(): ?string
+    public function getCoverage(): ?array
     {
-        return $this->coverage;
+        return $this->coverage ?? [];
     }
 
-    public function setCoverage(string $coverage): static
+    public function setCoverage(array $coverage): static
     {
         $this->coverage = $coverage;
 

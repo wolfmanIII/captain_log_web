@@ -1,0 +1,48 @@
+<div class="w-full">
+    <label class="label">
+        <span class="label-text">
+            Mortgage Summary
+        </span>
+    </label>
+
+    <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 m-1">
+        <table class="table border-separate border-spacing-0 inner-bordered-table">
+            <thead>
+                <tr>
+                    <th>Mortgage Monthly(Cr)</th>
+                    <th>Mortgage Annual(Cr)</th>
+                    <th>Insurance Monthly(Cr)</th>
+                    <th>Insurance Annual(Cr)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-right">{{ summary.mortgage_monthly|number_format(2, ',', '.') }}</td>
+                    <td class="text-right">{{ summary.mortgage_annual|number_format(2, ',', '.') }}</td>
+                    <td class="text-right">{{ summary.insurance_monthly|number_format(2, ',', '.') }}</td>
+                    <td class="text-right">{{ summary.insurance_annual|number_format(2, ',', '.') }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 m-1 mt-2">
+        <table class="table border-separate border-spacing-0 inner-bordered-table">
+            <thead>
+                <tr>
+                    <th>Ship Cost(Cr)</th>
+                    <th>Total Monthly Payment(Cr)</th>
+                    <th>Total Annual Payment(Cr)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-right">{{ summary.ship_cost|number_format(2, ',', '.') }}</td>
+                    <td class="text-right">{{ summary.total_monthly_payment|number_format(2, ',', '.') }}</td>
+                    <td class="text-right">{{ summary.total_annual_payment|number_format(2, ',', '.') }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>

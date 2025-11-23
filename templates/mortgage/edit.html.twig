@@ -6,7 +6,7 @@
 
     {{ form_start(form) }}
 
-    <fieldset class="fieldset bg-base-200 border-base-300 gap-4 p-4 border rounded w-350">
+    <fieldset class="fieldset bg-base-200 border-base-300 gap-4 p-4 border rounded w-310">
         <legend class="fieldset-legend">Mortgage</legend>
 
         <div class="grid grid-cols-3 gap-4">
@@ -50,6 +50,11 @@
             {{ include('mortgage/insurance_table.html.twig') }}
         </div>
 
+        {% if mortgage.id %}
+            <div class="grid grid-cols-1 gap-4">
+                {{ include('mortgage/mortgage_summary.html.twig') }}
+            </div>
+        {% endif %}
 
     </fieldset>
 
@@ -57,5 +62,31 @@
     <a href="{{ path('app_mortgage_index') }}" role="button" class="btn btn-outline btn-default mt-4 mb-4 mr-4">Cancel</a>
 
     {{ form_end(form) }}
+
+    <dialog id="coverage_modal" class="modal">
+        <div class="modal-box">
+            <h3 class="text-lg font-bold">Insurance Coverage</h3>
+            <p class="py-4">Press ESC key or click the button below to close</p>
+            <div class="modal-action">
+            <form method="dialog">
+                <!-- if there is a button in form, it will close the modal -->
+                <button class="btn">Close</button>
+            </form>
+            </div>
+        </div>
+    </dialog>
+
+    <dialog id="interest_rate_modal" class="modal">
+        <div class="modal-box">
+            <h3 class="text-lg font-bold">Hello!</h3>
+            <p class="py-4">Press ESC key or click the button below to close</p>
+            <div class="modal-action">
+            <form method="dialog">
+                <!-- if there is a button in form, it will close the modal -->
+                <button class="btn">Close</button>
+            </form>
+            </div>
+        </div>
+    </dialog>
 
 {% endblock %}
