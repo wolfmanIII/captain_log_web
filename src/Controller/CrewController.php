@@ -3,10 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Crew;
-use App\Entity\Ship;
 use App\Form\CrewType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -14,15 +14,16 @@ use Symfony\Component\Uid\Uuid;
 
 final class CrewController extends AbstractController
 {
-    const CONTROLLER_NAME = "CrewController";
+    public const CONTROLLER_NAME = 'CrewController';
 
     #[Route('/crew/index', name: 'app_crew_index', methods: ['GET'])]
     public function index(EntityManagerInterface $em): Response
     {
         $crew = $em->getRepository(Crew::class)->findAll();
+
         return $this->render('crew/index.html.twig', [
-            'controller_name' => 'CrewController',
-            'crew' => $crew,
+            'controller_name' => self::CONTROLLER_NAME,
+            'crew'            => $crew,
         ]);
     }
 
@@ -31,64 +32,64 @@ final class CrewController extends AbstractController
     {
         $crew = new Crew();
         $form = $this->createForm(CrewType::class, $crew);
-
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
 
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Se il code deve essere sempre valorizzato alla creazione, posso anche spostarlo
+            // nel costruttore dell'Entity o in un Doctrine listener prePersist.
             $crew->setCode(Uuid::v7());
 
             $em->persist($crew);
             $em->flush();
+
             return $this->redirectToRoute('app_crew_index');
         }
 
-        $response = $this->render('crew/edit.html.twig', [
-            'controller_name' => self::CONTROLLER_NAME,
-            'crew' => $crew,
-            'form' => $form->createView(),
-        ]);
-
-        // IMPORTANTE: se il form è stato sottomesso ma NON è valido → 422 - altrimenti TURBO spacca tutto e gli errori non si vedono
-        if ($form->isSubmitted() && !$form->isValid()) {
-            $response->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY); // 422
-        }
-
-        return $response;
-
-        /*
-        return $this->render('crew/edit.html.twig', [
-            'controller_name' => self::CONTROLLER_NAME,
-            'crew' => $crew,
-            'form' => $form->createView(),
-        ]);
-        */
+        return $this->renderCrewForm($crew, $form);
     }
 
     #[Route('/crew/edit/{id}', name: 'app_crew_edit', methods: ['GET', 'POST'])]
     public function edit(Crew $crew, Request $request, EntityManagerInterface $em): Response
     {
         $form = $this->createForm(CrewType::class, $crew);
-
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
-            $em->persist($crew);
             $em->flush();
+
             return $this->redirectToRoute('app_crew_index');
         }
 
-        return $this->render('crew/edit.html.twig', [
-            'controller_name' => self::CONTROLLER_NAME,
-            'crew' => $crew,
-            'form' => $form->createView(),
-        ]);
+        return $this->renderCrewForm($crew, $form);
     }
 
     #[Route('/crew/delete/{id}', name: 'app_crew_delete', methods: ['GET', 'POST'])]
-    public function delete(Crew $crew, Request $request, EntityManagerInterface $em): Response
+    public function delete(Request $request, Crew $crew, EntityManagerInterface $em): Response
     {
+       
         $em->remove($crew);
         $em->flush();
 
         return $this->redirectToRoute('app_crew_index');
+    }
+
+    /**
+     * Render del form con supporto a Turbo:
+     * - 200 se form non sottomesso
+     * - 422 se form sottomesso ma NON valido (altrimenti Turbo non mostra gli errori)
+     */
+    private function renderCrewForm(Crew $crew, FormInterface $form): Response
+    {
+        $response = $this->render('crew/edit.html.twig', [
+            'controller_name' => self::CONTROLLER_NAME,
+            'crew'            => $crew,
+            'form'            => $form->createView(),
+        ]);
+
+        if ($form->isSubmitted() && !$form->isValid()) {
+            $response->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY); // 422
+        }
+
+        return $response;
     }
 }
