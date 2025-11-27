@@ -38,8 +38,6 @@ final class ShipController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $ship->setCode(Uuid::v7());
-
             $em->persist($ship);
             $em->flush();
             return $this->redirectToRoute('app_ship_index');

@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: ShipRepository::class)]
 class Ship
@@ -45,6 +46,7 @@ class Ship
 
     public function __construct()
     {
+        $this->setCode(Uuid::v7());
         $this->mortgages = new ArrayCollection();
         $this->crews = new ArrayCollection();
     }

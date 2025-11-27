@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\MortgageRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: MortgageRepository::class)]
 class Mortgage
@@ -51,6 +52,11 @@ class Mortgage
 
     #[ORM\Column(type: 'boolean', options: ['default' => false])]
     private ?bool $signed = null;
+
+    public function __construct()
+    {
+        $this->setCode(Uuid::v7());
+    }
 
     public function getId(): ?int
     {
@@ -198,7 +204,7 @@ class Mortgage
     public function calculate()
     {
         $shipCost = $this->calculateShipCost();
-        $monthlyPayment = 
+        $monthlyPayment =
             $shipCost
             * $this->getInterestRate()->getPriceMultiplier()
             / $this->getInterestRate()->getDuration()
@@ -216,7 +222,7 @@ class Mortgage
 
         $totalMonthlyPayment = $monthlyPayment + $insuranceMonthlyPayment;
         $totalAnnualPayment = $annualPayment + $insuranceAnnualPayment;
-        
+
         $totalMortgage = $shipCost * $this->getInterestRate()->getPriceMultiplier();
 
         return [
@@ -233,7 +239,7 @@ class Mortgage
 
     public function calculateInsuranceCost()
     {
-        return $this->getShip()->getPrice() 
+        return $this->getShip()->getPrice()
             / 100
             * $this->getInsurance()->getAnnualCost()
             / 12

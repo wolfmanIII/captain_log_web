@@ -37,7 +37,6 @@ final class MortgageController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $mortgage->setCode(Uuid::v7());
             $mortgage->setName("MOR - " . $mortgage->getShip()->getName());
             $mortgage->setSigned(0);
 
