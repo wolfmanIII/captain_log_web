@@ -106,46 +106,47 @@
                         </tr>
                         </thead>
                         <tbody>
-                        {% if form.crewIds|length > 0 %}
-                            {% for id in form.crewIds %}
-                                {% set member = crewToSelect[loop.index0] %}
-                                <tr>
-                                    <td>
-                                        {{ form_widget(id, { attr: {
-                                            class: 'checkbox crew-checkbox',
-                                            'data-crew-select-target': 'item'
-                                        } }) }}
-                                    </td>
-                                    <td>{{ member.code }}</td>
-                                    <td>{{ member.name }}</td>
-                                    <td>"{{ member.nickname }}"</td>
-                                    <td>{{ member.surname }}</td>
-                                    <td>
-                                        {% for role in member.shipRoles %}
-                                            {{ role.name }}
-                                            {% if loop.index != loop.last %}
-                                                -
+                            {% if form.crewSelections|length > 0 %}
+                                {% for row in form.crewSelections %}
+                                    {% set selection = row.vars.data %}
+                                    {% set member = selection.crew %}
+
+                                    <tr>
+                                        <td>
+                                            {{ form_widget(row.selected, {
+                                                attr: {
+                                                    class: 'checkbox crew-checkbox',
+                                                    'data-crew-select-target': 'item'
+                                                }
+                                            }) }}
+                                        </td>
+                                        <td>{{ member.code }}</td>
+                                        <td>{{ member.name }}</td>
+                                        <td>"{{ member.nickname }}"</td>
+                                        <td>{{ member.surname }}</td>
+                                        <td>
+                                            {% for role in member.shipRoles %}
+                                                {{ role.name }}{% if not loop.last %} - {% endif %}
+                                            {% endfor %}
+                                        </td>
+                                        <td>
+                                            {% if member.captain %}
+                                                <div class="flex justify-center">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                         viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                                    </svg>
+                                                </div>
                                             {% endif %}
-                                        {% endfor %}
-                                    </td>
-                                    <td>
-                                        {% if member.captain %}
-                                            <div class="flex justify-center">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                                                </svg>
-                                            </div>
-                                        {% endif %}
-                                    </td>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="7">No more crew members to add</td>
                                 </tr>
-                            {% endfor %}
-                        {% else %}
-                            <tr>
-                                <td colspan="5">No more crew members to add</td>
-                            </tr>
-                        {% endif %}
+                            {% endif %}
                         </tbody>
                     </table>
                 </div>

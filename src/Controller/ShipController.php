@@ -2,12 +2,14 @@
 
 namespace App\Controller;
 
+use App\Dto\CrewSelection;
 use App\Entity\Crew;
 use App\Entity\Ship;
 use App\Form\CrewSelectType;
 use App\Form\ShipType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -43,7 +45,7 @@ final class ShipController extends AbstractController
             return $this->redirectToRoute('app_ship_index');
         }
 
-        return $this->render('ship/edit.html.twig', [
+        return $this->renderTurboForm('ship/edit.html.twig', $form, [
             'controller_name' => self::CONTROLLER_NAME,
             'ship' => $ship,
             'form' => $form->createView(),
@@ -62,7 +64,7 @@ final class ShipController extends AbstractController
             return $this->redirectToRoute('app_ship_index');
         }
 
-        return $this->render('ship/edit.html.twig', [
+        return $this->renderTurboForm('ship/edit.html.twig', $form, [
             'controller_name' => self::CONTROLLER_NAME,
             'ship' => $ship,
             'form' => $form->createView(),
@@ -79,44 +81,74 @@ final class ShipController extends AbstractController
         return $this->redirectToRoute('app_ship_index');
     }
 
-    #[Route('/ship/crew/select/{id}', name: 'app_ship_crew_select', methods: ['GET', 'POST'])]
-    public function crewSelect(Ship $ship, Request $request, EntityManagerInterface $em): Response
-    {
+    #[Route('/ship/{id}/crew', name: 'app_ship_crew')]
+    public function crew(
+        Ship $ship,
+        Request $request,
+        EntityManagerInterface $em
+    ): Response {
+        $needCaptain = !$ship->hasCaptain();
+        // Tutti i crew che non hanno una nave
+        $crewToSelect = $em->getRepository(Crew::class)->getCrewNotInAnyShip($needCaptain);
 
-        $crewToSelect = $em->getRepository(Crew::class)->findBy(['ship' => null]);
-        $form = $this->createForm(CrewSelectType::class, null, [
-            'crewToSelect' => $crewToSelect,
+        // Costruisco le DTO per la Collection
+        $rows = array_map(
+            fn (Crew $crew) => new CrewSelection($crew),
+            $crewToSelect
+        );
+
+        $form = $this->createForm(CrewSelectType::class, [
+            'crewSelections' => $rows,
         ]);
 
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
-            $selectedIds = $form->get('crewIds')->getData();
-            foreach ($selectedIds as $selectedId) {
-                $crewMember = $em->getRepository(Crew::class)->find($selectedId);
-                $ship->addCrew($crewMember);
-                $em->persist($ship);
-                $em->flush();
+            /** @var CrewSelection[] $selections */
+            $selections = $form->get('crewSelections')->getData();
+
+            foreach ($selections as $selection) {
+                if ($selection->selected) {
+                    $ship->addCrew($selection->crew);
+                }
             }
 
-            return $this->redirectToRoute('app_ship_crew_select', ['id' => $ship->getId()]);
+            $em->flush();
+
+            return $this->redirectToRoute('app_ship_crew', ['id' => $ship->getId()]);
         }
 
-        return $this->render('ship/crew_select.html.twig', [
-            'controller_name' => self::CONTROLLER_NAME,
-            'form' => $form->createView(),
+        return $this->renderTurboForm('ship/crew_select.html.twig', $form, [
             'ship' => $ship,
-            'crewToSelect' => $crewToSelect,
+            'form' => $form->createView(),
+            'controller_name' => self::CONTROLLER_NAME,
         ]);
     }
 
-    #[Route('/ship/crew/remove/{id}', name: 'app_ship_crew_remove', methods: ['GET', 'POST'])]
+    #[Route('/ship/crew/{id}/remove', name: 'app_ship_crew_remove', methods: ['GET', 'POST'])]
     public function removeCrew(Crew $crew, Request $request, EntityManagerInterface $em): Response
     {
         $ship = $crew->getShip();
         $ship->removeCrew($crew);
         $em->persist($ship);
         $em->flush();
-        return $this->redirectToRoute('app_ship_crew_select', ['id' => $ship->getId()]);
+        return $this->redirectToRoute('app_ship_crew', ['id' => $ship->getId()]);
+    }
+
+    /**
+     * Render del form con supporto a Turbo:
+     * - 200 se form non sottomesso
+     * - 422 se form sottomesso ma NON valido (altrimenti Turbo non mostra gli errori)
+     */
+    private function renderTurboForm(string $template, FormInterface $form, array $options): Response
+    {
+        $response = $this->render($template, $options);
+
+        if ($form->isSubmitted() && !$form->isValid()) {
+            $response->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY); // 422
+        }
+
+        return $response;
     }
 
 }

@@ -42,7 +42,11 @@ final class CrewController extends AbstractController
             return $this->redirectToRoute('app_crew_index');
         }
 
-        return $this->renderCrewForm($crew, $form);
+        return $this->renderTurboForm('crew/edit.html.twig', $form, [
+            'controller_name' => self::CONTROLLER_NAME,
+            'crew'            => $crew,
+            'form'            => $form->createView(),
+        ]);
     }
 
     #[Route('/crew/edit/{id}', name: 'app_crew_edit', methods: ['GET', 'POST'])]
@@ -57,7 +61,11 @@ final class CrewController extends AbstractController
             return $this->redirectToRoute('app_crew_index');
         }
 
-        return $this->renderCrewForm($crew, $form);
+        return $this->renderTurboForm('crew/edit.html.twig', $form, [
+            'controller_name' => self::CONTROLLER_NAME,
+            'crew'            => $crew,
+            'form'            => $form->createView(),
+        ]);
     }
 
     #[Route('/crew/delete/{id}', name: 'app_crew_delete', methods: ['GET', 'POST'])]
@@ -75,13 +83,9 @@ final class CrewController extends AbstractController
      * - 200 se form non sottomesso
      * - 422 se form sottomesso ma NON valido (altrimenti Turbo non mostra gli errori)
      */
-    private function renderCrewForm(Crew $crew, FormInterface $form): Response
+    private function renderTurboForm(string $template, FormInterface $form, $options): Response
     {
-        $response = $this->render('crew/edit.html.twig', [
-            'controller_name' => self::CONTROLLER_NAME,
-            'crew'            => $crew,
-            'form'            => $form->createView(),
-        ]);
+        $response = $this->render($template, $options);
 
         if ($form->isSubmitted() && !$form->isValid()) {
             $response->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY); // 422

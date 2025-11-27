@@ -173,4 +173,17 @@ class Ship
 
         return $this;
     }
+
+    /**
+     * @return bool
+     */
+    public function hasCaptain(): bool
+    {
+        foreach ($this->crews as $crew) {
+            if ($crew->isCaptain()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

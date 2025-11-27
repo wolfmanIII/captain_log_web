@@ -35,28 +35,28 @@ class CrewRepository extends ServiceEntityRepository
         return $qb->getQuery()->getOneOrNullResult();
     }
 
-    //    /**
-    //     * @return Crew[] Returns an array of Crew objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('c.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * @param bool $needCaptain
+     * @return array
+     */
+    public function getCrewNotInAnyShip(bool $needCaptain): array
+    {
+        $crew = $this->createQueryBuilder('c')
+            ->join('c.shipRoles', 'r')
+            ->where('c.ship IS NULL')
+            ->getQuery()->getResult();
 
-    //    public function findOneBySomeField($value): ?Crew
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        $result = [];
+        /** @var Crew $c */
+        foreach($crew as $c) {
+            if (!$needCaptain) {
+                if ($c->isCaptain()) {
+                    continue;
+                }
+            }
+            $result[] = $c;
+        }
+
+        return $result;
+    }
 }
