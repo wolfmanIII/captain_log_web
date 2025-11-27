@@ -8,14 +8,12 @@ use App\Entity\Ship;
 use App\Form\CrewSelectType;
 use App\Form\ShipType;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-final class ShipController extends AbstractController
+final class ShipController extends BaseController
 {
     const CONTROLLER_NAME = "ShipController";
     #[Route('/ship/index', name: 'app_ship_index', methods: ['GET'])]
@@ -130,22 +128,6 @@ final class ShipController extends AbstractController
         $em->persist($ship);
         $em->flush();
         return $this->redirectToRoute('app_ship_crew', ['id' => $ship->getId()]);
-    }
-
-    /**
-     * Render del form con supporto a Turbo:
-     * - 200 se form non sottomesso
-     * - 422 se form sottomesso ma NON valido (altrimenti Turbo non mostra gli errori)
-     */
-    private function renderTurboForm(string $template, FormInterface $form, array $options): Response
-    {
-        $response = $this->render($template, $options);
-
-        if ($form->isSubmitted() && !$form->isValid()) {
-            $response->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY); // 422
-        }
-
-        return $response;
     }
 
 }

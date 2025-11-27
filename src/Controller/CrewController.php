@@ -5,13 +5,11 @@ namespace App\Controller;
 use App\Entity\Crew;
 use App\Form\CrewType;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class CrewController extends AbstractController
+final class CrewController extends BaseController
 {
     public const CONTROLLER_NAME = 'CrewController';
 
@@ -75,21 +73,5 @@ final class CrewController extends AbstractController
         $em->flush();
 
         return $this->redirectToRoute('app_crew_index');
-    }
-
-    /**
-     * Render del form con supporto a Turbo:
-     * - 200 se form non sottomesso
-     * - 422 se form sottomesso ma NON valido (altrimenti Turbo non mostra gli errori)
-     */
-    private function renderTurboForm(string $template, FormInterface $form, $options): Response
-    {
-        $response = $this->render($template, $options);
-
-        if ($form->isSubmitted() && !$form->isValid()) {
-            $response->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY); // 422
-        }
-
-        return $response;
     }
 }
