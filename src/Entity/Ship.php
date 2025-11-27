@@ -188,4 +188,19 @@ class Ship
         }
         return false;
     }
+
+    public function hasMortgage(): bool
+    {
+        return $this->getMortgages()->count() > 0;
+    }
+
+    public function hasMortgageSigned(): bool
+    {
+        foreach ($this->getMortgages() as $mortgage) {
+            if ($mortgage->isSigned()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

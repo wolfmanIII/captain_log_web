@@ -46,7 +46,7 @@ final class MortgageVoter extends Voter
 
             case self::SIGN:
                 if (
-                    $subject->getCode() 
+                    $subject->getCode()
                     && !$subject->isSigned()
                 ) {
                     return true;
