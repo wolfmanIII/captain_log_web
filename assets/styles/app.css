@@ -22,6 +22,7 @@
 
 .inner-bordered-table thead tr:first-child th {
     @apply border-t-0;
+    @apply bg-info-content
 }
 
 .inner-bordered-table tbody tr:last-child td {
