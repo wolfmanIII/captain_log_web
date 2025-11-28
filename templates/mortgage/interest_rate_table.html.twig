@@ -24,7 +24,10 @@
             {% for choice in form.interestRate.vars.choices %}
                 {% set rate = choice.data %}
                 {% set isSelected = (form.interestRate.vars.value == choice.value) %}
-                <tr>
+                <tr
+                    data-single-select-table-target="row"
+                    class="{% if isSelected %}bg-primary/10{% endif %}"
+                >
                     <td>
                         <input
                             type="radio"

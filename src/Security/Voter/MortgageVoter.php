@@ -13,6 +13,7 @@ final class MortgageVoter extends Voter
     public const VIEW = 'MORTGAGE_VIEW';
     public const SIGN = 'MORTGAGE_SIGN';
     public const DELETE = 'MORTGAGE_DELETE';
+    public const PAY_INSTALLMENT = 'MORTGAGE_PAY_INSTALLMENT';
 
     protected function supports(string $attribute, mixed $subject): bool
     {
@@ -26,6 +27,7 @@ final class MortgageVoter extends Voter
             self::VIEW,
             self::SIGN,
             self::DELETE,
+            self::PAY_INSTALLMENT,
         ], true);
 
     }
@@ -44,6 +46,7 @@ final class MortgageVoter extends Voter
             self::EDIT        => $this->canEdit($subject, $user),
             self::SIGN        => $this->canSign($subject, $user),
             self::DELETE      => $this->canDelete($subject, $user),
+            self::PAY_INSTALLMENT => $this->canPayInstallment($subject, $user),
             default           => false,
         };
     }
@@ -66,5 +69,10 @@ final class MortgageVoter extends Voter
     private function canSign(Mortgage $mortgage, UserInterface $user = null): bool
     {
         return !( $mortgage->isSigned() || !$mortgage->getCode() );
+    }
+
+    private function canPayInstallment(Mortgage $mortgage, UserInterface $user = null): bool
+    {
+        return $mortgage->isSigned();
     }
 }

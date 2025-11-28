@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Mortgage;
+use App\Entity\MortgageInstallment;
+use App\Form\MortgageInstallmentType;
 use App\Form\MortgageType;
 use App\Security\Voter\MortgageVoter;
 use Doctrine\ORM\EntityManagerInterface;
@@ -57,7 +59,9 @@ final class MortgageController extends BaseController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-            if (!$this->isGranted(MortgageVoter::EDIT, $mortgage)) {
+            if (
+                !$this->isGranted(MortgageVoter::EDIT, $mortgage)
+            ) {
                 $this->addFlash('error', 'Mortgage Signed, Action Denied!');
                 return $this->redirectToRoute('app_mortgage_edit', ['id' => $mortgage->getId()]);
             }
@@ -75,13 +79,17 @@ final class MortgageController extends BaseController
 
         $summary = $mortgage->calculate();
 
+        $payment = new MortgageInstallment();
+        $payment->setMortgage($mortgage);
+        $paymentForm = $this->createForm(MortgageInstallmentType::class, $payment, ['summary' => $summary]);
+
         return $this->renderTurbo('mortgage/edit.html.twig', $form, [
             'controller_name' => self::CONTROLLER_NAME,
             'mortgage' => $mortgage,
             'summary' => $summary,
             'form' => $form->createView(),
+            'payment_form' => $paymentForm->createView(),
         ]);
-
     }
 
     #[Route('/mortgage/delete/{id}', name: 'app_mortgage_delete', methods: ['GET', 'POST'])]
@@ -92,5 +100,21 @@ final class MortgageController extends BaseController
         $em->flush();
 
         return $this->redirectToRoute('app_mortgage_index');
+    }
+
+    #[Route('/mortgage/{id}/pay', name: 'app_mortgage_pay', methods: ['GET', 'POST'])]
+    public function pay(Mortgage $mortgage, Request $request, EntityManagerInterface $em): Response
+    {
+        $payment = new MortgageInstallment();
+        $payment->setMortgage($mortgage);
+        $paymentForm = $this->createForm(MortgageInstallmentType::class, $payment);
+
+        $paymentForm->handleRequest($request);
+        if ($paymentForm->isSubmitted() && $paymentForm->isValid()) {
+            $em->persist($payment);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('app_mortgage_edit', ['id' => $mortgage->getId()]);
     }
 }

@@ -26,25 +26,42 @@
         </table>
     </div>
 
-    <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 m-1 mt-2">
-        <table class="table border-separate border-spacing-0 inner-bordered-table">
-            <thead>
-                <tr>
-                    <th>Ship Cost(Cr)</th>
-                    <th>Total Mortgage(Cr)</th>
-                    <th>Total Monthly Payment(Cr)</th>
-                    <th>Total Annual Payment(Cr)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="text-right">{{ summary.ship_cost|number_format(2, ',', '.') }}</td>
-                    <td class="text-right">{{ summary.total_mortgage|number_format(2, ',', '.') }}</td>
-                    <td class="text-right">{{ summary.total_monthly_payment|number_format(2, ',', '.') }}</td>
-                    <td class="text-right">{{ summary.total_annual_payment|number_format(2, ',', '.') }}</td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="flex">
+        <div class="flex-auto overflow-x-auto rounded-box border border-base-content/5 bg-base-100 m-1 mt-2">
+            <table class="table border-separate border-spacing-0 inner-bordered-table">
+                <thead>
+                    <tr>
+                        <th>Ship Cost(Cr)</th>
+                        <th>Total Mortgage(Cr)</th>
+                        <th>Total Monthly Payment(Cr)</th>
+                        <th>Total Annual Payment(Cr)</th>
+                        <th>Installments Paid</th>
+                        <th>Total Paid(Cr)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-right">{{ summary.ship_cost|number_format(2, ',', '.') }}</td>
+                        <td class="text-right">{{ summary.total_mortgage|number_format(2, ',', '.') }}</td>
+                        <td class="text-right">{{ summary.total_monthly_payment|number_format(2, ',', '.') }}</td>
+                        <td class="text-right">{{ summary.total_annual_payment|number_format(2, ',', '.') }}</td>
+                        <td class="text-right bg-primary/10">{{ summary.installments_paid }}</td>
+                        <td class="text-right bg-primary/10">{{ summary.total_mortgage_paid|number_format(2, ',', '.') }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div>
+            <button
+                type="button"
+                name="action" value="save"
+                class="btn btn-outline btn-primary mt-3 mb-4 mr-4 ml-4"
+                onclick="pay_installment_modal.showModal()"
+                {% if not mortgage.signed %} disabled {% endif %}
+            >Pay</button>
+        </div>
+
     </div>
 
 </div>

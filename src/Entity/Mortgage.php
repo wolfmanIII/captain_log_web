@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\MortgageRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
@@ -53,10 +55,17 @@ class Mortgage
     #[ORM\Column(type: 'boolean', options: ['default' => false])]
     private ?bool $signed = null;
 
+    /**
+     * @var Collection<int, MortgageInstallment>
+     */
+    #[ORM\OneToMany(targetEntity: MortgageInstallment::class, mappedBy: 'mortgage')]
+    private Collection $mortgageInstallments;
+
     public function __construct()
     {
         $this->setCode(Uuid::v7());
         $this->setSigned(0);
+        $this->mortgageInstallments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -184,7 +193,7 @@ class Mortgage
         return $this;
     }
 
-    public function calculateShipCost()
+    public function calculateShipCost(): float|int|string|null
     {
         $shipCost = 0.00;
         $shipCost = $this->getShip()->getPrice();
@@ -199,10 +208,18 @@ class Mortgage
         }
 
         return $shipCost;
-
     }
 
-    public function calculate()
+    public function calculateInsuranceCost(): float|int
+    {
+        return $this->getShip()->getPrice()
+            / 100
+            * $this->getInsurance()->getAnnualCost()
+            / 12
+            ;
+    }
+
+    public function calculate(): array
     {
         $shipCost = $this->calculateShipCost();
         $monthlyPayment =
@@ -226,6 +243,11 @@ class Mortgage
 
         $totalMortgage = $shipCost * $this->getInterestRate()->getPriceMultiplier();
 
+        $totalMortgagePaid = 0.00;
+        foreach($this->getMortgageInstallments() as $installment) {
+            $totalMortgagePaid = $totalMortgagePaid + $installment->getPayment();
+        }
+
         return [
             'ship_cost' => round($shipCost, 2, PHP_ROUND_HALF_DOWN),
             'mortgage_monthly' => round($monthlyPayment, 2, PHP_ROUND_HALF_DOWN),
@@ -235,16 +257,9 @@ class Mortgage
             'total_monthly_payment' => round($totalMonthlyPayment, 2, PHP_ROUND_HALF_DOWN),
             'total_annual_payment' => round($totalAnnualPayment, 2, PHP_ROUND_HALF_DOWN),
             'total_mortgage' => round($totalMortgage, 2, PHP_ROUND_HALF_DOWN),
+            'installments_paid' => $this->getMortgageInstallments()->count(),
+            'total_mortgage_paid' => round($totalMortgagePaid, 2, PHP_ROUND_HALF_UP)
         ];
-    }
-
-    public function calculateInsuranceCost()
-    {
-        return $this->getShip()->getPrice()
-            / 100
-            * $this->getInsurance()->getAnnualCost()
-            / 12
-        ;
     }
 
     public function isSigned(): ?bool
@@ -255,6 +270,36 @@ class Mortgage
     public function setSigned(bool $signed): static
     {
         $this->signed = $signed;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, MortgageInstallment>
+     */
+    public function getMortgageInstallments(): Collection
+    {
+        return $this->mortgageInstallments;
+    }
+
+    public function addMortgageInstallment(MortgageInstallment $mortgageInstallment): static
+    {
+        if (!$this->mortgageInstallments->contains($mortgageInstallment)) {
+            $this->mortgageInstallments->add($mortgageInstallment);
+            $mortgageInstallment->setMortgage($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMortgageInstallment(MortgageInstallment $mortgageInstallment): static
+    {
+        if ($this->mortgageInstallments->removeElement($mortgageInstallment)) {
+            // set the owning side to null (unless already changed)
+            if ($mortgageInstallment->getMortgage() === $this) {
+                $mortgageInstallment->setMortgage(null);
+            }
+        }
 
         return $this;
     }

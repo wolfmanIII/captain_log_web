@@ -11,7 +11,7 @@
 
     {% if mortgage.signed %}
         <div class="alert alert-info alert-outline w-315">
-            The Mortgage is signed! It can not be updated.
+            Mortgage Signed
         </div>
     {% endif %}
 
@@ -73,55 +73,8 @@
             <div class="grid grid-cols-1 gap-4">
                 {{ include('mortgage/mortgage_summary.html.twig') }}
             </div>
-
             <div class="grid grid-cols-1 gap-4">
-                <div class="w-full">
-                    <label class="label">
-                        <span class="label-text">
-                            Crew
-                        </span>
-                    </label>
-
-                    <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 m-1">
-                        <table class="table border-separate border-spacing-0 inner-bordered-table">
-                            <thead>
-                                <tr>
-                                    <th>Code</th>
-                                    <th>Name</th>
-                                    <th>Roles</th>
-                                    <th>Captain</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for member in mortgage.ship.crews %}
-                                <tr>
-                                    <td>{{ member.code }}</td>
-                                    <td>{{ member.name }} "{{ member.nickname }}" {{ member.surname }}</td>
-                                    <td>
-                                        {% for role in member.shipRoles %}
-                                            {{ role.name }}
-                                            {% if loop.index != loop.last %}
-                                                -
-                                            {% endif %}
-                                        {% endfor %}
-                                    </td>
-                                    <td>
-                                        {% if member.captain %}
-                                            <div class="flex justify-center">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                                                </svg>
-                                            </div>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                {{ include('mortgage/crew_table.html.twig') }}
             </div>
         {% endif %}
 
@@ -168,6 +121,42 @@
             </form>
             </div>
         </div>
+    </dialog>
+
+    <dialog id="pay_installment_modal" class="modal">
+        <div class="modal-box">
+            <header class="prose">
+                <h3>Payment</h3>
+            </header>
+
+            {{ form_start(payment_form) }}
+            <fieldset class="fieldset grid grid-cols-2 bg-base-200 border-base-300 gap-4 p-4 border rounded w-full">
+                <legend class="fieldset-legend">Installment</legend>
+                <div>
+                    <label class="label">Payment Day</label>
+                    {{ form_widget(payment_form.paymentDay) }}
+                </div>
+                <div>
+                    <label class="label">Payment Year</label>
+                    {{ form_widget(payment_form.paymentYear) }}
+                </div>
+                <div>
+                    <label class="label">Payment</label>
+                    {{ form_widget(payment_form.payment) }}
+                </div>
+            </fieldset>
+
+            {{ form_end(payment_form) }}
+
+
+            <div class="modal-action">
+                <a href="{{ path('app_mortgage_edit', {id: mortgage.id}) }}" role="button" class="btn btn-outline btn-default mt-4 mb-4 mr-4">Cancel</a>
+            </div>
+        </div>
+        <form method="dialog">
+            <!-- if there is a button in form, it will close the modal -->
+            <button class="btn">Close</button>
+        </form>
     </dialog>
 
 {% endblock %}

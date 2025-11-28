@@ -22,7 +22,10 @@
             {% for choice in form.insurance.vars.choices %}
                 {% set insurance = choice.data %}
                 {% set isSelected = (form.insurance.vars.value == choice.value) %}
-                <tr>
+                <tr
+                    data-single-select-table-target="row"
+                    class="{% if isSelected %}bg-primary/10{% endif %}"
+                >
                     <td>
                         <input
                             type="radio"
