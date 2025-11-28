@@ -51,6 +51,7 @@ final class MortgageController extends BaseController
             'controller_name' => self::CONTROLLER_NAME,
             'mortgage' => $mortgage,
             'form' => $form->createView(),
+            'last_payment' => $mortgage->getMortgageInstallments()->last(),
         ]);
     }
 
@@ -92,6 +93,7 @@ final class MortgageController extends BaseController
             'summary' => $summary,
             'form' => $form->createView(),
             'payment_form' => $paymentForm->createView(),
+            'last_payment' => $mortgage->getMortgageInstallments()->last(),
         ]);
     }
 

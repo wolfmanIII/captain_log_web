@@ -1,7 +1,7 @@
 <div class="w-full">
     <label class="label">
         <span class="label-text">
-            Mortgage Payment Information
+            Mortgage Information Payment
         </span>
     </label>
 
@@ -33,9 +33,10 @@
                     <tr>
                         <th>Ship Cost(Cr)</th>
                         <th>Total Mortgage(Cr)</th>
-                        <th>Total Monthly Payment(Cr)</th>
-                        <th>Total Annual Payment(Cr)</th>
+                        <th>Monthly Payment(Cr)</th>
+                        <th>Annual Payment(Cr)</th>
                         <th>Installments Paid</th>
+                        <th>Last Payment</th>
                         <th>Total Paid(Cr)</th>
                     </tr>
                 </thead>
@@ -46,6 +47,11 @@
                         <td class="text-right">{{ summary.total_monthly_payment|number_format(2, ',', '.') }}</td>
                         <td class="text-right">{{ summary.total_annual_payment|number_format(2, ',', '.') }}</td>
                         <td class="text-right bg-primary/10">{{ summary.installments_paid }}</td>
+                        <td class="text-right bg-primary/10">
+                            {% if last_payment %}
+                                {{ last_payment.paymentDay }} - {{ last_payment.paymentYear }}
+                            {% endif %}
+                        </td>
                         <td class="text-right bg-primary/10">{{ summary.total_mortgage_paid|number_format(2, ',', '.') }}</td>
                     </tr>
                 </tbody>
