@@ -2,8 +2,10 @@
 
 {% set CAN_EDIT = constant('App\\Security\\Voter\\MortgageVoter::EDIT') %}
 {% set CAN_SIGN = constant('App\\Security\\Voter\\MortgageVoter::SIGN') %}
+{% set CAN_PAY = constant('App\\Security\\Voter\\MortgageVoter::PAY_INSTALLMENT') %}
 {% set can_edit = is_granted(CAN_EDIT, mortgage) %}
 {% set can_sign = is_granted(CAN_SIGN, mortgage) %}
+{% set can_pay = is_granted(CAN_PAY, mortgage) %}
 
 {% block title %}Captain Log - Mortgage{% endblock %}
 
@@ -123,14 +125,17 @@
         </div>
     </dialog>
 
-    {% if mortgage.signed %}
+    {% if can_pay %}
         <dialog id="pay_installment_modal" class="modal">
             <div class="modal-box">
                 <header class="prose">
                     <h3>Payment</h3>
                 </header>
 
-                {{ form_start(payment_form) }}
+                {{ form_start(form, {
+                    action: path('app_mortgage_pay', {id: mortgage.id}),
+                    method: 'POST'
+                }) }}
                 <fieldset class="fieldset grid grid-cols-2 bg-base-200 border-base-300 gap-4 p-4 border rounded w-full">
                     <legend class="fieldset-legend">Installment</legend>
                     <div>
@@ -147,12 +152,16 @@
                     </div>
                 </fieldset>
 
-                {{ form_end(payment_form) }}
-
-
                 <div class="modal-action">
+                    <button
+                        type="submit"
+                        name="action" value="save"
+                        class="btn btn-outline btn-primary mt-4 mb-4 mr-4"
+                        {% if not can_pay %} disabled {% endif %}
+                    >Pay</button>
                     <a href="{{ path('app_mortgage_edit', {id: mortgage.id}) }}" role="button" class="btn btn-outline btn-default mt-4 mb-4 mr-4">Cancel</a>
                 </div>
+                {{ form_end(payment_form) }}
             </div>
             <form method="dialog">
                 <!-- if there is a button in form, it will close the modal -->

@@ -1,7 +1,7 @@
 <div class="w-full">
     <label class="label">
         <span class="label-text">
-            Mortgage Summary
+            Mortgage Payment Information
         </span>
     </label>
 
@@ -58,7 +58,7 @@
                 name="action" value="save"
                 class="btn btn-outline btn-primary mt-3 mb-4 mr-4 ml-4"
                 onclick="pay_installment_modal.showModal()"
-                {% if not mortgage.signed %} disabled {% endif %}
+                {% if not can_pay %} disabled {% endif %}
             >Pay</button>
         </div>
 

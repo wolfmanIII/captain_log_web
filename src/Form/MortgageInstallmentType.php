@@ -17,7 +17,7 @@ class MortgageInstallmentType extends AbstractType
     {
         /** @var MortgageInstallment $installments */
         $installment = $options['data'];
-        $summary = $options['summary'];
+        $summary = $installment->getMortgage()->calculate();
 
         $builder
             ->add('paymentDay', NumberType::class, [
