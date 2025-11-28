@@ -2,6 +2,7 @@
 
 namespace App\Security\Voter;
 
+use App\Entity\Mortgage;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -15,10 +16,18 @@ final class MortgageVoter extends Voter
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        // replace with your own logic
-        // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, [self::EDIT, self::VIEW, self::SIGN, self::DELETE])
-            && $subject instanceof \App\Entity\Mortgage;
+
+        if (!$subject instanceof Mortgage) {
+            return false;
+        }
+
+        return in_array($attribute, [
+            self::EDIT,
+            self::VIEW,
+            self::SIGN,
+            self::DELETE,
+        ], true);
+
     }
 
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
@@ -30,30 +39,39 @@ final class MortgageVoter extends Voter
         #    return false;
         #}
 
-        // ... (check conditions and return true to grant permission) ...
-        switch ($attribute) {
-            case self::EDIT:
-            case self::DELETE:
-                if (!$subject->isSigned()) {
-                    return true;
-                }
-                break;
+        return match ($attribute) {
+            self::VIEW        => $this->canView($subject, $user),
+            self::EDIT        => $this->canEdit($subject, $user),
+            self::SIGN        => $this->canSign($subject, $user),
+            self::DELETE      => $this->canDelete($subject, $user),
+            default           => false,
+        };
+    }
 
-            case self::VIEW:
-                // logic to determine if the user can VIEW
-                // return true or false
-                break;
+    private function canView(Mortgage $mortgage, UserInterface $user = null): bool
+    {
+        return true;
+    }
 
-            case self::SIGN:
-                if (
-                    $subject->getCode()
-                    && !$subject->isSigned()
-                ) {
-                    return true;
-                }
-                break;
+    private function canEdit(Mortgage $mortgage, UserInterface $user = null): bool
+    {
+        if ($mortgage->isSigned()) {
+            return false;
         }
+    }
 
-        return false;
+    private function canDelete(Mortgage $mortgage, UserInterface $user = null): bool
+    {
+        return $this->canEdit($mortgage, $user);
+    }
+
+    private function canSign(Mortgage $mortgage, UserInterface $user = null): bool
+    {
+        if (
+            $mortgage->isSigned() ||
+            !$mortgage->getCode()
+        ) {
+            return false;
+        }
     }
 }

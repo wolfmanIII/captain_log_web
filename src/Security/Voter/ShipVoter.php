@@ -16,10 +16,16 @@ final class ShipVoter extends Voter
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        // replace with your own logic
-        // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, [self::EDIT, self::VIEW, self::DELETE])
-            && $subject instanceof Ship;
+        if (!$subject instanceof Ship) {
+            return false;
+        }
+
+        return in_array($attribute, [
+            self::EDIT,
+            self::VIEW,
+            self::DELETE,
+            self::CREW_REMOVE,
+        ], true);
     }
 
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
@@ -27,39 +33,46 @@ final class ShipVoter extends Voter
         $user = $token->getUser();
 
         // if the user is anonymous, do not grant access
+        #TODO implementare l'autenticazione
         #if (!$user instanceof UserInterface) {
         #    return true;
         #}
 
+        return match ($attribute) {
+            self::VIEW        => $this->canView($subject, $user),
+            self::EDIT        => $this->canEdit($subject, $user),
+            self::DELETE      => $this->canDelete($subject, $user),
+            self::CREW_REMOVE => $this->canCrewRemove($subject, $user),
+            default           => false,
+        };
+    }
 
-        // ... (check conditions and return true to grant permission) ...
-        switch ($attribute) {
-            case self::EDIT:
-                // logic to determine if the user can EDIT
-                // return true or false
-                return true;
+    private function canView(Ship $ship, UserInterface $user = null): bool
+    {
+        return true;
+    }
 
-            case self::VIEW:
-                // logic to determine if the user can VIEW
-                // return true or false
-                return true;
+    private function canEdit(Ship $ship, UserInterface $user = null): bool
+    {
+        if ($ship->hasMortgageSigned()) {
+            return false;
+        }
+    }
 
-            case self::DELETE:
-                if (
-                    $subject->getCrews()->count() <= 0
-                    || !$subject->hasMortgage()
-                ) {
-                    return true;
-                }
-                break;
-
-            case self::CREW_REMOVE:
-                if (!$subject->hasMortgageSigned()) {
-                    return true;
-                }
-                break;
+    private function canDelete(Ship $ship, UserInterface $user = null): bool
+    {
+        if (
+            $ship->getCrews()->count() >= 0
+            && $ship->hasMortgage()
+        ) {
+            return false;
         }
 
-        return false;
+        return $this->canEdit($ship, $user);
+    }
+
+    private function canCrewRemove(Ship $ship, UserInterface $user = null): bool
+    {
+        return $this->canEdit($ship, $user);
     }
 }

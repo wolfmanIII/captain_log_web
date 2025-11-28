@@ -16,13 +16,26 @@ class ShipType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        /** @var Ship $ship */
+        $ship = $options['data'];
+        $disabled = $ship->hasMortgageSigned();
         $builder
-            ->add('name', TextType::class, ['attr' => ['class' => 'input m-1 w-full']])
-            ->add('type', TextType::class, ['attr' => ['class' => 'input m-1 w-full']])
-            ->add('class', TextType::class, ['attr' => ['class' => 'input m-1 w-full']])
+            ->add('name', TextType::class, [
+                'attr' => ['class' => 'input m-1 w-full'],
+                'disabled' => $disabled,
+            ])
+            ->add('type', TextType::class, [
+                'attr' => ['class' => 'input m-1 w-full'],
+                'disabled' => $disabled,
+            ])
+            ->add('class', TextType::class, [
+                'attr' => ['class' => 'input m-1 w-full'],
+                'disabled' => $disabled,
+            ])
             ->add('price', TravellerMoneyType::class, [
                 'label' => 'Price(Cr)',
                 'attr' => ['class' => 'input m-1 w-full'],
+                'disabled' => $disabled,
             ])
         ;
     }

@@ -20,22 +20,32 @@ class MortgageType extends AbstractType
     {
         /** @var Mortgage $mortgage */
         $mortgage = $options['data'];
+        $disabled = $mortgage->isSigned();
         $builder
             //->add('name', TextType::class, ['attr' => ['class' => 'input m-1 w-full'],])
-            ->add('startDay', NumberType::class, ['attr' => ['class' => 'input m-1 w-full'], 'disabled' => $mortgage->isSigned(),])
-            ->add('startYear', NumberType::class, ['attr' => ['class' => 'input m-1 w-full'], 'disabled' => $mortgage->isSigned(),])
+            ->add('startDay', NumberType::class, [
+                'attr' => ['class' => 'input m-1 w-full'],
+                'disabled' => $disabled,
+                ])
+            ->add('startYear', NumberType::class, [
+                'attr' => ['class' => 'input m-1 w-full'],
+                'disabled' => $disabled,
+                ])
             ->add('shipShares', NumberType::class, [
                 'attr' => ['class' => 'input m-1 w-full'],
-                'disabled' => $mortgage->isSigned(),
-                'required' => false
+                'disabled' => $disabled,
+                'required' => false,
             ])
             ->add('advancePayment', TravellerMoneyType::class, [
                 'label' => 'Advance Payment(Cr)',
-                'attr' => ['class' => 'input m-1 w-full'], 'required' => false, 'disabled' => $mortgage->isSigned(),
+                'attr' => ['class' => 'input m-1 w-full'],
+                'required' => false,
+                'disabled' => $disabled,
             ])
             ->add('discount', NumberType::class, [
                 'label' => 'Discount(%)',
-                'attr' => ['class' => 'input m-1 w-full'], 'required' => false, 'disabled' => $mortgage->isSigned()
+                'attr' => ['class' => 'input m-1 w-full'], 'required' => false,
+                'disabled' => $disabled,
             ])
             ->add('ship', EntityType::class, [
                 'placeholder' => '-- Select a Ship --',
@@ -47,7 +57,7 @@ class MortgageType extends AbstractType
                         number_format($ship->getPrice(), 2, ',', '.') . " Cr"
                     ),
                 'attr' => ['class' => 'select m-1 w-full'],
-                'disabled' => $mortgage->isSigned(),
+                'disabled' => $disabled,
             ])
             ->add('interestRate', EntityType::class, [
                 'class' => InterestRate::class,

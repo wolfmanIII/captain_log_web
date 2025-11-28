@@ -1,5 +1,8 @@
 {% extends 'base.html.twig' %}
 
+{% set CAN_CREW_REMOVE = constant('App\\Security\\Voter\\ShipVoter::CREW_REMOVE') %}
+{% set can_remove_crew = is_granted(CAN_CREW_REMOVE, ship) %}
+
 {% block title %}Captain Log - Ship Crew{% endblock %}
 
 {% block pageContent %}
@@ -23,6 +26,12 @@
         <header class="prose">
             <h2>Crew Members</h2>
         </header>
+
+        {% if ship.mortgageSigned %}
+            <div class="alert alert-info alert-outline w-315">
+                The Ship has Mortgage signed! Crew members can not be removed.
+            </div>
+        {% endif %}
 
         <button class="btn btn-outline btn-primary btn-xs mt-5 mb-5" onclick="m_crew_select.showModal()">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
@@ -69,11 +78,10 @@
                             {% endif %}
                         </td>
                         <td>
-                            {% set remove_disabled = not is_granted('SHIP_CREW_REMOVE', ship) %}
                             <a href="{{ path('app_ship_crew_remove', {id: member.id}) }}"
                                role="button"
                                class="btn btn-outline btn-error btn-xs"
-                               {% if remove_disabled %}disabled{% endif %}
+                               {% if not can_remove_crew %}disabled{% endif %}
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
                             </a>

@@ -6,7 +6,7 @@
 
     {% if mortgage.signed %}
         <div class="alert alert-info alert-outline w-315">
-            Mortgage signed! It can not be updated.
+            The Mortgage is signed! It can not be updated.
         </div>
     {% endif %}
 
@@ -25,7 +25,7 @@
 
         <div class="grid grid-cols-3 gap-4">
             <div>
-                <label class="label">Ship</label>
+                <label class="label">Ship Price</label>
                 {{ form_widget(form.ship) }}
                 {{ form_errors(form.ship) }}
             </div>
