@@ -44,6 +44,9 @@ final class MortgageController extends BaseController
             return $this->redirectToRoute('app_mortgage_index');
         }
 
+        $payment = new MortgageInstallment();
+        $payment->setMortgage($mortgage);
+
         return $this->renderTurbo('mortgage/edit.html.twig', $form, [
             'controller_name' => self::CONTROLLER_NAME,
             'mortgage' => $mortgage,
