@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Entity\DocumentChunk;
+use App\Entity\DocumentFile;
 use App\Service\DocumentTextExtractor;
 use Doctrine\ORM\EntityManagerInterface;
 use OpenAI;
@@ -16,7 +17,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand(name: 'app:index-docs')]
 class IndexDocsCommand extends Command
 {
-    // Cartelle da escludere (relative a var/knowledge)
     private array $excludedDirs = [
         'images',
         'img',
@@ -25,15 +25,13 @@ class IndexDocsCommand extends Command
         '.idea',
     ];
 
-    // Filtri per i nomi file (regex)
     private array $excludedNamePatterns = [
-        '/^~.*$/',          // file temporanei
-        '/^\.~lock\..*/',   // lock LibreOffice
+        '/^~.*$/',
+        '/^\.~lock\..*/',
         '/^\.gitkeep$/',
         '/^\.DS_Store$/',
     ];
 
-    // Estensioni supportate
     private array $extensions = ['pdf', 'md', 'odt', 'docx'];
 
     public function __construct(
@@ -69,7 +67,7 @@ class IndexDocsCommand extends Command
                 'path',
                 null,
                 InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
-                'Sotto-percorsi da indicizzare (es: manuali, log/2025). Posso usarlo più volte.'
+                'Sotto-percorsi da indicizzare (es: manuali, log/2025). Puoi usarlo più volte.'
             );
     }
 
@@ -85,12 +83,10 @@ class IndexDocsCommand extends Command
         $forceReindex = (bool) $input->getOption('force-reindex');
         $dryRun       = (bool) $input->getOption('dry-run');
 
-        // test-mode via opzione OPPURE via env
         $testMode =
             (bool) $input->getOption('test-mode')
             || (($_ENV['APP_AI_TEST_MODE'] ?? 'false') === 'true');
 
-        // se OpenAI fallisce, usare fallback locale (fake embedding)?
         $offlineFallback = (($_ENV['APP_AI_OFFLINE_FALLBACK'] ?? 'true') === 'true');
 
         /** @var string[] $pathsFilter */
@@ -111,7 +107,7 @@ class IndexDocsCommand extends Command
         }
 
         // ---------------------------------------------------------------------
-        // 1) Scansione ricorsiva dei file supportati
+        // 1) Scansione ricorsiva
         // ---------------------------------------------------------------------
         $iterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($rootDir, \FilesystemIterator::SKIP_DOTS)
@@ -132,17 +128,14 @@ class IndexDocsCommand extends Command
             $relPath = substr($filePath, strlen($rootDir) + 1);
             $dirName = trim(dirname($relPath), '.');
 
-            // Esclusione directory
             if ($this->isInExcludedDir($dirName)) {
                 continue;
             }
 
-            // Esclusione per nome file
             if ($this->isExcludedName($info->getFilename())) {
                 continue;
             }
 
-            // Filtro per sotto-percorsi, se richiesto
             if (!empty($pathsFilter) && !$this->matchesPathsFilter($relPath, $pathsFilter)) {
                 continue;
             }
@@ -156,7 +149,7 @@ class IndexDocsCommand extends Command
         }
 
         // ---------------------------------------------------------------------
-        // Barra di progresso (solo se -v)
+        // Barra di progresso
         // ---------------------------------------------------------------------
         $progressBar = null;
         if ($output->isVerbose()) {
@@ -164,11 +157,12 @@ class IndexDocsCommand extends Command
             $progressBar->start();
         }
 
-        // Client OpenAI (solo se serve davvero)
         $client = null;
         if (!$dryRun && !$testMode) {
             $client = OpenAI::client($_ENV['OPENAI_API_KEY']);
         }
+
+        $fileRepo = $this->em->getRepository(DocumentFile::class);
 
         // ---------------------------------------------------------------------
         // 2) Loop sui file
@@ -179,28 +173,15 @@ class IndexDocsCommand extends Command
             $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
             $fileHash  = hash_file('sha256', $file);
 
-            // Log base: sempre visibile
             $output->writeln("\n[FILE] $relPath");
 
-            if ($output->isVeryVerbose()) {
-                $output->writeln("  ext  = $extension");
-                $output->writeln("  hash = $fileHash");
-            }
+            /** @var DocumentFile|null $fileEntity */
+            $fileEntity = $fileRepo->findOneBy(['path' => $relPath]);
 
-            // Salta file già indicizzati (stesso path + hash),
-            // SOLO se non force, non dry-run, non test-mode
-            if (!$forceReindex && !$dryRun && !$testMode) {
-                $count = $this->em->createQueryBuilder()
-                    ->select('COUNT(c.id)')
-                    ->from(DocumentChunk::class, 'c')
-                    ->where('c.path = :p')
-                    ->andWhere('c.fileHash = :h')
-                    ->setParameter('p', $relPath)
-                    ->setParameter('h', $fileHash)
-                    ->getQuery()
-                    ->getSingleScalarResult();
-
-                if ($count > 0) {
+            // Se abbiamo già un record file, controlliamo hash
+            if ($fileEntity !== null) {
+                $oldHash = $fileEntity->getHash();
+                if (!$forceReindex && !$dryRun && !$testMode && $oldHash === $fileHash) {
                     $output->writeln("  -> hash invariato, salto");
                     if ($progressBar) {
                         $progressBar->advance();
@@ -209,7 +190,7 @@ class IndexDocsCommand extends Command
                 }
             }
 
-            // ---------------------- 1) Estrazione testo -----------------------
+            // Estrazione testo
             $output->writeln("  -> estrazione testo...");
             $text = $this->extractor->extract($file);
 
@@ -224,12 +205,12 @@ class IndexDocsCommand extends Command
             $len = mb_strlen($text);
             $output->writeln("  -> testo estratto, len = $len caratteri");
 
-            // ----------------------- 2) Split in chunk ------------------------
+            // Split in chunk
             $output->writeln("  -> split in chunk...");
             $chunks = $this->splitIntoChunks($text, 1000);
             $now    = new \DateTimeImmutable();
 
-            // ----------------------- 3) DRY-RUN -------------------------------
+            // DRY-RUN → solo log, niente DB
             if ($dryRun) {
                 $approxTokens = (int) ($len / 4);
                 $output->writeln("  [dry-run] $relPath → " . count($chunks)
@@ -237,34 +218,54 @@ class IndexDocsCommand extends Command
                 if ($progressBar) {
                     $progressBar->advance();
                 }
-                // NON salvo nulla, non faccio embeddings
                 continue;
             }
 
-            // --------------------- 4) Cancella vecchi chunk -------------------
-            $output->writeln("  -> cancello eventuali chunk già esistenti...");
-            $this->em->createQueryBuilder()
-                ->delete(DocumentChunk::class, 'c')
-                ->where('c.path = :p')
-                ->setParameter('p', $relPath)
-                ->getQuery()
-                ->execute();
+            // Creiamo o aggiorniamo DocumentFile
+            if ($fileEntity === null) {
+                $fileEntity = (new DocumentFile())
+                    ->setPath($relPath)
+                    ->setExtension($extension)
+                    ->setHash($fileHash)
+                    ->setIndexedAt($now);
+                $this->em->persist($fileEntity);
+                $output->writeln("  -> creato record DocumentFile");
+            } else {
+                $fileEntity
+                    ->setExtension($extension)
+                    ->setHash($fileHash)
+                    ->setIndexedAt($now);
+                $output->writeln("  -> aggiornato record DocumentFile");
+            }
+
+            // Cancella chunk precedenti per questo file (solo se il file è già in DB)
+            if ($fileEntity !== null && $fileEntity->getId() !== null) {
+                $output->writeln("  -> cancello chunk esistenti (se presenti)...");
+                $this->em->createQueryBuilder()
+                    ->delete(DocumentChunk::class, 'c')
+                    ->where('c.file = :file')
+                    ->setParameter('file', $fileEntity)
+                    ->getQuery()
+                    ->execute();
+            } else {
+                $output->writeln("  -> nessun chunk precedente da cancellare (file nuovo)");
+            }
 
             $output->writeln("  -> creo chunk + embedding (test-mode: " . ($testMode ? 'sì' : 'no') . ")");
 
-            // --------------------- 5) Per ogni chunk --------------------------
+            // Creazione nuovi chunk
             foreach ($chunks as $index => $chunkText) {
-
                 $embedding = null;
 
                 if ($testMode) {
-                    // embedding finto → deterministico, zero costi
                     $embedding = $this->fakeEmbeddingFromText($chunkText, 1536);
                 } else {
                     try {
                         $embResp = $client->embeddings()->create([
                             'model' => 'text-embedding-3-small',
                             'input' => $chunkText,
+                            // versione "full" 1536 dimensioni
+                            // 'dimensions' => 1536,
                         ]);
                         $embedding = $embResp->embeddings[0]->embedding;
                     } catch (\Throwable $e) {
@@ -273,25 +274,20 @@ class IndexDocsCommand extends Command
                             $embedding = $this->fakeEmbeddingFromText($chunkText, 1536);
                         } else {
                             $output->writeln("  -> errore embedding: ".$e->getMessage());
-                            // salto questo chunk
                             continue;
                         }
                     }
                 }
 
                 $chunk = (new DocumentChunk())
-                    ->setPath($relPath)
-                    ->setExtension($extension)
+                    ->setFile($fileEntity)
                     ->setChunkIndex($index)
                     ->setContent($chunkText)
-                    ->setIndexedAt($now)
-                    ->setFileHash($fileHash)
                     ->setEmbedding($embedding);
 
                 $this->em->persist($chunk);
             }
 
-            // Flush + clear per svuotare la unit of work
             $this->em->flush();
             $this->em->clear();
 
@@ -317,7 +313,6 @@ class IndexDocsCommand extends Command
 
     private function splitIntoChunks(string $text, int $maxLen): array
     {
-        // Normalizza spazi
         $text = preg_replace('/\s+/', ' ', $text);
         $text = trim($text);
 
@@ -333,18 +328,12 @@ class IndexDocsCommand extends Command
             $remaining = $len - $offset;
             $length    = min($maxLen, $remaining);
 
-            // fetta corrente
             $slice = mb_substr($text, $offset, $length);
 
-            // prova a spezzare sull'ultimo punto dentro la fetta
             $cut = mb_strrpos($slice, '.');
-
-            // se il punto è troppo vicino all'inizio o non c'è, prova con lo spazio
             if ($cut === false || $cut < (int)($length * 0.3)) {
                 $cut = mb_strrpos($slice, ' ');
             }
-
-            // se neanche lo spazio è utile, taglia secco a length
             if ($cut === false || $cut <= 0) {
                 $cut = $length;
             }
@@ -354,7 +343,6 @@ class IndexDocsCommand extends Command
                 $chunks[] = $chunkText;
             }
 
-            // avanza l'offset: IMPORTANTISSIMO per evitare loop infinito
             $offset += $cut;
         }
 
@@ -407,17 +395,14 @@ class IndexDocsCommand extends Command
         return false;
     }
 
-    /**
-     * Embedding finto, deterministico, per test-mode e fallback offline.
-     */
     private function fakeEmbeddingFromText(string $text, int $dimensions): array
     {
-        $hash   = hash('sha256', $text, true); // 32 byte binari
+        $hash   = hash('sha256', $text, true);
         $vector = [];
 
         for ($i = 0; $i < $dimensions; $i++) {
-            $b = ord($hash[$i % 32]);        // 0..255
-            $vector[] = ($b / 128.0) - 1.0;  // circa -1..+1
+            $b = ord($hash[$i % 32]);
+            $vector[] = ($b / 128.0) - 1.0;
         }
 
         return $vector;

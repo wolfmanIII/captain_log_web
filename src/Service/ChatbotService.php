@@ -18,27 +18,27 @@ class ChatbotService
         $offlineFallbackEnabled =
             ($_ENV['APP_AI_OFFLINE_FALLBACK'] ?? 'true') === 'true';
 
-        // In test-mode NON chiama OpenAI, usa solo il DB
         if ($testMode) {
             return $this->answerInTestMode($question);
         }
 
         try {
             $client = OpenAI::client($_ENV['OPENAI_API_KEY']);
+            $model  = $_ENV['APP_AI_MODEL'] ?? 'gpt-5.1-mini';
 
             // 1) Embedding della domanda
             $embResp = $client->embeddings()->create([
                 'model' => 'text-embedding-3-small',
                 'input' => $question,
-                // se si usa vector(1536) non serve "dimensions"
-                // 'dimensions' => 1536,
+                // default 1536 dimensioni
             ]);
             $queryVec = $embResp->embeddings[0]->embedding;
 
-            // 2) Recupero chunk più simili (top 5)
+            // 2) Recupero chunk più simili (top 5) usando cosine_similarity
             $qb = $this->em->createQueryBuilder()
-                ->select('c')
+                ->select('c', 'f')
                 ->from(DocumentChunk::class, 'c')
+                ->join('c.file', 'f')
                 ->where('c.embedding IS NOT NULL')
                 ->orderBy('cosine_similarity(c.embedding, :vec)', 'DESC')
                 ->setMaxResults(5)
@@ -53,8 +53,9 @@ class ChatbotService
 
             $context = '';
             foreach ($chunks as $chunk) {
-                $context .= "Fonte: {$chunk->getPath()} (chunk {$chunk->getChunkIndex()})\n";
-                $context .= $chunk->getContent() . "\n\n";
+                $file = $chunk->getFile();
+                $context .= "Fonte: ".$file->getPath()." (chunk ".$chunk->getChunkIndex().")\n";
+                $context .= $chunk->getContent()."\n\n";
             }
 
             $system = <<<TXT
@@ -71,9 +72,8 @@ DOMANDA:
 {$question}
 TXT;
 
-            // 3) Chiamata al modello
             $resp = $client->chat()->create([
-                'model' => 'gpt-5.1-mini',
+                'model' => $model,
                 'messages' => [
                     ['role' => 'system', 'content' => $system],
                     ['role' => 'user', 'content' => $user],
@@ -91,21 +91,17 @@ TXT;
         }
     }
 
-    /**
-     * Modalità test: nessuna chiamata ad OpenAI.
-     * Usa una ricerca a keyword (OR) nel contenuto dei chunk.
-     */
     private function answerInTestMode(string $question): string
     {
         $keywords = $this->buildKeywords($question);
 
         $qb = $this->em->createQueryBuilder()
-            ->select('c')
+            ->select('c', 'f')
             ->from(DocumentChunk::class, 'c')
+            ->join('c.file', 'f')
             ->setMaxResults(5);
 
         if ($keywords) {
-            // costruisco un OR: LOWER(c.content) LIKE :k0 OR :k1 ...
             $expr = $qb->expr();
             $orX  = $expr->orX();
 
@@ -117,7 +113,6 @@ TXT;
 
             $qb->where($orX);
         } else {
-            // fallback: LIKE sull'intera domanda (caso limite)
             $qb->where('LOWER(c.content) LIKE :q')
                ->setParameter('q', '%'.mb_strtolower($question).'%');
         }
@@ -133,25 +128,23 @@ TXT;
         $out .= "Questi sono alcuni estratti che sembrano rilevanti:\n\n";
 
         foreach ($chunks as $chunk) {
+            $file    = $chunk->getFile();
             $preview = mb_substr($chunk->getContent(), 0, 300);
-            $out .= "- Fonte: {$chunk->getPath()} (chunk {$chunk->getChunkIndex()})\n";
+            $out .= "- Fonte: ".$file->getPath()." (chunk ".$chunk->getChunkIndex().")\n";
             $out .= "  Estratto: ".str_replace("\n", ' ', $preview)."…\n\n";
         }
 
         return $out;
     }
 
-    /**
-     * Modalità fallback offline: si attiva se la chiamata ad OpenAI fallisce.
-     * Usa gli stessi keyword della modalità test-mode per cercare nel DB locale.
-     */
     private function answerInOfflineFallback(string $question, \Throwable $e): string
     {
         $keywords = $this->buildKeywords($question);
 
         $qb = $this->em->createQueryBuilder()
-            ->select('c')
+            ->select('c', 'f')
             ->from(DocumentChunk::class, 'c')
+            ->join('c.file', 'f')
             ->setMaxResults(5);
 
         if ($keywords) {
@@ -182,8 +175,9 @@ TXT;
              . "ma ho trovato alcuni estratti nei documenti locali:\n\n";
 
         foreach ($chunks as $chunk) {
+            $file    = $chunk->getFile();
             $preview = mb_substr($chunk->getContent(), 0, 300);
-            $out .= "- Fonte: {$chunk->getPath()} (chunk {$chunk->getChunkIndex()})\n";
+            $out .= "- Fonte: ".$file->getPath()." (chunk ".$chunk->getChunkIndex().")\n";
             $out .= "  Estratto: ".str_replace("\n", ' ', $preview)."…\n\n";
         }
 
@@ -192,23 +186,9 @@ TXT;
         return $out;
     }
 
-    /**
-     * Estrae keyword significative dalla domanda:
-     * - minuscole
-     * - rimuove punteggiatura
-     * - tiene solo parole con almeno 3 caratteri
-     * - rimuove duplicati
-     *
-     * Es:
-     *   "Chi è M. Trast?" → ["trast"]
-     *   "Dimmi di Malen Trast e della sua nave" → ["dimmi", "malen", "trast", "nave"]
-     */
     private function buildKeywords(string $text): array
     {
         $text = mb_strtolower($text);
-
-        // Sostitusce tutto ciò che NON è lettera/numero/spazio con spazio
-        // \p{L} = tutte le lettere Unicode, \p{N} = numeri
         $text = preg_replace('/[^\p{L}\p{N}\s]/u', ' ', $text);
         if ($text === null) {
             return [];
@@ -222,14 +202,11 @@ TXT;
         $keywords = [];
         foreach ($parts as $p) {
             if (mb_strlen($p) < 3) {
-                continue; // scarta parole troppo corte tipo "è", "di", "a"
+                continue;
             }
             $keywords[] = $p;
         }
 
-        // Rimuovi duplicati
-        $keywords = array_values(array_unique($keywords));
-
-        return $keywords;
+        return array_values(array_unique($keywords));
     }
 }

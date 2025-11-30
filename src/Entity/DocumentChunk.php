@@ -2,11 +2,10 @@
 
 namespace App\Entity;
 
+use App\Repository\DocumentChunkRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity]
-#[ORM\Table(name: 'document_chunk')]
-#[ORM\Index(columns: ['path'], name: 'idx_document_chunk_path')]
+#[ORM\Entity(repositoryClass: DocumentChunkRepository::class)]
 class DocumentChunk
 {
     #[ORM\Id]
@@ -14,55 +13,33 @@ class DocumentChunk
     #[ORM\Column]
     private ?int $id = null;
 
-    // es: "manuali/capitolo1.pdf"
-    #[ORM\Column(length: 255)]
-    private string $path;
+    #[ORM\ManyToOne(inversedBy: 'chunks')]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    private ?DocumentFile $file = null;
 
-    // pdf / md / odt / docx
-    #[ORM\Column(length: 10)]
-    private string $extension;
-
-    #[ORM\Column(type: 'integer')]
-    private int $chunkIndex = 0;
+    #[ORM\Column]
+    private int $chunkIndex;
 
     #[ORM\Column(type: 'text')]
     private string $content;
 
-    #[ORM\Column(type: 'datetime_immutable')]
-    private \DateTimeImmutable $indexedAt;
-
-    // hash del file (es. sha256)
-    #[ORM\Column(length: 64)]
-    private string $fileHash;
-
-    // embedding vettoriale (pgvector)
-    #[ORM\Column(type: 'vector', length: 1536, nullable: true)]
-    private ?array $embedding = null;
+    // colonna pgvector(1536)
+    #[ORM\Column(type: 'vector', length: 1536)]
+    private array $embedding = [];
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getPath(): string
+    public function getFile(): ?DocumentFile
     {
-        return $this->path;
+        return $this->file;
     }
 
-    public function setPath(string $path): self
+    public function setFile(?DocumentFile $file): self
     {
-        $this->path = $path;
-        return $this;
-    }
-
-    public function getExtension(): string
-    {
-        return $this->extension;
-    }
-
-    public function setExtension(string $extension): self
-    {
-        $this->extension = $extension;
+        $this->file = $file;
         return $this;
     }
 
@@ -88,36 +65,14 @@ class DocumentChunk
         return $this;
     }
 
-    public function getIndexedAt(): \DateTimeImmutable
-    {
-        return $this->indexedAt;
-    }
-
-    public function setIndexedAt(\DateTimeImmutable $indexedAt): self
-    {
-        $this->indexedAt = $indexedAt;
-        return $this;
-    }
-
-    public function getEmbedding(): ?array
+    public function getEmbedding(): array
     {
         return $this->embedding;
     }
 
-    public function setEmbedding(?array $embedding): self
+    public function setEmbedding(array $embedding): self
     {
         $this->embedding = $embedding;
-        return $this;
-    }
-
-    public function getFileHash(): string
-    {
-        return $this->fileHash;
-    }
-
-    public function setFileHash(string $fileHash): self
-    {
-        $this->fileHash = $fileHash;
         return $this;
     }
 }
