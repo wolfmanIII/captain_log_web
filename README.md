@@ -23,7 +23,7 @@ OPENAI_API_KEY=sk-...
 ```bash
 sudo apt install postgresql-18 postgresql-18-pgvector
 ```
-### Nel database PostgreSQL (una volta sola)
+### Nel database PostgreSQL (una volta sola), necessari permessi di admin
 sql
 ```sql
 CREATE EXTENSION IF NOT EXISTS vector;
@@ -111,7 +111,6 @@ doctrine:
         distance: Partitech\DoctrinePgVector\Query\Distance
 
 ```
----
 # 4. Command per indicizzare per open-ai
 ## Esempi di utilizzo
 ### 1. Full index, sfruttando hash (solo file nuovi/modificati)
@@ -135,7 +134,6 @@ php bin/console app:index-docs --dry-run -v
 php bin/console app:index-docs --test-mode -v
 # oppure: APP_AI_TEST_MODE=true php bin/console app:index-docs -v
 ```
----
 # 5. Command per vedere l'elenco dei file indicizzati
 ## Esempi di utilizzo
 ### 1. Elenco base (max 50):
@@ -154,7 +152,6 @@ php bin/console app:list-docs --limit=200
 ```bash
 php bin/console app:list-docs --path=manuali --limit=20
 ```
----
 # 5. Command per rimuovere file dell'indice
 ## Esempi di utilizzo
 ### 1. Eliminare un singolo file indicizzato
