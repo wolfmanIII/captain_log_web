@@ -16,7 +16,7 @@ export default class extends Controller {
             return;
         }
 
-        // Aggiungi il messaggio dell'utente alla chat
+        // Aggiungo il messaggio dell'utente alla chat
         this.appendMessage("user", text);
         this.inputTarget.value = "";
 
