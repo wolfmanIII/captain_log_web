@@ -1,6 +1,29 @@
 # Motore RAG(Retrieval-Augmented Generation)
 ## Definizione
 Un motore AI RAG (o sistema RAG) è un’architettura che combina modelli di linguaggio (LLM) con un motore di ricerca interno per produrre risposte più accurate, verificabili e basate su dati propri.
+## File .env.local
+```yaml
+DATABASE_URL="postgresql://app:!ChangeMe!@127.0.0.1:5432/app?serverVersion=16&charset=utf8"
+
+# Ollama
+AI_BACKEND=ollama
+OLLAMA_HOST=http://localhost:11434
+OLLAMA_CHAT_MODEL=llama3.2
+OLLAMA_EMBED_MODEL=nomic-embed-text
+
+# OpenAI
+#AI_BACKEND=openai
+#OPENAI_API_KEY=sk-...
+#OPENAI_CHAT_MODEL=gpt-5.1-mini
+#OPENAI_EMBED_MODEL=text-embedding-3-small
+
+## RAG Test Mode e Fallback
+APP_AI_TEST_MODE=true
+APP_AI_OFFLINE_FALLBACK=false
+
+# Postgres pgvector - sonde per indice ivfflat
+APP_IVFFLAT_PROBES=10
+```
 ## Dipendenze aggiuntive da installare
 ```bash
 composer require \

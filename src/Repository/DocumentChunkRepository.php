@@ -36,7 +36,7 @@ class DocumentChunkRepository extends ServiceEntityRepository
     {
         $conn = $this->getEntityManager()->getConnection();
 
-        // SQL nativo: usiamo l'operatore <=> su embedding
+        // SQL nativo: uso l'operatore <=> su embedding
         // NOTA: <=> restituisce la *distanza* (coseno), quindi ordiniamo ASC (più piccolo = più simile)
         $sql = <<<SQL
 SELECT
@@ -52,7 +52,7 @@ LIMIT :k
 SQL;
 
         // L'estensione pgvector accetta il vettore come array PostgreSQL o come testo.
-        // Doctrine, se hai il tipo "vector" configurato, converte l'array PHP in formato giusto.
+        // Doctrine, se ha il tipo "vector" configurato, converte l'array PHP in formato giusto.
         $stmt = $conn->prepare($sql);
 
         $stmt->bindValue('query_vec', $embedding);   // vettore della domanda
