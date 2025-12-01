@@ -1,30 +1,7 @@
 # Motore RAG(Retrieval-Augmented Generation)
-## Definizione
+## 1. Definizione
 Un motore AI RAG (o sistema RAG) è un’architettura che combina modelli di linguaggio (LLM) con un motore di ricerca interno per produrre risposte più accurate, verificabili e basate su dati propri.
-## File .env.local
-```yaml
-DATABASE_URL="postgresql://app:!ChangeMe!@127.0.0.1:5432/app?serverVersion=16&charset=utf8"
-
-# Ollama
-AI_BACKEND=ollama
-OLLAMA_HOST=http://localhost:11434
-OLLAMA_CHAT_MODEL=llama3.2
-OLLAMA_EMBED_MODEL=nomic-embed-text
-
-# OpenAI
-#AI_BACKEND=openai
-#OPENAI_API_KEY=sk-...
-#OPENAI_CHAT_MODEL=gpt-5.1-mini
-#OPENAI_EMBED_MODEL=text-embedding-3-small
-
-## RAG Test Mode e Fallback
-APP_AI_TEST_MODE=true
-APP_AI_OFFLINE_FALLBACK=false
-
-# Postgres pgvector - sonde per indice ivfflat
-APP_IVFFLAT_PROBES=10
-```
-## Dipendenze aggiuntive da installare
+## 2. Dipendenze aggiuntive da installare
 ```bash
 composer require \
     smalot/pdfparser \
@@ -32,24 +9,12 @@ composer require \
     openai-php/client \
     partitech/doctrine-pgvector
 ```
-## Nel file config/services.yaml
-```yaml
-services:
-  ...
-  Smalot\PdfParser\Parser: ~
-```
-# 2. Open AI
-## Nel file .env.local metti la chiave:
-```env
-OPENAI_API_KEY=sk-...
-```
-# 3. PostgreSQL + pgvector + Doctrine
-## Installare postgres + pgvector
+## 3. PostgreSQL + pgvector + Doctrine
+### Installare postgres + pgvector
 ```bash
 sudo apt install postgresql-18 postgresql-18-pgvector
 ```
 ### Nel database PostgreSQL (una volta sola), necessari permessi di admin
-sql
 ```sql
 CREATE EXTENSION IF NOT EXISTS vector;
 ```
@@ -60,7 +25,7 @@ ON document_chunk
 USING ivfflat (embedding vector_cosine_ops)
 WITH (lists = 100)
 ```
-## Cos'è pgvector
+### Cos'è pgvector
 __pgvector__ è un’estensione per PostgreSQL che aggiunge:
 * un tipo di colonna: vector(N) → un array di N numeri (float)
 * operatori e funzioni per confrontare questi vettori (distanze, similarità)
@@ -73,7 +38,7 @@ private array $embedding;
 ```
 questo campo su __DocumentChunk__ è letteralmente:  
 ***il posto dove salviamo il vettore di embedding del chunk di testo***
-## Definizione di embedding
+### Definizione di embedding
 
 Quando viene indicizzato un chunk:
 * viene preso il testo (__$chunkText__)
@@ -92,7 +57,7 @@ Postgres li usa per memorizzare questi vettori e confrontarli.
 All'interno dell'applicativo:
 * quando indicizzi → salvi per ogni __DocumentChunk__ il suo __embedding__ (vector(1536))
 * quando interroghi il chatbot → calcoli l’__embedding__ della domanda e lo confronti con quelli salvati.
-## Cos’è cosine_similarity e cosa fa nella query
+### Cos’è cosine_similarity e cosa fa nella query
 Nel ChatbotService abbiamo:
 ```php
 $qb = $this->em->createQueryBuilder()
@@ -125,7 +90,6 @@ ORDER BY cosine_similarity(c.embedding, :vec) DESC
 ```
 si sta chiedendo:  
 ***“Recupera per primi i chunk il cui significato è più vicino al significato della domanda”.***
-## Abilitare pgvector e cosine_similarity
 ### In config/packages/doctrine.yaml aggiungi il tipo e le funzioni DQL:
 ```yaml
 doctrine:
@@ -141,23 +105,59 @@ doctrine:
         cosine_similarity: Partitech\DoctrinePgVector\Query\CosineSimilarity
         distance: Partitech\DoctrinePgVector\Query\Distance
 ```
-### Abilitare le sonde sugli indici ivfflat(pgvector)
+## 4. Backend AI Ollama/Open
+### Variabili d'ambiente, nel file .env.local
+```env
+DATABASE_URL="postgresql://app:!ChangeMe!@127.0.0.1:5432/app?serverVersion=16&charset=utf8"
+
+# Ollama
+AI_BACKEND=ollama
+OLLAMA_HOST=http://localhost:11434
+OLLAMA_CHAT_MODEL=llama3.2
+OLLAMA_EMBED_MODEL=nomic-embed-text
+
+# OpenAI
+#AI_BACKEND=openai
+#OPENAI_API_KEY=sk-...
+#OPENAI_CHAT_MODEL=gpt-5.1-mini
+#OPENAI_EMBED_MODEL=text-embedding-3-small
+
+## RAG Test Mode e Fallback
+APP_AI_TEST_MODE=true
+APP_AI_OFFLINE_FALLBACK=false
+
+# Postgres pgvector - sonde per indice ivfflat
+APP_IVFFLAT_PROBES=10
+```
+### Configurazione AI_BACKEND, PDF parser, Ivfflat Probes, nel file services.yaml
 ```yaml
+parameters:
+  # ...
+
+  ai.backend: '%env(AI_BACKEND)%' # ollama | openai
+
 services:
   # ...
 
+  # abilta il servizio per il parsing dei file PDF
+  Smalot\PdfParser\Parser: ~
+
   # Middleware per abilitare l'uso delle sonde sugli indici ivfflat(pgvector)
   App\Middleware\PgvectorIvfflatMiddleware:
-    arguments:
-      $probes: '%env(int:APP_IVFFLAT_PROBES)%'
+      arguments:
+          $probes: '%env(int:APP_IVFFLAT_PROBES)%'
+
+  # AiClientInterface per gestire il backend Ollama/OpenAi
+  App\AI\AiClientInterface:
+      factory: [ 'App\AI\AiClientFactory', 'create' ]
+      arguments: [ '%ai.backend%' ]
 ```
-Tramite la variabile di ambiente __APP_IVFFLAT_PROBES__:   
-impostiamo il rapporto qualità velocità del nostro sistema RAG:  
+Tramite la variabile di ambiente __APP_IVFFLAT_PROBES__, impostiamo il rapporto qualità velocità del nostro sistema RAG:
 * 5–10 = super veloce
 * 20–30 = molto preciso
 * 50–100 = qualità altissima (RAG più consistente, più lento)
-# 4. Command per indicizzare per open-ai
-## Esempi di utilizzo
+## 5. Command per indicizzare per open-ai
+### Esempi di utilizzo
 ### 1. Full index, sfruttando hash (solo file nuovi/modificati)
 ```bash
 php bin/console app:index-docs -v
@@ -179,8 +179,8 @@ php bin/console app:index-docs --dry-run -v
 php bin/console app:index-docs --test-mode -v
 # oppure: APP_AI_TEST_MODE=true php bin/console app:index-docs -v
 ```
-# 5. Command per vedere l'elenco dei file indicizzati
-## Esempi di utilizzo
+## 6. Command per vedere l'elenco dei file indicizzati
+### Esempi di utilizzo
 ### 1. Elenco base (max 50):
 ```bash
 php bin/console app:list-docs
@@ -197,8 +197,8 @@ php bin/console app:list-docs --limit=200
 ```bash
 php bin/console app:list-docs --path=manuali --limit=20
 ```
-# 5. Command per rimuovere file dell'indice
-## Esempi di utilizzo
+# 7. Command per rimuovere file dell'indice
+### Esempi di utilizzo
 ### 1. Eliminare un singolo file indicizzato
 ```bash
 php bin/console app:unindex-file "manuali/helix.md"
