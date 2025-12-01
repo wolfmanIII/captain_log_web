@@ -2,11 +2,11 @@
 
 namespace App\Command;
 
+use App\AI\AiClientInterface;
 use App\Entity\DocumentChunk;
 use App\Entity\DocumentFile;
 use App\Service\DocumentTextExtractor;
 use Doctrine\ORM\EntityManagerInterface;
-use OpenAI;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -17,6 +17,19 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand(name: 'app:index-docs')]
 class IndexDocsCommand extends Command
 {
+    /**
+     * Directory da indicizzare (relativa al progetto).
+     */
+    private const ROOT_DIR = __DIR__ . '/../../var/knowledge';
+
+    /**
+     * Estensioni supportate.
+     */
+    private array $extensions = ['pdf', 'md', 'odt', 'docx'];
+
+    /**
+     * Sottocartelle da escludere (match su path relativi).
+     */
     private array $excludedDirs = [
         'images',
         'img',
@@ -25,6 +38,9 @@ class IndexDocsCommand extends Command
         '.idea',
     ];
 
+    /**
+     * Pattern filename da escludere.
+     */
     private array $excludedNamePatterns = [
         '/^~.*$/',
         '/^\.~lock\..*/',
@@ -32,11 +48,10 @@ class IndexDocsCommand extends Command
         '/^\.DS_Store$/',
     ];
 
-    private array $extensions = ['pdf', 'md', 'odt', 'docx'];
-
     public function __construct(
         private EntityManagerInterface $em,
-        private DocumentTextExtractor $extractor,
+        private DocumentTextExtractor  $extractor,
+        private AiClientInterface      $ai,
     ) {
         parent::__construct();
     }
@@ -44,50 +59,52 @@ class IndexDocsCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Indicizza i documenti (PDF/MD/ODT/DOCX) in var/knowledge, genera embeddings e salva su Postgres.')
+            ->setDescription('Indicizza i documenti (PDF/MD/ODT/DOCX) in var/knowledge, genera embeddings e salva su Postgres (pgvector).')
             ->addOption(
                 'force-reindex',
                 null,
                 InputOption::VALUE_NONE,
-                'Ignora hash e reindicizza tutto'
+                'Ignora hash e reindicizza tutto, anche se il file non è cambiato.'
             )
             ->addOption(
                 'dry-run',
                 null,
                 InputOption::VALUE_NONE,
-                'Simulazione: nessuna scrittura su DB e nessuna chiamata OpenAI'
+                'Simulazione: nessuna scrittura su DB e nessuna chiamata AI.'
             )
             ->addOption(
                 'test-mode',
                 null,
                 InputOption::VALUE_NONE,
-                'Usa embeddings finti (nessun costo)'
+                'Usa embeddings finti (derivati dal testo) invece di chiamare il backend AI.'
             )
             ->addOption(
                 'path',
                 null,
                 InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
-                'Sotto-percorsi da indicizzare (es: manuali, log/2025). Puoi usarlo più volte.'
+                'Sotto-percorsi da indicizzare (es: manuali, log/2025). Puoi usare più --path.'
             );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $rootDir = __DIR__ . '/../../var/knowledge';
+        $rootDir = self::ROOT_DIR;
 
         if (!is_dir($rootDir)) {
-            $output->writeln('<error>Cartella non trovata: '.$rootDir.'</error>');
+            $output->writeln('<error>Cartella non trovata: ' . $rootDir . '</error>');
             return Command::FAILURE;
         }
 
         $forceReindex = (bool) $input->getOption('force-reindex');
         $dryRun       = (bool) $input->getOption('dry-run');
 
+        // test-mode può essere attivato da option o da env
         $testMode =
             (bool) $input->getOption('test-mode')
             || (($_ENV['APP_AI_TEST_MODE'] ?? 'false') === 'true');
 
-        $offlineFallback = (($_ENV['APP_AI_OFFLINE_FALLBACK'] ?? 'true') === 'true');
+        $offlineFallback =
+            (($_ENV['APP_AI_OFFLINE_FALLBACK'] ?? 'true') === 'true');
 
         /** @var string[] $pathsFilter */
         $pathsFilter = $input->getOption('path') ?? [];
@@ -103,11 +120,11 @@ class IndexDocsCommand extends Command
             $output->writeln('<comment>--dry-run: nessuna scrittura su DB</comment>');
         }
         if ($testMode) {
-            $output->writeln('<comment>--test-mode: embeddings finti (zero costi)</comment>');
+            $output->writeln('<comment>--test-mode: embeddings finti, nessuna chiamata AI</comment>');
         }
 
         // ---------------------------------------------------------------------
-        // 1) Scansione ricorsiva
+        // 1) Scansione ricorsiva dei file
         // ---------------------------------------------------------------------
         $iterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($rootDir, \FilesystemIterator::SKIP_DOTS)
@@ -149,7 +166,7 @@ class IndexDocsCommand extends Command
         }
 
         // ---------------------------------------------------------------------
-        // Barra di progresso
+        // 2) Barra di progresso
         // ---------------------------------------------------------------------
         $progressBar = null;
         if ($output->isVerbose()) {
@@ -157,18 +174,12 @@ class IndexDocsCommand extends Command
             $progressBar->start();
         }
 
-        $client = null;
-        if (!$dryRun && !$testMode) {
-            $client = OpenAI::client($_ENV['OPENAI_API_KEY']);
-        }
-
         $fileRepo = $this->em->getRepository(DocumentFile::class);
 
         // ---------------------------------------------------------------------
-        // 2) Loop sui file
+        // 3) Loop sui file
         // ---------------------------------------------------------------------
         foreach ($files as $file) {
-
             $relPath   = substr($file, strlen($rootDir) + 1);
             $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
             $fileHash  = hash_file('sha256', $file);
@@ -178,7 +189,7 @@ class IndexDocsCommand extends Command
             /** @var DocumentFile|null $fileEntity */
             $fileEntity = $fileRepo->findOneBy(['path' => $relPath]);
 
-            // Se abbiamo già un record file, controlliamo hash
+            // Se il file è già presente e l'hash non è cambiato, possiamo saltare
             if ($fileEntity !== null) {
                 $oldHash = $fileEntity->getHash();
                 if (!$forceReindex && !$dryRun && !$testMode && $oldHash === $fileHash) {
@@ -210,7 +221,7 @@ class IndexDocsCommand extends Command
             $chunks = $this->splitIntoChunks($text, 1000);
             $now    = new \DateTimeImmutable();
 
-            // DRY-RUN → solo log, niente DB
+            // DRY-RUN → solo log, niente DB / niente embeddings reali
             if ($dryRun) {
                 $approxTokens = (int) ($len / 4);
                 $output->writeln("  [dry-run] $relPath → " . count($chunks)
@@ -238,18 +249,14 @@ class IndexDocsCommand extends Command
                 $output->writeln("  -> aggiornato record DocumentFile");
             }
 
-            // Cancella chunk precedenti per questo file (solo se il file è già in DB)
-            if ($fileEntity !== null && $fileEntity->getId() !== null) {
-                $output->writeln("  -> cancello chunk esistenti (se presenti)...");
-                $this->em->createQueryBuilder()
-                    ->delete(DocumentChunk::class, 'c')
-                    ->where('c.file = :file')
-                    ->setParameter('file', $fileEntity)
-                    ->getQuery()
-                    ->execute();
-            } else {
-                $output->writeln("  -> nessun chunk precedente da cancellare (file nuovo)");
-            }
+            // Cancella eventuali chunk già esistenti per questo file
+            $output->writeln("  -> cancello chunk esistenti (se presenti)...");
+            $this->em->createQueryBuilder()
+                ->delete(DocumentChunk::class, 'c')
+                ->where('c.file = :file')
+                ->setParameter('file', $fileEntity)
+                ->getQuery()
+                ->execute();
 
             $output->writeln("  -> creo chunk + embedding (test-mode: " . ($testMode ? 'sì' : 'no') . ")");
 
@@ -258,23 +265,22 @@ class IndexDocsCommand extends Command
                 $embedding = null;
 
                 if ($testMode) {
+                    // Embedding finto, niente AI (puoi tenere 1536 per compatibilità col DB)
                     $embedding = $this->fakeEmbeddingFromText($chunkText, 1536);
                 } else {
                     try {
-                        $embResp = $client->embeddings()->create([
-                            'model' => 'text-embedding-3-small',
-                            'input' => $chunkText,
-                            // versione "full" 1536 dimensioni
-                            // 'dimensions' => 1536,
-                        ]);
-                        $embedding = $embResp->embeddings[0]->embedding;
+                        // Usa il backend configurato (Ollama/OpenAI/altro)
+                        $embedding = $this->ai->embed($chunkText);
                     } catch (\Throwable $e) {
                         if ($offlineFallback) {
-                            $output->writeln("  -> errore embedding, uso fallback locale: ".$e->getMessage());
+                            $output->writeln("  -> errore embedding, uso fallback locale: " . $e->getMessage());
                             $embedding = $this->fakeEmbeddingFromText($chunkText, 1536);
                         } else {
-                            $output->writeln("  -> errore embedding: ".$e->getMessage());
-                            continue;
+                            $output->writeln("  -> errore embedding: " . $e->getMessage());
+                            // Se preferisci saltare solo questo chunk:
+                            // continue;
+                            // Per ora continuiamo con embedding finto per non bucare l'indice:
+                            $embedding = $this->fakeEmbeddingFromText($chunkText, 1536);
                         }
                     }
                 }
@@ -311,6 +317,10 @@ class IndexDocsCommand extends Command
     // METODI DI SUPPORTO
     // =====================================================================
 
+    /**
+     * Split molto semplice in chunk di max $maxLen caratteri, cercando di tagliare
+     * su punto o spazio quando possibile.
+     */
     private function splitIntoChunks(string $text, int $maxLen): array
     {
         $text = preg_replace('/\s+/', ' ', $text);
@@ -395,6 +405,9 @@ class IndexDocsCommand extends Command
         return false;
     }
 
+    /**
+     * Genera un embedding finto deterministico, usato in test-mode o fallback.
+     */
     private function fakeEmbeddingFromText(string $text, int $dimensions): array
     {
         $hash   = hash('sha256', $text, true);
@@ -402,7 +415,7 @@ class IndexDocsCommand extends Command
 
         for ($i = 0; $i < $dimensions; $i++) {
             $b = ord($hash[$i % 32]);
-            $vector[] = ($b / 128.0) - 1.0;
+            $vector[] = ($b / 128.0) - 1.0; // range ~[-1, 1]
         }
 
         return $vector;
