@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Service\ChatbotService;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,10 +13,17 @@ final class ChatController extends BaseController
     public const CONTROLLER_NAME = 'ChatController';
 
     #[Route('/ai/console', name: 'app_ai_console', methods: ['GET'])]
-    public function console(): Response
+    public function console(HttpClientInterface $httpClient): Response
     {
-        $testMode = ($_ENV['APP_AI_TEST_MODE'] ?? 'false') === 'true';
-        $offlineFallback = ($_ENV['APP_AI_OFFLINE_FALLBACK'] ?? 'true') === 'true';
+        $response = $httpClient->request(
+            'GET',
+            'http://127.0.0.1:8000/engine/status'
+        );
+
+        $elaraStatus = $response->toArray(false);
+
+        $testMode = $elaraStatus["test_mode"];
+        $offlineFallback = $elaraStatus["offline_fallback"];;
 
         return $this->render('ai/console.html.twig', [
             'controller_name'   => self::CONTROLLER_NAME,
@@ -25,23 +32,22 @@ final class ChatController extends BaseController
         ]);
     }
 
-    #[Route('/api/chat', name: 'api_chat', methods: ['POST'])]
-    public function chat(Request $request, ChatbotService $bot): JsonResponse
+    #[Route('/elara/api/chat', name: 'elara_api_chat', methods: ['POST'])]
+    public function chat(Request $request, HttpClientInterface $httpClient): JsonResponse
     {
         $data = json_decode($request->getContent(), true) ?? [];
-        $question = trim($data['message'] ?? '');
+        
+        $response = $httpClient->request(
+            'POST',
+            'http://127.0.0.1:8000/api/chat',
+            ["json" => $data]
+        );
 
-        if ($question === '') {
-            return $this->json([
-                'error' => 'Messaggio vuoto',
-            ], 400);
-        }
-
-        $answer = $bot->ask($question);
+        $data = $response->toArray(false);
 
         return $this->json([
-            'question' => $question,
-            'answer'   => $answer,
+            'question' => $data["question"],
+            'answer'   => $data["answer"],
         ]);
     }
 }

@@ -5,7 +5,7 @@ export default class extends Controller {
 
     connect() {
         // opzionale: log per debug
-        // console.log("AI console controller connesso");
+        // console.log("console controller connesso");
     }
 
     async submit(event) {
@@ -23,7 +23,7 @@ export default class extends Controller {
         this.toggleLoading(true);
 
         try {
-            const response = await fetch("/api/chat", {
+            const response = await fetch("/elara/api/chat", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -39,7 +39,7 @@ export default class extends Controller {
             }
 
             const data = await response.json();
-            const answer = data.answer ?? "[Nessuna risposta dal motore AI]";
+            const answer = data.answer ?? "[Nessuna risposta dal engine Elara]";
 
             this.appendMessage("assistant", answer);
         } catch (e) {
@@ -57,7 +57,7 @@ export default class extends Controller {
         const wrapper = document.createElement("div");
 
         let chatSideClass = "chat-start";
-        let headerLabel = "AI";
+        let headerLabel = "Elara";
         let bubbleExtra = "";
 
         if (role === "user") {
