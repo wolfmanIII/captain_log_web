@@ -22,8 +22,8 @@ final class ChatController extends BaseController
 
         $elaraStatus = $response->toArray(false);
 
-        $testMode = $elaraStatus["test_mode"];
-        $offlineFallback = $elaraStatus["offline_fallback"];;
+        $testMode = ($elaraStatus["test_mode"] ?? 'false') === 'true';
+        $offlineFallback = ($elaraStatus["offline_fallback"] ?? 'true') === 'true';
 
         return $this->render('ai/console.html.twig', [
             'controller_name'   => self::CONTROLLER_NAME,
