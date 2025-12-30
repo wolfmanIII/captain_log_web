@@ -41,10 +41,10 @@ final class CrewController extends BaseController
             return $this->redirectToRoute('app_crew_index');
         }
 
-        return $this->renderTurbo('crew/edit.html.twig', $form, [
+        return $this->renderTurbo('crew/edit.html.twig', [
             'controller_name' => self::CONTROLLER_NAME,
             'crew'            => $crew,
-            'form'            => $form->createView(),
+            'form'            => $form,
         ]);
     }
 
@@ -60,10 +60,10 @@ final class CrewController extends BaseController
             return $this->redirectToRoute('app_crew_index');
         }
 
-        return $this->renderTurbo('crew/edit.html.twig', $form, [
+        return $this->renderTurbo('crew/edit.html.twig', [
             'controller_name' => self::CONTROLLER_NAME,
             'crew'            => $crew,
-            'form'            => $form->createView(),
+            'form'            => $form,
         ]);
     }
 

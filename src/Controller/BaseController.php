@@ -13,11 +13,17 @@ abstract class BaseController extends AbstractController
      * - 200 se form non sottomesso
      * - 422 se form sottomesso ma NON valido (altrimenti Turbo non mostra gli errori)
      */
-    protected function renderTurbo(string $template, FormInterface $form, array $options = []): Response
+    protected function renderTurbo(string $template, array $options = []): Response
     {
+        $form = $options['form'] ?? null;
+
+        if ($form instanceof FormInterface) {
+            $options['form'] = $form->createView();
+        }
+
         $response = $this->render($template, $options);
 
-        if ($form->isSubmitted() && !$form->isValid()) {
+        if ($form instanceof FormInterface && $form->isSubmitted() && !$form->isValid()) {
             $response->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY); // 422
         }
 

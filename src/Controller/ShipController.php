@@ -41,10 +41,10 @@ final class ShipController extends BaseController
             return $this->redirectToRoute('app_ship_index');
         }
 
-        return $this->renderTurbo('ship/edit.html.twig', $form, [
+        return $this->renderTurbo('ship/edit.html.twig', [
             'controller_name' => self::CONTROLLER_NAME,
             'ship' => $ship,
-            'form' => $form->createView(),
+            'form' => $form,
         ]);
     }
 
@@ -66,10 +66,10 @@ final class ShipController extends BaseController
             return $this->redirectToRoute('app_ship_index');
         }
 
-        return $this->renderTurbo('ship/edit.html.twig', $form, [
+        return $this->renderTurbo('ship/edit.html.twig', [
             'controller_name' => self::CONTROLLER_NAME,
             'ship' => $ship,
-            'form' => $form->createView(),
+            'form' => $form,
         ]);
     }
 
@@ -124,9 +124,9 @@ final class ShipController extends BaseController
             return $this->redirectToRoute('app_ship_crew', ['id' => $ship->getId()]);
         }
 
-        return $this->renderTurbo('ship/crew_select.html.twig', $form, [
+        return $this->renderTurbo('ship/crew_select.html.twig', [
             'ship' => $ship,
-            'form' => $form->createView(),
+            'form' => $form,
             'controller_name' => self::CONTROLLER_NAME,
         ]);
     }

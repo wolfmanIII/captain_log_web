@@ -29,7 +29,7 @@ export default class extends Controller {
                     "Content-Type": "application/json",
                     "X-Requested-With": "XMLHttpRequest",
                 },
-                body: JSON.stringify({ message: text }),
+                body: JSON.stringify({ question: text }),
             });
 
             if (!response.ok) {

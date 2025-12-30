@@ -16,19 +16,30 @@ final class ChatController extends BaseController
     #[Route('/ai/console', name: 'app_ai_console', methods: ['GET'])]
     public function console(HttpClientInterface $httpClient): Response
     {
+        $testMode = false;
+        $offlineFallback = false;
+        $elaraIsReachable = false;
+
         try {
             $response = $httpClient->request(
                 'GET',
-                'http://127.0.0.1:8000/engine/status'
+                'https://127.0.0.1:8080/status/engine',
+                [
+                    'headers' => [
+                        'Authorization' => 'Bearer 4ad352a3f3c2b3b8940d7ef9caa9361e',
+                        'Accept'        => 'application/json',
+                    ],
+                    'max_redirects' => 0,
+                ]
             );
-            $elaraStatus = $response->toArray(false);
-            $testMode = ($elaraStatus["test_mode"] ?? 'false') === 'true';
-            $offlineFallback = ($elaraStatus["offline_fallback"] ?? 'true') === 'true';
-            $elaraIsReachable = true;
+            if ($response->getStatusCode() === Response::HTTP_OK) {
+                $elaraStatus = json_decode($response->getContent(false), true) ?? [];
+                $testMode = ($elaraStatus["test_mode"] ?? 'false') === 'true';
+                $offlineFallback = ($elaraStatus["offline_fallback"] ?? 'true') === 'true';
+                $elaraIsReachable = true;
+            }
         } catch (TransportException $e) {
-            $testMode = false;
-            $offlineFallback = false;
-            $elaraIsReachable = false;
+            // keep defaults
         }
 
         
@@ -48,15 +59,36 @@ final class ChatController extends BaseController
         
         $response = $httpClient->request(
             'POST',
-            'http://127.0.0.1:8000/api/chat',
-            ["json" => $data]
+            'https://127.0.0.1:8080/api/chat',
+            [
+                'headers' => [
+                    'Authorization' => 'Bearer 4ad352a3f3c2b3b8940d7ef9caa9361e',
+                    'Accept'        => 'application/json',
+                ],
+                'json'          => $data,
+                'max_redirects' => 0,
+            ]
         );
 
-        $data = $response->toArray(false);
+        $statusCode = $response->getStatusCode();
+        $body = $response->getContent(false);
+        $payload = json_decode($body, true) ?? [];
+
+        if ($statusCode >= Response::HTTP_BAD_REQUEST || !is_array($payload)) {
+            $message = $payload['message'] ?? $payload['error'] ?? 'Errore durante la chiamata al motore Elara.';
+
+            return $this->json(
+                [
+                    'error'  => $message,
+                    'status' => $statusCode,
+                ],
+                $statusCode
+            );
+        }
 
         return $this->json([
-            'question' => $data["question"],
-            'answer'   => $data["answer"],
+            'question' => $payload["question"] ?? ($data['question'] ?? $data['message'] ?? ''),
+            'answer'   => $payload["answer"] ?? $payload["message"] ?? '',
         ]);
     }
 }
