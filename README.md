@@ -10,6 +10,7 @@ Applicazione Symfony 7.3 per la gestione di navi, equipaggi e mutui, pensata per
 - Comandi di export/import JSON per ripristinare rapidamente i dati di contesto.
 - Console AI per inoltrare domande a un backend esterno (Elara) tramite HttpClient.
 - I controller e i repository filtrano le entità sull’utente proprietario restituendo 404 se non corrispondono, per difesa in profondità oltre ai voter.
+- I calcoli del mutuo usano BCMath e importi normalizzati a stringa per evitare drift tipici dei float.
 
 ## Requisiti
 - PHP 8.2+
