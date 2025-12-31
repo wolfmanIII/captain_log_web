@@ -1,0 +1,64 @@
+<div class="drawer-side">
+    <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
+
+    <div class="min-h-full w-64 bg-base-200 flex flex-col items-start">
+        <ul class="menu w-full grow">
+            <li>
+                <a href="{{ path('app_home') }}"
+                   class="{% if controller_name == constant('App\\Controller\\HomeController::CONTROLLER_NAME') %}menu-active{% endif %}"
+                >
+                    <!-- icona home -->
+                    {% include 'icons/spaceport.html.twig' %}
+                    <span>Homepage</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ path('app_ship_index') }}"
+                   class="{% if controller_name == constant('App\\Controller\\ShipController::CONTROLLER_NAME') %}menu-active{% endif %}"
+                >
+                    <!-- icona ships -->
+                    {% include 'icons/far-trader.html.twig' %}
+                    <span>Ships</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ path('app_crew_index') }}"
+                   class="{% if controller_name == constant('App\\Controller\\CrewController::CONTROLLER_NAME') %}menu-active{% endif %}"
+                >
+                    <!-- icona crew -->
+                    {% include 'icons/crew.html.twig' %}
+                    <span>Crew</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ path('app_mortgage_index') }}"
+                   class="{% if controller_name == constant('App\\Controller\\MortgageController::CONTROLLER_NAME') %}menu-active{% endif %}"
+                >
+                    <!-- icona mortgages -->
+                    {% include 'icons/handbook.html.twig' %}
+                    <span>Mortgages</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ path('app_ai_console') }}"
+                    class="{% if controller_name == constant('App\\Controller\\ChatController::CONTROLLER_NAME') %}menu-active{% endif %}">
+                    {# icona "elara" #}
+                    <img src="{{ asset('img/elara-logo.png') }}" width=24>
+                    <span>Elara</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ path('admin') }}">
+                    {% include 'icons/admin.html.twig' %}
+                    <span>Admin</span>
+                </a>
+            </li>
+
+        </ul>
+    </div>
+</div>

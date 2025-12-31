@@ -56,9 +56,5 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Interest Rate', 'fas fa-list', InterestRate::class);
         yield MenuItem::linkToCrud('Insurance', 'fas fa-list', Insurance::class);
         yield MenuItem::linkToCrud('ShipRole', 'fas fa-list', ShipRole::class);
-
-        yield MenuItem::section('AI / Documenti indicizzati');
-        yield MenuItem::linkToCrud('Documenti', 'fa fa-file-alt', DocumentFile::class);
-        yield MenuItem::linkToCrud('Chunk', 'fa fa-paragraph', DocumentChunk::class);
     }
 }
