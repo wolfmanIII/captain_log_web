@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\AnnualBudget;
 use App\Form\AnnualBudgetType;
+use App\Security\Voter\AnnualBudgetVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -92,6 +93,10 @@ final class AnnualBudgetController extends BaseController
         $budget = $em->getRepository(AnnualBudget::class)->findOneForUser($id, $user);
         if (!$budget) {
             throw new NotFoundHttpException();
+        }
+
+        if (!$this->isGranted(AnnualBudgetVoter::DELETE, $budget)) {
+            throw $this->createAccessDeniedException();
         }
 
         $em->remove($budget);
