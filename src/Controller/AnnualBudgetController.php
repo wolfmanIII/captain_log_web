@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\AnnualBudget;
+use App\Entity\Cost;
+use App\Entity\Income;
 use App\Form\AnnualBudgetType;
 use App\Security\Voter\AnnualBudgetVoter;
 use Doctrine\ORM\EntityManagerInterface;
@@ -110,5 +112,94 @@ final class AnnualBudgetController extends BaseController
         $em->flush();
 
         return $this->redirectToRoute('app_annual_budget_index');
+    }
+
+    #[Route('/annual-budget/chart/{id}', name: 'app_annual_budget_chart', methods: ['GET'])]
+    public function chart(int $id, EntityManagerInterface $em): Response
+    {
+        $user = $this->getUser();
+        if (!$user instanceof \App\Entity\User) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $budget = $em->getRepository(AnnualBudget::class)->findOneForUser($id, $user);
+        if (!$budget) {
+            throw new NotFoundHttpException();
+        }
+
+        $this->denyAccessUnlessGranted(AnnualBudgetVoter::VIEW, $budget);
+
+        $incomes = $em->getRepository(Income::class)->findAllForUser($user);
+        $costs = $em->getRepository(Cost::class)->findAllForUser($user);
+
+        [$labels, $incomeSeries, $costSeries] = $this->buildSeries($budget, $incomes, $costs);
+
+        return $this->render('annual_budget/chart.html.twig', [
+            'controller_name' => self::CONTROLLER_NAME,
+            'budget' => $budget,
+            'labels' => $labels,
+            'incomeSeries' => $incomeSeries,
+            'costSeries' => $costSeries,
+        ]);
+    }
+
+    private function buildSeries(AnnualBudget $budget, array $incomes, array $costs): array
+    {
+        $startKey = $this->keyFromDayYear($budget->getStartDay(), $budget->getStartYear());
+        $endKey = $this->keyFromDayYear($budget->getEndDay(), $budget->getEndYear());
+        $labels = [];
+        $incomeMap = [];
+        $costMap = [];
+
+        foreach ($incomes as $income) {
+            if ($income->getShip()?->getId() !== $budget->getShip()?->getId()) {
+                continue;
+            }
+            $day = $income->getPaymentDay() ?? $income->getSigningDay();
+            $year = $income->getPaymentYear() ?? $income->getSigningYear();
+            $key = $this->keyFromDayYear($day, $year);
+            if ($key === null || $key < $startKey || $key > $endKey) {
+                continue;
+            }
+            $incomeMap[$key] = ($incomeMap[$key] ?? 0) + (float) $income->getAmount();
+            $labels[$key] = sprintf('%s/%s', $day, $year);
+        }
+
+        foreach ($costs as $cost) {
+            if ($cost->getShip()?->getId() !== $budget->getShip()?->getId()) {
+                continue;
+            }
+            $day = $cost->getPaymentDay() ?? null;
+            $year = $cost->getPaymentYear() ?? null;
+            if ($day === null || $year === null) {
+                continue;
+            }
+            $key = $this->keyFromDayYear($day, $year);
+            if ($key === null || $key < $startKey || $key > $endKey) {
+                continue;
+            }
+            $costMap[$key] = ($costMap[$key] ?? 0) + (float) $cost->getAmount();
+            $labels[$key] = sprintf('%s/%s', $day, $year);
+        }
+
+        ksort($labels);
+        $orderedLabels = array_values($labels);
+        $incomeSeries = [];
+        $costSeries = [];
+        foreach (array_keys($labels) as $key) {
+            $incomeSeries[] = $incomeMap[$key] ?? 0;
+            $costSeries[] = $costMap[$key] ?? 0;
+        }
+
+        return [$orderedLabels, $incomeSeries, $costSeries];
+    }
+
+    private function keyFromDayYear(?int $day, ?int $year): ?int
+    {
+        if ($day === null || $year === null) {
+            return null;
+        }
+
+        return $year * 1000 + $day;
     }
 }
