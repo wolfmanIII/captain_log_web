@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Cost;
 use App\Form\CostType;
+use App\Security\Voter\CostVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -65,6 +66,10 @@ final class CostController extends BaseController
             throw new NotFoundHttpException();
         }
 
+        if (!$this->isGranted(CostVoter::EDIT, $cost)) {
+            throw $this->createAccessDeniedException();
+        }
+
         $form = $this->createForm(CostType::class, $cost, ['user' => $user]);
         $form->handleRequest($request);
 
@@ -92,6 +97,10 @@ final class CostController extends BaseController
         $cost = $em->getRepository(Cost::class)->findOneForUser($id, $user);
         if (!$cost) {
             throw new NotFoundHttpException();
+        }
+
+        if (!$this->isGranted(CostVoter::DELETE, $cost)) {
+            throw $this->createAccessDeniedException();
         }
 
         $em->remove($cost);

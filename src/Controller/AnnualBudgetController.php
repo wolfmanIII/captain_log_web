@@ -66,6 +66,10 @@ final class AnnualBudgetController extends BaseController
             throw new NotFoundHttpException();
         }
 
+        if (!$this->isGranted(AnnualBudgetVoter::EDIT, $budget)) {
+            throw $this->createAccessDeniedException();
+        }
+
         $form = $this->createForm(AnnualBudgetType::class, $budget, ['user' => $user]);
         $form->handleRequest($request);
 

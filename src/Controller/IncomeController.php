@@ -66,6 +66,10 @@ final class IncomeController extends BaseController
             throw new NotFoundHttpException();
         }
 
+        if (!$this->isGranted(IncomeVoter::EDIT, $income)) {
+            throw $this->createAccessDeniedException();
+        }
+
         $form = $this->createForm(IncomeType::class, $income, ['user' => $user]);
         $form->handleRequest($request);
 
