@@ -12,34 +12,30 @@ use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\HttpFoundation\Response;
 
 #[AdminDashboard(routePath: '/admin', routeName: 'admin')]
 class DashboardController extends AbstractDashboardController
 {
+    public function __construct(private readonly AdminUrlGenerator $adminUrlGenerator)
+    {
+    }
+
     public function index(): Response
     {
-        return parent::index();
+        $links = [
+            'Interest Rate' => $this->adminUrlGenerator->setController(InterestRateCrudController::class)->setAction('index')->generateUrl(),
+            'Insurance' => $this->adminUrlGenerator->setController(InsuranceCrudController::class)->setAction('index')->generateUrl(),
+            'Ship Role' => $this->adminUrlGenerator->setController(ShipRoleCrudController::class)->setAction('index')->generateUrl(),
+            'Cost Category' => $this->adminUrlGenerator->setController(CostCategoryCrudController::class)->setAction('index')->generateUrl(),
+            'Documenti indicizzati' => $this->adminUrlGenerator->setController(DocumentFileCrudController::class)->setAction('index')->generateUrl(),
+            'Chunk indicizzati' => $this->adminUrlGenerator->setController(DocumentChunkCrudController::class)->setAction('index')->generateUrl(),
+        ];
 
-        // Option 1. You can make your dashboard redirect to some common page of your backend
-        //
-        // 1.1) If you have enabled the "pretty URLs" feature:
-        // return $this->redirectToRoute('admin_interest_rate_index');
-        //
-        // 1.2) Same example but using the "ugly URLs" that were used in previous EasyAdmin versions:
-        // $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
-        // return $this->redirect($adminUrlGenerator->setController(OneOfYourCrudController::class)->generateUrl());
-
-        // Option 2. You can make your dashboard redirect to different pages depending on the user
-        //
-        // if ('jane' === $this->getUser()->getUsername()) {
-        //     return $this->redirectToRoute('...');
-        // }
-
-        // Option 3. You can render some custom template to display a proper dashboard with widgets, etc.
-        // (tip: it's easier if your template extends from @EasyAdmin/page/content.html.twig)
-        //
-        // return $this->render('some/path/my-dashboard.html.twig');
+        return $this->render('admin/dashboard.html.twig', [
+            'links' => $links,
+        ]);
     }
 
     public function configureDashboard(): Dashboard
