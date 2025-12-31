@@ -29,8 +29,6 @@ class DashboardController extends AbstractDashboardController
             'Insurance' => $this->adminUrlGenerator->setController(InsuranceCrudController::class)->setAction('index')->generateUrl(),
             'Ship Role' => $this->adminUrlGenerator->setController(ShipRoleCrudController::class)->setAction('index')->generateUrl(),
             'Cost Category' => $this->adminUrlGenerator->setController(CostCategoryCrudController::class)->setAction('index')->generateUrl(),
-            'Documenti indicizzati' => $this->adminUrlGenerator->setController(DocumentFileCrudController::class)->setAction('index')->generateUrl(),
-            'Chunk indicizzati' => $this->adminUrlGenerator->setController(DocumentChunkCrudController::class)->setAction('index')->generateUrl(),
         ];
 
         return $this->render('admin/dashboard.html.twig', [
