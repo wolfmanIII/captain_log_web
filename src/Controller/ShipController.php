@@ -9,7 +9,6 @@ use App\Form\CrewSelectType;
 use App\Form\ShipType;
 use App\Security\Voter\ShipVoter;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -53,13 +52,13 @@ final class ShipController extends BaseController
 
     #[Route('/ship/edit/{id}', name: 'app_ship_edit', methods: ['GET', 'POST'])]
     public function edit(
-        #[CurrentUser] ?\App\Entity\User $user,
         int $id,
         Request $request,
         EntityManagerInterface $em
     ): Response
     {
-        if (!$user) {
+        $user = $this->getUser();
+        if (!$user instanceof \App\Entity\User) {
             throw $this->createAccessDeniedException();
         }
 
@@ -92,13 +91,13 @@ final class ShipController extends BaseController
 
     #[Route('/ship/delete/{id}', name: 'app_ship_delete', methods: ['GET', 'POST'])]
     public function delete(
-        #[CurrentUser] ?\App\Entity\User $user,
         int $id,
         Request $request,
         EntityManagerInterface $em
     ): Response
     {
-        if (!$user) {
+        $user = $this->getUser();
+        if (!$user instanceof \App\Entity\User) {
             throw $this->createAccessDeniedException();
         }
 
@@ -119,12 +118,12 @@ final class ShipController extends BaseController
 
     #[Route('/ship/{id}/crew', name: 'app_ship_crew')]
     public function crew(
-        #[CurrentUser] ?\App\Entity\User $user,
         int $id,
         Request $request,
         EntityManagerInterface $em
     ): Response {
-        if (!$user) {
+        $user = $this->getUser();
+        if (!$user instanceof \App\Entity\User) {
             throw $this->createAccessDeniedException();
         }
 
@@ -177,13 +176,13 @@ final class ShipController extends BaseController
 
     #[Route('/ship/crew/{id}/remove', name: 'app_ship_crew_remove', methods: ['GET', 'POST'])]
     public function removeCrew(
-        #[CurrentUser] ?\App\Entity\User $user,
         int $id,
         Request $request,
         EntityManagerInterface $em
     ): Response
     {
-        if (!$user) {
+        $user = $this->getUser();
+        if (!$user instanceof \App\Entity\User) {
             throw $this->createAccessDeniedException();
         }
 
