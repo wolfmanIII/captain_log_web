@@ -33,8 +33,13 @@ final class MortgageController extends BaseController
     #[Route('/mortgage/new', name: 'app_mortgage_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $em): Response
     {
+        $user = $this->getUser();
+        if (!$user instanceof \App\Entity\User) {
+            throw $this->createAccessDeniedException();
+        }
+
         $mortgage = new Mortgage();
-        $form = $this->createForm(MortgageType::class, $mortgage);
+        $form = $this->createForm(MortgageType::class, $mortgage, ['user' => $user]);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -70,7 +75,7 @@ final class MortgageController extends BaseController
             throw new NotFoundHttpException();
         }
 
-        $form = $this->createForm(MortgageType::class, $mortgage);
+        $form = $this->createForm(MortgageType::class, $mortgage, ['user' => $user]);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

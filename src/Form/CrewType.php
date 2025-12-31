@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Crew;
 use App\Entity\Ship;
 use App\Entity\ShipRole;
+use App\Repository\ShipRepository;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -19,6 +20,7 @@ class CrewType extends AbstractType
         /** @var Crew $crew */
         $crew = $options['data'];
         $disabled = $crew->hasMortgageSigned();
+        $user = $options['user'];
         $builder
             ->add('name', TextType::class, [
                 'attr' => ['class' => 'input m-1 w-full'],
@@ -52,6 +54,14 @@ class CrewType extends AbstractType
                 'class' => Ship::class,
                 'choice_label' => 'name',
                 'required' => false,
+                'query_builder' => function (ShipRepository $repo) use ($user) {
+                    $qb = $repo->createQueryBuilder('s')->orderBy('s.name', 'ASC');
+                    if ($user) {
+                        $qb->andWhere('s.user = :user')->setParameter('user', $user);
+                    }
+
+                    return $qb;
+                },
                 'attr' => ['class' => 'select m-1 w-full'],
                 'disabled' => $disabled,
             ])
@@ -71,6 +81,7 @@ class CrewType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Crew::class,
+            'user' => null,
         ]);
     }
 }

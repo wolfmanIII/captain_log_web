@@ -31,8 +31,13 @@ final class CrewController extends BaseController
     #[Route('/crew/new', name: 'app_crew_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $em): Response
     {
+        $user = $this->getUser();
+        if (!$user instanceof \App\Entity\User) {
+            throw $this->createAccessDeniedException();
+        }
+
         $crew = new Crew();
-        $form = $this->createForm(CrewType::class, $crew);
+        $form = $this->createForm(CrewType::class, $crew, ['user' => $user]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -63,7 +68,7 @@ final class CrewController extends BaseController
             throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
         }
 
-        $form = $this->createForm(CrewType::class, $crew);
+        $form = $this->createForm(CrewType::class, $crew, ['user' => $user]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
