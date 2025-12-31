@@ -1,7 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% set CAN_EDIT = constant('App\\Security\\Voter\\CrewVoter::EDIT') %}
+{% set CAN_CREATE = constant('App\\Security\\Voter\\CrewVoter::CREATE') %}
 {% set can_edit = is_granted(CAN_EDIT, crew) %}
+{% set can_create = is_granted(CAN_CREATE, crew) %}
 
 {% block title %}Captain Log - Crew{% endblock %}
 
@@ -85,7 +87,7 @@
 
     <button type="submit"
             class="btn btn-outline btn-primary mt-4 mb-4 mr-4"
-            {% if not can_edit %} disabled {% endif %}
+            {% if not (crew.id ? can_edit : can_create) %} disabled {% endif %}
     >
         Save
     </button>

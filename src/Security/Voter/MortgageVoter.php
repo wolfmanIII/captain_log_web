@@ -11,6 +11,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 final class MortgageVoter extends Voter
 {
     public const EDIT = 'MORTGAGE_EDIT';
+    public const CREATE = 'MORTGAGE_CREATE';
     public const VIEW = 'MORTGAGE_VIEW';
     public const SIGN = 'MORTGAGE_SIGN';
     public const DELETE = 'MORTGAGE_DELETE';
@@ -24,6 +25,7 @@ final class MortgageVoter extends Voter
         }
 
         return in_array($attribute, [
+            self::CREATE,
             self::EDIT,
             self::VIEW,
             self::SIGN,
@@ -42,11 +44,8 @@ final class MortgageVoter extends Voter
             return false;
         }
 
-        if (!$this->isOwner($subject, $user)) {
-            return false;
-        }
-
         return match ($attribute) {
+            self::CREATE      => $this->canCreate($subject, $user),
             self::VIEW        => $this->canView($subject, $user),
             self::EDIT        => $this->canEdit($subject, $user),
             self::SIGN        => $this->canSign($subject, $user),
@@ -56,14 +55,19 @@ final class MortgageVoter extends Voter
         };
     }
 
+    private function canCreate(Mortgage $mortgage, ?UserInterface $user = null): bool
+    {
+        return $mortgage->getId() === null;
+    }
+
     private function canView(Mortgage $mortgage, ?UserInterface $user = null): bool
     {
-        return true;
+        return $this->isOwner($mortgage, $user);
     }
 
     private function canEdit(Mortgage $mortgage, ?UserInterface $user = null): bool
     {
-        return !$mortgage->isSigned();
+        return $this->isOwner($mortgage, $user) && !$mortgage->isSigned();
     }
 
     private function canDelete(Mortgage $mortgage, ?UserInterface $user = null): bool
@@ -73,12 +77,12 @@ final class MortgageVoter extends Voter
 
     private function canSign(Mortgage $mortgage, ?UserInterface $user = null): bool
     {
-        return !$mortgage->isSigned() && $mortgage->getId();
+        return $this->isOwner($mortgage, $user) && !$mortgage->isSigned() && $mortgage->getId();
     }
 
     private function canPayInstallment(Mortgage $mortgage, ?UserInterface $user = null): bool
     {
-        return $mortgage->isSigned();
+        return $this->isOwner($mortgage, $user) && $mortgage->isSigned();
     }
 
     private function isOwner(Mortgage $mortgage, UserInterface $user): bool

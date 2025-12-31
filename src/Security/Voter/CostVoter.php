@@ -9,13 +9,14 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 class CostVoter extends Voter
 {
+    public const CREATE = 'cost_create';
     public const VIEW = 'cost_view';
     public const EDIT = 'cost_edit';
     public const DELETE = 'cost_delete';
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        if (!in_array($attribute, [self::VIEW, self::EDIT, self::DELETE], true)) {
+        if (!in_array($attribute, [self::CREATE, self::VIEW, self::EDIT, self::DELETE], true)) {
             return false;
         }
 
@@ -32,15 +33,38 @@ class CostVoter extends Voter
         /** @var Cost $cost */
         $cost = $subject;
 
-        if ($cost->getUser() === null || $cost->getUser()->getId() !== $user->getId()) {
-            return false;
-        }
-
         return match ($attribute) {
-            self::VIEW => true,
-            self::EDIT => true,
-            self::DELETE => true,
+            self::CREATE => $this->canCreate($cost),
+            self::VIEW => $this->canView($cost, $user),
+            self::EDIT => $this->canEdit($cost, $user),
+            self::DELETE => $this->canDelete($cost, $user),
             default => false,
         };
+    }
+
+    private function canCreate(Cost $cost): bool
+    {
+        return $cost->getId() === null;
+    }
+
+    private function canView(Cost $cost, User $user): bool
+    {
+        return $this->isOwner($cost, $user);
+    }
+
+    private function canEdit(Cost $cost, User $user): bool
+    {
+        return $this->isOwner($cost, $user);
+    }
+
+    private function canDelete(Cost $cost, User $user): bool
+    {
+        return $this->canEdit($cost, $user);
+    }
+
+    private function isOwner(Cost $cost, User $user): bool
+    {
+        return $cost->getUser() instanceof User
+            && $cost->getUser()->getId() === $user->getId();
     }
 }

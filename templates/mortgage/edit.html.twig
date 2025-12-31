@@ -1,9 +1,11 @@
 {% extends 'base.html.twig' %}
 
 {% set CAN_EDIT = constant('App\\Security\\Voter\\MortgageVoter::EDIT') %}
+{% set CAN_CREATE = constant('App\\Security\\Voter\\MortgageVoter::CREATE') %}
 {% set CAN_SIGN = constant('App\\Security\\Voter\\MortgageVoter::SIGN') %}
 {% set CAN_PAY = constant('App\\Security\\Voter\\MortgageVoter::PAY_INSTALLMENT') %}
 {% set can_edit = is_granted(CAN_EDIT, mortgage) %}
+{% set can_create = is_granted(CAN_CREATE, mortgage) %}
 {% set can_sign = is_granted(CAN_SIGN, mortgage) %}
 {% set can_pay = is_granted(CAN_PAY, mortgage) %}
 
@@ -109,7 +111,7 @@
         type="submit"
         name="action" value="save"
         class="btn btn-outline btn-primary mt-4 mb-4 mr-4"
-        {% if not can_edit %} disabled {% endif %}
+        {% if not (mortgage.id ? can_edit : can_create) %} disabled {% endif %}
     >Save</button>
 
     <button

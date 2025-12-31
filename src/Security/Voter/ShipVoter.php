@@ -11,6 +11,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 final class ShipVoter extends Voter
 {
     public const EDIT = 'SHIP_EDIT';
+    public const CREATE = 'SHIP_CREATE';
     public const VIEW = 'SHIP_VIEW';
     public const DELETE = 'SHIP_DELETE';
     public const CREW_REMOVE = 'SHIP_CREW_REMOVE';
@@ -22,6 +23,7 @@ final class ShipVoter extends Voter
         }
 
         return in_array($attribute, [
+            self::CREATE,
             self::EDIT,
             self::VIEW,
             self::DELETE,
@@ -38,12 +40,18 @@ final class ShipVoter extends Voter
         }
 
         return match ($attribute) {
+            self::CREATE      => $this->canCreate($subject, $user),
             self::VIEW        => $this->canView($subject, $user),
             self::EDIT        => $this->canEdit($subject, $user),
             self::DELETE      => $this->canDelete($subject, $user),
             self::CREW_REMOVE => $this->canCrewRemove($subject, $user),
             default           => false,
         };
+    }
+
+    private function canCreate(Ship $ship, ?UserInterface $user = null): bool
+    {
+        return $ship->getId() === null;
     }
 
     private function canView(Ship $ship, ?UserInterface $user = null): bool

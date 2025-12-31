@@ -11,6 +11,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 final class CrewVoter extends Voter
 {
     public const EDIT = 'CREW_EDIT';
+    public const CREATE = 'CREW_CREATE';
     public const VIEW = 'CREW_VIEW';
     public const DELETE = 'CREW_DELETE';
 
@@ -21,6 +22,7 @@ final class CrewVoter extends Voter
         }
 
         return in_array($attribute, [
+            self::CREATE,
             self::EDIT,
             self::VIEW,
             self::DELETE,
@@ -35,11 +37,8 @@ final class CrewVoter extends Voter
             return false;
         }
 
-        if (!$this->isOwner($subject, $user)) {
-            return false;
-        }
-
         return match ($attribute) {
+            self::CREATE      => $this->canCreate($subject, $user),
             self::VIEW        => $this->canView($subject, $user),
             self::EDIT        => $this->canEdit($subject, $user),
             self::DELETE      => $this->canDelete($subject, $user),
@@ -47,14 +46,19 @@ final class CrewVoter extends Voter
         };
     }
 
+    private function canCreate(Crew $crew, ?UserInterface $user = null): bool
+    {
+        return $crew->getId() === null;
+    }
+
     private function canView(Crew $crew, ?UserInterface $user = null): bool
     {
-        return true;
+        return $this->isOwner($crew, $user);
     }
 
     private function canEdit(Crew $crew, ?UserInterface $user = null): bool
     {
-        return !$crew->hasMortgageSigned();
+        return $this->isOwner($crew, $user) && !$crew->hasMortgageSigned();
     }
 
     private function canDelete(Crew $crew, ?UserInterface $user = null): bool
