@@ -25,5 +25,5 @@ services:
     #    tags:
     #        - { name: 'doctrine.middleware' }
 
-    # abilta il servizio per il parsing dei file PDF
-    Smalot\PdfParser\Parser: ~
+    App\EventSubscriber\AssignUserSubscriber:
+        tags: ['doctrine.event_subscriber']
