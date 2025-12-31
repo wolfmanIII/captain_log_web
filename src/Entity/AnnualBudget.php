@@ -168,6 +168,45 @@ class AnnualBudget
         }
 
         return round($budget, 2, PHP_ROUND_HALF_DOWN);
+    }
 
+    public function getTotalIncomeAmount()
+    {
+        $incomeAmount = 0.00; 
+        foreach($this->getShip()->getIncomes() as $income) {
+            if (
+                is_null($income->getCancelDay())
+                && is_null($income->getCancelYear())
+            ) {
+                $incomeAmount = bcadd($incomeAmount, $income->getAmount(), 6);
+            }
+        }
+        return round($incomeAmount, 2, PHP_ROUND_HALF_DOWN);
+    }
+
+    public function getTotalCostsAmount()
+    {
+        $costAmount = 0.00;
+        foreach($this->getShip()->getCosts() as $cost) {
+            $costAmount = bcadd($costAmount, $cost->getAmount(), 6);
+        }
+        return round($costAmount, 2, PHP_ROUND_HALF_DOWN);
+    }
+
+    public function getActualBudget()
+    {
+        $totalIncomeAmount = $this->getTotalIncomeAmount();
+        $mortgageAnnualPayment = $this->getShip()->getMortgage()->calculate()['total_annual_payment'];
+        $totaleCostsAmount = $this->getTotalCostsAmount();
+
+        $totalCost = bcadd($mortgageAnnualPayment, $totaleCostsAmount, 6);
+
+        $actualBudget = bcsub(
+            $totalIncomeAmount,
+            $totalCost,
+            6
+        );
+
+        return round($actualBudget, 2, PHP_ROUND_HALF_DOWN);
     }
 }
