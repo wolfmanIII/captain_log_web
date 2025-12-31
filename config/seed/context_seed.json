@@ -110,5 +110,27 @@
             "name": "Steward",
             "description": "Spaceship Steward"
         }
+    ],
+    "income_categories": [
+        {
+            "code": "FRT",
+            "description": "Freight income"
+        },
+        {
+            "code": "PAS",
+            "description": "Passengers"
+        },
+        {
+            "code": "SUB",
+            "description": "Subsidy"
+        },
+        {
+            "code": "SAL",
+            "description": "Salvage"
+        },
+        {
+            "code": "MIS",
+            "description": "Miscellaneous income"
+        }
     ]
 }

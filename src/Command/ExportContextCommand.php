@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Repository\InsuranceRepository;
 use App\Repository\CostCategoryRepository;
+use App\Repository\IncomeCategoryRepository;
 use App\Repository\InterestRateRepository;
 use App\Repository\ShipRoleRepository;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -24,6 +25,7 @@ class ExportContextCommand extends Command
     public function __construct(
         private readonly InsuranceRepository $insuranceRepository,
         private readonly CostCategoryRepository $costCategoryRepository,
+        private readonly IncomeCategoryRepository $incomeCategoryRepository,
         private readonly InterestRateRepository $interestRateRepository,
         private readonly ShipRoleRepository $shipRoleRepository,
         #[Autowire('%kernel.project_dir%')] private readonly string $projectDir,
@@ -93,6 +95,15 @@ class ExportContextCommand extends Command
                     ];
                 },
                 $this->costCategoryRepository->findAll()
+            ),
+            'income_categories' => array_map(
+                static function ($category): array {
+                    return [
+                        'code'        => $category->getCode(),
+                        'description' => $category->getDescription(),
+                    ];
+                },
+                $this->incomeCategoryRepository->findAll()
             ),
         ];
 

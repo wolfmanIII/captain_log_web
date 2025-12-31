@@ -14,6 +14,7 @@ Questo documento descrive in modo discorsivo l’architettura attuale di Captain
 - **Navi e mutui:** `Ship`, `Mortgage`, `MortgageInstallment`, `InterestRate`, `Insurance`, `ShipRole`.
 - **Equipaggio:** `Crew` con ruoli multipli (`ShipRole`, es. CAP). Metodi helper `hasCaptain()`, `hasMortgageSigned()`.
 - **CostCategory:** tabella di contesto per tipologie di spesa equipaggio (code, description).
+- **IncomeCategory:** tabella di contesto per tipologie di entrata (code, description) per future use-cases di accounting.
 - **Tracciamento utente:** `user` (FK nullable) su Ship, Crew, Mortgage, MortgageInstallment. Un listener Doctrine (`AssignUserSubscriber`) assegna l’utente loggato in `prePersist`.
 
 ### Relazioni principali
