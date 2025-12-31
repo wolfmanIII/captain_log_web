@@ -9,6 +9,8 @@ use App\Form\CrewSelectType;
 use App\Form\ShipType;
 use App\Security\Voter\ShipVoter;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Bundle\SecurityBundle\Attribute\CurrentUser;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -51,14 +53,18 @@ final class ShipController extends BaseController
     }
 
     #[Route('/ship/edit/{id}', name: 'app_ship_edit', methods: ['GET', 'POST'])]
-    public function edit(int $id, Request $request, EntityManagerInterface $em): Response
+    #[IsGranted(ShipVoter::EDIT, subject: 'ship')]
+    public function edit(
+        #[CurrentUser] ?\App\Entity\User $user,
+        #[MapEntity(expr: 'repository.findOneForUser(id, user)')] ?Ship $ship,
+        Request $request,
+        EntityManagerInterface $em
+    ): Response
     {
-        $user = $this->getUser();
-        if (!$user instanceof \App\Entity\User) {
+        if (!$user) {
             throw $this->createAccessDeniedException();
         }
 
-        $ship = $em->getRepository(Ship::class)->findOneForUser($id, $user);
         if (!$ship) {
             throw new NotFoundHttpException();
         }
@@ -86,14 +92,18 @@ final class ShipController extends BaseController
     }
 
     #[Route('/ship/delete/{id}', name: 'app_ship_delete', methods: ['GET', 'POST'])]
-    public function delete(int $id, Request $request, EntityManagerInterface $em): Response
+    #[IsGranted(ShipVoter::DELETE, subject: 'ship')]
+    public function delete(
+        #[CurrentUser] ?\App\Entity\User $user,
+        #[MapEntity(expr: 'repository.findOneForUser(id, user)')] ?Ship $ship,
+        Request $request,
+        EntityManagerInterface $em
+    ): Response
     {
-        $user = $this->getUser();
-        if (!$user instanceof \App\Entity\User) {
+        if (!$user) {
             throw $this->createAccessDeniedException();
         }
 
-        $ship = $em->getRepository(Ship::class)->findOneForUser($id, $user);
         if (!$ship) {
             throw new NotFoundHttpException();
         }
@@ -110,16 +120,15 @@ final class ShipController extends BaseController
 
     #[Route('/ship/{id}/crew', name: 'app_ship_crew')]
     public function crew(
-        int $id,
+        #[CurrentUser] ?\App\Entity\User $user,
+        #[MapEntity(expr: 'repository.findOneForUser(id, user)')] ?Ship $ship,
         Request $request,
         EntityManagerInterface $em
     ): Response {
-        $user = $this->getUser();
-        if (!$user instanceof \App\Entity\User) {
+        if (!$user) {
             throw $this->createAccessDeniedException();
         }
 
-        $ship = $em->getRepository(Ship::class)->findOneForUser($id, $user);
         if (!$ship) {
             throw new NotFoundHttpException();
         }
@@ -167,14 +176,17 @@ final class ShipController extends BaseController
     }
 
     #[Route('/ship/crew/{id}/remove', name: 'app_ship_crew_remove', methods: ['GET', 'POST'])]
-    public function removeCrew(int $id, Request $request, EntityManagerInterface $em): Response
+    public function removeCrew(
+        #[CurrentUser] ?\App\Entity\User $user,
+        #[MapEntity(expr: 'repository.findOneForUser(id, user)')] ?Crew $crew,
+        Request $request,
+        EntityManagerInterface $em
+    ): Response
     {
-        $user = $this->getUser();
-        if (!$user instanceof \App\Entity\User) {
+        if (!$user) {
             throw $this->createAccessDeniedException();
         }
 
-        $crew = $em->getRepository(Crew::class)->findOneForUser($id, $user);
         if (!$crew) {
             throw new NotFoundHttpException();
         }

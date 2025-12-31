@@ -6,6 +6,8 @@ use App\Entity\Cost;
 use App\Form\CostType;
 use App\Security\Voter\CostVoter;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Bundle\SecurityBundle\Attribute\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -54,20 +56,20 @@ final class CostController extends BaseController
     }
 
     #[Route('/cost/edit/{id}', name: 'app_cost_edit', methods: ['GET', 'POST'])]
-    public function edit(int $id, Request $request, EntityManagerInterface $em): Response
+    #[\Symfony\Component\Security\Http\Attribute\IsGranted(CostVoter::EDIT, subject: 'cost')]
+    public function edit(
+        #[CurrentUser] ?\App\Entity\User $user,
+        #[MapEntity(expr: 'repository.findOneForUser(id, user)')] ?Cost $cost,
+        Request $request,
+        EntityManagerInterface $em
+    ): Response
     {
-        $user = $this->getUser();
-        if (!$user instanceof \App\Entity\User) {
+        if (!$user) {
             throw $this->createAccessDeniedException();
         }
 
-        $cost = $em->getRepository(Cost::class)->findOneForUser($id, $user);
         if (!$cost) {
             throw new NotFoundHttpException();
-        }
-
-        if (!$this->isGranted(CostVoter::EDIT, $cost)) {
-            throw $this->createAccessDeniedException();
         }
 
         $form = $this->createForm(CostType::class, $cost, ['user' => $user]);
@@ -87,20 +89,19 @@ final class CostController extends BaseController
     }
 
     #[Route('/cost/delete/{id}', name: 'app_cost_delete', methods: ['GET', 'POST'])]
-    public function delete(int $id, EntityManagerInterface $em): Response
+    #[\Symfony\Component\Security\Http\Attribute\IsGranted(CostVoter::DELETE, subject: 'cost')]
+    public function delete(
+        #[CurrentUser] ?\App\Entity\User $user,
+        #[MapEntity(expr: 'repository.findOneForUser(id, user)')] ?Cost $cost,
+        EntityManagerInterface $em
+    ): Response
     {
-        $user = $this->getUser();
-        if (!$user instanceof \App\Entity\User) {
+        if (!$user) {
             throw $this->createAccessDeniedException();
         }
 
-        $cost = $em->getRepository(Cost::class)->findOneForUser($id, $user);
         if (!$cost) {
             throw new NotFoundHttpException();
-        }
-
-        if (!$this->isGranted(CostVoter::DELETE, $cost)) {
-            throw $this->createAccessDeniedException();
         }
 
         $em->remove($cost);

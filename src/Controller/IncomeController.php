@@ -6,6 +6,8 @@ use App\Entity\Income;
 use App\Form\IncomeType;
 use App\Security\Voter\IncomeVoter;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Bundle\SecurityBundle\Attribute\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -54,20 +56,20 @@ final class IncomeController extends BaseController
     }
 
     #[Route('/income/edit/{id}', name: 'app_income_edit', methods: ['GET', 'POST'])]
-    public function edit(int $id, Request $request, EntityManagerInterface $em): Response
+    #[\Symfony\Component\Security\Http\Attribute\IsGranted(IncomeVoter::EDIT, subject: 'income')]
+    public function edit(
+        #[CurrentUser] ?\App\Entity\User $user,
+        #[MapEntity(expr: 'repository.findOneForUser(id, user)')] ?Income $income,
+        Request $request,
+        EntityManagerInterface $em
+    ): Response
     {
-        $user = $this->getUser();
-        if (!$user instanceof \App\Entity\User) {
+        if (!$user) {
             throw $this->createAccessDeniedException();
         }
 
-        $income = $em->getRepository(Income::class)->findOneForUser($id, $user);
         if (!$income) {
             throw new NotFoundHttpException();
-        }
-
-        if (!$this->isGranted(IncomeVoter::EDIT, $income)) {
-            throw $this->createAccessDeniedException();
         }
 
         $form = $this->createForm(IncomeType::class, $income, ['user' => $user]);
@@ -87,20 +89,19 @@ final class IncomeController extends BaseController
     }
 
     #[Route('/income/delete/{id}', name: 'app_income_delete', methods: ['GET', 'POST'])]
-    public function delete(int $id, EntityManagerInterface $em): Response
+    #[\Symfony\Component\Security\Http\Attribute\IsGranted(IncomeVoter::DELETE, subject: 'income')]
+    public function delete(
+        #[CurrentUser] ?\App\Entity\User $user,
+        #[MapEntity(expr: 'repository.findOneForUser(id, user)')] ?Income $income,
+        EntityManagerInterface $em
+    ): Response
     {
-        $user = $this->getUser();
-        if (!$user instanceof \App\Entity\User) {
+        if (!$user) {
             throw $this->createAccessDeniedException();
         }
 
-        $income = $em->getRepository(Income::class)->findOneForUser($id, $user);
         if (!$income) {
             throw new NotFoundHttpException();
-        }
-
-        if (!$this->isGranted(IncomeVoter::DELETE, $income)) {
-            throw $this->createAccessDeniedException();
         }
 
         $em->remove($income);

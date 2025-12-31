@@ -6,6 +6,8 @@ use App\Entity\AnnualBudget;
 use App\Form\AnnualBudgetType;
 use App\Security\Voter\AnnualBudgetVoter;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Bundle\SecurityBundle\Attribute\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -54,20 +56,20 @@ final class AnnualBudgetController extends BaseController
     }
 
     #[Route('/annual-budget/edit/{id}', name: 'app_annual_budget_edit', methods: ['GET', 'POST'])]
-    public function edit(int $id, Request $request, EntityManagerInterface $em): Response
+    #[\Symfony\Component\Security\Http\Attribute\IsGranted(AnnualBudgetVoter::EDIT, subject: 'budget')]
+    public function edit(
+        #[CurrentUser] ?\App\Entity\User $user,
+        #[MapEntity(expr: 'repository.findOneForUser(id, user)')] ?AnnualBudget $budget,
+        Request $request,
+        EntityManagerInterface $em
+    ): Response
     {
-        $user = $this->getUser();
-        if (!$user instanceof \App\Entity\User) {
+        if (!$user) {
             throw $this->createAccessDeniedException();
         }
 
-        $budget = $em->getRepository(AnnualBudget::class)->findOneForUser($id, $user);
         if (!$budget) {
             throw new NotFoundHttpException();
-        }
-
-        if (!$this->isGranted(AnnualBudgetVoter::EDIT, $budget)) {
-            throw $this->createAccessDeniedException();
         }
 
         $form = $this->createForm(AnnualBudgetType::class, $budget, ['user' => $user]);
@@ -87,20 +89,19 @@ final class AnnualBudgetController extends BaseController
     }
 
     #[Route('/annual-budget/delete/{id}', name: 'app_annual_budget_delete', methods: ['GET', 'POST'])]
-    public function delete(int $id, EntityManagerInterface $em): Response
+    #[\Symfony\Component\Security\Http\Attribute\IsGranted(AnnualBudgetVoter::DELETE, subject: 'budget')]
+    public function delete(
+        #[CurrentUser] ?\App\Entity\User $user,
+        #[MapEntity(expr: 'repository.findOneForUser(id, user)')] ?AnnualBudget $budget,
+        EntityManagerInterface $em
+    ): Response
     {
-        $user = $this->getUser();
-        if (!$user instanceof \App\Entity\User) {
+        if (!$user) {
             throw $this->createAccessDeniedException();
         }
 
-        $budget = $em->getRepository(AnnualBudget::class)->findOneForUser($id, $user);
         if (!$budget) {
             throw new NotFoundHttpException();
-        }
-
-        if (!$this->isGranted(AnnualBudgetVoter::DELETE, $budget)) {
-            throw $this->createAccessDeniedException();
         }
 
         $em->remove($budget);
