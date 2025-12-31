@@ -82,7 +82,7 @@
             {{ form_errors(form.note) }}
         </div>
 
-        {% if income.id %}
+        {% if income.id and (income.paymentDay is null or income.paymentYear is null) %}
             <div class="col-span-2">
                 <div class="alert alert-warning alert-outline shadow-sm w-full">
                     <div class="grid grid-cols-2 gap-4 items-end">
