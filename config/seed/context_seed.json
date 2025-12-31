@@ -112,26 +112,18 @@
         }
     ],
     "income_categories": [
-        {
-            "code": "FRT",
-            "description": "Freight income"
-        },
-        {
-            "code": "PAS",
-            "description": "Passengers"
-        },
-        {
-            "code": "SUB",
-            "description": "Subsidy"
-        },
-        {
-            "code": "SAL",
-            "description": "Salvage"
-        },
-        {
-            "code": "MIS",
-            "description": "Miscellaneous income"
-        }
+        { "code": "FREIGHT", "description": "Cargo transport revenue (paid freight contracts)" },
+        { "code": "PASSENGERS", "description": "Passenger fares (tickets, berths, passage fees)" },
+        { "code": "MAIL", "description": "Mail contract revenue (official postal/courier runs)" },
+        { "code": "CHARTER", "description": "Charter hire income (ship rented/contracted as a whole)" },
+        { "code": "CONTRACT", "description": "Mission/contract payouts (patron jobs, bounties, assignments)" },
+        { "code": "TRADE", "description": "Trading profit (speculative trade margin, buy/sell spread)" },
+        { "code": "SALVAGE", "description": "Salvage and recovery income (wrecks, derelicts, recovered goods)" },
+        { "code": "PRIZE", "description": "Prize money / captured cargo or ship awards (legal seizure)" },
+        { "code": "SUBSIDY", "description": "Subsidies and grants (e.g., subsidized route payments)" },
+        { "code": "SERVICES", "description": "Service fees (refueling, repairs, towing, escort services, etc.)" },
+        { "code": "INSURANCE", "description": "Insurance payouts (claims, compensation for losses)" },
+        { "code": "INTEREST", "description": "Interest and investment income (financial returns)" }
     ],
     "cost_categories": [
         { "code": "PERSONAL", "description": "Personal cost" },
