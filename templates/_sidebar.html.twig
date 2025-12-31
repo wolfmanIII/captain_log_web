@@ -47,7 +47,7 @@
                 <a href="{{ path('app_cost_index') }}"
                    class="{% if controller_name == constant('App\\Controller\\CostController::CONTROLLER_NAME') %}menu-active{% endif %}"
                 >
-                    {% include 'icons/token.html.twig' %}
+                    {% include 'icons/cost.html.twig' %}
                     <span>Costs</span>
                 </a>
             </li>
@@ -56,7 +56,7 @@
                 <a href="{{ path('app_income_index') }}"
                    class="{% if controller_name == constant('App\\Controller\\IncomeController::CONTROLLER_NAME') %}menu-active{% endif %}"
                 >
-                    {% include 'icons/token.html.twig' %}
+                    {% include 'icons/income.html.twig' %}
                     <span>Income</span>
                 </a>
             </li>
