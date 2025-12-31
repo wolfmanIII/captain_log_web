@@ -6,7 +6,6 @@ use App\Entity\Crew;
 use App\Form\CrewType;
 use App\Security\Voter\CrewVoter;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
@@ -58,10 +57,9 @@ final class CrewController extends BaseController
     }
 
     #[Route('/crew/edit/{id}', name: 'app_crew_edit', methods: ['GET', 'POST'])]
-    #[\Symfony\Component\Security\Http\Attribute\IsGranted(CrewVoter::EDIT, subject: 'crew')]
     public function edit(
         #[CurrentUser] ?\App\Entity\User $user,
-        #[MapEntity(expr: 'repository.findOneForUser(id, user)')] ?Crew $crew,
+        int $id,
         Request $request,
         EntityManagerInterface $em
     ): Response
@@ -70,9 +68,12 @@ final class CrewController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
+        $crew = $em->getRepository(Crew::class)->findOneForUser($id, $user);
         if (!$crew) {
             throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
         }
+
+        $this->denyAccessUnlessGranted(CrewVoter::EDIT, $crew);
 
         $form = $this->createForm(CrewType::class, $crew, ['user' => $user]);
         $form->handleRequest($request);
@@ -91,11 +92,10 @@ final class CrewController extends BaseController
     }
 
     #[Route('/crew/delete/{id}', name: 'app_crew_delete', methods: ['GET', 'POST'])]
-    #[\Symfony\Component\Security\Http\Attribute\IsGranted(CrewVoter::DELETE, subject: 'crew')]
     public function delete(
         Request $request,
         #[CurrentUser] ?\App\Entity\User $user,
-        #[MapEntity(expr: 'repository.findOneForUser(id, user)')] ?Crew $crew,
+        int $id,
         EntityManagerInterface $em
     ): Response
     {
@@ -103,9 +103,12 @@ final class CrewController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
+        $crew = $em->getRepository(Crew::class)->findOneForUser($id, $user);
         if (!$crew) {
             throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
         }
+
+        $this->denyAccessUnlessGranted(CrewVoter::DELETE, $crew);
 
         $em->remove($crew);
         $em->flush();
