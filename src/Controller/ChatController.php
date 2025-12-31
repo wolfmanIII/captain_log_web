@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,6 +14,11 @@ use Symfony\Component\HttpClient\Exception\TransportException;
 final class ChatController extends BaseController
 {
     public const CONTROLLER_NAME = 'ChatController';
+
+    public function __construct(
+        #[Autowire(env: 'ELARA_API_TOKEN')] private readonly string $elaraApiToken,
+    ) {
+    }
 
     #[Route('/ai/console', name: 'app_ai_console', methods: ['GET'])]
     public function console(HttpClientInterface $httpClient): Response
@@ -27,7 +33,7 @@ final class ChatController extends BaseController
                 'https://127.0.0.1:8080/status/engine',
                 [
                     'headers' => [
-                        'Authorization' => 'Bearer 4ad352a3f3c2b3b8940d7ef9caa9361e',
+                        'Authorization' => sprintf('Bearer %s', $this->elaraApiToken),
                         'Accept'        => 'application/json',
                     ],
                     // Elara risponde 302 prima del 200, quindi seguiamo i redirect
@@ -63,14 +69,14 @@ final class ChatController extends BaseController
         $response = $httpClient->request(
             'POST',
             'https://127.0.0.1:8080/api/chat',
-                [
-                    'headers' => [
-                        'Authorization' => 'Bearer 4ad352a3f3c2b3b8940d7ef9caa9361e',
-                        'Accept'        => 'application/json',
-                    ],
-                    'json'          => $data,
-                    // Elara risponde 302 prima del 200, quindi seguiamo i redirect
-                    'max_redirects' => 5,
+            [
+                'headers' => [
+                    'Authorization' => sprintf('Bearer %s', $this->elaraApiToken),
+                    'Accept'        => 'application/json',
+                ],
+                'json'          => $data,
+                // Elara risponde 302 prima del 200, quindi seguiamo i redirect
+                'max_redirects' => 5,
                 ]
             );
 
@@ -107,7 +113,7 @@ final class ChatController extends BaseController
                 'https://127.0.0.1:8080/api/chat/stream',
                 [
                     'headers' => [
-                        'Authorization' => 'Bearer 4ad352a3f3c2b3b8940d7ef9caa9361e',
+                        'Authorization' => sprintf('Bearer %s', $this->elaraApiToken),
                         'Accept'        => 'text/event-stream',
                     ],
                     'json'          => $data,
