@@ -3,6 +3,7 @@
 namespace App\Security\Voter;
 
 use App\Entity\Crew;
+use App\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -30,11 +31,13 @@ final class CrewVoter extends Voter
     {
         $user = $token->getUser();
 
-        // if the user is anonymous, do not grant access
-        #TODO implementare l'autenticazione
-        #if (!$user instanceof UserInterface) {
-        #    return true;
-        #}
+        if (!$user instanceof UserInterface) {
+            return false;
+        }
+
+        if (!$this->isOwner($subject, $user)) {
+            return false;
+        }
 
         return match ($attribute) {
             self::VIEW        => $this->canView($subject, $user),
@@ -57,5 +60,12 @@ final class CrewVoter extends Voter
     private function canDelete(Crew $crew, ?UserInterface $user = null): bool
     {
         return $this->canEdit($crew, $user);
+    }
+
+    private function isOwner(Crew $crew, UserInterface $user): bool
+    {
+        return $crew->getUser() instanceof User
+            && $user instanceof User
+            && $crew->getUser()->getId() === $user->getId();
     }
 }

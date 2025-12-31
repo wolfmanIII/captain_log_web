@@ -3,6 +3,7 @@
 namespace App\Security\Voter;
 
 use App\Entity\Ship;
+use App\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -32,11 +33,13 @@ final class ShipVoter extends Voter
     {
         $user = $token->getUser();
 
-        // if the user is anonymous, do not grant access
-        #TODO implementare l'autenticazione
-        #if (!$user instanceof UserInterface) {
-        #    return true;
-        #}
+        if (!$user instanceof UserInterface) {
+            return false;
+        }
+
+        if (!$this->isOwner($subject, $user)) {
+            return false;
+        }
 
         return match ($attribute) {
             self::VIEW        => $this->canView($subject, $user),
@@ -72,5 +75,12 @@ final class ShipVoter extends Voter
     private function canCrewRemove(Ship $ship, ?UserInterface $user = null): bool
     {
         return $this->canEdit($ship, $user);
+    }
+
+    private function isOwner(Ship $ship, UserInterface $user): bool
+    {
+        return $ship->getUser() instanceof User
+            && $user instanceof User
+            && $ship->getUser()->getId() === $user->getId();
     }
 }
