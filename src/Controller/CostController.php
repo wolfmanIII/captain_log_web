@@ -6,7 +6,6 @@ use App\Entity\Cost;
 use App\Form\CostType;
 use App\Security\Voter\CostVoter;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -56,10 +55,9 @@ final class CostController extends BaseController
     }
 
     #[Route('/cost/edit/{id}', name: 'app_cost_edit', methods: ['GET', 'POST'])]
-    #[\Symfony\Component\Security\Http\Attribute\IsGranted(CostVoter::EDIT, subject: 'cost')]
     public function edit(
         #[CurrentUser] ?\App\Entity\User $user,
-        #[MapEntity(expr: 'repository.findOneForUser(id, user)')] ?Cost $cost,
+        int $id,
         Request $request,
         EntityManagerInterface $em
     ): Response
@@ -68,9 +66,12 @@ final class CostController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
+        $cost = $em->getRepository(Cost::class)->findOneForUser($id, $user);
         if (!$cost) {
             throw new NotFoundHttpException();
         }
+
+        $this->denyAccessUnlessGranted(CostVoter::EDIT, $cost);
 
         $form = $this->createForm(CostType::class, $cost, ['user' => $user]);
         $form->handleRequest($request);
@@ -89,10 +90,9 @@ final class CostController extends BaseController
     }
 
     #[Route('/cost/delete/{id}', name: 'app_cost_delete', methods: ['GET', 'POST'])]
-    #[\Symfony\Component\Security\Http\Attribute\IsGranted(CostVoter::DELETE, subject: 'cost')]
     public function delete(
         #[CurrentUser] ?\App\Entity\User $user,
-        #[MapEntity(expr: 'repository.findOneForUser(id, user)')] ?Cost $cost,
+        int $id,
         EntityManagerInterface $em
     ): Response
     {
@@ -100,9 +100,12 @@ final class CostController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
+        $cost = $em->getRepository(Cost::class)->findOneForUser($id, $user);
         if (!$cost) {
             throw new NotFoundHttpException();
         }
+
+        $this->denyAccessUnlessGranted(CostVoter::DELETE, $cost);
 
         $em->remove($cost);
         $em->flush();

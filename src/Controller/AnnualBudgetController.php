@@ -6,7 +6,6 @@ use App\Entity\AnnualBudget;
 use App\Form\AnnualBudgetType;
 use App\Security\Voter\AnnualBudgetVoter;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -56,10 +55,9 @@ final class AnnualBudgetController extends BaseController
     }
 
     #[Route('/annual-budget/edit/{id}', name: 'app_annual_budget_edit', methods: ['GET', 'POST'])]
-    #[\Symfony\Component\Security\Http\Attribute\IsGranted(AnnualBudgetVoter::EDIT, subject: 'budget')]
     public function edit(
         #[CurrentUser] ?\App\Entity\User $user,
-        #[MapEntity(expr: 'repository.findOneForUser(id, user)')] ?AnnualBudget $budget,
+        int $id,
         Request $request,
         EntityManagerInterface $em
     ): Response
@@ -68,9 +66,12 @@ final class AnnualBudgetController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
+        $budget = $em->getRepository(AnnualBudget::class)->findOneForUser($id, $user);
         if (!$budget) {
             throw new NotFoundHttpException();
         }
+
+        $this->denyAccessUnlessGranted(AnnualBudgetVoter::EDIT, $budget);
 
         $form = $this->createForm(AnnualBudgetType::class, $budget, ['user' => $user]);
         $form->handleRequest($request);
@@ -89,10 +90,9 @@ final class AnnualBudgetController extends BaseController
     }
 
     #[Route('/annual-budget/delete/{id}', name: 'app_annual_budget_delete', methods: ['GET', 'POST'])]
-    #[\Symfony\Component\Security\Http\Attribute\IsGranted(AnnualBudgetVoter::DELETE, subject: 'budget')]
     public function delete(
         #[CurrentUser] ?\App\Entity\User $user,
-        #[MapEntity(expr: 'repository.findOneForUser(id, user)')] ?AnnualBudget $budget,
+        int $id,
         EntityManagerInterface $em
     ): Response
     {
@@ -100,9 +100,12 @@ final class AnnualBudgetController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
+        $budget = $em->getRepository(AnnualBudget::class)->findOneForUser($id, $user);
         if (!$budget) {
             throw new NotFoundHttpException();
         }
+
+        $this->denyAccessUnlessGranted(AnnualBudgetVoter::DELETE, $budget);
 
         $em->remove($budget);
         $em->flush();

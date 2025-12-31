@@ -8,7 +8,6 @@ use App\Form\MortgageInstallmentType;
 use App\Form\MortgageType;
 use App\Security\Voter\MortgageVoter;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Response;
@@ -65,10 +64,9 @@ final class MortgageController extends BaseController
     }
 
     #[Route('/mortgage/edit/{id}', name: 'app_mortgage_edit', methods: ['GET', 'POST'])]
-    #[\Symfony\Component\Security\Http\Attribute\IsGranted(MortgageVoter::EDIT, subject: 'mortgage')]
     public function edit(
         #[CurrentUser] ?\App\Entity\User $user,
-        #[MapEntity(expr: 'repository.findOneForUser(id, user)')] ?Mortgage $mortgage,
+        int $id,
         Request $request,
         EntityManagerInterface $em
     ): Response
@@ -77,9 +75,12 @@ final class MortgageController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
+        $mortgage = $em->getRepository(Mortgage::class)->findOneForUser($id, $user);
         if (!$mortgage) {
             throw new NotFoundHttpException();
         }
+
+        $this->denyAccessUnlessGranted(MortgageVoter::EDIT, $mortgage);
 
         $form = $this->createForm(MortgageType::class, $mortgage, ['user' => $user]);
 
@@ -121,10 +122,9 @@ final class MortgageController extends BaseController
     }
 
     #[Route('/mortgage/delete/{id}', name: 'app_mortgage_delete', methods: ['GET', 'POST'])]
-    #[IsGranted(MortgageVoter::DELETE, subject: 'mortgage')]
     public function delete(
         #[CurrentUser] ?\App\Entity\User $user,
-        #[MapEntity(expr: 'repository.findOneForUser(id, user)')] ?Mortgage $mortgage,
+        int $id,
         EntityManagerInterface $em
     ): Response
     {
@@ -132,9 +132,12 @@ final class MortgageController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
+        $mortgage = $em->getRepository(Mortgage::class)->findOneForUser($id, $user);
         if (!$mortgage) {
             throw new NotFoundHttpException();
         }
+
+        $this->denyAccessUnlessGranted(MortgageVoter::DELETE, $mortgage);
 
         $em->remove($mortgage);
         $em->flush();
@@ -145,7 +148,7 @@ final class MortgageController extends BaseController
     #[Route('/mortgage/{id}/pay', name: 'app_mortgage_pay', methods: ['GET', 'POST'])]
     public function pay(
         #[CurrentUser] ?\App\Entity\User $user,
-        #[MapEntity(expr: 'repository.findOneForUser(id, user)')] ?Mortgage $mortgage,
+        int $id,
         Request $request,
         EntityManagerInterface $em
     ): Response
@@ -154,6 +157,7 @@ final class MortgageController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
+        $mortgage = $em->getRepository(Mortgage::class)->findOneForUser($id, $user);
         if (!$mortgage) {
             throw new NotFoundHttpException();
         }
