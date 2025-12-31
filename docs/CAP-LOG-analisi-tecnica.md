@@ -4,9 +4,9 @@ Questo documento descrive in modo discorsivo l’architettura attuale di Captain
 
 ## Stack e infrastruttura
 - **Framework:** Symfony 7.3 (PHP ≥ 8.2), asset mapper, Stimulus, Twig, Tailwind + DaisyUI per la UI.
-- **Persistenza:** Doctrine ORM con PostgreSQL/MySQL/SQLite. Estensione pgvector già prevista a livello di README per il motore RAG.
+- **Persistenza:** Doctrine ORM con PostgreSQL/MySQL/SQLite.
 - **Admin:** EasyAdmin per le entità di contesto.
-- **AI/RAG:** integrazione “Elara” via HttpClient (chat e status), export/import documenti e chunk indicizzati (DocumentFile/DocumentChunk).
+- **AI:** integrazione esterna “Elara” via HttpClient (chat e status).
 
 ## Dominio applicativo
 - **Navi e mutui:** `Ship`, `Mortgage`, `MortgageInstallment`, `InterestRate`, `Insurance`, `ShipRole`.
@@ -34,7 +34,6 @@ Questo documento descrive in modo discorsivo l’architettura attuale di Captain
 - **Export:** `php bin/console app:context:export --file=config/seed/context_seed.json`
 - **Import:** `php bin/console app:context:import --file=config/seed/context_seed.json`
   - Trunca le tabelle di contesto (ship_role, insurance, interest_rate, cost_category) e reimporta da JSON.
-- **RAG (da README):** comandi `app:index-docs`, `app:list-docs`, `app:unindex-file` per indicizzazione e gestione documenti/chunk (pgvector).
 
 ## Integrazione AI/Elara
 - Controller `ChatController`: chiama Elara via HttpClient (`/status/engine`, `/api/chat`, `/api/chat/stream`) con token/URL in env (`ELARA_API_TOKEN`, `ELARA_BASE_URL`). `max_redirects` impostato a 5 per gestire 302.
@@ -52,7 +51,7 @@ Questo documento descrive in modo discorsivo l’architettura attuale di Captain
 - **Dashboard:** card a sfondo scuro coerenti con tema EasyAdmin dark; testo “Apri” in azzurro.
 
 ## Checklist rapida di setup
-1. Variabili env: `DATABASE_URL`, `AI_BACKEND`, `ELARA_BASE_URL`, `ELARA_API_TOKEN`, `APP_SECRET`.
+1. Variabili env: `DATABASE_URL`, `ELARA_BASE_URL`, `ELARA_API_TOKEN`, `APP_SECRET`.
 2. Dipendenze: `composer install`, frontend già con asset mapper/Stimulus.
 3. Migrazioni: `php bin/console doctrine:migrations:migrate`.
 4. Import seeds di contesto: `php bin/console app:context:import` (facoltativo).
