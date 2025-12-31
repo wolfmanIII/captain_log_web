@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Captain Log - Income{% endblock %}
+
+{% block pageContent %}
+
+    {{ form_start(form) }}
+
+    {{ form_widget(form._token) }}
+
+    <fieldset class="fieldset grid grid-cols-2 bg-base-200 border-base-300 gap-4 p-4 border rounded w-full">
+        <legend class="fieldset-legend">Income</legend>
+
+        {% if income.id %}
+            <div>
+                <label class="label">Code</label>
+                <div><b>{{ income.code }}</b></div>
+            </div>
+            <div></div>
+        {% endif %}
+
+        <div>
+            <label class="label">Title</label>
+            {{ form_widget(form.title) }}
+            {{ form_errors(form.title) }}
+        </div>
+
+        <div>
+            <label class="label">Amount</label>
+            {{ form_widget(form.amount) }}
+            {{ form_errors(form.amount) }}
+        </div>
+
+        <div>
+            <label class="label">Signing Day</label>
+            {{ form_widget(form.signingDay) }}
+            {{ form_errors(form.signingDay) }}
+        </div>
+
+        <div>
+            <label class="label">Signing Year</label>
+            {{ form_widget(form.signingYear) }}
+            {{ form_errors(form.signingYear) }}
+        </div>
+
+        <div>
+            <label class="label">Payment Day</label>
+            {{ form_widget(form.paymentDay) }}
+            {{ form_errors(form.paymentDay) }}
+        </div>
+
+        <div>
+            <label class="label">Payment Year</label>
+            {{ form_widget(form.paymentYear) }}
+            {{ form_errors(form.paymentYear) }}
+        </div>
+
+        <div>
+            <label class="label">Category</label>
+            {{ form_widget(form.incomeCategory) }}
+            {{ form_errors(form.incomeCategory) }}
+        </div>
+
+        <div>
+            <label class="label">Ship</label>
+            {{ form_widget(form.ship) }}
+            {{ form_errors(form.ship) }}
+        </div>
+
+        <div class="col-span-2">
+            <label class="label">Note</label>
+            {{ form_widget(form.note) }}
+            {{ form_errors(form.note) }}
+        </div>
+
+    </fieldset>
+
+    <button type="submit" class="btn btn-outline btn-primary mt-4 mb-4 mr-4">
+        Save
+    </button>
+    <a href="{{ path('app_income_index') }}" role="button" class="btn btn-outline btn-default mt-4 mb-4 mr-4">Cancel</a>
+
+    {{ form_end(form, { render_rest: false }) }}
+
+{% endblock %}

@@ -53,6 +53,15 @@
             </li>
 
             <li>
+                <a href="{{ path('app_income_index') }}"
+                   class="{% if controller_name == constant('App\\Controller\\IncomeController::CONTROLLER_NAME') %}menu-active{% endif %}"
+                >
+                    {% include 'icons/token.html.twig' %}
+                    <span>Income</span>
+                </a>
+            </li>
+
+            <li>
                 <a href="{{ path('app_ai_console') }}"
                     class="{% if controller_name == constant('App\\Controller\\ChatController::CONTROLLER_NAME') %}menu-active{% endif %}">
                     {# icona "elara" #}
