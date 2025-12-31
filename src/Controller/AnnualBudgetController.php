@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\AnnualBudget;
 use App\Entity\Cost;
 use App\Entity\Income;
+use App\Entity\MortgageInstallment;
 use App\Form\AnnualBudgetType;
 use App\Security\Voter\AnnualBudgetVoter;
 use Doctrine\ORM\EntityManagerInterface;
@@ -129,10 +130,11 @@ final class AnnualBudgetController extends BaseController
 
         $this->denyAccessUnlessGranted(AnnualBudgetVoter::VIEW, $budget);
 
-        $incomes = $em->getRepository(Income::class)->findAllForUser($user);
+        $incomes = $em->getRepository(Income::class)->findAllNotCanceledForUser($user);
         $costs = $em->getRepository(Cost::class)->findAllForUser($user);
+        $installments = $em->getRepository(MortgageInstallment::class)->findAllForUser($user);
 
-        [$labels, $incomeSeries, $costSeries] = $this->buildSeries($budget, $incomes, $costs);
+        [$labels, $incomeSeries, $costSeries] = $this->buildSeries($budget, $incomes, $costs, $installments);
 
         return $this->render('annual_budget/chart.html.twig', [
             'controller_name' => self::CONTROLLER_NAME,
@@ -143,7 +145,7 @@ final class AnnualBudgetController extends BaseController
         ]);
     }
 
-    private function buildSeries(AnnualBudget $budget, array $incomes, array $costs): array
+    private function buildSeries(AnnualBudget $budget, array $incomes, array $costs, array $installments): array
     {
         $startKey = $this->keyFromDayYear($budget->getStartDay(), $budget->getStartYear());
         $endKey = $this->keyFromDayYear($budget->getEndDay(), $budget->getEndYear());
@@ -179,6 +181,20 @@ final class AnnualBudgetController extends BaseController
                 continue;
             }
             $costMap[$key] = ($costMap[$key] ?? 0) + (float) $cost->getAmount();
+            $labels[$key] = sprintf('%s/%s', $day, $year);
+        }
+
+        foreach ($installments as $installment) {
+            if ($installment->getMortgage()?->getShip()?->getId() !== $budget->getShip()?->getId()) {
+                continue;
+            }
+            $day = $installment->getPaymentDay();
+            $year = $installment->getPaymentYear();
+            $key = $this->keyFromDayYear($day, $year);
+            if ($key === null || $key < $startKey || $key > $endKey) {
+                continue;
+            }
+            $costMap[$key] = ($costMap[$key] ?? 0) + (float) $installment->getPayment();
             $labels[$key] = sprintf('%s/%s', $day, $year);
         }
 

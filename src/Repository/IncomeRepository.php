@@ -43,4 +43,17 @@ class IncomeRepository extends ServiceEntityRepository
             ->getOneOrNullResult()
         ;
     }
+
+    public function findAllNotCanceledForUser(User $user)
+    {
+        return $this->createQueryBuilder('i')
+            ->andWhere('i.user = :user')
+            ->andWhere('i.cancelDay is null and i.cancelYear is null')
+            ->setParameter('user', $user)
+            ->orderBy('i.signingYear', 'DESC')
+            ->addOrderBy('i.signingDay', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }
