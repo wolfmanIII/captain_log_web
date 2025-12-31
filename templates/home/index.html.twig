@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Captain Log - Diario di bordo{% endblock %}
+{% block title %}Captain Log - Ship Log{% endblock %}
 
 {% block pageContent %}
     <div class="min-h-[80vh] overflow-hidden">
@@ -14,40 +14,40 @@
                 <div class="space-y-6">
                     <p class="text-sm uppercase tracking-[0.3em] text-cyan-200/80">Traveller // Space Opera Log</p>
                     <h1 class="text-4xl md:text-5xl font-bold text-white leading-tight">
-                        Tieni rotta, equipaggio e crediti sotto controllo.
+                        Keep course, crew, and credits under control.
                     </h1>
                     <p class="text-lg text-slate-200/90 max-w-2xl">
-                        Captain Log è il diario di bordo per la tua campagna Traveller: navi, equipaggi, mutui e anagrafiche di contesto raccolti in un’unica plancia, pronta per il salto.
+                        Captain Log is the ship log for your Traveller campaign: ships, crew, mortgages and context registries in one bridge, ready for jump.
                     </p>
                     <div class="flex flex-wrap gap-3">
-                        <a href="{{ path('app_ship_index') }}" class="btn btn-primary">Vai alle Navi</a>
-                        <a href="{{ path('app_mortgage_index') }}" class="btn btn-outline btn-primary">Gestisci Mutui</a>
-                        <a href="{{ path('app_cost_index') }}" class="btn btn-outline">Traccia Costi</a>
-                        <a href="{{ path('app_ai_console') }}" class="btn btn-ghost text-cyan-200">Console AI</a>
+                        <a href="{{ path('app_ship_index') }}" class="btn btn-primary">Go to Ships</a>
+                        <a href="{{ path('app_mortgage_index') }}" class="btn btn-outline btn-primary">Manage Mortgages</a>
+                        <a href="{{ path('app_cost_index') }}" class="btn btn-outline">Track Costs</a>
+                        <a href="{{ path('app_ai_console') }}" class="btn btn-ghost text-cyan-200">AI Console</a>
                     </div>
                 </div>
 
                 <div class="relative bg-slate-900/60 border border-white/10 rounded-2xl p-6 shadow-lg">
                     <div class="grid grid-cols-2 gap-4 text-slate-100">
                         <div class="rounded-xl bg-white/5 p-4 border border-white/10">
-                            <p class="text-xs uppercase tracking-widest text-cyan-200/80">Navi</p>
-                            <p class="text-2xl font-bold mt-2">Flotte e classi</p>
-                            <p class="text-sm opacity-80 mt-1">Schede nave, prezzo, stato del mutuo, equipaggio.</p>
+                            <p class="text-xs uppercase tracking-widest text-cyan-200/80">Ships</p>
+                            <p class="text-2xl font-bold mt-2">Fleets and classes</p>
+                            <p class="text-sm opacity-80 mt-1">Ship sheets, price, mortgage status, crew.</p>
                         </div>
                         <div class="rounded-xl bg-white/5 p-4 border border-white/10">
-                            <p class="text-xs uppercase tracking-widest text-cyan-200/80">Equipaggio</p>
-                            <p class="text-2xl font-bold mt-2">Ruoli e turni</p>
-                            <p class="text-sm opacity-80 mt-1">Ruoli di plancia, capitano, crew list collegata alle navi.</p>
+                            <p class="text-xs uppercase tracking-widest text-cyan-200/80">Crew</p>
+                            <p class="text-2xl font-bold mt-2">Roles and shifts</p>
+                            <p class="text-sm opacity-80 mt-1">Bridge roles, captain, and crew lists linked to ships.</p>
                         </div>
                         <div class="rounded-xl bg-white/5 p-4 border border-white/10">
-                            <p class="text-xs uppercase tracking-widest text-cyan-200/80">Mutui</p>
-                            <p class="text-2xl font-bold mt-2">Rate e penali</p>
-                            <p class="text-sm opacity-80 mt-1">Piani di pagamento, interessi, assicurazioni e rate pagate.</p>
+                            <p class="text-xs uppercase tracking-widest text-cyan-200/80">Mortgages</p>
+                            <p class="text-2xl font-bold mt-2">Rates and penalties</p>
+                            <p class="text-sm opacity-80 mt-1">Payment plans, interests, insurance, and paid installments.</p>
                         </div>
                         <div class="rounded-xl bg-white/5 p-4 border border-white/10">
-                            <p class="text-xs uppercase tracking-widest text-cyan-200/80">Contesto</p>
-                            <p class="text-2xl font-bold mt-2">Cataloghi</p>
-                            <p class="text-sm opacity-80 mt-1">Categorie di costo e reddito, tassi, ruoli, assicurazioni.</p>
+                            <p class="text-xs uppercase tracking-widest text-cyan-200/80">Context</p>
+                            <p class="text-2xl font-bold mt-2">Catalogs</p>
+                            <p class="text-sm opacity-80 mt-1">Cost and income categories, rates, roles, insurance.</p>
                         </div>
                     </div>
                 </div>
@@ -57,33 +57,33 @@
         <div class="mt-12 grid gap-6 md:grid-cols-3">
             <div class="rounded-2xl border border-white/10 bg-base-200/80 p-6 shadow-sm">
                 <p class="text-xs uppercase tracking-[0.25em] text-cyan-400">Scenario</p>
-                <h3 class="text-xl font-semibold mt-2 text-slate-100">Spazio profondo, regole snelle</h3>
-                <p class="text-sm text-slate-300 mt-2">Pensato per sessioni rapide: poche schermate, dati essenziali, comandi di contesto per ripristinare le anagrafiche in un lampo.</p>
+                <h3 class="text-xl font-semibold mt-2 text-slate-100">Deep space, lean rules</h3>
+                <p class="text-sm text-slate-300 mt-2">Built for quick sessions: few screens, essential data, context commands to restore registries in a flash.</p>
             </div>
             <div class="rounded-2xl border border-white/10 bg-base-200/80 p-6 shadow-sm">
-                <p class="text-xs uppercase tracking-[0.25em] text-cyan-400">Controllo</p>
-                <h3 class="text-xl font-semibold mt-2 text-slate-100">Proprietà e sicurezza</h3>
-                <p class="text-sm text-slate-300 mt-2">Ogni risorsa resta legata al tuo utente: filtri e voti proteggono navi, equipaggi e mutui da sguardi indiscreti.</p>
+                <p class="text-xs uppercase tracking-[0.25em] text-cyan-400">Control</p>
+                <h3 class="text-xl font-semibold mt-2 text-slate-100">Ownership & security</h3>
+                <p class="text-sm text-slate-300 mt-2">Each resource is tied to your user: filters and voters protect ships, crew, and mortgages from prying eyes.</p>
             </div>
             <div class="rounded-2xl border border-white/10 bg-base-200/80 p-6 shadow-sm">
-                <p class="text-xs uppercase tracking-[0.25em] text-cyan-400">Assistenza</p>
-                <h3 class="text-xl font-semibold mt-2 text-slate-100">Console AI di bordo</h3>
-                <p class="text-sm text-slate-300 mt-2">Una consolle dedicata inoltra le tue richieste a Elara: report, riassunti o spunti narrativi, sempre a portata di click.</p>
+                <p class="text-xs uppercase tracking-[0.25em] text-cyan-400">Support</p>
+                <h3 class="text-xl font-semibold mt-2 text-slate-100">Onboard AI console</h3>
+                <p class="text-sm text-slate-300 mt-2">A dedicated console forwards your requests to Elara: reports, summaries, or narrative hooks always one click away.</p>
             </div>
             <div class="rounded-2xl border border-white/10 bg-base-200/80 p-6 shadow-sm">
-                <p class="text-xs uppercase tracking-[0.25em] text-cyan-400">Economia</p>
-                <h3 class="text-xl font-semibold mt-2 text-slate-100">Costi e introiti</h3>
-                <p class="text-sm text-slate-300 mt-2">Categorie di spesa e reddito per seguire ogni credito: manutenzioni, charter, salvage e contratti.</p>
+                <p class="text-xs uppercase tracking-[0.25em] text-cyan-400">Economy</p>
+                <h3 class="text-xl font-semibold mt-2 text-slate-100">Costs and income</h3>
+                <p class="text-sm text-slate-300 mt-2">Expense and revenue categories to follow every credit: maintenance, charter, salvage, and contracts.</p>
             </div>
             <div class="rounded-2xl border border-white/10 bg-base-200/80 p-6 shadow-sm">
-                <p class="text-xs uppercase tracking-[0.25em] text-cyan-400">Plancia</p>
-                <h3 class="text-xl font-semibold mt-2 text-slate-100">Stato nave e crew</h3>
-                <p class="text-sm text-slate-300 mt-2">Ruoli di plancia, capitano e mortgage firmati: tutto sincronizzato con le schede nave.</p>
+                <p class="text-xs uppercase tracking-[0.25em] text-cyan-400">Bridge</p>
+                <h3 class="text-xl font-semibold mt-2 text-slate-100">Ship & crew status</h3>
+                <p class="text-sm text-slate-300 mt-2">Bridge roles, captain, and signed mortgages: all synced with ship sheets.</p>
             </div>
             <div class="rounded-2xl border border-white/10 bg-base-200/80 p-6 shadow-sm">
-                <p class="text-xs uppercase tracking-[0.25em] text-cyan-400">Campagna</p>
-                <h3 class="text-xl font-semibold mt-2 text-slate-100">Ripartenza rapida</h3>
-                <p class="text-sm text-slate-300 mt-2">Con i seed di contesto puoi ricreare in pochi istanti le anagrafiche chiave tra una sessione e l’altra.</p>
+                <p class="text-xs uppercase tracking-[0.25em] text-cyan-400">Campaign</p>
+                <h3 class="text-xl font-semibold mt-2 text-slate-100">Rapid restart</h3>
+                <p class="text-sm text-slate-300 mt-2">With context seeds you can recreate key registries in seconds between sessions.</p>
             </div>
         </div>
     </div>
