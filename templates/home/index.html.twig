@@ -12,12 +12,12 @@
 
             <div class="relative grid gap-8 lg:grid-cols-2 items-center">
                 <div class="space-y-6">
-                    <p class="text-sm uppercase tracking-[0.3em] text-cyan-200/80">Traveller // Space Opera Log</p>
+                    <p class="text-sm uppercase tracking-[0.3em] text-cyan-200/80">Traveller // Imperial Drift Lane</p>
                     <h1 class="text-4xl md:text-5xl font-bold text-white leading-tight">
-                        Keep course, crew, and credits under control.
+                        Bridge-grade ops for ships, crew, and credits.
                     </h1>
                     <p class="text-lg text-slate-200/90 max-w-2xl">
-                        Captain Log is the ship log for your Traveller campaign: ships, crew, mortgages one-to-one per ship, and annual budgets that track income, costs, and mortgage rates on each hull.
+                        Captain Log è l’holo-console per la tua campagna: navi, equipaggi, mutui uno-a-uno per ogni hull, e budget annuali per misurare rotte, entrate, costi e rate in tempo reale.
                     </p>
                     <div class="flex flex-wrap gap-3">
                         <a href="{{ path('app_ship_index') }}" class="btn btn-primary">Go to Ships</a>
@@ -25,6 +25,11 @@
                         <a href="{{ path('app_annual_budget_index') }}" class="btn btn-outline btn-secondary">Annual Budgets</a>
                         <a href="{{ path('app_cost_index') }}" class="btn btn-outline">Track Costs</a>
                         <a href="{{ path('app_ai_console') }}" class="btn btn-ghost text-cyan-200">AI Console</a>
+                    </div>
+                    <div class="flex flex-wrap gap-4 pt-4 text-xs uppercase tracking-[0.25em] text-cyan-200/70">
+                        <span class="badge badge-outline badge-sm">Jump Ready</span>
+                        <span class="badge badge-outline badge-sm">Per-Ship Budget</span>
+                        <span class="badge badge-outline badge-sm">Owner Secured</span>
                     </div>
                 </div>
 
@@ -80,6 +85,11 @@
                 <p class="text-xs uppercase tracking-[0.25em] text-cyan-400">Economy</p>
                 <h3 class="text-xl font-semibold mt-2 text-slate-100">Costs and income</h3>
                 <p class="text-sm text-slate-300 mt-2">Expense and revenue categories to follow every credit: maintenance, charter, salvage, and contracts.</p>
+            </div>
+            <div class="rounded-2xl border border-white/10 bg-base-200/80 p-6 shadow-sm">
+                <p class="text-xs uppercase tracking-[0.25em] text-cyan-400">Signals</p>
+                <h3 class="text-xl font-semibold mt-2 text-slate-100">Telemetry at a glance</h3>
+                <p class="text-sm text-slate-300 mt-2">Charts per nave per l’anno imperiale: traccia ingressi e uscite su timeline e chiudi il gap sui crediti.</p>
             </div>
             <div class="rounded-2xl border border-white/10 bg-base-200/80 p-6 shadow-sm">
                 <p class="text-xs uppercase tracking-[0.25em] text-cyan-400">Annual Budget</p>
