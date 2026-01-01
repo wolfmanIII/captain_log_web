@@ -25,7 +25,7 @@ final class ShipCalendarController extends BaseController
             throw $this->createNotFoundException();
         }
 
-        $this->denyAccessUnlessGranted(ShipVoter::EDIT, $ship);
+        $this->denyAccessUnlessGranted(ShipVoter::CALENDAR_EDIT, $ship);
 
         $form = $this->createForm(ShipCalendarType::class, $ship);
         $form->handleRequest($request);
