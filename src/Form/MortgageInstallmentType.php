@@ -5,7 +5,7 @@ namespace App\Form;
 use App\Entity\MortgageInstallment;
 use App\Form\Type\TravellerMoneyType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -18,10 +18,10 @@ class MortgageInstallmentType extends AbstractType
         $summary = $installment->getMortgage()->calculate();
 
         $builder
-            ->add('paymentDay', NumberType::class, [
+            ->add('paymentDay', IntegerType::class, [
                 'attr' => ['class' => 'input m-1 w-full'],
             ])
-            ->add('paymentYear', NumberType::class, [
+            ->add('paymentYear', IntegerType::class, [
                 'attr' => ['min' => 1105, 'max' => 1200, 'class' => 'input m-1 w-full'],
             ])
             ->add('payment', TravellerMoneyType::class, [

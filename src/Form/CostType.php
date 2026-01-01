@@ -9,7 +9,7 @@ use App\Form\Type\TravellerMoneyType;
 use App\Repository\ShipRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -29,11 +29,11 @@ class CostType extends AbstractType
                 'label' => 'Amount (Cr)',
                 'attr' => ['class' => 'input m-1 w-full'],
             ])
-            ->add('paymentDay', NumberType::class, [
+            ->add('paymentDay', IntegerType::class, [
                 'required' => false,
                 'attr' => ['class' => 'input m-1 w-full'],
             ])
-            ->add('paymentYear', NumberType::class, [
+            ->add('paymentYear', IntegerType::class, [
                 'required' => false,
                 'attr' => ['min' => 1100, 'max' => 1300, 'class' => 'input m-1 w-full'],
             ])

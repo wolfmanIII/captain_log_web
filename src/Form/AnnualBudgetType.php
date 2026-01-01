@@ -7,7 +7,7 @@ use App\Entity\Ship;
 use App\Repository\ShipRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -19,16 +19,16 @@ class AnnualBudgetType extends AbstractType
         $user = $options['user'];
 
         $builder
-            ->add('startDay', NumberType::class, [
+            ->add('startDay', IntegerType::class, [
                 'attr' => ['class' => 'input m-1 w-full'],
             ])
-            ->add('startYear', NumberType::class, [
+            ->add('startYear', IntegerType::class, [
                 'attr' => ['class' => 'input m-1 w-full'],
             ])
-            ->add('endDay', NumberType::class, [
+            ->add('endDay', IntegerType::class, [
                 'attr' => ['class' => 'input m-1 w-full'],
             ])
-            ->add('endYear', NumberType::class, [
+            ->add('endYear', IntegerType::class, [
                 'attr' => ['class' => 'input m-1 w-full'],
             ])
             ->add('ship', EntityType::class, [

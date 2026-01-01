@@ -10,7 +10,7 @@ use App\Form\Type\TravellerMoneyType;
 use App\Repository\ShipRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -27,15 +27,15 @@ class MortgageType extends AbstractType
 
         $builder
             //->add('name', TextType::class, ['attr' => ['class' => 'input m-1 w-full'],])
-            ->add('startDay', NumberType::class, [
+            ->add('startDay', IntegerType::class, [
                 'attr' => ['class' => 'input m-1 w-full'],
                 'disabled' => $disabled,
                 ])
-            ->add('startYear', NumberType::class, [
+            ->add('startYear', IntegerType::class, [
                 'attr' => ['class' => 'input m-1 w-full'],
                 'disabled' => $disabled,
                 ])
-            ->add('shipShares', NumberType::class, [
+            ->add('shipShares', IntegerType::class, [
                 'attr' => ['class' => 'input m-1 w-full'],
                 'disabled' => $disabled,
                 'required' => false,
@@ -46,7 +46,7 @@ class MortgageType extends AbstractType
                 'required' => false,
                 'disabled' => $disabled,
             ])
-            ->add('discount', NumberType::class, [
+            ->add('discount', IntegerType::class, [
                 'label' => 'Discount(%)',
                 'attr' => ['class' => 'input m-1 w-full'], 'required' => false,
                 'disabled' => $disabled,
