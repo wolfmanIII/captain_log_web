@@ -16,6 +16,7 @@ final class MortgageVoter extends Voter
     public const SIGN = 'MORTGAGE_SIGN';
     public const DELETE = 'MORTGAGE_DELETE';
     public const PAY_INSTALLMENT = 'MORTGAGE_PAY_INSTALLMENT';
+    public const CREATE_PDF = 'MORTGAGE_CREATE_PDF';
 
     protected function supports(string $attribute, mixed $subject): bool
     {
@@ -31,6 +32,7 @@ final class MortgageVoter extends Voter
             self::SIGN,
             self::DELETE,
             self::PAY_INSTALLMENT,
+            self::CREATE_PDF,
         ], true);
 
     }
@@ -51,6 +53,7 @@ final class MortgageVoter extends Voter
             self::SIGN        => $this->canSign($subject, $user),
             self::DELETE      => $this->canDelete($subject, $user),
             self::PAY_INSTALLMENT => $this->canPayInstallment($subject, $user),
+            self::CREATE_PDF  => $this->canCreatePdf($subject, $user),
             default           => false,
         };
     }
@@ -81,6 +84,11 @@ final class MortgageVoter extends Voter
     }
 
     private function canPayInstallment(Mortgage $mortgage, ?UserInterface $user = null): bool
+    {
+        return $this->isOwner($mortgage, $user) && $mortgage->isSigned();
+    }
+
+    private function canCreatePdf(Mortgage $mortgage, ?UserInterface $user = null): bool
     {
         return $this->isOwner($mortgage, $user) && $mortgage->isSigned();
     }
