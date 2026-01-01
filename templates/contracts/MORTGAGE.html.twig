@@ -18,6 +18,8 @@
         .grid { display: grid; }
         .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         .items-start { align-items: flex-start; }
+        .sign-row { display: flex; gap: 1rem; align-items: flex-start; }
+        .sign-col { flex: 1; }
         .gap-4 { gap: 0.75rem; }
         .gap-8 { gap: 1rem; }
         .gap-3 { gap: 0.5rem; }
@@ -250,8 +252,8 @@
         </div>
     {% endif %}
 
-    <div class="grid grid-cols-2 items-start gap-8 mt-6 text-sm">
-        <div class="pt-2">
+    <div class="sign-row mt-6 text-sm">
+        <div class="sign-col pt-2">
             <div><b>Owner / Operator</b></div>
             <div>
                 {% if captain %}
@@ -261,7 +263,7 @@
                 {% endif %}
             </div>
         </div>
-        <div class="pt-2 text-right">
+        <div class="sign-col pt-2 text-right">
             <div><b>Counterparty</b></div>
             {% if mortgage.company %}
                 <div>{{ mortgage.company.signLabel ?? mortgage.company.name }}</div>
