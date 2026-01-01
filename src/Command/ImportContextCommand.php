@@ -7,11 +7,13 @@ use App\Entity\InterestRate;
 use App\Entity\ShipRole;
 use App\Entity\CostCategory;
 use App\Entity\IncomeCategory;
+use App\Entity\LocalLaw;
 use App\Repository\InsuranceRepository;
 use App\Repository\InterestRateRepository;
 use App\Repository\ShipRoleRepository;
 use App\Repository\CostCategoryRepository;
 use App\Repository\IncomeCategoryRepository;
+use App\Repository\LocalLawRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -32,6 +34,7 @@ class ImportContextCommand extends Command
         private readonly InsuranceRepository $insuranceRepository,
         private readonly CostCategoryRepository $costCategoryRepository,
         private readonly IncomeCategoryRepository $incomeCategoryRepository,
+        private readonly LocalLawRepository $localLawRepository,
         private readonly InterestRateRepository $interestRateRepository,
         private readonly ShipRoleRepository $shipRoleRepository,
         private readonly EntityManagerInterface $entityManager,
@@ -81,11 +84,12 @@ class ImportContextCommand extends Command
         [$roleCreated, $roleUpdated] = $this->importShipRoles($decoded['ship_roles'] ?? []);
         [$catCreated, $catUpdated] = $this->importCostCategories($decoded['cost_categories'] ?? []);
         [$incomeCreated, $incomeUpdated] = $this->importIncomeCategories($decoded['income_categories'] ?? []);
+        [$lawCreated, $lawUpdated] = $this->importLocalLaws($decoded['local_laws'] ?? []);
 
         $this->entityManager->flush();
 
         $io->success(sprintf(
-            'Import completato. Insurance: %d nuovi / %d aggiornati; InterestRate: %d nuovi / %d aggiornati; ShipRole: %d nuovi / %d aggiornati; CostCategory: %d nuovi / %d aggiornati; IncomeCategory: %d nuovi / %d aggiornati.',
+            'Import completato. Insurance: %d nuovi / %d aggiornati; InterestRate: %d nuovi / %d aggiornati; ShipRole: %d nuovi / %d aggiornati; CostCategory: %d nuovi / %d aggiornati; IncomeCategory: %d nuovi / %d aggiornati; LocalLaw: %d nuovi / %d aggiornati.',
             $insCreated,
             $insUpdated,
             $rateCreated,
@@ -95,7 +99,9 @@ class ImportContextCommand extends Command
             $catCreated,
             $catUpdated,
             $incomeCreated,
-            $incomeUpdated
+            $incomeUpdated,
+            $lawCreated,
+            $lawUpdated
         ));
 
         return Command::SUCCESS;
@@ -246,6 +252,37 @@ class ImportContextCommand extends Command
         return [$created, $updated];
     }
 
+    /**
+     * @param array<int, array<string, mixed>> $rows
+     *
+     * @return array{int, int} [creati, aggiornati]
+     */
+    private function importLocalLaws(array $rows): array
+    {
+        $created = 0;
+        $updated = 0;
+
+        foreach ($rows as $row) {
+            if (!isset($row['code'])) {
+                continue;
+            }
+
+            $entity = $this->localLawRepository->findOneBy(['code' => $row['code']]) ?? new LocalLaw();
+            $isNew = $entity->getId() === null;
+
+            $entity
+                ->setCode((string) $row['code'])
+                ->setDescription(isset($row['description']) ? (string) $row['description'] : '')
+                ->setDisclaimer(isset($row['disclaimer']) ? (string) $row['disclaimer'] : null)
+            ;
+
+            $this->entityManager->persist($entity);
+            $isNew ? $created++ : $updated++;
+        }
+
+        return [$created, $updated];
+    }
+
     private function truncateTables(): void
     {
         $connection = $this->entityManager->getConnection();
@@ -258,13 +295,14 @@ class ImportContextCommand extends Command
             $connection->executeStatement('TRUNCATE TABLE interest_rate');
             $connection->executeStatement('TRUNCATE TABLE cost_category');
             $connection->executeStatement('TRUNCATE TABLE income_category');
+            $connection->executeStatement('TRUNCATE TABLE local_law');
             $connection->executeStatement('SET FOREIGN_KEY_CHECKS=1');
 
             return;
         }
 
         if ($platform === 'postgresql' || $platform === 'postgres') {
-            $connection->executeStatement('TRUNCATE TABLE ship_role, insurance, interest_rate, cost_category, income_category RESTART IDENTITY CASCADE');
+            $connection->executeStatement('TRUNCATE TABLE ship_role, insurance, interest_rate, cost_category, income_category, local_law RESTART IDENTITY CASCADE');
 
             return;
         }
@@ -276,7 +314,8 @@ class ImportContextCommand extends Command
         $connection->executeStatement('DELETE FROM interest_rate');
         $connection->executeStatement('DELETE FROM cost_category');
         $connection->executeStatement('DELETE FROM income_category');
-        $connection->executeStatement("DELETE FROM sqlite_sequence WHERE name IN ('ship_role','insurance','interest_rate','cost_category','income_category')");
+        $connection->executeStatement('DELETE FROM local_law');
+        $connection->executeStatement("DELETE FROM sqlite_sequence WHERE name IN ('ship_role','insurance','interest_rate','cost_category','income_category','local_law')");
         $connection->executeStatement('PRAGMA foreign_keys = ON');
     }
 

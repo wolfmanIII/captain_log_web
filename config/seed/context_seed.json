@@ -138,5 +138,6 @@
         { "code": "MORTGAGE_PENALTY", "description": "Mortgage penalty cost" },
         { "code": "LEGAL", "description": "Legal cost" },
         { "code": "RECRUITMENT", "description": "Recruitment cost" }
-    ]
+    ],
+    "local_laws": []
 }

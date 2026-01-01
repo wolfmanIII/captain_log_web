@@ -6,6 +6,7 @@ use App\Repository\InsuranceRepository;
 use App\Repository\CostCategoryRepository;
 use App\Repository\IncomeCategoryRepository;
 use App\Repository\InterestRateRepository;
+use App\Repository\LocalLawRepository;
 use App\Repository\ShipRoleRepository;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -28,6 +29,7 @@ class ExportContextCommand extends Command
         private readonly IncomeCategoryRepository $incomeCategoryRepository,
         private readonly InterestRateRepository $interestRateRepository,
         private readonly ShipRoleRepository $shipRoleRepository,
+        private readonly LocalLawRepository $localLawRepository,
         #[Autowire('%kernel.project_dir%')] private readonly string $projectDir,
     ) {
         parent::__construct();
@@ -104,6 +106,16 @@ class ExportContextCommand extends Command
                     ];
                 },
                 $this->incomeCategoryRepository->findAll()
+            ),
+            'local_laws' => array_map(
+                static function ($law): array {
+                    return [
+                        'code'        => $law->getCode(),
+                        'description' => $law->getDescription(),
+                        'disclaimer'  => $law->getDisclaimer(),
+                    ];
+                },
+                $this->localLawRepository->findAll()
             ),
         ];
 
