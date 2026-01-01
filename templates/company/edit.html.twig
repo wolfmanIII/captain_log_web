@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Captain Log - Company{% endblock %}
+
+{% block pageContent %}
+
+    <div class="p-6">
+        <header class="prose">
+            <h1>Company</h1>
+        </header>
+
+        <div class="alert alert-info alert-outline shadow-sm w-full mb-4">
+            <div class="flex items-center gap-3">
+                {% include 'icons/admin.html.twig' %}
+                <div>
+                    <h3 class="font-semibold">Counterparty</h3>
+                    <p class="text-sm opacity-80">Name, role, contact and signature label to reuse across contracts and documents.</p>
+                </div>
+            </div>
+        </div>
+
+        {{ form_start(form) }}
+
+        <fieldset class="fieldset grid grid-cols-2 bg-base-200 border-base-300 gap-4 p-4 border rounded w-250">
+            <legend class="fieldset-legend">Anagraphic</legend>
+
+            {% if company.id %}
+                <div>
+                    <label class="label">Code</label>
+                    <div><b>{{ company.code }}</b></div>
+                </div>
+                <div></div>
+            {% endif %}
+
+            <div>
+                <label class="label">Name</label>
+                {{ form_widget(form.name) }}
+                {{ form_errors(form.name) }}
+            </div>
+
+            <div>
+                <label class="label">Role</label>
+                {{ form_widget(form.companyRole) }}
+                {{ form_errors(form.companyRole) }}
+            </div>
+
+            <div>
+                <label class="label">Contact</label>
+                {{ form_widget(form.contact) }}
+                {{ form_errors(form.contact) }}
+            </div>
+
+            <div>
+                <label class="label">Sign label</label>
+                {{ form_widget(form.signLabel) }}
+                {{ form_errors(form.signLabel) }}
+            </div>
+
+            <div class="col-span-2">
+                <label class="label">Notes</label>
+                {{ form_widget(form.notes) }}
+                {{ form_errors(form.notes) }}
+            </div>
+
+        </fieldset>
+
+        <button type="submit" class="btn btn-outline btn-primary mt-4 mb-4 mr-4">Save</button>
+        <a href="{{ path('app_company_index') }}" role="button" class="btn btn-outline btn-default mt-4 mb-4 mr-4">Cancel</a>
+
+        {{ form_end(form) }}
+    </div>
+
+{% endblock %}
