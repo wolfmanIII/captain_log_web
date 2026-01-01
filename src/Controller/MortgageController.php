@@ -199,7 +199,12 @@ final class MortgageController extends BaseController
             'user' => $user,
         ];
 
-        $pdfContent = $pdfGenerator->render($htmlTemplate, $context);
+        $pdfContent = $pdfGenerator->render($htmlTemplate, $context, [
+            'footer-right' => 'Page [page] / [toPage]',
+            'footer-font-size' => 9,
+            'footer-spacing' => 4,
+            'margin-bottom' => '18mm',
+        ]);
 
         return new Response($pdfContent, 200, [
             'Content-Type' => 'application/pdf',
