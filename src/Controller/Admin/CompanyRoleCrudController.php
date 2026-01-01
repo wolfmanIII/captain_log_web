@@ -6,6 +6,7 @@ use App\Entity\CompanyRole;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 
 class CompanyRoleCrudController extends AbstractCrudController
 {
@@ -19,7 +20,7 @@ class CompanyRoleCrudController extends AbstractCrudController
         return [
             IdField::new('id')->hideOnForm(),
             TextField::new('code'),
-            TextField::new('description'),
+            TextareaField::new('description')->renderAsHtml(false),
         ];
     }
 }
