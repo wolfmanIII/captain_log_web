@@ -49,7 +49,7 @@
                         <td class="text-right bg-primary/10">{{ summary.installments_paid }}</td>
                         <td class="text-right bg-primary/10">
                             {% if last_payment %}
-                                {{ last_payment.paymentDay }} - {{ last_payment.paymentYear }}
+                                {{ last_payment.paymentDay }} / {{ last_payment.paymentYear }}
                             {% endif %}
                         </td>
                         <td class="text-right bg-primary/10">{{ summary.total_mortgage_paid|number_format(2, ',', '.') }}</td>

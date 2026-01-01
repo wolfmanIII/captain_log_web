@@ -154,6 +154,26 @@
 
     <div class="card mb-4">
         <div class="card-body p-4">
+            <h2 class="card-title text-lg mb-2">Local Law</h2>
+            <table class="table text-sm">
+                <thead>
+                    <tr>
+                        <th class="text-left px-2">Description</th>
+                        <th class="text-left px-2">Disclaimer</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="px-2">{{ mortgage.localLaw ? mortgage.localLaw.description : '—' }}</td>
+                        <td class="px-2">{{ mortgage.localLaw ? (mortgage.localLaw.disclaimer ?? '—') : '—' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body p-4">
             <h2 class="card-title text-lg mb-2">Terms</h2>
             <table class="table text-sm">
                 <thead>
