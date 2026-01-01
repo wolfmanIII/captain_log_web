@@ -7,6 +7,7 @@ use App\Entity\InterestRate;
 use App\Entity\ShipRole;
 use App\Entity\CostCategory;
 use App\Entity\IncomeCategory;
+use App\Entity\CompanyRole;
 use App\Entity\DocumentFile;
 use App\Entity\DocumentChunk;
 use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
@@ -31,6 +32,7 @@ class DashboardController extends AbstractDashboardController
             'Ship Role' => $this->adminUrlGenerator->setController(ShipRoleCrudController::class)->setAction('index')->generateUrl(),
             'Cost Category' => $this->adminUrlGenerator->setController(CostCategoryCrudController::class)->setAction('index')->generateUrl(),
             'Income Category' => $this->adminUrlGenerator->setController(IncomeCategoryCrudController::class)->setAction('index')->generateUrl(),
+            'Company Role' => $this->adminUrlGenerator->setController(CompanyRoleCrudController::class)->setAction('index')->generateUrl(),
         ];
 
         return $this->render('admin/dashboard.html.twig', [
@@ -55,5 +57,6 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('ShipRole', 'fas fa-list', ShipRole::class);
         yield MenuItem::linkToCrud('Cost Category', 'fas fa-list', CostCategory::class);
         yield MenuItem::linkToCrud('Income Category', 'fas fa-list', IncomeCategory::class);
+        yield MenuItem::linkToCrud('Company Role', 'fas fa-list', CompanyRole::class);
     }
 }
