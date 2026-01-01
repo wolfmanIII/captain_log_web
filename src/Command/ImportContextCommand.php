@@ -272,6 +272,7 @@ class ImportContextCommand extends Command
 
             $entity
                 ->setCode((string) $row['code'])
+                ->setShortDescription(isset($row['short_description']) ? (string) $row['short_description'] : null)
                 ->setDescription(isset($row['description']) ? (string) $row['description'] : '')
                 ->setDisclaimer(isset($row['disclaimer']) ? (string) $row['disclaimer'] : null)
             ;

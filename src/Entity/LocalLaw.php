@@ -16,6 +16,9 @@ class LocalLaw
     #[ORM\Column(length: 50)]
     private ?string $code = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $shortDescription = null;
+
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
@@ -59,6 +62,18 @@ class LocalLaw
     public function setDisclaimer(?string $disclaimer): static
     {
         $this->disclaimer = $disclaimer;
+
+        return $this;
+    }
+
+    public function getShortDescription(): ?string
+    {
+        return $this->shortDescription;
+    }
+
+    public function setShortDescription(?string $shortDescription): static
+    {
+        $this->shortDescription = $shortDescription;
 
         return $this;
     }

@@ -111,6 +111,7 @@ class ExportContextCommand extends Command
                 static function ($law): array {
                     return [
                         'code'        => $law->getCode(),
+                        'short_description' => $law->getShortDescription(),
                         'description' => $law->getDescription(),
                         'disclaimer'  => $law->getDisclaimer(),
                     ];
