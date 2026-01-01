@@ -4,10 +4,12 @@
 {% set CAN_CREATE = constant('App\\Security\\Voter\\MortgageVoter::CREATE') %}
 {% set CAN_SIGN = constant('App\\Security\\Voter\\MortgageVoter::SIGN') %}
 {% set CAN_PAY = constant('App\\Security\\Voter\\MortgageVoter::PAY_INSTALLMENT') %}
+{% set CAN_PDF = constant('App\\Security\\Voter\\MortgageVoter::CREATE_PDF') %}
 {% set can_edit = is_granted(CAN_EDIT, mortgage) %}
 {% set can_create = is_granted(CAN_CREATE, mortgage) %}
 {% set can_sign = is_granted(CAN_SIGN, mortgage) %}
 {% set can_pay = is_granted(CAN_PAY, mortgage) %}
+{% set can_pdf = is_granted(CAN_PDF, mortgage) %}
 
 {% block title %}Captain Log - Mortgage{% endblock %}
 
@@ -129,6 +131,13 @@
         class="btn btn-outline btn-warning mt-4 mb-4 mr-4"
         {% if not can_sign %} disabled {% endif %}
     >Sign</button>
+
+    <a
+        href="{{ path('app_mortgage_pdf', {id: mortgage.id}) }}"
+        role="button"
+        class="btn btn-outline btn-secondary mt-4 mb-4 mr-4"
+        {% if not can_pdf %} disabled {% endif %}
+    >PDF</a>
     <a href="{{ path('app_mortgage_index') }}" role="button" class="btn btn-outline btn-default mt-4 mb-4 mr-4">Cancel</a>
 
     {{ form_end(form) }}
