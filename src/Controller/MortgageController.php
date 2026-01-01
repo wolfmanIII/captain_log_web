@@ -171,4 +171,39 @@ final class MortgageController extends BaseController
 
         return $this->redirectToRoute('app_mortgage_edit', ['id' => $mortgage->getId()]);
     }
+
+    #[Route('/mortgage/{id}/pdf', name: 'app_mortgage_pdf', methods: ['GET'])]
+    public function pdf(
+        int $id,
+        EntityManagerInterface $em,
+        \App\Service\PdfGenerator $pdfGenerator
+    ): Response {
+        $user = $this->getUser();
+        if (!$user instanceof \App\Entity\User) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $mortgage = $em->getRepository(Mortgage::class)->findOneForUser($id, $user);
+        if (!$mortgage) {
+            throw new NotFoundHttpException();
+        }
+
+        if (!$mortgage->isSigned()) {
+            throw $this->createAccessDeniedException('Mortgage not signed');
+        }
+
+        $htmlTemplate = 'contracts/MORTGAGE.html.twig';
+        $context = [
+            'mortgage' => $mortgage,
+            'ship' => $mortgage->getShip(),
+            'user' => $user,
+        ];
+
+        $pdfContent = $pdfGenerator->render($htmlTemplate, $context);
+
+        return new Response($pdfContent, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => sprintf('inline; filename=\"mortgage-%s.pdf\"', $mortgage->getCode()),
+        ]);
+    }
 }
