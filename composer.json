@@ -12,6 +12,7 @@
         "doctrine/doctrine-migrations-bundle": "^3.5",
         "doctrine/orm": "^3.5",
         "easycorp/easyadmin-bundle": "^4.27",
+        "knplabs/knp-snappy-bundle": "^1.10",
         "nyholm/psr7": "^1.8",
         "openai-php/client": "^0.18.0",
         "partitech/doctrine-pgvector": "^0.0.8",

@@ -1,0 +1,22 @@
+# Company roles
+
+- AUTHORITY — Official body with legal power: permits, inspections, enforcement, fines, seizures, rulings (port authority, customs, court, navy office).
+- BANK — Runs accounts and payments, holds deposits, issues loans and guarantees, handles letters of credit and secure transfers.
+- BROKER — Connects parties and negotiates deals for a commission; typically arranges terms but does not physically move or store goods.
+- COMMS_PROVIDER — Provides communications services: relays, message routing, data courier dispatch, secure channels, comms infrastructure access.
+- ENERGY_UTILITY — Supplies and manages power/fuel distribution for stations and settlements: generation, grid service, contracts for steady supply.
+- FINANCIER — Provides investment and high-risk financing: funding ventures, underwriting projects, managing assets for returns rather than basic banking.
+- HOSPITALITY — Provides passenger-facing services: lodging, berths, catering, lounges, bookings, and general comfort services.
+- INDUSTRIAL_SUPPLIER — Supplies industrial inputs: spare parts, components, tools, materials, consumables, and standardized replacement stock.
+- LOGISTICS_HUB — Handles warehousing and cargo operations: storage, consolidation, loading/unloading, scheduling, bonded/controlled storage, handoff coordination.
+- MANUFACTURER — Produces goods through fabrication/assembly: factories, workshops, production lines, and contract manufacturing.
+- MEDIA_NETWORK — Produces and distributes information and entertainment: news, advertising, broadcasts, propaganda, and content syndication.
+- MEDICAL_PROVIDER — Delivers medical services and supplies: clinics/medbays, treatment, pharmaceuticals, emergency care, med-evac coordination.
+- MINING_COMPANY — Extracts raw resources: ore, volatiles, ice, gas harvesting; primary collection before refinement/processing.
+- MULTI_SERVICE_PROVIDER — General-purpose company that offers multiple services under one roof (one-stop operator), used when the exact specialty isn’t worth tracking.
+- REFINERY — Processes raw inputs into usable products: fuels, purified chemicals, refined metals/alloys, and industrial-grade materials.
+- RESEARCH_LAB — Performs R&D and testing: prototypes, experiments, trials, validation, and controlled development of new tech or processes.
+- SECURITY_CONTRACTOR — Provides security services: escort, protection, investigation, risk assessment, armed response where legal.
+- SHIPYARD — Builds and overhauls ships: construction, major repairs, refits, drydock services, and certified heavy maintenance.
+- TECH_VENDOR — Sells/installs/supports technology systems: software, electronics, sensors, avionics, networks, diagnostics, and maintenance contracts.
+- TRADER — Trades goods for profit: sourcing, buying low/selling high, managing inventory and market risk as a core business.

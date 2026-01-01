@@ -107,7 +107,7 @@ class MortgageType extends AbstractType
                 'class' => Company::class,
                 'placeholder' => '-- Select a Company --',
                 'required' => false,
-                'choice_label' => fn (Company $c) => sprintf('%s (%s)', $c->getName(), $c->getCompanyRole()?->getCode()),
+                'choice_label' => fn (Company $c) => sprintf('%s - %s', $c->getName(), $c->getCode()),
                 'query_builder' => function (EntityRepository $er) use ($user) {
                     $qb = $er->createQueryBuilder('c')->orderBy('c.name', 'ASC');
                     if ($user) {
@@ -116,6 +116,7 @@ class MortgageType extends AbstractType
                     return $qb;
                 },
                 'attr' => ['class' => 'select m-1 w-full'],
+                'disabled' => $disabled,
             ])
         ;
     }
