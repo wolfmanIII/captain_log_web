@@ -6,18 +6,12 @@
 
 {% block pageContent %}
     {% set summary = mortgage.calculate() %}
+    {% set installments = mortgage.mortgageInstallments %}
+    {% set crew = ship.crews %}
 
-    <div class="flex items-center justify-between mb-4">
-        <div>
-            <h1 class="text-2xl font-bold">Ship Mortgage Agreement</h1>
-            <p class="text-sm opacity-70">Code: {{ mortgage.code }}{% if mortgage.signed %} • Signed{% endif %}</p>
-        </div>
-        <div class="text-right text-sm opacity-80">
-            <div>Generated for: {{ user.userIdentifier }}</div>
-            {% if mortgage.company %}
-                <div>Counterparty: {{ mortgage.company.name }} ({{ mortgage.company.companyRole.code }})</div>
-            {% endif %}
-        </div>
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold">Ship Mortgage Agreement</h1>
+        <p class="text-sm opacity-70">Code: {{ mortgage.code }}{% if mortgage.signed %} • Signed{% endif %}</p>
     </div>
 
     <div class="grid grid-cols-2 gap-4 mb-4">
@@ -96,10 +90,73 @@
 
                 <div><b>Total mortgage amount:</b></div>
                 <div class="text-right">{{ summary.total_mortgage|number_format(2, ',', '.') }} Cr</div>
+
+                <div><b>Installments paid:</b></div>
+                <div class="text-right">{{ summary.installments_paid }}</div>
+
+                <div><b>Total paid to date:</b></div>
+                <div class="text-right">{{ summary.total_mortgage_paid|number_format(2, ',', '.') }} Cr</div>
             </div>
-            <p class="text-xs opacity-70 mt-3">Installments already paid are not listed in this document.</p>
         </div>
     </div>
+
+    {% if installments|length > 0 %}
+        <div class="card bg-base-200 border border-base-300 shadow-sm mb-4">
+            <div class="card-body p-4">
+                <h2 class="card-title text-lg mb-3">Paid installments</h2>
+                <table class="table w-full text-sm">
+                    <thead>
+                        <tr>
+                            <th class="text-left">Code</th>
+                            <th class="text-left">Day/Year</th>
+                            <th class="text-right">Amount (Cr)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for inst in installments %}
+                            <tr>
+                                <td>{{ inst.code }}</td>
+                                <td>{{ inst.paymentDay }}/{{ inst.paymentYear }}</td>
+                                <td class="text-right">{{ inst.payment|number_format(2, ',', '.') }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if crew|length > 0 %}
+        <div class="card bg-base-200 border border-base-300 shadow-sm mb-4">
+            <div class="card-body p-4">
+                <h2 class="card-title text-lg mb-3">Ship crew</h2>
+                <table class="table w-full text-sm">
+                    <thead>
+                        <tr>
+                            <th class="text-left">Name</th>
+                            <th class="text-left">Surname</th>
+                            <th class="text-left">Nickname</th>
+                            <th class="text-left">Roles</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for member in crew %}
+                            <tr>
+                                <td>{{ member.name }}</td>
+                                <td>{{ member.surname }}</td>
+                                <td>{{ member.nickname ?? '-' }}</td>
+                                <td>
+                                    {% for role in member.shipRoles %}
+                                        {{ role.name }}{% if not loop.last %}, {% endif %}
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endif %}
 
     <div class="grid grid-cols-2 gap-8 mt-6 text-sm">
         <div class="border-t border-base-300 pt-2">
