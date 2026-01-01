@@ -20,7 +20,7 @@ class LocalLawCrudController extends AbstractCrudController
         return [
             IdField::new('id')->hideOnForm(),
             TextField::new('code'),
-            TextField::new('description'),
+            TextareaField::new('description')->renderAsHtml(false),
             TextareaField::new('disclaimer')->renderAsHtml(false)->setRequired(false),
         ];
     }
