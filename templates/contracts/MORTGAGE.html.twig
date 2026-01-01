@@ -75,24 +75,38 @@
     <div class="card mb-4">
         <div class="card-body p-4">
             <h2 class="card-title text-lg mb-2">Terms</h2>
-            <div class="grid grid-cols-2 gap-3 text-sm">
-                <div><b>Start Day/Year:</b> {{ mortgage.startDay }}/{{ mortgage.startYear }}</div>
-                <div><b>Ship Shares:</b> {{ mortgage.shipShares ?? 0 }}</div>
-                <div><b>Advance Payment:</b> {{ mortgage.advancePayment|number_format(2, ',', '.') }} Cr</div>
-                <div><b>Discount:</b> {{ mortgage.discount ?? 0 }} %</div>
-                <div><b>Interest:</b>
-                    {{ mortgage.interestRate.duration }} years,
-                    x{{ mortgage.interestRate.priceMultiplier }}/{{ mortgage.interestRate.priceDivider }},
-                    {{ mortgage.interestRate.annualInterestRate }}% annual
-                </div>
-                <div><b>Insurance:</b>
-                    {% if mortgage.insurance %}
-                        {{ mortgage.insurance.name }} ({{ mortgage.insurance.annualCost }}% ship price)
-                    {% else %}
-                        None
-                    {% endif %}
-                </div>
-            </div>
+            <table class="table text-sm">
+                <thead>
+                    <tr>
+                        <th class="text-left px-2">Start Day/Year</th>
+                        <th class="text-left px-2">Ship Shares</th>
+                        <th class="text-left px-2">Advance Payment</th>
+                        <th class="text-left px-2">Discount</th>
+                        <th class="text-left px-2">Interest</th>
+                        <th class="text-left px-2">Insurance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="px-2">{{ mortgage.startDay }}/{{ mortgage.startYear }}</td>
+                        <td class="px-2">{{ mortgage.shipShares ?? 0 }}</td>
+                        <td class="text-right px-2">{{ mortgage.advancePayment|number_format(2, ',', '.') }} Cr</td>
+                        <td class="px-2">{{ mortgage.discount ?? 0 }} %</td>
+                        <td class="px-2">
+                            {{ mortgage.interestRate.duration }} years,
+                            x{{ mortgage.interestRate.priceMultiplier }}/{{ mortgage.interestRate.priceDivider }},
+                            {{ mortgage.interestRate.annualInterestRate }}% annual
+                        </td>
+                        <td class="px-2">
+                            {% if mortgage.insurance %}
+                                {{ mortgage.insurance.name }} ({{ mortgage.insurance.annualCost }}% ship price)
+                            {% else %}
+                                None
+                            {% endif %}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
