@@ -63,39 +63,64 @@
         </div>
     </div>
 
-    <div class="card bg-base-200 border border-base-300 shadow-sm mb-4">
-        <div class="card-body p-4">
-            <h2 class="card-title text-lg mb-3">Financial summary</h2>
-            <div class="grid grid-cols-2 gap-2 text-sm">
-                <div><b>Ship cost (after shares/advance/discount):</b></div>
-                <div class="text-right">{{ summary.ship_cost|number_format(2, ',', '.') }} Cr</div>
+    <div class="grid grid-cols-2 gap-4 mb-4">
+        <div class="card bg-base-200 border border-base-300 shadow-sm">
+            <div class="card-body p-4">
+                <h2 class="card-title text-lg mb-3">Mortgage</h2>
+                <table class="table w-full text-sm">
+                    <tbody>
+                        <tr>
+                            <th class="text-left">Ship cost (after shares/advance/discount)</th>
+                            <td class="text-right">{{ summary.ship_cost|number_format(2, ',', '.') }} Cr</td>
+                        </tr>
+                        <tr>
+                            <th class="text-left">Mortgage monthly</th>
+                            <td class="text-right">{{ summary.mortgage_monthly|number_format(2, ',', '.') }} Cr</td>
+                        </tr>
+                        <tr>
+                            <th class="text-left">Mortgage annual</th>
+                            <td class="text-right">{{ summary.mortgage_annual|number_format(2, ',', '.') }} Cr</td>
+                        </tr>
+                        <tr>
+                            <th class="text-left">Total mortgage amount</th>
+                            <td class="text-right">{{ summary.total_mortgage|number_format(2, ',', '.') }} Cr</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-                <div><b>Mortgage monthly:</b></div>
-                <div class="text-right">{{ summary.mortgage_monthly|number_format(2, ',', '.') }} Cr</div>
-
-                <div><b>Mortgage annual:</b></div>
-                <div class="text-right">{{ summary.mortgage_annual|number_format(2, ',', '.') }} Cr</div>
-
-                <div><b>Insurance monthly:</b></div>
-                <div class="text-right">{{ summary.insurance_monthly|number_format(2, ',', '.') }} Cr</div>
-
-                <div><b>Insurance annual:</b></div>
-                <div class="text-right">{{ summary.insurance_annual|number_format(2, ',', '.') }} Cr</div>
-
-                <div><b>Total monthly payment:</b></div>
-                <div class="text-right">{{ summary.total_monthly_payment|number_format(2, ',', '.') }} Cr</div>
-
-                <div><b>Total annual payment:</b></div>
-                <div class="text-right">{{ summary.total_annual_payment|number_format(2, ',', '.') }} Cr</div>
-
-                <div><b>Total mortgage amount:</b></div>
-                <div class="text-right">{{ summary.total_mortgage|number_format(2, ',', '.') }} Cr</div>
-
-                <div><b>Installments paid:</b></div>
-                <div class="text-right">{{ summary.installments_paid }}</div>
-
-                <div><b>Total paid to date:</b></div>
-                <div class="text-right">{{ summary.total_mortgage_paid|number_format(2, ',', '.') }} Cr</div>
+        <div class="card bg-base-200 border border-base-300 shadow-sm">
+            <div class="card-body p-4">
+                <h2 class="card-title text-lg mb-3">Insurance & totals</h2>
+                <table class="table w-full text-sm">
+                    <tbody>
+                        <tr>
+                            <th class="text-left">Insurance monthly</th>
+                            <td class="text-right">{{ summary.insurance_monthly|number_format(2, ',', '.') }} Cr</td>
+                        </tr>
+                        <tr>
+                            <th class="text-left">Insurance annual</th>
+                            <td class="text-right">{{ summary.insurance_annual|number_format(2, ',', '.') }} Cr</td>
+                        </tr>
+                        <tr>
+                            <th class="text-left">Total monthly payment</th>
+                            <td class="text-right">{{ summary.total_monthly_payment|number_format(2, ',', '.') }} Cr</td>
+                        </tr>
+                        <tr>
+                            <th class="text-left">Total annual payment</th>
+                            <td class="text-right">{{ summary.total_annual_payment|number_format(2, ',', '.') }} Cr</td>
+                        </tr>
+                        <tr>
+                            <th class="text-left">Installments paid</th>
+                            <td class="text-right">{{ summary.installments_paid }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-left">Total paid to date</th>
+                            <td class="text-right">{{ summary.total_mortgage_paid|number_format(2, ',', '.') }} Cr</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
