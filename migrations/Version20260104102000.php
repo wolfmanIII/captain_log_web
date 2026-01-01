@@ -21,8 +21,6 @@ final class Version20260104102000 extends AbstractMigration
         $this->addSql('CREATE INDEX IDX_4FBF0947FA9442D ON company (company_role_id)');
         $this->addSql('ALTER TABLE income ADD company_id INTEGER DEFAULT NULL');
         $this->addSql('CREATE INDEX IDX_249AA25C979B1AD6 ON income (company_id)');
-        $this->addSql('ALTER TABLE cost ADD company_id INTEGER DEFAULT NULL');
-        $this->addSql('CREATE INDEX IDX_3C2AA97979B1AD6 ON cost (company_id)');
     }
 
     public function down(Schema $schema): void
