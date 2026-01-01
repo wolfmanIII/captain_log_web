@@ -9,20 +9,22 @@
             <h1>Company</h1>
         </header>
 
-        <div class="alert alert-info alert-outline shadow-sm w-full mb-4">
-            <div class="flex items-center gap-3">
-                {% include 'icons/admin.html.twig' %}
-                <div>
-                    <h3 class="font-semibold">Counterparty</h3>
-                    <p class="text-sm opacity-80">Name, role, contact and signature label to reuse across contracts and documents.</p>
-                </div>
-            </div>
-        </div>
-
         {{ form_start(form) }}
 
         <fieldset class="fieldset grid grid-cols-2 bg-base-200 border-base-300 gap-4 p-4 border rounded w-250">
             <legend class="fieldset-legend">Anagraphic</legend>
+
+            <div class="col-span-2">
+                <div class="alert alert-info alert-outline shadow-sm w-full">
+                    <div class="flex items-center gap-3">
+                        {% include 'icons/admin.html.twig' %}
+                        <div>
+                            <h3 class="font-semibold">Counterparty</h3>
+                            <p class="text-sm opacity-80">Name, role, contact and signature label to reuse across contracts and documents.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             {% if company.id %}
                 <div>
