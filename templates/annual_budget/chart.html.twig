@@ -9,11 +9,14 @@
         </header>
 
         <div class="alert alert-info alert-outline shadow-sm mb-6 mt-6">
-            <div>
-                <h3 class="font-semibold">Credits on this budget window</h3>
-                <p class="text-sm opacity-80">
-                    Incoming vs outgoing credits for this ship between {{ budget.startDay }}/{{ budget.startYear }} and {{ budget.endDay }}/{{ budget.endYear }}.
-                </p>
+            <div class="flex items-center gap-3">
+                {% include 'icons/annual-budget.html.twig' %}
+                <div>
+                    <h3 class="font-semibold">Credits on this budget window</h3>
+                    <p class="text-sm opacity-80">
+                        Incoming vs outgoing credits for this ship between {{ budget.startDay }}/{{ budget.startYear }} and {{ budget.endDay }}/{{ budget.endYear }}.
+                    </p>
+                </div>
             </div>
         </div>
 
