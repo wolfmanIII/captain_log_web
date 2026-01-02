@@ -1,74 +1,64 @@
-<fieldset class="fieldset bg-base-200 border-base-300 p-4 border rounded w-full space-y-4">
+<fieldset class="fieldset grid grid-cols-3 bg-base-200 border-base-300 p-4 border rounded w-250">
     <legend class="fieldset-legend flex items-center gap-2">
         {% include 'icons/income.html.twig' %} FREIGHT Details
     </legend>
 
-    <div class="grid grid-cols-2 gap-4">
-        <div>
-            {{ form_label(detail_form.origin) }}
-            {{ form_widget(detail_form.origin) }}
-            {{ form_errors(detail_form.origin) }}
-        </div>
-        <div>
-            {{ form_label(detail_form.destination) }}
-            {{ form_widget(detail_form.destination) }}
-            {{ form_errors(detail_form.destination) }}
-        </div>
-    </div>
-
-    <div class="flex flex-wrap gap-4">
-        <div class="basis-1/4 min-w-[140px]">
-            {{ form_label(detail_form.pickupDay) }}
-            {{ form_widget(detail_form.pickupDay) }}
-            {{ form_errors(detail_form.pickupDay) }}
-        </div>
-        <div class="basis-1/4 min-w-[140px]">
-            {{ form_label(detail_form.pickupYear) }}
-            {{ form_widget(detail_form.pickupYear) }}
-            {{ form_errors(detail_form.pickupYear) }}
-        </div>
-        <div class="basis-1/4 min-w-[140px]">
-            {{ form_label(detail_form.deliveryDay) }}
-            {{ form_widget(detail_form.deliveryDay) }}
-            {{ form_errors(detail_form.deliveryDay) }}
-        </div>
-        <div class="basis-1/4 min-w-[140px]">
-            {{ form_label(detail_form.deliveryYear) }}
-            {{ form_widget(detail_form.deliveryYear) }}
-            {{ form_errors(detail_form.deliveryYear) }}
-        </div>
-    </div>
-
     <div>
+        {{ form_label(detail_form.origin) }}
+        {{ form_widget(detail_form.origin) }}
+        {{ form_errors(detail_form.origin) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.destination) }}
+        {{ form_widget(detail_form.destination) }}
+        {{ form_errors(detail_form.destination) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.pickupDay) }}
+        {{ form_widget(detail_form.pickupDay) }}
+        {{ form_errors(detail_form.pickupDay) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.pickupYear) }}
+        {{ form_widget(detail_form.pickupYear) }}
+        {{ form_errors(detail_form.pickupYear) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.deliveryDay) }}
+        {{ form_widget(detail_form.deliveryDay) }}
+        {{ form_errors(detail_form.deliveryDay) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.deliveryYear) }}
+        {{ form_widget(detail_form.deliveryYear) }}
+        {{ form_errors(detail_form.deliveryYear) }}
+    </div>
+    <div class="col-span-3">
         {{ form_label(detail_form.cargoDescription) }}
         {{ form_widget(detail_form.cargoDescription) }}
         {{ form_errors(detail_form.cargoDescription) }}
     </div>
-
-    <div class="grid grid-cols-3 gap-4">
-        <div>
-            {{ form_label(detail_form.cargoQty) }}
-            {{ form_widget(detail_form.cargoQty) }}
-            {{ form_errors(detail_form.cargoQty) }}
-        </div>
-        <div>
-            {{ form_label(detail_form.declaredValue) }}
-            {{ form_widget(detail_form.declaredValue) }}
-            {{ form_errors(detail_form.declaredValue) }}
-        </div>
-        <div>
-            {{ form_label(detail_form.liabilityLimit) }}
-            {{ form_widget(detail_form.liabilityLimit) }}
-            {{ form_errors(detail_form.liabilityLimit) }}
-        </div>
-    </div>
-
     <div>
+        {{ form_label(detail_form.cargoQty) }}
+        {{ form_widget(detail_form.cargoQty) }}
+        {{ form_errors(detail_form.cargoQty) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.declaredValue) }}
+        {{ form_widget(detail_form.declaredValue) }}
+        {{ form_errors(detail_form.declaredValue) }}
+    </div>
+    <div class="col-span-3">
         {{ form_label(detail_form.paymentTerms) }}
         {{ form_widget(detail_form.paymentTerms) }}
         {{ form_errors(detail_form.paymentTerms) }}
     </div>
     <div>
+        {{ form_label(detail_form.liabilityLimit) }}
+        {{ form_widget(detail_form.liabilityLimit) }}
+        {{ form_errors(detail_form.liabilityLimit) }}
+    </div>
+    <div class="col-span-3">
         {{ form_label(detail_form.cancellationTerms) }}
         {{ form_widget(detail_form.cancellationTerms) }}
         {{ form_errors(detail_form.cancellationTerms) }}
