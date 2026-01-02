@@ -5,7 +5,7 @@ namespace App\Form\Type;
 use App\Entity\IncomePassengersDetails;
 use App\Form\Config\DayYearLimits;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -30,22 +30,22 @@ class IncomePassengersDetailsType extends AbstractType
                 'label' => 'Destination',
                 'attr' => ['class' => 'input m-1 w-full'],
             ])
-            ->add('departureDay', IntegerType::class, [
+            ->add('departureDay', NumberType::class, [
                 'required' => false,
                 'label' => 'Departure Day',
                 'attr' => $this->limits->dayAttr(['class' => 'input m-1 w-full']),
             ])
-            ->add('departureYear', IntegerType::class, [
+            ->add('departureYear', NumberType::class, [
                 'required' => false,
                 'label' => 'Departure Year',
                 'attr' => $this->limits->yearAttr(['class' => 'input m-1 w-full']),
             ])
-            ->add('arrivalDay', IntegerType::class, [
+            ->add('arrivalDay', NumberType::class, [
                 'required' => false,
                 'label' => 'Arrival Day',
                 'attr' => $this->limits->dayAttr(['class' => 'input m-1 w-full']),
             ])
-            ->add('arrivalYear', IntegerType::class, [
+            ->add('arrivalYear', NumberType::class, [
                 'required' => false,
                 'label' => 'Arrival Year',
                 'attr' => $this->limits->yearAttr(['class' => 'input m-1 w-full']),
@@ -55,7 +55,7 @@ class IncomePassengersDetailsType extends AbstractType
                 'label' => 'Class / Berth',
                 'attr' => ['class' => 'input m-1 w-full'],
             ])
-            ->add('qty', IntegerType::class, [
+            ->add('qty', NumberType::class, [
                 'required' => false,
                 'label' => 'Qty',
                 'attr' => ['class' => 'input m-1 w-full'],

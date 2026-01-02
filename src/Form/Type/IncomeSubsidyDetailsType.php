@@ -5,7 +5,6 @@ namespace App\Form\Type;
 use App\Entity\IncomeSubsidyDetails;
 use App\Form\Config\DayYearLimits;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -36,22 +35,22 @@ class IncomeSubsidyDetailsType extends AbstractType
                 'label' => 'Destination',
                 'attr' => ['class' => 'input m-1 w-full'],
             ])
-            ->add('startDay', IntegerType::class, [
+            ->add('startDay', NumberType::class, [
                 'required' => false,
                 'label' => 'Start Day',
                 'attr' => $this->limits->dayAttr(['class' => 'input m-1 w-full']),
             ])
-            ->add('startYear', IntegerType::class, [
+            ->add('startYear', NumberType::class, [
                 'required' => false,
                 'label' => 'Start Year',
                 'attr' => $this->limits->yearAttr(['class' => 'input m-1 w-full']),
             ])
-            ->add('endDay', IntegerType::class, [
+            ->add('endDay', NumberType::class, [
                 'required' => false,
                 'label' => 'End Day',
                 'attr' => $this->limits->dayAttr(['class' => 'input m-1 w-full']),
             ])
-            ->add('endYear', IntegerType::class, [
+            ->add('endYear', NumberType::class, [
                 'required' => false,
                 'label' => 'End Year',
                 'attr' => $this->limits->yearAttr(['class' => 'input m-1 w-full']),

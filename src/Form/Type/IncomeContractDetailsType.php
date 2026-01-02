@@ -5,7 +5,6 @@ namespace App\Form\Type;
 use App\Entity\IncomeContractDetails;
 use App\Form\Config\DayYearLimits;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -41,22 +40,22 @@ class IncomeContractDetailsType extends AbstractType
                 'label' => 'Success condition',
                 'attr' => ['class' => 'textarea m-1 w-full', 'rows' => 2],
             ])
-            ->add('startDay', IntegerType::class, [
+            ->add('startDay', NumberType::class, [
                 'required' => false,
                 'label' => 'Start Day',
                 'attr' => $this->limits->dayAttr(['class' => 'input m-1 w-full']),
             ])
-            ->add('startYear', IntegerType::class, [
+            ->add('startYear', NumberType::class, [
                 'required' => false,
                 'label' => 'Start Year',
                 'attr' => $this->limits->yearAttr(['class' => 'input m-1 w-full']),
             ])
-            ->add('deadlineDay', IntegerType::class, [
+            ->add('deadlineDay', NumberType::class, [
                 'required' => false,
                 'label' => 'Deadline Day',
                 'attr' => $this->limits->dayAttr(['class' => 'input m-1 w-full']),
             ])
-            ->add('deadlineYear', IntegerType::class, [
+            ->add('deadlineYear', NumberType::class, [
                 'required' => false,
                 'label' => 'Deadline Year',
                 'attr' => $this->limits->yearAttr(['class' => 'input m-1 w-full']),

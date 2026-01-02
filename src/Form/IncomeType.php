@@ -14,7 +14,7 @@ use App\Repository\ShipRepository;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -36,11 +36,11 @@ class IncomeType extends AbstractType
             ->add('title', TextType::class, [
                 'attr' => ['class' => 'input m-1 w-full'],
             ])
-            ->add('signingDay', IntegerType::class, [
+            ->add('signingDay', NumberType::class, [
                 'required' => false,
                 'attr' => $this->dayYearLimits->dayAttr(['class' => 'input m-1 w-full']),
             ])
-            ->add('signingYear', IntegerType::class, [
+            ->add('signingYear', NumberType::class, [
                 'required' => false,
                 'attr' => $this->dayYearLimits->yearAttr(['class' => 'input m-1 w-full']),
             ])
@@ -49,29 +49,29 @@ class IncomeType extends AbstractType
                 'label' => 'Signing Location',
                 'attr' => ['class' => 'input m-1 w-full'],
             ])
-            ->add('paymentDay', IntegerType::class, [
+            ->add('paymentDay', NumberType::class, [
                 'required' => false,
                 'attr' => $this->dayYearLimits->dayAttr(['class' => 'input m-1 w-full']),
             ])
-            ->add('paymentYear', IntegerType::class, [
+            ->add('paymentYear', NumberType::class, [
                 'required' => false,
                 'attr' => $this->dayYearLimits->yearAttr(['class' => 'input m-1 w-full']),
             ])
-            ->add('expirationDay', IntegerType::class, [
+            ->add('expirationDay', NumberType::class, [
                 'label' => 'Expiration Day',
                 'required' => false,
                 'attr' => $this->dayYearLimits->dayAttr(['class' => 'input m-1 w-full']),
             ])
-            ->add('expirationYear', IntegerType::class, [
+            ->add('expirationYear', NumberType::class, [
                 'label' => 'Expiration Year',
                 'required' => false,
                 'attr' => $this->dayYearLimits->yearAttr(['class' => 'input m-1 w-full']),
             ])
-            ->add('cancelDay', IntegerType::class, [
+            ->add('cancelDay', NumberType::class, [
                 'required' => false,
                 'attr' => $this->dayYearLimits->dayAttr(['class' => 'input m-1 w-full']),
             ])
-            ->add('cancelYear', IntegerType::class, [
+            ->add('cancelYear', NumberType::class, [
                 'required' => false,
                 'attr' => $this->dayYearLimits->yearAttr(['class' => 'input m-1 w-full']),
             ])

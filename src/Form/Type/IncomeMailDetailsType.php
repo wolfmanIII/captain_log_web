@@ -5,7 +5,6 @@ namespace App\Form\Type;
 use App\Entity\IncomeMailDetails;
 use App\Form\Config\DayYearLimits;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -31,22 +30,22 @@ class IncomeMailDetailsType extends AbstractType
                 'label' => 'Destination',
                 'attr' => ['class' => 'input m-1 w-full'],
             ])
-            ->add('dispatchDay', IntegerType::class, [
+            ->add('dispatchDay', NumberType::class, [
                 'required' => false,
                 'label' => 'Dispatch Day',
                 'attr' => $this->limits->dayAttr(['class' => 'input m-1 w-full']),
             ])
-            ->add('dispatchYear', IntegerType::class, [
+            ->add('dispatchYear', NumberType::class, [
                 'required' => false,
                 'label' => 'Dispatch Year',
                 'attr' => $this->limits->yearAttr(['class' => 'input m-1 w-full']),
             ])
-            ->add('deliveryDay', IntegerType::class, [
+            ->add('deliveryDay', NumberType::class, [
                 'required' => false,
                 'label' => 'Delivery Day',
                 'attr' => $this->limits->dayAttr(['class' => 'input m-1 w-full']),
             ])
-            ->add('deliveryYear', IntegerType::class, [
+            ->add('deliveryYear', NumberType::class, [
                 'required' => false,
                 'label' => 'Delivery Year',
                 'attr' => $this->limits->yearAttr(['class' => 'input m-1 w-full']),

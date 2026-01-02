@@ -5,7 +5,6 @@ namespace App\Form\Type;
 use App\Entity\IncomeTradeDetails;
 use App\Form\Config\DayYearLimits;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -73,12 +72,12 @@ class IncomeTradeDetailsType extends AbstractType
                 'label' => 'Delivery method',
                 'attr' => ['class' => 'textarea m-1 w-full', 'rows' => 2],
             ])
-            ->add('deliveryDay', IntegerType::class, [
+            ->add('deliveryDay', NumberType::class, [
                 'required' => false,
                 'label' => 'Delivery Day',
                 'attr' => $this->limits->dayAttr(['class' => 'input m-1 w-full']),
             ])
-            ->add('deliveryYear', IntegerType::class, [
+            ->add('deliveryYear', NumberType::class, [
                 'required' => false,
                 'label' => 'Delivery Year',
                 'attr' => $this->limits->yearAttr(['class' => 'input m-1 w-full']),

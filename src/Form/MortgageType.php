@@ -14,7 +14,7 @@ use App\Repository\ShipRepository;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -35,11 +35,11 @@ class MortgageType extends AbstractType
 
         $builder
             //->add('name', TextType::class, ['attr' => ['class' => 'input m-1 w-full'],])
-            ->add('startDay', IntegerType::class, [
+            ->add('startDay', NumberType::class, [
                 'attr' => $this->limits->dayAttr(['class' => 'input m-1 w-full']),
                 'disabled' => $disabled,
                 ])
-            ->add('startYear', IntegerType::class, [
+            ->add('startYear', NumberType::class, [
                 'attr' => $this->limits->yearAttr(['class' => 'input m-1 w-full']),
                 'disabled' => $disabled,
                 ])

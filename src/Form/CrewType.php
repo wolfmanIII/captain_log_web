@@ -7,7 +7,7 @@ use App\Entity\Ship;
 use App\Entity\ShipRole;
 use App\Form\Config\DayYearLimits;
 use App\Repository\ShipRepository;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -40,12 +40,12 @@ class CrewType extends AbstractType
                 'required' => false,
                 'disabled' => $disabled,
             ])
-            ->add('birthYear', IntegerType::class, [
+            ->add('birthYear', NumberType::class, [
                 'attr' => $this->limits->yearAttr(['class' => 'input m-1 w-full']),
                 'required' => false,
                 'disabled' => $disabled,
             ])
-            ->add('birthDay', IntegerType::class, [
+            ->add('birthDay', NumberType::class, [
                 'attr' => $this->limits->dayAttr(['class' => 'input m-1 w-full']),
                 'required' => false,
                 'disabled' => $disabled,

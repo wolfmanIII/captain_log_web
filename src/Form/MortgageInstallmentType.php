@@ -6,7 +6,7 @@ use App\Entity\MortgageInstallment;
 use App\Form\Config\DayYearLimits;
 use App\Form\Type\TravellerMoneyType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -23,10 +23,10 @@ class MortgageInstallmentType extends AbstractType
         $summary = $installment->getMortgage()->calculate();
 
         $builder
-            ->add('paymentDay', IntegerType::class, [
+            ->add('paymentDay', NumberType::class, [
                 'attr' => $this->limits->dayAttr(['class' => 'input m-1 w-full']),
             ])
-            ->add('paymentYear', IntegerType::class, [
+            ->add('paymentYear', NumberType::class, [
                 'attr' => $this->limits->yearAttr(['class' => 'input m-1 w-full']),
             ])
             ->add('payment', TravellerMoneyType::class, [
