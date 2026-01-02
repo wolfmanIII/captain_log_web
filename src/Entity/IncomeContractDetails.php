@@ -63,6 +63,9 @@ class IncomeContractDetails
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $cancellationTerms = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $paymentTerms = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -241,6 +244,17 @@ class IncomeContractDetails
     public function setCancellationTerms(?string $cancellationTerms): static
     {
         $this->cancellationTerms = $cancellationTerms;
+        return $this;
+    }
+
+    public function getPaymentTerms(): ?string
+    {
+        return $this->paymentTerms;
+    }
+
+    public function setPaymentTerms(?string $paymentTerms): static
+    {
+        $this->paymentTerms = $paymentTerms;
         return $this;
     }
 }
