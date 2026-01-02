@@ -14,7 +14,7 @@ class IncomeSubsidyDetails
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne]
+    #[ORM\OneToOne(inversedBy: 'subsidyDetails')]
     #[ORM\JoinColumn(nullable: false, unique: true)]
     private ?Income $income = null;
 

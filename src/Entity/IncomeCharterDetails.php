@@ -14,7 +14,7 @@ class IncomeCharterDetails
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne]
+    #[ORM\OneToOne(inversedBy: 'charterDetails')]
     #[ORM\JoinColumn(nullable: false, unique: true)]
     private ?Income $income = null;
 

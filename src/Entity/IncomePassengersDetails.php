@@ -14,7 +14,7 @@ class IncomePassengersDetails
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne]
+    #[ORM\OneToOne(inversedBy: 'passengersDetails')]
     #[ORM\JoinColumn(nullable: false, unique: true)]
     private ?Income $income = null;
 

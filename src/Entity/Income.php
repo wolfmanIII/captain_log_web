@@ -4,6 +4,18 @@ namespace App\Entity;
 
 use App\Repository\IncomeRepository;
 use App\Entity\LocalLaw;
+use App\Entity\IncomeCharterDetails;
+use App\Entity\IncomeSubsidyDetails;
+use App\Entity\IncomeFreightDetails;
+use App\Entity\IncomePassengersDetails;
+use App\Entity\IncomeServicesDetails;
+use App\Entity\IncomeInsuranceDetails;
+use App\Entity\IncomeMailDetails;
+use App\Entity\IncomeInterestDetails;
+use App\Entity\IncomeTradeDetails;
+use App\Entity\IncomeSalvageDetails;
+use App\Entity\IncomePrizeDetails;
+use App\Entity\IncomeContractDetails;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
@@ -59,6 +71,42 @@ class Income
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: true)]
     private ?LocalLaw $localLaw = null;
+
+    #[ORM\OneToOne(mappedBy: 'income', cascade: ['persist', 'remove'])]
+    private ?IncomeCharterDetails $charterDetails = null;
+
+    #[ORM\OneToOne(mappedBy: 'income', cascade: ['persist', 'remove'])]
+    private ?IncomeSubsidyDetails $subsidyDetails = null;
+
+    #[ORM\OneToOne(mappedBy: 'income', cascade: ['persist', 'remove'])]
+    private ?IncomeFreightDetails $freightDetails = null;
+
+    #[ORM\OneToOne(mappedBy: 'income', cascade: ['persist', 'remove'])]
+    private ?IncomePassengersDetails $passengersDetails = null;
+
+    #[ORM\OneToOne(mappedBy: 'income', cascade: ['persist', 'remove'])]
+    private ?IncomeServicesDetails $servicesDetails = null;
+
+    #[ORM\OneToOne(mappedBy: 'income', cascade: ['persist', 'remove'])]
+    private ?IncomeInsuranceDetails $insuranceDetails = null;
+
+    #[ORM\OneToOne(mappedBy: 'income', cascade: ['persist', 'remove'])]
+    private ?IncomeMailDetails $mailDetails = null;
+
+    #[ORM\OneToOne(mappedBy: 'income', cascade: ['persist', 'remove'])]
+    private ?IncomeInterestDetails $interestDetails = null;
+
+    #[ORM\OneToOne(mappedBy: 'income', cascade: ['persist', 'remove'])]
+    private ?IncomeTradeDetails $tradeDetails = null;
+
+    #[ORM\OneToOne(mappedBy: 'income', cascade: ['persist', 'remove'])]
+    private ?IncomeSalvageDetails $salvageDetails = null;
+
+    #[ORM\OneToOne(mappedBy: 'income', cascade: ['persist', 'remove'])]
+    private ?IncomePrizeDetails $prizeDetails = null;
+
+    #[ORM\OneToOne(mappedBy: 'income', cascade: ['persist', 'remove'])]
+    private ?IncomeContractDetails $contractDetails = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $signingLocation = null;
