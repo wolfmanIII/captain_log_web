@@ -4,6 +4,7 @@ namespace App\Form\Type;
 
 use App\Entity\IncomePrizeDetails;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -20,10 +21,23 @@ class IncomePrizeDetailsType extends AbstractType
                 'label' => 'Case ref',
                 'attr' => ['class' => 'input m-1 w-full'],
             ])
-            ->add('legalBasis', TextareaType::class, [
+            ->add('legalBasis', ChoiceType::class, [
                 'required' => false,
                 'label' => 'Legal basis',
-                'attr' => ['class' => 'textarea m-1 w-full', 'rows' => 2],
+                'placeholder' => 'Select legal basis',
+                'choices' => [
+                    'Imperial Warrant' => 'Imperial Warrant',
+                    'Port Authority Writ' => 'Port Authority Writ',
+                    'Prize Court Order' => 'Prize Court Order',
+                    'Letters of Marque' => 'Letters of Marque',
+                    'Customs Seizure (Contraband)' => 'Customs Seizure (Contraband)',
+                    'Anti-Piracy Mandate' => 'Anti-Piracy Mandate',
+                    'Quarantine / Emergency Order' => 'Quarantine / Emergency Order',
+                    'Search & Seizure Authorization' => 'Search & Seizure Authorization',
+                    'Court-Ordered Repossession' => 'Court-Ordered Repossession',
+                    'Maritime Lien (Unpaid Fees)' => 'Maritime Lien (Unpaid Fees)',
+                ],
+                'attr' => ['class' => 'select m-1 w-full'],
             ])
             ->add('prizeDescription', TextareaType::class, [
                 'required' => false,
