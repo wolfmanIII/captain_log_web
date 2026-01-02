@@ -13,26 +13,30 @@
         {{ form_widget(detail_form.destination) }}
         {{ form_errors(detail_form.destination) }}
     </div>
-    <div>
-        {{ form_label(detail_form.pickupDay) }}
-        {{ form_widget(detail_form.pickupDay) }}
-        {{ form_errors(detail_form.pickupDay) }}
+
+    <div class="col-span-3 grid grid-cols-4 gap-4">
+        <div>
+            {{ form_label(detail_form.pickupDay) }}
+            {{ form_widget(detail_form.pickupDay) }}
+            {{ form_errors(detail_form.pickupDay) }}
+        </div>
+        <div>
+            {{ form_label(detail_form.pickupYear) }}
+            {{ form_widget(detail_form.pickupYear) }}
+            {{ form_errors(detail_form.pickupYear) }}
+        </div>
+        <div>
+            {{ form_label(detail_form.deliveryDay) }}
+            {{ form_widget(detail_form.deliveryDay) }}
+            {{ form_errors(detail_form.deliveryDay) }}
+        </div>
+        <div>
+            {{ form_label(detail_form.deliveryYear) }}
+            {{ form_widget(detail_form.deliveryYear) }}
+            {{ form_errors(detail_form.deliveryYear) }}
+        </div>
     </div>
-    <div>
-        {{ form_label(detail_form.pickupYear) }}
-        {{ form_widget(detail_form.pickupYear) }}
-        {{ form_errors(detail_form.pickupYear) }}
-    </div>
-    <div>
-        {{ form_label(detail_form.deliveryDay) }}
-        {{ form_widget(detail_form.deliveryDay) }}
-        {{ form_errors(detail_form.deliveryDay) }}
-    </div>
-    <div>
-        {{ form_label(detail_form.deliveryYear) }}
-        {{ form_widget(detail_form.deliveryYear) }}
-        {{ form_errors(detail_form.deliveryYear) }}
-    </div>
+
     <div class="col-span-3">
         {{ form_label(detail_form.cargoDescription) }}
         {{ form_widget(detail_form.cargoDescription) }}
