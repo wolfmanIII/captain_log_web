@@ -22,10 +22,10 @@ class Income
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $signingDay = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $signingYear = null;
 
     #[ORM\Column(nullable: true)]
