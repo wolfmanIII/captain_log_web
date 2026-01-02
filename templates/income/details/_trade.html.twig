@@ -1,0 +1,86 @@
+<fieldset class="fieldset grid grid-cols-3 bg-base-200 border-base-300 p-4 border rounded w-250">
+    <legend class="fieldset-legend flex items-center gap-2">
+        {% include 'icons/income.html.twig' %} TRADE Details
+    </legend>
+
+    <div>
+        {{ form_label(detail_form.location) }}
+        {{ form_widget(detail_form.location) }}
+        {{ form_errors(detail_form.location) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.transferPoint) }}
+        {{ form_widget(detail_form.transferPoint) }}
+        {{ form_errors(detail_form.transferPoint) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.transferCondition) }}
+        {{ form_widget(detail_form.transferCondition) }}
+        {{ form_errors(detail_form.transferCondition) }}
+    </div>
+    <div class="col-span-3">
+        {{ form_label(detail_form.goodsDescription) }}
+        {{ form_widget(detail_form.goodsDescription) }}
+        {{ form_errors(detail_form.goodsDescription) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.qty) }}
+        {{ form_widget(detail_form.qty) }}
+        {{ form_errors(detail_form.qty) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.grade) }}
+        {{ form_widget(detail_form.grade) }}
+        {{ form_errors(detail_form.grade) }}
+    </div>
+    <div class="col-span-3">
+        {{ form_label(detail_form.batchIds) }}
+        {{ form_widget(detail_form.batchIds) }}
+        {{ form_errors(detail_form.batchIds) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.unitPrice) }}
+        {{ form_widget(detail_form.unitPrice) }}
+        {{ form_errors(detail_form.unitPrice) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.paymentTerms) }}
+        {{ form_widget(detail_form.paymentTerms) }}
+        {{ form_errors(detail_form.paymentTerms) }}
+    </div>
+    <div class="col-span-3">
+        {{ form_label(detail_form.deliveryMethod) }}
+        {{ form_widget(detail_form.deliveryMethod) }}
+        {{ form_errors(detail_form.deliveryMethod) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.deliveryDay) }}
+        {{ form_widget(detail_form.deliveryDay) }}
+        {{ form_errors(detail_form.deliveryDay) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.deliveryYear) }}
+        {{ form_widget(detail_form.deliveryYear) }}
+        {{ form_errors(detail_form.deliveryYear) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.asIsOrWarranty) }}
+        {{ form_widget(detail_form.asIsOrWarranty) }}
+        {{ form_errors(detail_form.asIsOrWarranty) }}
+    </div>
+    <div class="col-span-3">
+        {{ form_label(detail_form.warrantyText) }}
+        {{ form_widget(detail_form.warrantyText) }}
+        {{ form_errors(detail_form.warrantyText) }}
+    </div>
+    <div class="col-span-3">
+        {{ form_label(detail_form.claimWindow) }}
+        {{ form_widget(detail_form.claimWindow) }}
+        {{ form_errors(detail_form.claimWindow) }}
+    </div>
+    <div class="col-span-3">
+        {{ form_label(detail_form.returnPolicy) }}
+        {{ form_widget(detail_form.returnPolicy) }}
+        {{ form_errors(detail_form.returnPolicy) }}
+    </div>
+</fieldset>

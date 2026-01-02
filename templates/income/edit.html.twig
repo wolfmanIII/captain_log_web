@@ -109,66 +109,42 @@
         </div>
     </fieldset>
 
-    {% set detail_configs = {
-        'charterDetails': {
-            'title': 'CHARTER Details',
-            'fields': ['areaOrRoute','purpose','manifestSummary','startDay','startYear','endDay','endYear','paymentTerms','deposit','extras','damageTerms','cancellationTerms']
-        },
-        'subsidyDetails': {
-            'title': 'SUBSIDY Details',
-            'fields': ['programRef','origin','destination','startDay','startYear','endDay','endYear','serviceLevel','subsidyAmount','paymentTerms','milestones','reportingRequirements','nonComplianceTerms','proofRequirements','cancellationTerms']
-        },
-        'freightDetails': {
-            'title': 'FREIGHT Details',
-            'fields': ['origin','destination','pickupDay','pickupYear','deliveryDay','deliveryYear','cargoDescription','cargoQty','declaredValue','paymentTerms','liabilityLimit','cancellationTerms']
-        },
-        'passengersDetails': {
-            'title': 'PASSENGERS Details',
-            'fields': ['origin','destination','departureDay','departureYear','arrivalDay','arrivalYear','classOrBerth','qty','passengerNames','passengerContact','baggageAllowance','extraBaggage','paymentTerms','refundChangePolicy']
-        },
-        'servicesDetails': {
-            'title': 'SERVICES Details',
-            'fields': ['location','vesselId','serviceType','requestedBy','startDay','startYear','endDay','endYear','workSummary','partsMaterials','risks','paymentTerms','extras','liabilityLimit','cancellationTerms']
-        },
-        'insuranceDetails': {
-            'title': 'INSURANCE Details',
-            'fields': ['claimId','policyNumber','incidentRef','incidentDay','incidentYear','incidentLocation','incidentCause','lossType','verifiedLoss','deductible','paymentTerms','acceptanceEffect','subrogationTerms','coverageNotes']
-        },
-        'mailDetails': {
-            'title': 'MAIL Details',
-            'fields': ['runId','authorityRef','origin','destination','dispatchDay','dispatchYear','deliveryDay','deliveryYear','mailType','packageCount','totalMass','securityLevel','sealCodes','paymentTerms','proofOfDelivery','liabilityLimit']
-        },
-        'interestDetails': {
-            'title': 'INTEREST Details',
-            'fields': ['receiptId','accountRef','instrument','principal','interestRate','startDay','startYear','endDay','endYear','calcMethod','interestEarned','netPaid','paymentTerms','disputeWindow']
-        },
-        'tradeDetails': {
-            'title': 'TRADE Details',
-            'fields': ['location','transferPoint','transferCondition','goodsDescription','qty','grade','batchIds','unitPrice','paymentTerms','deliveryMethod','deliveryDay','deliveryYear','asIsOrWarranty','warrantyText','claimWindow','returnPolicy']
-        },
-        'salvageDetails': {
-            'title': 'SALVAGE Details',
-            'fields': ['claimId','caseRef','source','siteLocation','recoveredItemsSummary','qtyValue','hazards','paymentTerms','splitTerms','rightsBasis','awardTrigger','disputeProcess']
-        },
-        'prizeDetails': {
-            'title': 'PRIZE Details',
-            'fields': ['prizeId','caseRef','jurisdiction','legalBasis','prizeDescription','estimatedValue','disposition','paymentTerms','shareSplit','awardTrigger']
-        },
-        'contractDetails': {
-            'title': 'CONTRACT Details',
-            'fields': ['jobType','location','objective','successCondition','startDay','startYear','deadlineDay','deadlineYear','bonus','expensesPolicy','deposit','restrictions','confidentialityLevel','failureTerms','cancellationTerms']
-        },
-    } %}
-
-    {% for detail_name, config in detail_configs %}
-        {% if form[detail_name] is defined %}
-            {% include 'income/_detail_section.html.twig' with {
-                detail_form: form[detail_name],
-                title: config.title,
-                fields: config.fields
-            } %}
-        {% endif %}
-    {% endfor %}
+    {% if form.charterDetails is defined %}
+        {% include 'income/details/_charter.html.twig' with { detail_form: form.charterDetails } %}
+    {% endif %}
+    {% if form.subsidyDetails is defined %}
+        {% include 'income/details/_subsidy.html.twig' with { detail_form: form.subsidyDetails } %}
+    {% endif %}
+    {% if form.freightDetails is defined %}
+        {% include 'income/details/_freight.html.twig' with { detail_form: form.freightDetails } %}
+    {% endif %}
+    {% if form.passengersDetails is defined %}
+        {% include 'income/details/_passengers.html.twig' with { detail_form: form.passengersDetails } %}
+    {% endif %}
+    {% if form.servicesDetails is defined %}
+        {% include 'income/details/_services.html.twig' with { detail_form: form.servicesDetails } %}
+    {% endif %}
+    {% if form.insuranceDetails is defined %}
+        {% include 'income/details/_insurance.html.twig' with { detail_form: form.insuranceDetails } %}
+    {% endif %}
+    {% if form.mailDetails is defined %}
+        {% include 'income/details/_mail.html.twig' with { detail_form: form.mailDetails } %}
+    {% endif %}
+    {% if form.interestDetails is defined %}
+        {% include 'income/details/_interest.html.twig' with { detail_form: form.interestDetails } %}
+    {% endif %}
+    {% if form.tradeDetails is defined %}
+        {% include 'income/details/_trade.html.twig' with { detail_form: form.tradeDetails } %}
+    {% endif %}
+    {% if form.salvageDetails is defined %}
+        {% include 'income/details/_salvage.html.twig' with { detail_form: form.salvageDetails } %}
+    {% endif %}
+    {% if form.prizeDetails is defined %}
+        {% include 'income/details/_prize.html.twig' with { detail_form: form.prizeDetails } %}
+    {% endif %}
+    {% if form.contractDetails is defined %}
+        {% include 'income/details/_contract.html.twig' with { detail_form: form.contractDetails } %}
+    {% endif %}
 
     <fieldset class="fieldset grid grid-cols-3 bg-base-200 border-base-300 gap-4 p-4 border rounded w-250">
         <legend class="fieldset-legend">{% include 'icons/income.html.twig' %} Note</legend>

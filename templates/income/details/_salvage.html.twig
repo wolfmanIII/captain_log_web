@@ -1,0 +1,66 @@
+<fieldset class="fieldset grid grid-cols-3 bg-base-200 border-base-300 p-4 border rounded w-250">
+    <legend class="fieldset-legend flex items-center gap-2">
+        {% include 'icons/income.html.twig' %} SALVAGE Details
+    </legend>
+
+    <div>
+        {{ form_label(detail_form.claimId) }}
+        {{ form_widget(detail_form.claimId) }}
+        {{ form_errors(detail_form.claimId) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.caseRef) }}
+        {{ form_widget(detail_form.caseRef) }}
+        {{ form_errors(detail_form.caseRef) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.source) }}
+        {{ form_widget(detail_form.source) }}
+        {{ form_errors(detail_form.source) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.siteLocation) }}
+        {{ form_widget(detail_form.siteLocation) }}
+        {{ form_errors(detail_form.siteLocation) }}
+    </div>
+    <div class="col-span-3">
+        {{ form_label(detail_form.recoveredItemsSummary) }}
+        {{ form_widget(detail_form.recoveredItemsSummary) }}
+        {{ form_errors(detail_form.recoveredItemsSummary) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.qtyValue) }}
+        {{ form_widget(detail_form.qtyValue) }}
+        {{ form_errors(detail_form.qtyValue) }}
+    </div>
+    <div class="col-span-3">
+        {{ form_label(detail_form.hazards) }}
+        {{ form_widget(detail_form.hazards) }}
+        {{ form_errors(detail_form.hazards) }}
+    </div>
+    <div class="col-span-3">
+        {{ form_label(detail_form.paymentTerms) }}
+        {{ form_widget(detail_form.paymentTerms) }}
+        {{ form_errors(detail_form.paymentTerms) }}
+    </div>
+    <div class="col-span-3">
+        {{ form_label(detail_form.splitTerms) }}
+        {{ form_widget(detail_form.splitTerms) }}
+        {{ form_errors(detail_form.splitTerms) }}
+    </div>
+    <div class="col-span-3">
+        {{ form_label(detail_form.rightsBasis) }}
+        {{ form_widget(detail_form.rightsBasis) }}
+        {{ form_errors(detail_form.rightsBasis) }}
+    </div>
+    <div class="col-span-3">
+        {{ form_label(detail_form.awardTrigger) }}
+        {{ form_widget(detail_form.awardTrigger) }}
+        {{ form_errors(detail_form.awardTrigger) }}
+    </div>
+    <div class="col-span-3">
+        {{ form_label(detail_form.disputeProcess) }}
+        {{ form_widget(detail_form.disputeProcess) }}
+        {{ form_errors(detail_form.disputeProcess) }}
+    </div>
+</fieldset>

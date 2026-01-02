@@ -1,0 +1,86 @@
+<fieldset class="fieldset grid grid-cols-3 bg-base-200 border-base-300 p-4 border rounded w-250">
+    <legend class="fieldset-legend flex items-center gap-2">
+        {% include 'icons/income.html.twig' %} MAIL Details
+    </legend>
+
+    <div>
+        {{ form_label(detail_form.runId) }}
+        {{ form_widget(detail_form.runId) }}
+        {{ form_errors(detail_form.runId) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.authorityRef) }}
+        {{ form_widget(detail_form.authorityRef) }}
+        {{ form_errors(detail_form.authorityRef) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.origin) }}
+        {{ form_widget(detail_form.origin) }}
+        {{ form_errors(detail_form.origin) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.destination) }}
+        {{ form_widget(detail_form.destination) }}
+        {{ form_errors(detail_form.destination) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.dispatchDay) }}
+        {{ form_widget(detail_form.dispatchDay) }}
+        {{ form_errors(detail_form.dispatchDay) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.dispatchYear) }}
+        {{ form_widget(detail_form.dispatchYear) }}
+        {{ form_errors(detail_form.dispatchYear) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.deliveryDay) }}
+        {{ form_widget(detail_form.deliveryDay) }}
+        {{ form_errors(detail_form.deliveryDay) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.deliveryYear) }}
+        {{ form_widget(detail_form.deliveryYear) }}
+        {{ form_errors(detail_form.deliveryYear) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.mailType) }}
+        {{ form_widget(detail_form.mailType) }}
+        {{ form_errors(detail_form.mailType) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.packageCount) }}
+        {{ form_widget(detail_form.packageCount) }}
+        {{ form_errors(detail_form.packageCount) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.totalMass) }}
+        {{ form_widget(detail_form.totalMass) }}
+        {{ form_errors(detail_form.totalMass) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.securityLevel) }}
+        {{ form_widget(detail_form.securityLevel) }}
+        {{ form_errors(detail_form.securityLevel) }}
+    </div>
+    <div class="col-span-3">
+        {{ form_label(detail_form.sealCodes) }}
+        {{ form_widget(detail_form.sealCodes) }}
+        {{ form_errors(detail_form.sealCodes) }}
+    </div>
+    <div class="col-span-3">
+        {{ form_label(detail_form.paymentTerms) }}
+        {{ form_widget(detail_form.paymentTerms) }}
+        {{ form_errors(detail_form.paymentTerms) }}
+    </div>
+    <div class="col-span-3">
+        {{ form_label(detail_form.proofOfDelivery) }}
+        {{ form_widget(detail_form.proofOfDelivery) }}
+        {{ form_errors(detail_form.proofOfDelivery) }}
+    </div>
+    <div class="col-span-3">
+        {{ form_label(detail_form.liabilityLimit) }}
+        {{ form_widget(detail_form.liabilityLimit) }}
+        {{ form_errors(detail_form.liabilityLimit) }}
+    </div>
+</fieldset>

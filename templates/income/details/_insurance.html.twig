@@ -1,0 +1,76 @@
+<fieldset class="fieldset grid grid-cols-3 bg-base-200 border-base-300 p-4 border rounded w-250">
+    <legend class="fieldset-legend flex items-center gap-2">
+        {% include 'icons/income.html.twig' %} INSURANCE Details
+    </legend>
+
+    <div>
+        {{ form_label(detail_form.claimId) }}
+        {{ form_widget(detail_form.claimId) }}
+        {{ form_errors(detail_form.claimId) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.policyNumber) }}
+        {{ form_widget(detail_form.policyNumber) }}
+        {{ form_errors(detail_form.policyNumber) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.incidentRef) }}
+        {{ form_widget(detail_form.incidentRef) }}
+        {{ form_errors(detail_form.incidentRef) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.incidentDay) }}
+        {{ form_widget(detail_form.incidentDay) }}
+        {{ form_errors(detail_form.incidentDay) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.incidentYear) }}
+        {{ form_widget(detail_form.incidentYear) }}
+        {{ form_errors(detail_form.incidentYear) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.incidentLocation) }}
+        {{ form_widget(detail_form.incidentLocation) }}
+        {{ form_errors(detail_form.incidentLocation) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.incidentCause) }}
+        {{ form_widget(detail_form.incidentCause) }}
+        {{ form_errors(detail_form.incidentCause) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.lossType) }}
+        {{ form_widget(detail_form.lossType) }}
+        {{ form_errors(detail_form.lossType) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.verifiedLoss) }}
+        {{ form_widget(detail_form.verifiedLoss) }}
+        {{ form_errors(detail_form.verifiedLoss) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.deductible) }}
+        {{ form_widget(detail_form.deductible) }}
+        {{ form_errors(detail_form.deductible) }}
+    </div>
+    <div class="col-span-3">
+        {{ form_label(detail_form.paymentTerms) }}
+        {{ form_widget(detail_form.paymentTerms) }}
+        {{ form_errors(detail_form.paymentTerms) }}
+    </div>
+    <div class="col-span-3">
+        {{ form_label(detail_form.acceptanceEffect) }}
+        {{ form_widget(detail_form.acceptanceEffect) }}
+        {{ form_errors(detail_form.acceptanceEffect) }}
+    </div>
+    <div class="col-span-3">
+        {{ form_label(detail_form.subrogationTerms) }}
+        {{ form_widget(detail_form.subrogationTerms) }}
+        {{ form_errors(detail_form.subrogationTerms) }}
+    </div>
+    <div class="col-span-3">
+        {{ form_label(detail_form.coverageNotes) }}
+        {{ form_widget(detail_form.coverageNotes) }}
+        {{ form_errors(detail_form.coverageNotes) }}
+    </div>
+</fieldset>

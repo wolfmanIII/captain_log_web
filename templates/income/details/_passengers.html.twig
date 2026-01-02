@@ -1,0 +1,76 @@
+<fieldset class="fieldset grid grid-cols-3 bg-base-200 border-base-300 p-4 border rounded w-250">
+    <legend class="fieldset-legend flex items-center gap-2">
+        {% include 'icons/income.html.twig' %} PASSENGERS Details
+    </legend>
+
+    <div>
+        {{ form_label(detail_form.origin) }}
+        {{ form_widget(detail_form.origin) }}
+        {{ form_errors(detail_form.origin) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.destination) }}
+        {{ form_widget(detail_form.destination) }}
+        {{ form_errors(detail_form.destination) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.departureDay) }}
+        {{ form_widget(detail_form.departureDay) }}
+        {{ form_errors(detail_form.departureDay) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.departureYear) }}
+        {{ form_widget(detail_form.departureYear) }}
+        {{ form_errors(detail_form.departureYear) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.arrivalDay) }}
+        {{ form_widget(detail_form.arrivalDay) }}
+        {{ form_errors(detail_form.arrivalDay) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.arrivalYear) }}
+        {{ form_widget(detail_form.arrivalYear) }}
+        {{ form_errors(detail_form.arrivalYear) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.classOrBerth) }}
+        {{ form_widget(detail_form.classOrBerth) }}
+        {{ form_errors(detail_form.classOrBerth) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.qty) }}
+        {{ form_widget(detail_form.qty) }}
+        {{ form_errors(detail_form.qty) }}
+    </div>
+    <div class="col-span-3">
+        {{ form_label(detail_form.passengerNames) }}
+        {{ form_widget(detail_form.passengerNames) }}
+        {{ form_errors(detail_form.passengerNames) }}
+    </div>
+    <div class="col-span-3">
+        {{ form_label(detail_form.passengerContact) }}
+        {{ form_widget(detail_form.passengerContact) }}
+        {{ form_errors(detail_form.passengerContact) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.baggageAllowance) }}
+        {{ form_widget(detail_form.baggageAllowance) }}
+        {{ form_errors(detail_form.baggageAllowance) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.extraBaggage) }}
+        {{ form_widget(detail_form.extraBaggage) }}
+        {{ form_errors(detail_form.extraBaggage) }}
+    </div>
+    <div class="col-span-3">
+        {{ form_label(detail_form.paymentTerms) }}
+        {{ form_widget(detail_form.paymentTerms) }}
+        {{ form_errors(detail_form.paymentTerms) }}
+    </div>
+    <div class="col-span-3">
+        {{ form_label(detail_form.refundChangePolicy) }}
+        {{ form_widget(detail_form.refundChangePolicy) }}
+        {{ form_errors(detail_form.refundChangePolicy) }}
+    </div>
+</fieldset>

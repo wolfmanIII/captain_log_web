@@ -1,0 +1,76 @@
+<fieldset class="fieldset grid grid-cols-3 bg-base-200 border-base-300 p-4 border rounded w-250">
+    <legend class="fieldset-legend flex items-center gap-2">
+        {% include 'icons/income.html.twig' %} INTEREST Details
+    </legend>
+
+    <div>
+        {{ form_label(detail_form.receiptId) }}
+        {{ form_widget(detail_form.receiptId) }}
+        {{ form_errors(detail_form.receiptId) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.accountRef) }}
+        {{ form_widget(detail_form.accountRef) }}
+        {{ form_errors(detail_form.accountRef) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.instrument) }}
+        {{ form_widget(detail_form.instrument) }}
+        {{ form_errors(detail_form.instrument) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.principal) }}
+        {{ form_widget(detail_form.principal) }}
+        {{ form_errors(detail_form.principal) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.interestRate) }}
+        {{ form_widget(detail_form.interestRate) }}
+        {{ form_errors(detail_form.interestRate) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.startDay) }}
+        {{ form_widget(detail_form.startDay) }}
+        {{ form_errors(detail_form.startDay) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.startYear) }}
+        {{ form_widget(detail_form.startYear) }}
+        {{ form_errors(detail_form.startYear) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.endDay) }}
+        {{ form_widget(detail_form.endDay) }}
+        {{ form_errors(detail_form.endDay) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.endYear) }}
+        {{ form_widget(detail_form.endYear) }}
+        {{ form_errors(detail_form.endYear) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.calcMethod) }}
+        {{ form_widget(detail_form.calcMethod) }}
+        {{ form_errors(detail_form.calcMethod) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.interestEarned) }}
+        {{ form_widget(detail_form.interestEarned) }}
+        {{ form_errors(detail_form.interestEarned) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.netPaid) }}
+        {{ form_widget(detail_form.netPaid) }}
+        {{ form_errors(detail_form.netPaid) }}
+    </div>
+    <div class="col-span-3">
+        {{ form_label(detail_form.paymentTerms) }}
+        {{ form_widget(detail_form.paymentTerms) }}
+        {{ form_errors(detail_form.paymentTerms) }}
+    </div>
+    <div class="col-span-3">
+        {{ form_label(detail_form.disputeWindow) }}
+        {{ form_widget(detail_form.disputeWindow) }}
+        {{ form_errors(detail_form.disputeWindow) }}
+    </div>
+</fieldset>

@@ -1,0 +1,81 @@
+<fieldset class="fieldset grid grid-cols-3 bg-base-200 border-base-300 p-4 border rounded w-250">
+    <legend class="fieldset-legend flex items-center gap-2">
+        {% include 'icons/income.html.twig' %} SERVICES Details
+    </legend>
+
+    <div>
+        {{ form_label(detail_form.location) }}
+        {{ form_widget(detail_form.location) }}
+        {{ form_errors(detail_form.location) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.vesselId) }}
+        {{ form_widget(detail_form.vesselId) }}
+        {{ form_errors(detail_form.vesselId) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.serviceType) }}
+        {{ form_widget(detail_form.serviceType) }}
+        {{ form_errors(detail_form.serviceType) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.requestedBy) }}
+        {{ form_widget(detail_form.requestedBy) }}
+        {{ form_errors(detail_form.requestedBy) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.startDay) }}
+        {{ form_widget(detail_form.startDay) }}
+        {{ form_errors(detail_form.startDay) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.startYear) }}
+        {{ form_widget(detail_form.startYear) }}
+        {{ form_errors(detail_form.startYear) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.endDay) }}
+        {{ form_widget(detail_form.endDay) }}
+        {{ form_errors(detail_form.endDay) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.endYear) }}
+        {{ form_widget(detail_form.endYear) }}
+        {{ form_errors(detail_form.endYear) }}
+    </div>
+    <div class="col-span-3">
+        {{ form_label(detail_form.workSummary) }}
+        {{ form_widget(detail_form.workSummary) }}
+        {{ form_errors(detail_form.workSummary) }}
+    </div>
+    <div class="col-span-3">
+        {{ form_label(detail_form.partsMaterials) }}
+        {{ form_widget(detail_form.partsMaterials) }}
+        {{ form_errors(detail_form.partsMaterials) }}
+    </div>
+    <div class="col-span-3">
+        {{ form_label(detail_form.risks) }}
+        {{ form_widget(detail_form.risks) }}
+        {{ form_errors(detail_form.risks) }}
+    </div>
+    <div class="col-span-3">
+        {{ form_label(detail_form.paymentTerms) }}
+        {{ form_widget(detail_form.paymentTerms) }}
+        {{ form_errors(detail_form.paymentTerms) }}
+    </div>
+    <div class="col-span-3">
+        {{ form_label(detail_form.extras) }}
+        {{ form_widget(detail_form.extras) }}
+        {{ form_errors(detail_form.extras) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.liabilityLimit) }}
+        {{ form_widget(detail_form.liabilityLimit) }}
+        {{ form_errors(detail_form.liabilityLimit) }}
+    </div>
+    <div class="col-span-3">
+        {{ form_label(detail_form.cancellationTerms) }}
+        {{ form_widget(detail_form.cancellationTerms) }}
+        {{ form_errors(detail_form.cancellationTerms) }}
+    </div>
+</fieldset>

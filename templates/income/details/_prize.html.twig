@@ -1,0 +1,56 @@
+<fieldset class="fieldset grid grid-cols-3 bg-base-200 border-base-300 p-4 border rounded w-250">
+    <legend class="fieldset-legend flex items-center gap-2">
+        {% include 'icons/income.html.twig' %} PRIZE Details
+    </legend>
+
+    <div>
+        {{ form_label(detail_form.prizeId) }}
+        {{ form_widget(detail_form.prizeId) }}
+        {{ form_errors(detail_form.prizeId) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.caseRef) }}
+        {{ form_widget(detail_form.caseRef) }}
+        {{ form_errors(detail_form.caseRef) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.jurisdiction) }}
+        {{ form_widget(detail_form.jurisdiction) }}
+        {{ form_errors(detail_form.jurisdiction) }}
+    </div>
+    <div class="col-span-3">
+        {{ form_label(detail_form.legalBasis) }}
+        {{ form_widget(detail_form.legalBasis) }}
+        {{ form_errors(detail_form.legalBasis) }}
+    </div>
+    <div class="col-span-3">
+        {{ form_label(detail_form.prizeDescription) }}
+        {{ form_widget(detail_form.prizeDescription) }}
+        {{ form_errors(detail_form.prizeDescription) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.estimatedValue) }}
+        {{ form_widget(detail_form.estimatedValue) }}
+        {{ form_errors(detail_form.estimatedValue) }}
+    </div>
+    <div>
+        {{ form_label(detail_form.disposition) }}
+        {{ form_widget(detail_form.disposition) }}
+        {{ form_errors(detail_form.disposition) }}
+    </div>
+    <div class="col-span-3">
+        {{ form_label(detail_form.paymentTerms) }}
+        {{ form_widget(detail_form.paymentTerms) }}
+        {{ form_errors(detail_form.paymentTerms) }}
+    </div>
+    <div class="col-span-3">
+        {{ form_label(detail_form.shareSplit) }}
+        {{ form_widget(detail_form.shareSplit) }}
+        {{ form_errors(detail_form.shareSplit) }}
+    </div>
+    <div class="col-span-3">
+        {{ form_label(detail_form.awardTrigger) }}
+        {{ form_widget(detail_form.awardTrigger) }}
+        {{ form_errors(detail_form.awardTrigger) }}
+    </div>
+</fieldset>
