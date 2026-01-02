@@ -16,9 +16,9 @@ final class Version20260107110000 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $platform = $this->connection->getDatabasePlatform()->getName();
+        $platform = $this->connection->getDatabasePlatform();
 
-        if ($platform === 'sqlite') {
+        if ($platform instanceof \Doctrine\DBAL\Platforms\SqlitePlatform) {
             $this->addSql('PRAGMA foreign_keys = OFF');
             $this->addSql('CREATE TABLE income_tmp (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, income_category_id INTEGER NOT NULL, ship_id INTEGER NOT NULL, user_id INTEGER DEFAULT NULL, code VARCHAR(36) NOT NULL, title VARCHAR(255) NOT NULL, signing_day INTEGER DEFAULT NULL, signing_year INTEGER DEFAULT NULL, payment_day INTEGER DEFAULT NULL, payment_year INTEGER DEFAULT NULL, amount NUMERIC(11, 2) NOT NULL, note CLOB DEFAULT NULL, cancel_day INTEGER DEFAULT NULL, cancel_year INTEGER DEFAULT NULL, expiration_day INT DEFAULT NULL, expiration_year INT DEFAULT NULL, company_id INTEGER DEFAULT NULL, local_law_id INTEGER DEFAULT NULL, signing_location VARCHAR(255) DEFAULT NULL, CONSTRAINT FK_3FA862D053F8702F FOREIGN KEY (income_category_id) REFERENCES income_category (id) NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_3FA862D0C256317D FOREIGN KEY (ship_id) REFERENCES ship (id) NOT DEFERRABLE INITIALLY IMMEDIATE, CONSTRAINT FK_3FA862D0A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
             $this->addSql('INSERT INTO income_tmp (id, income_category_id, ship_id, user_id, code, title, signing_day, signing_year, payment_day, payment_year, amount, note, cancel_day, cancel_year, expiration_day, expiration_year, company_id, local_law_id) SELECT id, income_category_id, ship_id, user_id, code, title, signing_day, signing_year, payment_day, payment_year, amount, note, cancel_day, cancel_year, expiration_day, expiration_year, company_id, local_law_id FROM income');

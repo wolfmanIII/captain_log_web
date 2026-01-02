@@ -1,0 +1,157 @@
+<?php
+
+namespace App\Entity;
+
+use App\Repository\IncomeCharterDetailsRepository;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity(repositoryClass: IncomeCharterDetailsRepository::class)]
+class IncomeCharterDetails
+{
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
+
+    #[ORM\OneToOne]
+    #[ORM\JoinColumn(nullable: false, unique: true)]
+    private ?Income $income = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $areaOrRoute = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $purpose = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $manifestSummary = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $paymentTerms = null;
+
+    #[ORM\Column(type: Types::DECIMAL, precision: 11, scale: 2, nullable: true)]
+    private ?string $deposit = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $extras = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $damageTerms = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $cancellationTerms = null;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getIncome(): ?Income
+    {
+        return $this->income;
+    }
+
+    public function setIncome(Income $income): static
+    {
+        $this->income = $income;
+
+        return $this;
+    }
+
+    public function getAreaOrRoute(): ?string
+    {
+        return $this->areaOrRoute;
+    }
+
+    public function setAreaOrRoute(?string $areaOrRoute): static
+    {
+        $this->areaOrRoute = $areaOrRoute;
+
+        return $this;
+    }
+
+    public function getPurpose(): ?string
+    {
+        return $this->purpose;
+    }
+
+    public function setPurpose(?string $purpose): static
+    {
+        $this->purpose = $purpose;
+
+        return $this;
+    }
+
+    public function getManifestSummary(): ?string
+    {
+        return $this->manifestSummary;
+    }
+
+    public function setManifestSummary(?string $manifestSummary): static
+    {
+        $this->manifestSummary = $manifestSummary;
+
+        return $this;
+    }
+
+    public function getPaymentTerms(): ?string
+    {
+        return $this->paymentTerms;
+    }
+
+    public function setPaymentTerms(?string $paymentTerms): static
+    {
+        $this->paymentTerms = $paymentTerms;
+
+        return $this;
+    }
+
+    public function getDeposit(): ?string
+    {
+        return $this->deposit;
+    }
+
+    public function setDeposit(?string $deposit): static
+    {
+        $this->deposit = $deposit;
+
+        return $this;
+    }
+
+    public function getExtras(): ?string
+    {
+        return $this->extras;
+    }
+
+    public function setExtras(?string $extras): static
+    {
+        $this->extras = $extras;
+
+        return $this;
+    }
+
+    public function getDamageTerms(): ?string
+    {
+        return $this->damageTerms;
+    }
+
+    public function setDamageTerms(?string $damageTerms): static
+    {
+        $this->damageTerms = $damageTerms;
+
+        return $this;
+    }
+
+    public function getCancellationTerms(): ?string
+    {
+        return $this->cancellationTerms;
+    }
+
+    public function setCancellationTerms(?string $cancellationTerms): static
+    {
+        $this->cancellationTerms = $cancellationTerms;
+
+        return $this;
+    }
+}
