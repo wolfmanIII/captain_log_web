@@ -90,10 +90,22 @@ class IncomePrizeDetailsType extends AbstractType
                 'label' => 'Share split',
                 'attr' => ['class' => 'textarea m-1 w-full', 'rows' => 2],
             ])
-            ->add('awardTrigger', TextareaType::class, [
+            ->add('awardTrigger', ChoiceType::class, [
                 'required' => false,
                 'label' => 'Award trigger',
-                'attr' => ['class' => 'textarea m-1 w-full', 'rows' => 2],
+                'placeholder' => '-- Select trigger --',
+                'choices' => [
+                    'Court Ruling Issued' => 'Court Ruling Issued',
+                    'Authority Verification Completed' => 'Authority Verification Completed',
+                    'Auction Settlement Received' => 'Auction Settlement Received',
+                    'Funds Cleared / Posted' => 'Funds Cleared / Posted',
+                    'Delivery Confirmed (Proof of Delivery)' => 'Delivery Confirmed (Proof of Delivery)',
+                    'Inspection Passed' => 'Inspection Passed',
+                    'Custody Transfer Signed' => 'Custody Transfer Signed',
+                    'Case Closed' => 'Case Closed',
+                    'Forfeiture Finalized' => 'Forfeiture Finalized',
+                ],
+                'attr' => ['class' => 'select m-1 w-full'],
             ])
         ;
     }
