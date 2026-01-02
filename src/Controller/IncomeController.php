@@ -6,6 +6,7 @@ use App\Entity\Income;
 use App\Form\IncomeType;
 use App\Security\Voter\IncomeVoter;
 use App\Entity\IncomeCategory;
+use App\Service\PdfGenerator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -149,6 +150,41 @@ final class IncomeController extends BaseController
         return $this->redirectToRoute('app_income_index');
     }
 
+    #[Route('/income/{id}/pdf', name: 'app_income_pdf', methods: ['GET'])]
+    public function pdf(
+        int $id,
+        EntityManagerInterface $em,
+        PdfGenerator $pdfGenerator
+    ): Response {
+        $user = $this->getUser();
+        if (!$user instanceof \App\Entity\User) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $income = $em->getRepository(Income::class)->findOneForUser($id, $user);
+        if (!$income) {
+            throw new NotFoundHttpException();
+        }
+
+        $template = $this->resolveTemplate($income);
+        $placeholders = $this->buildPlaceholderMap($income);
+
+        $html = $this->renderView($template);
+        $html = strtr($html, $placeholders);
+
+        $pdf = $pdfGenerator->renderFromHtml($html, [
+            'footer-right' => 'Page [page] / [toPage]',
+            'footer-font-size' => 9,
+            'footer-spacing' => 4,
+            'margin-bottom' => '18mm',
+        ]);
+
+        return new Response($pdf, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => sprintf('inline; filename=\"income-%s.pdf\"', $income->getCode()),
+        ]);
+    }
+
     private function clearUnusedDetails(Income $income, EntityManagerInterface $em): void
     {
         $currentCode = $income->getIncomeCategory()?->getCode();
@@ -174,5 +210,368 @@ final class IncomeController extends BaseController
                 $income->$setter(null);
             }
         }
+    }
+
+    private function resolveTemplate(Income $income): string
+    {
+        $code = $income->getIncomeCategory()?->getCode();
+        return match ($code) {
+            'CHARTER' => 'contracts/CHARTER.html.twig',
+            'SUBSIDY' => 'contracts/SUBSIDY.html.twig',
+            'PRIZE' => 'contracts/PRIZE.html.twig',
+            'FREIGHT' => 'contracts/FRIGHT.html.twig',
+            'SERVICES' => 'contracts/SERVICES.html.twig',
+            'PASSENGERS' => 'contracts/PASSENGERS.html.twig',
+            'CONTRACT' => 'contracts/CONTRACT.html.twig',
+            'INTEREST' => 'contracts/INTEREST.html.twig',
+            'MAIL' => 'contracts/MAIL.html.twig',
+            'INSURANCE' => 'contracts/INSURANCE.html.twig',
+            'SALVAGE' => 'contracts/SALVAGE.html.twig',
+            'TRADE' => 'contracts/TRADE.html.twig',
+            default => throw new NotFoundHttpException('No template for category'),
+        };
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function buildPlaceholderMap(Income $income): array
+    {
+        $currency = 'Cr';
+        $ship = $income->getShip();
+        $company = $income->getCompany();
+        $detailCode = $income->getIncomeCategory()?->getCode();
+
+        $common = [
+            '{{DATE}}' => $this->formatDayYear($income->getSigningDay(), $income->getSigningYear()),
+            '{{CONTRACT_ID}}' => $income->getCode(),
+            '{{DEAL_ID}}' => $income->getCode(),
+            '{{RECEIPT_ID}}' => $income->getCode(),
+            '{{CLAIM_ID}}' => $income->getCode(),
+            '{{SUBSIDY_ID}}' => $income->getCode(),
+            '{{PRIZE_ID}}' => $income->getCode(),
+            '{{SERVICE_ID}}' => $income->getCode(),
+            '{{PROGRAM_REF}}' => $this->fallback($income->getCode()),
+            '{{CASE_REF}}' => $this->fallback(null),
+            '{{VESSEL_NAME}}' => $ship?->getName() ?? '—',
+            '{{CURRENCY}}' => $currency,
+            '{{PAYMENT_TERMS}}' => $this->fallback($income->getNote()),
+            '{{NOTES}}' => $this->fallback($income->getNote()),
+        ];
+
+        $companyName = $company?->getName() ?? '—';
+        $companyContact = $company?->getContact() ?? '—';
+        $companySign = $company?->getSignLabel() ?? $companyName;
+
+        $map = $common;
+
+        switch ($detailCode) {
+            case 'CHARTER':
+                $d = $income->getCharterDetails();
+                $map = array_merge($map, [
+                    '{{CHARTER_ID}}' => $income->getCode(),
+                    '{{CHARTERER_NAME}}' => $companyName,
+                    '{{CHARTERER_CONTACT}}' => $companyContact,
+                    '{{CHARTERER_SIGN}}' => $companySign,
+                    '{{CARRIER_NAME}}' => $ship?->getName() ?? '—',
+                    '{{CARRIER_SIGN}}' => $ship?->getName() ?? '—',
+                    '{{CHARTER_TYPE}}' => $this->fallback(null),
+                    '{{START_DATE}}' => $this->formatDayYear($d?->getStartDay(), $d?->getStartYear()),
+                    '{{END_DATE}}' => $this->formatDayYear($d?->getEndDay(), $d?->getEndYear()),
+                    '{{AREA_OR_ROUTE}}' => $this->fallback($d?->getAreaOrRoute()),
+                    '{{PURPOSE}}' => $this->fallback($d?->getPurpose()),
+                    '{{MANIFEST_SUMMARY}}' => $this->fallback($d?->getManifestSummary()),
+                    '{{DEPOSIT}}' => $this->formatMoney($d?->getDeposit(), $currency),
+                    '{{EXTRAS}}' => $this->fallback($d?->getExtras()),
+                    '{{DAMAGE_TERMS}}' => $this->fallback($d?->getDamageTerms()),
+                    '{{CANCELLATION_TERMS}}' => $this->fallback($d?->getCancellationTerms()),
+                    '{{PAYMENT_TERMS}}' => $this->fallback($d?->getPaymentTerms()),
+                ]);
+                break;
+            case 'SUBSIDY':
+                $d = $income->getSubsidyDetails();
+                $map = array_merge($map, [
+                    '{{SUBSIDY_ID}}' => $income->getCode(),
+                    '{{AUTHORITY_NAME}}' => $companyName,
+                    '{{AUTHORITY_CONTACT}}' => $companyContact,
+                    '{{AUTHORITY_SIGN}}' => $companySign,
+                    '{{CARRIER_NAME}}' => $ship?->getName() ?? '—',
+                    '{{CARRIER_CONTACT}}' => $companyContact,
+                    '{{CARRIER_SIGN}}' => $companySign,
+                    '{{PROGRAM_REF}}' => $this->fallback($d?->getProgramRef()),
+                    '{{ORIGIN}}' => $this->fallback($d?->getOrigin()),
+                    '{{DESTINATION}}' => $this->fallback($d?->getDestination()),
+                    '{{START_DATE}}' => $this->formatDayYear($d?->getStartDay(), $d?->getStartYear()),
+                    '{{END_DATE}}' => $this->formatDayYear($d?->getEndDay(), $d?->getEndYear()),
+                    '{{SERVICE_LEVEL}}' => $this->fallback($d?->getServiceLevel()),
+                    '{{SUBSIDY_AMOUNT}}' => $this->formatMoney($income->getAmount(), $currency),
+                    '{{MILESTONES}}' => $this->fallback($d?->getMilestones()),
+                    '{{REPORTING_REQUIREMENTS}}' => $this->fallback($d?->getReportingRequirements()),
+                    '{{PROOF_REQUIREMENTS}}' => $this->fallback($d?->getProofRequirements()),
+                    '{{NON_COMPLIANCE_TERMS}}' => $this->fallback($d?->getNonComplianceTerms()),
+                    '{{CANCELLATION_TERMS}}' => $this->fallback($d?->getCancellationTerms()),
+                ]);
+                break;
+            case 'PRIZE':
+                $d = $income->getPrizeDetails();
+                $map = array_merge($map, [
+                    '{{PRIZE_ID}}' => $income->getCode(),
+                    '{{CAPTOR_NAME}}' => $companyName,
+                    '{{CAPTOR_CONTACT}}' => $companyContact,
+                    '{{CAPTOR_SIGN}}' => $companySign,
+                    '{{AUTHORITY_NAME}}' => $this->fallback(null),
+                    '{{AUTHORITY_SIGN}}' => $this->fallback(null),
+                    '{{CASE_REF}}' => $this->fallback($d?->getCaseRef()),
+                    '{{JURISDICTION}}' => $this->fallback($d?->getJurisdiction()),
+                    '{{SEIZURE_LOCATION}}' => $this->fallback(null),
+                    '{{SEIZURE_DATE}}' => $this->formatDayYear(null, null),
+                    '{{LEGAL_BASIS}}' => $this->fallback($d?->getLegalBasis()),
+                    '{{PRIZE_DESCRIPTION}}' => $this->fallback($d?->getPrizeDescription()),
+                    '{{ESTIMATED_VALUE}}' => $this->formatMoney($d?->getEstimatedValue(), $currency),
+                    '{{DISPOSITION}}' => $this->fallback($d?->getDisposition()),
+                    '{{PRIZE_AWARD}}' => $this->formatMoney($income->getAmount(), $currency),
+                    '{{PAYMENT_TERMS}}' => $this->fallback($d?->getPaymentTerms()),
+                    '{{SHARE_SPLIT}}' => $this->fallback($d?->getShareSplit()),
+                    '{{AWARD_TRIGGER}}' => $this->fallback($d?->getAwardTrigger()),
+                ]);
+                break;
+            case 'FREIGHT':
+                $d = $income->getFreightDetails();
+                $map = array_merge($map, [
+                    '{{CONTRACT_ID}}' => $income->getCode(),
+                    '{{SHIPPER_NAME}}' => $companyName,
+                    '{{SHIPPER_CONTACT}}' => $companyContact,
+                    '{{SHIPPER_SIGN}}' => $companySign,
+                    '{{CARRIER_NAME}}' => $ship?->getName() ?? '—',
+                    '{{CARRIER_SIGN}}' => $ship?->getName() ?? '—',
+                    '{{ORIGIN}}' => $this->fallback($d?->getOrigin()),
+                    '{{DESTINATION}}' => $this->fallback($d?->getDestination()),
+                    '{{PICKUP_DATE}}' => $this->formatDayYear($d?->getPickupDay(), $d?->getPickupYear()),
+                    '{{DELIVERY_DATE}}' => $this->formatDayYear($d?->getDeliveryDay(), $d?->getDeliveryYear()),
+                    '{{CARGO_DESCRIPTION}}' => $this->fallback($d?->getCargoDescription()),
+                    '{{CARGO_QTY}}' => $this->fallback($d?->getCargoQty()),
+                    '{{DECLARED_VALUE}}' => $this->formatMoney($d?->getDeclaredValue(), $currency),
+                    '{{PAYMENT_TERMS}}' => $this->fallback($d?->getPaymentTerms()),
+                    '{{LIABILITY_LIMIT}}' => $this->formatMoney($d?->getLiabilityLimit(), $currency),
+                    '{{CANCELLATION_TERMS}}' => $this->fallback($d?->getCancellationTerms()),
+                ]);
+                break;
+            case 'SERVICES':
+                $d = $income->getServicesDetails();
+                $map = array_merge($map, [
+                    '{{SERVICE_ID}}' => $income->getCode(),
+                    '{{CUSTOMER_NAME}}' => $companyName,
+                    '{{CUSTOMER_CONTACT}}' => $companyContact,
+                    '{{CUSTOMER_SIGN}}' => $companySign,
+                    '{{PROVIDER_NAME}}' => $ship?->getName() ?? '—',
+                    '{{PROVIDER_SIGN}}' => $ship?->getName() ?? '—',
+                    '{{LOCATION}}' => $this->fallback($d?->getLocation()),
+                    '{{VESSEL_NAME}}' => $ship?->getName() ?? '—',
+                    '{{VESSEL_ID}}' => $this->fallback($d?->getVesselId()),
+                    '{{REQUESTED_BY}}' => $this->fallback($d?->getRequestedBy()),
+                    '{{SERVICE_TYPE}}' => $this->fallback($d?->getServiceType()),
+                    '{{START_DATE}}' => $this->formatDayYear($d?->getStartDay(), $d?->getStartYear()),
+                    '{{END_DATE}}' => $this->formatDayYear($d?->getEndDay(), $d?->getEndYear()),
+                    '{{WORK_SUMMARY}}' => $this->fallback($d?->getWorkSummary()),
+                    '{{PARTS_MATERIALS}}' => $this->fallback($d?->getPartsMaterials()),
+                    '{{RISKS}}' => $this->fallback($d?->getRisks()),
+                    '{{PAYMENT_TERMS}}' => $this->fallback($d?->getPaymentTerms()),
+                    '{{EXTRAS}}' => $this->fallback($d?->getExtras()),
+                    '{{LIABILITY_LIMIT}}' => $this->formatMoney($d?->getLiabilityLimit(), $currency),
+                    '{{CANCELLATION_TERMS}}' => $this->fallback($d?->getCancellationTerms()),
+                ]);
+                break;
+            case 'PASSENGERS':
+                $d = $income->getPassengersDetails();
+                $map = array_merge($map, [
+                    '{{TICKET_ID}}' => $income->getCode(),
+                    '{{PASSENGER_NAMES}}' => $this->fallback($d?->getPassengerNames()),
+                    '{{PASSENGER_CONTACT}}' => $this->fallback($d?->getPassengerContact()),
+                    '{{PASSENGER_SIGN}}' => $companySign,
+                    '{{CARRIER_NAME}}' => $ship?->getName() ?? '—',
+                    '{{CARRIER_SIGN}}' => $ship?->getName() ?? '—',
+                    '{{ORIGIN}}' => $this->fallback($d?->getOrigin()),
+                    '{{DESTINATION}}' => $this->fallback($d?->getDestination()),
+                    '{{DEPARTURE_DATE}}' => $this->formatDayYear($d?->getDepartureDay(), $d?->getDepartureYear()),
+                    '{{ARRIVAL_DATE}}' => $this->formatDayYear($d?->getArrivalDay(), $d?->getArrivalYear()),
+                    '{{CLASS_OR_BERTH}}' => $this->fallback($d?->getClassOrBerth()),
+                    '{{QTY}}' => (string) ($d?->getQty() ?? '—'),
+                    '{{BAGGAGE_ALLOWANCE}}' => $this->fallback($d?->getBaggageAllowance()),
+                    '{{EXTRA_BAGGAGE}}' => $this->fallback($d?->getExtraBaggage()),
+                    '{{PAYMENT_TERMS}}' => $this->fallback($d?->getPaymentTerms()),
+                    '{{REFUND_CHANGE_POLICY}}' => $this->fallback($d?->getRefundChangePolicy()),
+                ]);
+                break;
+            case 'CONTRACT':
+                $d = $income->getContractDetails();
+                $map = array_merge($map, [
+                    '{{CONTRACT_ID}}' => $income->getCode(),
+                    '{{PATRON_NAME}}' => $companyName,
+                    '{{PATRON_CONTACT}}' => $companyContact,
+                    '{{PATRON_SIGN}}' => $companySign,
+                    '{{CONTRACTOR_NAME}}' => $ship?->getName() ?? '—',
+                    '{{CONTRACTOR_SIGN}}' => $ship?->getName() ?? '—',
+                    '{{JOB_TYPE}}' => $this->fallback($d?->getJobType()),
+                    '{{LOCATION}}' => $this->fallback($d?->getLocation()),
+                    '{{OBJECTIVE}}' => $this->fallback($d?->getObjective()),
+                    '{{START_DATE}}' => $this->formatDayYear($d?->getStartDay(), $d?->getStartYear()),
+                    '{{DEADLINE}}' => $this->formatDayYear($d?->getDeadlineDay(), $d?->getDeadlineYear()),
+                    '{{SUCCESS_CONDITION}}' => $this->fallback($d?->getSuccessCondition()),
+                    '{{PAY_AMOUNT}}' => $this->formatMoney($income->getAmount(), $currency),
+                    '{{PAYMENT_TERMS}}' => $this->fallback($d?->getPaymentTerms()),
+                    '{{BONUS}}' => $this->fallback($d?->getBonus()),
+                    '{{EXPENSES_POLICY}}' => $this->fallback($d?->getExpensesPolicy()),
+                    '{{DEPOSIT}}' => $this->formatMoney($d?->getDeposit(), $currency),
+                    '{{RESTRICTIONS}}' => $this->fallback($d?->getRestrictions()),
+                    '{{CONFIDENTIALITY_LEVEL}}' => $this->fallback($d?->getConfidentialityLevel()),
+                    '{{FAILURE_TERMS}}' => $this->fallback($d?->getFailureTerms()),
+                    '{{CANCELLATION_TERMS}}' => $this->fallback($d?->getCancellationTerms()),
+                ]);
+                break;
+            case 'INTEREST':
+                $d = $income->getInterestDetails();
+                $map = array_merge($map, [
+                    '{{RECEIPT_ID}}' => $income->getCode(),
+                    '{{PAYER_NAME}}' => $companyName,
+                    '{{PAYEE_NAME}}' => $ship?->getName() ?? '—',
+                    '{{PAYEE_CONTACT}}' => $companyContact,
+                    '{{ACCOUNT_REF}}' => $this->fallback($d?->getAccountRef()),
+                    '{{INSTRUMENT}}' => $this->fallback($d?->getInstrument()),
+                    '{{PRINCIPAL}}' => $this->formatMoney($d?->getPrincipal(), $currency),
+                    '{{INTEREST_RATE}}' => $this->fallback($d?->getInterestRate()),
+                    '{{START_DATE}}' => $this->formatDayYear($d?->getStartDay(), $d?->getStartYear()),
+                    '{{END_DATE}}' => $this->formatDayYear($d?->getEndDay(), $d?->getEndYear()),
+                    '{{CALC_METHOD}}' => $this->fallback($d?->getCalcMethod()),
+                    '{{INTEREST_EARNED}}' => $this->formatMoney($d?->getInterestEarned(), $currency),
+                    '{{NET_PAID}}' => $this->formatMoney($d?->getNetPaid(), $currency),
+                    '{{PAYMENT_TERMS}}' => $this->fallback($d?->getPaymentTerms()),
+                    '{{DISPUTE_WINDOW}}' => $this->fallback($d?->getDisputeWindow()),
+                ]);
+                break;
+            case 'MAIL':
+                $d = $income->getMailDetails();
+                $map = array_merge($map, [
+                    '{{CARRIER_NAME}}' => $ship?->getName() ?? '—',
+                    '{{VESSEL_NAME}}' => $ship?->getName() ?? '—',
+                    '{{ORIGIN}}' => $this->fallback($d?->getOrigin()),
+                    '{{DESTINATION}}' => $this->fallback($d?->getDestination()),
+                    '{{DISPATCH_DATE}}' => $this->formatDayYear($d?->getDispatchDay(), $d?->getDispatchYear()),
+                    '{{DELIVERY_DATE}}' => $this->formatDayYear($d?->getDeliveryDay(), $d?->getDeliveryYear()),
+                    '{{MAIL_TYPE}}' => $this->fallback($d?->getMailType()),
+                    '{{PACKAGE_COUNT}}' => (string) ($d?->getPackageCount() ?? '—'),
+                    '{{TOTAL_MASS}}' => $this->formatMoney($d?->getTotalMass(), $currency),
+                    '{{SECURITY_LEVEL}}' => $this->fallback($d?->getSecurityLevel()),
+                    '{{SEAL_CODES}}' => $this->fallback($d?->getSealCodes()),
+                    '{{PAYMENT_TERMS}}' => $this->fallback($d?->getPaymentTerms()),
+                    '{{LIABILITY_LIMIT}}' => $this->formatMoney($d?->getLiabilityLimit(), $currency),
+                    '{{PROOF_OF_DELIVERY}}' => $this->fallback($d?->getProofOfDelivery()),
+                    '{{CARRIER_SIGN}}' => $ship?->getName() ?? '—',
+                    '{{AUTHORITY_SIGN}}' => $companySign,
+                ]);
+                break;
+            case 'INSURANCE':
+                $d = $income->getInsuranceDetails();
+                $map = array_merge($map, [
+                    '{{CLAIM_ID}}' => $income->getCode(),
+                    '{{INSURER_NAME}}' => $companyName,
+                    '{{INSURED_NAME}}' => $ship?->getName() ?? '—',
+                    '{{INSURED_CONTACT}}' => $companyContact,
+                    '{{POLICY_NUMBER}}' => $this->fallback($d?->getPolicyNumber()),
+                    '{{INCIDENT_REF}}' => $this->fallback($d?->getIncidentRef()),
+                    '{{INCIDENT_DATE}}' => $this->formatDayYear($d?->getIncidentDay(), $d?->getIncidentYear()),
+                    '{{INCIDENT_LOCATION}}' => $this->fallback($d?->getIncidentLocation()),
+                    '{{INCIDENT_CAUSE}}' => $this->fallback($d?->getIncidentCause()),
+                    '{{LOSS_TYPE}}' => $this->fallback($d?->getLossType()),
+                    '{{VERIFIED_LOSS}}' => $this->formatMoney($d?->getVerifiedLoss(), $currency),
+                    '{{PAYOUT_AMOUNT}}' => $this->formatMoney($income->getAmount(), $currency),
+                    '{{DEDUCTIBLE}}' => $this->formatMoney($d?->getDeductible(), $currency),
+                    '{{COVERAGE_NOTES}}' => $this->fallback($d?->getCoverageNotes()),
+                    '{{PAYMENT_TERMS}}' => $this->fallback($d?->getPaymentTerms()),
+                    '{{ACCEPTANCE_EFFECT}}' => $this->fallback($d?->getAcceptanceEffect()),
+                    '{{SUBROGATION_TERMS}}' => $this->fallback($d?->getSubrogationTerms()),
+                    '{{NOTES}}' => $this->fallback($income->getNote()),
+                    '{{INSURER_SIGN}}' => $companySign,
+                    '{{INSURED_SIGN}}' => $ship?->getName() ?? '—',
+                ]);
+                break;
+            case 'SALVAGE':
+                $d = $income->getSalvageDetails();
+                $map = array_merge($map, [
+                    '{{CLAIM_ID}}' => $income->getCode(),
+                    '{{SALVAGE_TEAM_NAME}}' => $companyName,
+                    '{{SALVAGE_CONTACT}}' => $companyContact,
+                    '{{SALVAGE_SIGN}}' => $companySign,
+                    '{{AUTHORITY_OR_OWNER_NAME}}' => $this->fallback(null),
+                    '{{AUTHORITY_SIGN}}' => $this->fallback(null),
+                    '{{CASE_REF}}' => $this->fallback($d?->getCaseRef()),
+                    '{{SITE_LOCATION}}' => $this->fallback($d?->getSiteLocation()),
+                    '{{SOURCE}}' => $this->fallback($d?->getSource()),
+                    '{{START_DATE}}' => $this->formatDayYear(null, null),
+                    '{{END_DATE}}' => $this->formatDayYear(null, null),
+                    '{{RECOVERED_ITEMS_SUMMARY}}' => $this->fallback($d?->getRecoveredItemsSummary()),
+                    '{{QTY_VALUE}}' => $this->formatMoney($d?->getQtyValue(), $currency),
+                    '{{HAZARDS}}' => $this->fallback($d?->getHazards()),
+                    '{{SALVAGE_AWARD}}' => $this->formatMoney($income->getAmount(), $currency),
+                    '{{PAYMENT_TERMS}}' => $this->fallback($d?->getPaymentTerms()),
+                    '{{SPLIT_TERMS}}' => $this->fallback($d?->getSplitTerms()),
+                    '{{RIGHTS_BASIS}}' => $this->fallback($d?->getRightsBasis()),
+                    '{{AWARD_TRIGGER}}' => $this->fallback($d?->getAwardTrigger()),
+                    '{{DISPUTE_PROCESS}}' => $this->fallback($d?->getDisputeProcess()),
+                    '{{NOTES}}' => $this->fallback($income->getNote()),
+                ]);
+                break;
+            case 'TRADE':
+                $d = $income->getTradeDetails();
+                $map = array_merge($map, [
+                    '{{DEAL_ID}}' => $income->getCode(),
+                    '{{BUYER_NAME}}' => $companyName,
+                    '{{BUYER_CONTACT}}' => $companyContact,
+                    '{{BUYER_SIGN}}' => $companySign,
+                    '{{SELLER_NAME}}' => $ship?->getName() ?? '—',
+                    '{{SELLER_CONTACT}}' => $companyContact,
+                    '{{SELLER_SIGN}}' => $ship?->getName() ?? '—',
+                    '{{LOCATION}}' => $this->fallback($d?->getLocation()),
+                    '{{GOODS_DESCRIPTION}}' => $this->fallback($d?->getGoodsDescription()),
+                    '{{QTY}}' => (string) ($d?->getQty() ?? '—'),
+                    '{{GRADE}}' => $this->fallback($d?->getGrade()),
+                    '{{BATCH_IDS}}' => $this->fallback($d?->getBatchIds()),
+                    '{{UNIT_PRICE}}' => $this->formatMoney($d?->getUnitPrice(), $currency),
+                    '{{TOTAL_PRICE}}' => $this->formatMoney($income->getAmount(), $currency),
+                    '{{PAYMENT_TERMS}}' => $this->fallback($d?->getPaymentTerms()),
+                    '{{DELIVERY_METHOD}}' => $this->fallback($d?->getDeliveryMethod()),
+                    '{{DELIVERY_DATE}}' => $this->formatDayYear($d?->getDeliveryDay(), $d?->getDeliveryYear()),
+                    '{{TRANSFER_POINT}}' => $this->fallback($d?->getTransferPoint()),
+                    '{{TRANSFER_CONDITION}}' => $this->fallback($d?->getTransferCondition()),
+                    '{{AS_IS_OR_WARRANTY}}' => $this->fallback($d?->getAsIsOrWarranty()),
+                    '{{WARRANTY}}' => $this->fallback($d?->getWarrantyText()),
+                    '{{CLAIM_WINDOW}}' => $this->fallback($d?->getClaimWindow()),
+                    '{{CANCEL_RETURN_POLICY}}' => $this->fallback($d?->getReturnPolicy()),
+                    '{{NOTES}}' => $this->fallback($income->getNote()),
+                ]);
+                break;
+        }
+
+        return $map;
+    }
+
+    private function formatDayYear(?int $day, ?int $year): string
+    {
+        if ($day === null && $year === null) {
+            return '—';
+        }
+        return sprintf('Day %s / Year %s', $day ?? '—', $year ?? '—');
+    }
+
+    private function formatMoney(?string $amount, string $currency): string
+    {
+        if ($amount === null || $amount === '') {
+            return '—';
+        }
+        return number_format((float) $amount, 2, ',', '.') . ' ' . $currency;
+    }
+
+    private function fallback(?string $value): string
+    {
+        return $value === null || $value === '' ? '—' : $value;
     }
 }

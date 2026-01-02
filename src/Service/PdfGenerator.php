@@ -28,4 +28,9 @@ class PdfGenerator
 
         return $this->snappy->getOutputFromHtml($html, $options);
     }
+
+    public function renderFromHtml(string $html, array $options = []): string
+    {
+        return $this->snappy->getOutputFromHtml($html, $options);
+    }
 }
