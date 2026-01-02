@@ -34,6 +34,11 @@ class IncomeType extends AbstractType
             ->add('signingYear', IntegerType::class, [
                 'attr' => ['class' => 'input m-1 w-full'],
             ])
+            ->add('signingLocation', TextType::class, [
+                'required' => false,
+                'label' => 'Signing Location',
+                'attr' => ['class' => 'input m-1 w-full'],
+            ])
             ->add('paymentDay', IntegerType::class, [
                 'required' => false,
                 'attr' => ['class' => 'input m-1 w-full'],

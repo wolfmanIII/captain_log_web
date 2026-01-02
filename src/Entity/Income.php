@@ -60,6 +60,9 @@ class Income
     #[ORM\JoinColumn(nullable: true)]
     private ?LocalLaw $localLaw = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $signingLocation = null;
+
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     private ?IncomeCategory $incomeCategory = null;
@@ -282,6 +285,18 @@ class Income
     public function setLocalLaw(?LocalLaw $localLaw): static
     {
         $this->localLaw = $localLaw;
+
+        return $this;
+    }
+
+    public function getSigningLocation(): ?string
+    {
+        return $this->signingLocation;
+    }
+
+    public function setSigningLocation(?string $signingLocation): static
+    {
+        $this->signingLocation = $signingLocation;
 
         return $this;
     }
