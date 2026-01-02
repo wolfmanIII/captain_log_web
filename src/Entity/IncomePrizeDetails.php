@@ -19,9 +19,6 @@ class IncomePrizeDetails
     private ?Income $income = null;
 
     #[ORM\Column(length: 100, nullable: true)]
-    private ?string $prizeId = null;
-
-    #[ORM\Column(length: 100, nullable: true)]
     private ?string $caseRef = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -61,17 +58,6 @@ class IncomePrizeDetails
     public function setIncome(Income $income): static
     {
         $this->income = $income;
-        return $this;
-    }
-
-    public function getPrizeId(): ?string
-    {
-        return $this->prizeId;
-    }
-
-    public function setPrizeId(?string $prizeId): static
-    {
-        $this->prizeId = $prizeId;
         return $this;
     }
 

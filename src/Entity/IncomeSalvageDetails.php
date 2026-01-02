@@ -19,9 +19,6 @@ class IncomeSalvageDetails
     private ?Income $income = null;
 
     #[ORM\Column(length: 100, nullable: true)]
-    private ?string $claimId = null;
-
-    #[ORM\Column(length: 100, nullable: true)]
     private ?string $caseRef = null;
 
     #[ORM\Column(length: 100, nullable: true)]
@@ -67,17 +64,6 @@ class IncomeSalvageDetails
     public function setIncome(Income $income): static
     {
         $this->income = $income;
-        return $this;
-    }
-
-    public function getClaimId(): ?string
-    {
-        return $this->claimId;
-    }
-
-    public function setClaimId(?string $claimId): static
-    {
-        $this->claimId = $claimId;
         return $this;
     }
 

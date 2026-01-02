@@ -19,9 +19,6 @@ class IncomeInterestDetails
     private ?Income $income = null;
 
     #[ORM\Column(length: 100, nullable: true)]
-    private ?string $receiptId = null;
-
-    #[ORM\Column(length: 100, nullable: true)]
     private ?string $accountRef = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -73,17 +70,6 @@ class IncomeInterestDetails
     public function setIncome(Income $income): static
     {
         $this->income = $income;
-        return $this;
-    }
-
-    public function getReceiptId(): ?string
-    {
-        return $this->receiptId;
-    }
-
-    public function setReceiptId(?string $receiptId): static
-    {
-        $this->receiptId = $receiptId;
         return $this;
     }
 

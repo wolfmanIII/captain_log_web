@@ -22,9 +22,6 @@ class IncomeServicesDetails
     private ?string $location = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $vesselId = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
     private ?string $serviceType = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -87,17 +84,6 @@ class IncomeServicesDetails
     public function setLocation(?string $location): static
     {
         $this->location = $location;
-        return $this;
-    }
-
-    public function getVesselId(): ?string
-    {
-        return $this->vesselId;
-    }
-
-    public function setVesselId(?string $vesselId): static
-    {
-        $this->vesselId = $vesselId;
         return $this;
     }
 
