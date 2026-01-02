@@ -123,6 +123,185 @@ class Income
     #[ORM\JoinColumn(nullable: true)]
     private ?User $user = null;
 
+    public function getCharterDetails(): ?IncomeCharterDetails
+    {
+        return $this->charterDetails;
+    }
+
+    public function setCharterDetails(?IncomeCharterDetails $charterDetails): static
+    {
+        $this->charterDetails = $charterDetails;
+        if ($charterDetails && $charterDetails->getIncome() !== $this) {
+            $charterDetails->setIncome($this);
+        }
+
+        return $this;
+    }
+
+    public function getSubsidyDetails(): ?IncomeSubsidyDetails
+    {
+        return $this->subsidyDetails;
+    }
+
+    public function setSubsidyDetails(?IncomeSubsidyDetails $subsidyDetails): static
+    {
+        $this->subsidyDetails = $subsidyDetails;
+        if ($subsidyDetails && $subsidyDetails->getIncome() !== $this) {
+            $subsidyDetails->setIncome($this);
+        }
+
+        return $this;
+    }
+
+    public function getFreightDetails(): ?IncomeFreightDetails
+    {
+        return $this->freightDetails;
+    }
+
+    public function setFreightDetails(?IncomeFreightDetails $freightDetails): static
+    {
+        $this->freightDetails = $freightDetails;
+        if ($freightDetails && $freightDetails->getIncome() !== $this) {
+            $freightDetails->setIncome($this);
+        }
+
+        return $this;
+    }
+
+    public function getPassengersDetails(): ?IncomePassengersDetails
+    {
+        return $this->passengersDetails;
+    }
+
+    public function setPassengersDetails(?IncomePassengersDetails $passengersDetails): static
+    {
+        $this->passengersDetails = $passengersDetails;
+        if ($passengersDetails && $passengersDetails->getIncome() !== $this) {
+            $passengersDetails->setIncome($this);
+        }
+
+        return $this;
+    }
+
+    public function getServicesDetails(): ?IncomeServicesDetails
+    {
+        return $this->servicesDetails;
+    }
+
+    public function setServicesDetails(?IncomeServicesDetails $servicesDetails): static
+    {
+        $this->servicesDetails = $servicesDetails;
+        if ($servicesDetails && $servicesDetails->getIncome() !== $this) {
+            $servicesDetails->setIncome($this);
+        }
+
+        return $this;
+    }
+
+    public function getInsuranceDetails(): ?IncomeInsuranceDetails
+    {
+        return $this->insuranceDetails;
+    }
+
+    public function setInsuranceDetails(?IncomeInsuranceDetails $insuranceDetails): static
+    {
+        $this->insuranceDetails = $insuranceDetails;
+        if ($insuranceDetails && $insuranceDetails->getIncome() !== $this) {
+            $insuranceDetails->setIncome($this);
+        }
+
+        return $this;
+    }
+
+    public function getMailDetails(): ?IncomeMailDetails
+    {
+        return $this->mailDetails;
+    }
+
+    public function setMailDetails(?IncomeMailDetails $mailDetails): static
+    {
+        $this->mailDetails = $mailDetails;
+        if ($mailDetails && $mailDetails->getIncome() !== $this) {
+            $mailDetails->setIncome($this);
+        }
+
+        return $this;
+    }
+
+    public function getInterestDetails(): ?IncomeInterestDetails
+    {
+        return $this->interestDetails;
+    }
+
+    public function setInterestDetails(?IncomeInterestDetails $interestDetails): static
+    {
+        $this->interestDetails = $interestDetails;
+        if ($interestDetails && $interestDetails->getIncome() !== $this) {
+            $interestDetails->setIncome($this);
+        }
+
+        return $this;
+    }
+
+    public function getTradeDetails(): ?IncomeTradeDetails
+    {
+        return $this->tradeDetails;
+    }
+
+    public function setTradeDetails(?IncomeTradeDetails $tradeDetails): static
+    {
+        $this->tradeDetails = $tradeDetails;
+        if ($tradeDetails && $tradeDetails->getIncome() !== $this) {
+            $tradeDetails->setIncome($this);
+        }
+
+        return $this;
+    }
+
+    public function getSalvageDetails(): ?IncomeSalvageDetails
+    {
+        return $this->salvageDetails;
+    }
+
+    public function setSalvageDetails(?IncomeSalvageDetails $salvageDetails): static
+    {
+        $this->salvageDetails = $salvageDetails;
+        if ($salvageDetails && $salvageDetails->getIncome() !== $this) {
+            $salvageDetails->setIncome($this);
+        }
+
+        return $this;
+    }
+
+    public function getPrizeDetails(): ?IncomePrizeDetails
+    {
+        return $this->prizeDetails;
+    }
+
+    public function setPrizeDetails(?IncomePrizeDetails $prizeDetails): static
+    {
+        $this->prizeDetails = $prizeDetails;
+        if ($prizeDetails && $prizeDetails->getIncome() !== $this) {
+            $prizeDetails->setIncome($this);
+        }
+
+        return $this;
+    }
+
+    public function getContractDetails(): ?IncomeContractDetails
+    {
+        return $this->contractDetails;
+    }
+
+    public function setContractDetails(?IncomeContractDetails $contractDetails): static
+    {
+        $this->contractDetails = $contractDetails;
+        if ($contractDetails && $contractDetails->getIncome() !== $this) {
+            $contractDetails->setIncome($this);
+        }
+
+        return $this;
+    }
     public function __construct()
     {
         $this->setCode(Uuid::v7());
@@ -162,7 +341,7 @@ class Income
         return $this->signingDay;
     }
 
-    public function setSigningDay(int $signingDay): static
+    public function setSigningDay(?int $signingDay): static
     {
         $this->signingDay = $signingDay;
 
@@ -174,7 +353,7 @@ class Income
         return $this->signingYear;
     }
 
-    public function setSigningYear(int $signingYear): static
+    public function setSigningYear(?int $signingYear): static
     {
         $this->signingYear = $signingYear;
 

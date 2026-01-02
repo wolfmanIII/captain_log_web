@@ -108,6 +108,45 @@
             {{ form_errors(form.expirationYear) }}
         </div>
 
+        {% set detail_sections = {
+            'charterDetails': 'CHARTER Details',
+            'subsidyDetails': 'SUBSIDY Details',
+            'freightDetails': 'FREIGHT Details',
+            'passengersDetails': 'PASSENGERS Details',
+            'servicesDetails': 'SERVICES Details',
+            'insuranceDetails': 'INSURANCE Details',
+            'mailDetails': 'MAIL Details',
+            'interestDetails': 'INTEREST Details',
+            'tradeDetails': 'TRADE Details',
+            'salvageDetails': 'SALVAGE Details',
+            'prizeDetails': 'PRIZE Details',
+            'contractDetails': 'CONTRACT Details',
+        } %}
+
+        {% for detail_name, detail_label in detail_sections %}
+            {% if form[detail_name] is defined %}
+                <div class="col-span-3">
+                    <div class="card bg-base-200 border border-base-300 shadow-sm">
+                        <div class="card-body p-4">
+                            <div class="flex items-center gap-3 mb-2">
+                                {% include 'icons/income.html.twig' %}
+                                <h3 class="font-semibold">{{ detail_label }}</h3>
+                            </div>
+                            <div class="grid grid-cols-3 gap-4">
+                                {% for child in form[detail_name] %}
+                                    <div>
+                                        {{ form_label(child) }}
+                                        {{ form_widget(child) }}
+                                        {{ form_errors(child) }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+
         <div class="col-span-3">
             <label class="label">Note</label>
             {{ form_widget(form.note) }}

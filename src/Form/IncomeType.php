@@ -7,6 +7,7 @@ use App\Entity\IncomeCategory;
 use App\Entity\Ship;
 use App\Entity\Company;
 use App\Entity\LocalLaw;
+use App\Form\EventSubscriber\IncomeDetailsSubscriber;
 use App\Form\Type\TravellerMoneyType;
 use App\Repository\ShipRepository;
 use Doctrine\ORM\EntityRepository;
@@ -20,6 +21,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class IncomeType extends AbstractType
 {
+    public function __construct(
+        private readonly IncomeDetailsSubscriber $incomeDetailsSubscriber,
+    ) {
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $user = $options['user'];
@@ -29,9 +35,11 @@ class IncomeType extends AbstractType
                 'attr' => ['class' => 'input m-1 w-full'],
             ])
             ->add('signingDay', IntegerType::class, [
+                'required' => false,
                 'attr' => ['class' => 'input m-1 w-full'],
             ])
             ->add('signingYear', IntegerType::class, [
+                'required' => false,
                 'attr' => ['class' => 'input m-1 w-full'],
             ])
             ->add('signingLocation', TextType::class, [
@@ -117,6 +125,8 @@ class IncomeType extends AbstractType
                 'attr' => ['class' => 'textarea m-1 w-full', 'rows' => 3],
             ])
         ;
+
+        $builder->addEventSubscriber($this->incomeDetailsSubscriber);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
