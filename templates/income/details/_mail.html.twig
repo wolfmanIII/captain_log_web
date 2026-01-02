@@ -1,13 +1,8 @@
-<fieldset class="fieldset grid grid-cols-3 bg-base-200 border-base-300 p-4 border rounded w-250">
+<fieldset class="fieldset grid grid-cols-3 bg-base-200 border-base-300 p-4 border rounded w-full">
     <legend class="fieldset-legend flex items-center gap-2">
         {% include 'icons/income.html.twig' %} MAIL Details
     </legend>
 
-    <div>
-        {{ form_label(detail_form.runId) }}
-        {{ form_widget(detail_form.runId) }}
-        {{ form_errors(detail_form.runId) }}
-    </div>
     <div>
         {{ form_label(detail_form.authorityRef) }}
         {{ form_widget(detail_form.authorityRef) }}

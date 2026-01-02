@@ -82,7 +82,7 @@ class ContractFieldConfig
             'interestEarned', 'netPaid', 'paymentTerms', 'disputeWindow',
         ],
         'MAIL' => [
-            'runId', 'authorityRef', 'origin', 'destination', 'dispatchDay',
+            'authorityRef', 'origin', 'destination', 'dispatchDay',
             'dispatchYear', 'deliveryDay', 'deliveryYear', 'mailType',
             'packageCount', 'totalMass', 'securityLevel', 'sealCodes',
             'paymentTerms', 'proofOfDelivery', 'liabilityLimit',
