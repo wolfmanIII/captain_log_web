@@ -5,6 +5,7 @@ namespace App\Form\Type;
 use App\Entity\IncomeInterestDetails;
 use App\Form\Config\DayYearLimits;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -25,10 +26,23 @@ class IncomeInterestDetailsType extends AbstractType
                 'label' => 'Account ref',
                 'attr' => ['class' => 'input m-1 w-full'],
             ])
-            ->add('instrument', TextType::class, [
+            ->add('instrument', ChoiceType::class, [
                 'required' => false,
                 'label' => 'Instrument',
-                'attr' => ['class' => 'input m-1 w-full'],
+                'placeholder' => '-- Select instrument --',
+                'choices' => [
+                    'Savings Account' => 'Savings Account',
+                    'Term Deposit' => 'Term Deposit',
+                    'Bond' => 'Bond',
+                    'Note' => 'Note',
+                    'Loan Interest' => 'Loan Interest',
+                    'Investment Fund Share' => 'Investment Fund Share',
+                    'Corporate Debenture' => 'Corporate Debenture',
+                    'Trade Finance Facility' => 'Trade Finance Facility',
+                    'Letter of Credit Interest' => 'Letter of Credit Interest',
+                    'Treasury Bill' => 'Treasury Bill',
+                ],
+                'attr' => ['class' => 'select m-1 w-full'],
             ])
             ->add('principal', NumberType::class, [
                 'required' => false,
@@ -62,10 +76,19 @@ class IncomeInterestDetailsType extends AbstractType
                 'label' => 'End Year',
                 'attr' => $this->limits->yearAttr(['class' => 'input m-1 w-full']),
             ])
-            ->add('calcMethod', TextType::class, [
+            ->add('calcMethod', ChoiceType::class, [
                 'required' => false,
                 'label' => 'Calc. method',
-                'attr' => ['class' => 'input m-1 w-full'],
+                'placeholder' => '-- Select method --',
+                'choices' => [
+                    'Simple Interest' => 'Simple Interest',
+                    'Compound Interest' => 'Compound Interest',
+                    'Daily Compounding' => 'Daily Compounding',
+                    'Monthly Compounding' => 'Monthly Compounding',
+                    'Floating Rate (Index-Linked)' => 'Floating Rate (Index-Linked)',
+                    'Fixed Rate' => 'Fixed Rate',
+                ],
+                'attr' => ['class' => 'select m-1 w-full'],
             ])
             ->add('interestEarned', NumberType::class, [
                 'required' => false,
