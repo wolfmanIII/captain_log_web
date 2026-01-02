@@ -42,7 +42,19 @@ class IncomePrizeDetailsType extends AbstractType
             ->add('prizeDescription', TextareaType::class, [
                 'required' => false,
                 'label' => 'Prize description',
-                'attr' => ['class' => 'textarea m-1 w-full', 'rows' => 2],
+                'placeholder' => '-- Select prize type --',
+                'choices' => [
+                    'Captured Cargo' => 'Captured Cargo',
+                    'Captured Vessel' => 'Captured Vessel',
+                    'Captured Vessel + Cargo' => 'Captured Vessel + Cargo',
+                    'Seized Contraband Shipment' => 'Seized Contraband Shipment',
+                    'Seized Smuggling Cache' => 'Seized Smuggling Cache',
+                    'Repossessed Vessel (Lien)' => 'Repossessed Vessel (Lien)',
+                    'Impounded Cargo Lot' => 'Impounded Cargo Lot',
+                    'Prize Auction Proceeds' => 'Prize Auction Proceeds',
+                    'Salvage Awarded as Prize' => 'Salvage Awarded as Prize',
+                ],
+                'attr' => ['class' => 'select m-1 w-full'],
             ])
             ->add('estimatedValue', NumberType::class, [
                 'required' => false,
