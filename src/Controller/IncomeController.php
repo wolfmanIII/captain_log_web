@@ -367,7 +367,7 @@ final class IncomeController extends BaseController
                     '{{PROVIDER_SIGN}}' => $ship?->getName() ?? '—',
                     '{{LOCATION}}' => $this->fallback($d?->getLocation()),
                     '{{VESSEL_NAME}}' => $ship?->getName() ?? '—',
-                    '{{VESSEL_ID}}' => $this->fallback($d?->getVesselId()),
+                    '{{VESSEL_ID}}' => $income->getCode(),
                     '{{REQUESTED_BY}}' => $this->fallback($d?->getRequestedBy()),
                     '{{SERVICE_TYPE}}' => $this->fallback($d?->getServiceType()),
                     '{{START_DATE}}' => $this->formatDayYear($d?->getStartDay(), $d?->getStartYear()),
