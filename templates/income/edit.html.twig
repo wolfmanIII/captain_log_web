@@ -24,7 +24,7 @@
         </div>
 
         {% if income.id %}
-            <div class="col-span-1">
+            <div class="col-span-3">
                 <label class="label">Code</label>
                 <div><b>{{ income.code }}</b></div>
             </div>
@@ -37,9 +37,27 @@
         </div>
 
         <div class="col-span-1">
-            <label class="label">Amount</label>
-            {{ form_widget(form.amount) }}
-            {{ form_errors(form.amount) }}
+            <label class="label">Local Law</label>
+            {{ form_widget(form.localLaw) }}
+            {{ form_errors(form.localLaw) }}
+        </div>
+
+        <div class="col-span-1">
+            <label class="label">Company</label>
+            {{ form_widget(form.company) }}
+            {{ form_errors(form.company) }}
+        </div>
+
+        <div class="col-span-1">
+            <label class="label">Category</label>
+            {{ form_widget(form.incomeCategory) }}
+            {{ form_errors(form.incomeCategory) }}
+        </div>
+
+        <div class="col-span-1">
+            <label class="label">Ship</label>
+            {{ form_widget(form.ship) }}
+            {{ form_errors(form.ship) }}
         </div>
 
         <div class="col-span-1">
@@ -58,6 +76,12 @@
             <label class="label">Signing Year</label>
             {{ form_widget(form.signingYear) }}
             {{ form_errors(form.signingYear) }}
+        </div>
+
+        <div class="col-span-1">
+            <label class="label">Amount</label>
+            {{ form_widget(form.amount) }}
+            {{ form_errors(form.amount) }}
         </div>
 
         <div class="col-span-1">
@@ -84,30 +108,6 @@
             {{ form_errors(form.expirationYear) }}
         </div>
 
-        <div class="col-span-1">
-            <label class="label">Company</label>
-            {{ form_widget(form.company) }}
-            {{ form_errors(form.company) }}
-        </div>
-
-        <div class="col-span-1">
-            <label class="label">Category</label>
-            {{ form_widget(form.incomeCategory) }}
-            {{ form_errors(form.incomeCategory) }}
-        </div>
-
-        <div class="col-span-1">
-            <label class="label">Ship</label>
-            {{ form_widget(form.ship) }}
-            {{ form_errors(form.ship) }}
-        </div>
-
-        <div class="col-span-1">
-            <label class="label">Local Law</label>
-            {{ form_widget(form.localLaw) }}
-            {{ form_errors(form.localLaw) }}
-        </div>
-
         <div class="col-span-3">
             <label class="label">Note</label>
             {{ form_widget(form.note) }}
@@ -128,8 +128,10 @@
                             {{ form_widget(form.cancelYear) }}
                             {{ form_errors(form.cancelYear) }}
                         </div>
+                        <div>
+                            Fill only if the contract was canceled: this date closes its validity window
+                        </div>
                     </div>
-                    <p class="text-xs opacity-80 mt-2">Fill only if the contract was canceled: this date closes its validity window.</p>
                 </div>
             </div>
         {% endif %}

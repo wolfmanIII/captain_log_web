@@ -50,7 +50,7 @@ class CostType extends AbstractType
             ->add('ship', EntityType::class, [
                 'class' => Ship::class,
                 'placeholder' => '-- Select a Ship --',
-                'choice_label' => fn (Ship $ship) => sprintf('%s (%s)', $ship->getName(), $ship->getClass()),
+                'choice_label' => fn (Ship $ship) => sprintf('%s - %s(%s)', $ship->getName(), $ship->getType(), $ship->getClass()),
                 'query_builder' => function (ShipRepository $repo) use ($user) {
                     $qb = $repo->createQueryBuilder('s')->orderBy('s.name', 'ASC');
                     if ($user) {
@@ -64,7 +64,7 @@ class CostType extends AbstractType
                 'class' => Company::class,
                 'placeholder' => '-- Select a Company --',
                 'required' => false,
-                'choice_label' => fn (Company $c) => sprintf('%s (%s)', $c->getName(), $c->getCompanyRole()?->getCode()),
+                'choice_label' => fn (Company $c) => sprintf('%s - %s', $c->getName(), $c->getCode()),
                 'query_builder' => function (EntityRepository $er) use ($user) {
                     $qb = $er->createQueryBuilder('c')->orderBy('c.name', 'ASC');
                     if ($user) {

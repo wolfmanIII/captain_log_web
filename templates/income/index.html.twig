@@ -53,7 +53,7 @@
                                 <td>{{ income.incomeCategory.description }}</td>
                                 <td>{{ income.ship.name }}</td>
                                 <td class="text-right">{{ income.amount|number_format(2, ',', '.') }}</td>
-                                <td class="text-right">{{ income.signingDay }}/{{ income.signingYear }}</td>
+                                <td class="text-right">{{ income.signingLocation }} - {{ income.signingDay }}/{{ income.signingYear }}</td>
                                 <td class="text-right">
                                     {% if income.paymentDay is not null and income.paymentYear is not null %}
                                         {{ income.paymentDay }}/{{ income.paymentYear }}
