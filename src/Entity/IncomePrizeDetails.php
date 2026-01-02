@@ -21,9 +21,6 @@ class IncomePrizeDetails
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $caseRef = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $jurisdiction = null;
-
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $legalBasis = null;
 
@@ -69,17 +66,6 @@ class IncomePrizeDetails
     public function setCaseRef(?string $caseRef): static
     {
         $this->caseRef = $caseRef;
-        return $this;
-    }
-
-    public function getJurisdiction(): ?string
-    {
-        return $this->jurisdiction;
-    }
-
-    public function setJurisdiction(?string $jurisdiction): static
-    {
-        $this->jurisdiction = $jurisdiction;
         return $this;
     }
 

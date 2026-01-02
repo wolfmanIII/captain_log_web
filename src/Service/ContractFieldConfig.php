@@ -49,7 +49,7 @@ class ContractFieldConfig
             'proofRequirements', 'cancellationTerms',
         ],
         'PRIZE' => [
-            'caseRef', 'jurisdiction', 'legalBasis',
+            'caseRef', 'legalBasis',
             'prizeDescription', 'estimatedValue', 'disposition',
             'paymentTerms', 'shareSplit', 'awardTrigger',
         ],

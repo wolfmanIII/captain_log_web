@@ -20,11 +20,6 @@ class IncomePrizeDetailsType extends AbstractType
                 'label' => 'Case ref',
                 'attr' => ['class' => 'input m-1 w-full'],
             ])
-            ->add('jurisdiction', TextType::class, [
-                'required' => false,
-                'label' => 'Jurisdiction',
-                'attr' => ['class' => 'input m-1 w-full'],
-            ])
             ->add('legalBasis', TextareaType::class, [
                 'required' => false,
                 'label' => 'Legal basis',
