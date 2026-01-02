@@ -1,13 +1,8 @@
-<fieldset class="fieldset grid grid-cols-3 bg-base-200 border-base-300 p-4 border rounded w-250">
-    <legend class="fieldset-legend flex items-center gap-2">
+<fieldset class="fieldset grid grid-cols-3 bg-base-200 border-base-300 gap-4 p-4 border rounded w-250">
+    <legend class="fieldset-legend">
         {% include 'icons/income.html.twig' %} SALVAGE Details
     </legend>
 
-    <div>
-        {{ form_label(detail_form.claimId) }}
-        {{ form_widget(detail_form.claimId) }}
-        {{ form_errors(detail_form.claimId) }}
-    </div>
     <div>
         {{ form_label(detail_form.caseRef) }}
         {{ form_widget(detail_form.caseRef) }}

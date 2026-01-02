@@ -20,11 +20,6 @@ class IncomeInterestDetailsType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('receiptId', TextType::class, [
-                'required' => false,
-                'label' => 'Receipt ID',
-                'attr' => ['class' => 'input m-1 w-full'],
-            ])
             ->add('accountRef', TextType::class, [
                 'required' => false,
                 'label' => 'Account ref',

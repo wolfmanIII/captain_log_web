@@ -49,7 +49,7 @@ class ContractFieldConfig
             'proofRequirements', 'cancellationTerms',
         ],
         'PRIZE' => [
-            'prizeId', 'caseRef', 'jurisdiction', 'legalBasis',
+            'caseRef', 'jurisdiction', 'legalBasis',
             'prizeDescription', 'estimatedValue', 'disposition',
             'paymentTerms', 'shareSplit', 'awardTrigger',
         ],
@@ -59,7 +59,7 @@ class ContractFieldConfig
             'declaredValue', 'paymentTerms', 'liabilityLimit', 'cancellationTerms',
         ],
         'SERVICES' => [
-            'location', 'vesselId', 'serviceType', 'requestedBy',
+            'location', 'serviceType', 'requestedBy',
             'startDay', 'startYear', 'endDay', 'endYear', 'workSummary',
             'partsMaterials', 'risks', 'paymentTerms', 'extras',
             'liabilityLimit', 'cancellationTerms',
@@ -77,7 +77,7 @@ class ContractFieldConfig
             'confidentialityLevel', 'failureTerms', 'cancellationTerms',
         ],
         'INTEREST' => [
-            'receiptId', 'accountRef', 'instrument', 'principal', 'interestRate',
+            'accountRef', 'instrument', 'principal', 'interestRate',
             'startDay', 'startYear', 'endDay', 'endYear', 'calcMethod',
             'interestEarned', 'netPaid', 'paymentTerms', 'disputeWindow',
         ],
@@ -88,13 +88,13 @@ class ContractFieldConfig
             'paymentTerms', 'proofOfDelivery', 'liabilityLimit',
         ],
         'INSURANCE' => [
-            'claimId', 'policyNumber', 'incidentRef', 'incidentDay', 'incidentYear',
+            'policyNumber', 'incidentRef', 'incidentDay', 'incidentYear',
             'incidentLocation', 'incidentCause', 'lossType', 'verifiedLoss',
             'deductible', 'paymentTerms', 'acceptanceEffect',
             'subrogationTerms', 'coverageNotes',
         ],
         'SALVAGE' => [
-            'claimId', 'caseRef', 'source', 'siteLocation', 'recoveredItemsSummary',
+            'caseRef', 'source', 'siteLocation', 'recoveredItemsSummary',
             'qtyValue', 'hazards', 'paymentTerms', 'splitTerms', 'rightsBasis',
             'awardTrigger', 'disputeProcess',
         ],

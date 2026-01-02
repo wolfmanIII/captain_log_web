@@ -20,11 +20,6 @@ class IncomeInsuranceDetailsType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('claimId', TextType::class, [
-                'required' => false,
-                'label' => 'Claim ID',
-                'attr' => ['class' => 'input m-1 w-full'],
-            ])
             ->add('policyNumber', TextType::class, [
                 'required' => false,
                 'label' => 'Policy number',

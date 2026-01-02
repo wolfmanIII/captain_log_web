@@ -5,6 +5,7 @@ namespace App\Form\Type;
 use App\Entity\IncomeCharterDetails;
 use App\Form\Config\DayYearLimits;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -25,10 +26,16 @@ class IncomeCharterDetailsType extends AbstractType
                 'label' => 'Area / Route',
                 'attr' => ['class' => 'input m-1 w-full'],
             ])
-            ->add('purpose', TextType::class, [
+            ->add('purpose', ChoiceType::class, [
                 'required' => false,
                 'label' => 'Purpose',
-                'attr' => ['class' => 'input m-1 w-full'],
+                'placeholder' => '-- Select a purpose --',
+                'choices' => [
+                    'Tourism / Sightseeing' => 'Tourism / Sightseeing',
+                    'Event / Media Charter' => 'Event / Media Charter',
+                    'Private Charter (Non-Service)' => 'Private Charter (Non-Service)',
+                ],
+                'attr' => ['class' => 'select m-1 w-full'],
             ])
             ->add('manifestSummary', TextareaType::class, [
                 'required' => false,

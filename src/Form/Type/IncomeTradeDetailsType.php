@@ -5,6 +5,7 @@ namespace App\Form\Type;
 use App\Entity\IncomeTradeDetails;
 use App\Form\Config\DayYearLimits;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -46,10 +47,23 @@ class IncomeTradeDetailsType extends AbstractType
                 'label' => 'Quantity',
                 'attr' => ['class' => 'input m-1 w-full'],
             ])
-            ->add('grade', TextType::class, [
+            ->add('grade', ChoiceType::class, [
                 'required' => false,
                 'label' => 'Grade',
-                'attr' => ['class' => 'input m-1 w-full'],
+                'placeholder' => '-- Select grade --',
+                'choices' => [
+                    'Prime (top quality)' => 'Prime (top quality)',
+                    'Premium' => 'Premium',
+                    'Standard' => 'Standard',
+                    'Economy' => 'Economy',
+                    'Low Grade' => 'Low Grade',
+                    'Substandard' => 'Substandard',
+                    'Mixed Lot' => 'Mixed Lot',
+                    'Uninspected' => 'Uninspected',
+                    'Damaged' => 'Damaged',
+                    'Salvage Quality' => 'Salvage Quality',
+                ],
+                'attr' => ['class' => 'select m-1 w-full'],
             ])
             ->add('batchIds', TextareaType::class, [
                 'required' => false,

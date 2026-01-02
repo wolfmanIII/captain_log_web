@@ -1,5 +1,5 @@
-<fieldset class="fieldset grid grid-cols-3 bg-base-200 border-base-300 p-4 border rounded w-250">
-    <legend class="fieldset-legend flex items-center gap-2">
+<fieldset class="fieldset grid grid-cols-3 bg-base-200 border-base-300 gap-4 p-4 border rounded w-250">
+    <legend class="fieldset-legend">
         {% include 'icons/income.html.twig' %} CHARTER Details
     </legend>
 
@@ -18,26 +18,34 @@
         {{ form_widget(detail_form.manifestSummary) }}
         {{ form_errors(detail_form.manifestSummary) }}
     </div>
-    <div>
-        {{ form_label(detail_form.startDay) }}
-        {{ form_widget(detail_form.startDay) }}
-        {{ form_errors(detail_form.startDay) }}
+
+    <div class="col-span-3 grid grid-cols-2 gap-4">
+        <div class="col-span-1 grid grid-cols-2 gap-4">
+            <div>
+                {{ form_label(detail_form.startDay) }}
+                {{ form_widget(detail_form.startDay) }}
+                {{ form_errors(detail_form.startDay) }}
+            </div>
+            <div>
+                {{ form_label(detail_form.startYear) }}
+                {{ form_widget(detail_form.startYear) }}
+                {{ form_errors(detail_form.startYear) }}
+            </div>
+        </div>
+        <div class="col-span-1 grid grid-cols-2 gap-4">
+            <div>
+                {{ form_label(detail_form.endDay) }}
+                {{ form_widget(detail_form.endDay) }}
+                {{ form_errors(detail_form.endDay) }}
+            </div>
+            <div>
+                {{ form_label(detail_form.endYear) }}
+                {{ form_widget(detail_form.endYear) }}
+                {{ form_errors(detail_form.endYear) }}
+            </div>
+        </div>
     </div>
-    <div>
-        {{ form_label(detail_form.startYear) }}
-        {{ form_widget(detail_form.startYear) }}
-        {{ form_errors(detail_form.startYear) }}
-    </div>
-    <div>
-        {{ form_label(detail_form.endDay) }}
-        {{ form_widget(detail_form.endDay) }}
-        {{ form_errors(detail_form.endDay) }}
-    </div>
-    <div>
-        {{ form_label(detail_form.endYear) }}
-        {{ form_widget(detail_form.endYear) }}
-        {{ form_errors(detail_form.endYear) }}
-    </div>
+    
     <div class="col-span-3">
         {{ form_label(detail_form.paymentTerms) }}
         {{ form_widget(detail_form.paymentTerms) }}

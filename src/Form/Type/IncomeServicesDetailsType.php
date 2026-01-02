@@ -25,11 +25,6 @@ class IncomeServicesDetailsType extends AbstractType
                 'label' => 'Location',
                 'attr' => ['class' => 'input m-1 w-full'],
             ])
-            ->add('vesselId', TextType::class, [
-                'required' => false,
-                'label' => 'Vessel ID',
-                'attr' => ['class' => 'input m-1 w-full'],
-            ])
             ->add('serviceType', TextType::class, [
                 'required' => false,
                 'label' => 'Service type',

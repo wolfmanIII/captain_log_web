@@ -11,6 +11,7 @@ Documento di riferimento per collegare i placeholder dei template di contratto (
 
 ### Placeholder ricorrenti e mapping consigliato
 - **Identificativi**: `{{CONTRACT_ID}}`, `{{DEAL_ID}}`, `{{RECEIPT_ID}}`, `{{TICKET_ID}}`, `{{CLAIM_ID}}`, `{{SUBSIDY_ID}}`, `{{PRIZE_ID}}`, `{{SERVICE_ID}}`, `{{PROGRAM_REF}}`, `{{CASE_REF}}` → utilizzare `Income.code` come ID pratica principale; gli altri restano campi liberi template-specifici.
+  - Nota: per PRIZE_ID, CLAIM_ID, RECEIPT_ID, VESSEL_ID si riusa `Income.code`; non esistono più campi dedicati nei dettagli.
 - **Nave**: `{{VESSEL_NAME}}` (+ type/class se serve) → `Ship`. Per la cronologia di gioco usare `sessionDay/sessionYear`.
 - **Controparti**: varianti `*_NAME`, `*_CONTACT`, `*_SIGN` (es. `CARRIER`, `SHIPPER`, `INSURER`, `AUTHORITY`, `BUYER`, `SELLER`, `PATRON`, `CONTRACTOR`, `CUSTOMER`, `PROVIDER`, `CAPTOR`, `SALVAGE_TEAM`, `AUTHORITY_OR_OWNER`, `PAYEE`, `PAYER`, ecc.) → `Company` (name/contact/signLabel) con ruolo da `CompanyRole`.
 - **Rotte/luoghi**: `{{ORIGIN}}`, `{{DESTINATION}}`, `{{ROUTE}}`, `{{TRANSFER_POINT}}`, `{{LOCATION}}`, `{{SITE_LOCATION}}`, `{{EXCHANGE_LOCATION}}`, ecc. → dati operativi variabili per pratica; memorizzabili su `Income` (campi aggiuntivi o note) oppure inseriti a runtime.

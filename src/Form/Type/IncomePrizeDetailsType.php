@@ -15,11 +15,6 @@ class IncomePrizeDetailsType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('prizeId', TextType::class, [
-                'required' => false,
-                'label' => 'Prize ID',
-                'attr' => ['class' => 'input m-1 w-full'],
-            ])
             ->add('caseRef', TextType::class, [
                 'required' => false,
                 'label' => 'Case ref',
