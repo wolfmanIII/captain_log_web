@@ -1,24 +1,18 @@
 {% set grid_class = grid_class is defined ? grid_class : 'grid grid-cols-3 gap-4' %}
 
-<div class="col-span-3">
-    <div class="card bg-base-200 border border-base-300 shadow-sm">
-        <div class="card-body p-4">
-            <div class="flex items-center gap-3 mb-2">
-                {% include 'icons/income.html.twig' %}
-                <h3 class="font-semibold">{{ title }}</h3>
+<fieldset class="fieldset {{ grid_class }} bg-base-200 border-base-300 p-4 border rounded w-250">
+    <legend class="fieldset-legend flex items-center gap-2">
+        {% include 'icons/income.html.twig' %}
+        {{ title }}
+    </legend>
+
+    {% for field_name in fields %}
+        {% if detail_form[field_name] is defined %}
+            <div>
+                {{ form_label(detail_form[field_name]) }}
+                {{ form_widget(detail_form[field_name]) }}
+                {{ form_errors(detail_form[field_name]) }}
             </div>
-            <div class="{{ grid_class }}">
-                {% for field_name in fields %}
-                    {% if detail_form[field_name] is defined %}
-                        <div>
-                            {{ form_label(detail_form[field_name]) }}
-                            {{ form_widget(detail_form[field_name]) }}
-                            {{ form_errors(detail_form[field_name]) }}
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-    <div class="mt-3 border-b border-base-300"></div>
-</div>
+        {% endif %}
+    {% endfor %}
+</fieldset>
