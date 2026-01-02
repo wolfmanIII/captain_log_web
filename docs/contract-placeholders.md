@@ -44,9 +44,8 @@ Documento di riferimento per collegare i placeholder dei template di contratto (
 - **Altri placeholder**: termini legali, descrizioni cargo/servizio, policy, restrizioni, ecc. restano campi liberi per singolo template.
 
 ### Come gestire i campi opzionali di Income per categoria di contratto
-Per limitare i campi ai soli contratti che li richiedono:
-- mantenere i campi extra su `Income` come nullable (solo quelli necessari ai contratti);
-- definire una mappa “campi per categoria” (`IncomeCategory.code` → elenco campi opzionali);
-- in `IncomeType` utilizzare un event subscriber (`PRE_SET_DATA` / `PRE_SUBMIT`) che aggiunge al form solo i campi previsti dalla categoria selezionata;
-- applicare validation groups per categoria, così da validare solo i campi visibili;
-- in EasyAdmin riusare la stessa logica in `configureFields()` o tramite un form type dedicato.
+- **Campi nullable**: aggiungere a `Income` solo i campi richiesti dai contratti, lasciandoli nullable.
+- **Mappa per categoria**: creare un servizio (es. `ContractFieldConfig`) che, dato `IncomeCategory.code` (FREIGHT, PASSENGERS, CONTRACT, TRADE, ecc.), restituisce l’elenco dei campi opzionali da mostrare.
+- **Form dinamica**: in `IncomeType` usare un event subscriber (`PRE_SET_DATA` / `PRE_SUBMIT`) che legge la categoria e aggiunge al form solo i campi previsti dalla mappa.
+- **Validation groups**: abilitare gruppi di validazione per categoria, così vengono validati solo i campi effettivamente resi visibili.
+- **Template modulare** (opzionale): per le sezioni “dati aggiuntivi” per categoria si possono usare partial Twig dedicati; se il form genera già i campi dinamici, i widget standard sono sufficienti.
