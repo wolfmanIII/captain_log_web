@@ -19,9 +19,6 @@ class IncomeInsuranceDetails
     private ?Income $income = null;
 
     #[ORM\Column(length: 100, nullable: true)]
-    private ?string $policyNumber = null;
-
-    #[ORM\Column(length: 100, nullable: true)]
     private ?string $incidentRef = null;
 
     #[ORM\Column(nullable: true)]
@@ -70,17 +67,6 @@ class IncomeInsuranceDetails
     public function setIncome(Income $income): static
     {
         $this->income = $income;
-        return $this;
-    }
-
-    public function getPolicyNumber(): ?string
-    {
-        return $this->policyNumber;
-    }
-
-    public function setPolicyNumber(?string $policyNumber): static
-    {
-        $this->policyNumber = $policyNumber;
         return $this;
     }
 

@@ -476,7 +476,7 @@ final class IncomeController extends BaseController
                     '{{INSURER_NAME}}' => $companyName,
                     '{{INSURED_NAME}}' => $ship?->getName() ?? '—',
                     '{{INSURED_CONTACT}}' => $companyContact,
-                    '{{POLICY_NUMBER}}' => $this->fallback($d?->getPolicyNumber()),
+                    '{{POLICY_NUMBER}}' => $income->getCode(),
                     '{{INCIDENT_REF}}' => $this->fallback($d?->getIncidentRef()),
                     '{{INCIDENT_DATE}}' => $this->formatDayYear($d?->getIncidentDay(), $d?->getIncidentYear()),
                     '{{INCIDENT_LOCATION}}' => $this->fallback($d?->getIncidentLocation()),

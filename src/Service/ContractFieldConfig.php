@@ -88,7 +88,7 @@ class ContractFieldConfig
             'paymentTerms', 'proofOfDelivery', 'liabilityLimit',
         ],
         'INSURANCE' => [
-            'policyNumber', 'incidentRef', 'incidentDay', 'incidentYear',
+            'incidentRef', 'incidentDay', 'incidentYear',
             'incidentLocation', 'incidentCause', 'lossType', 'verifiedLoss',
             'deductible', 'paymentTerms', 'acceptanceEffect',
             'subrogationTerms', 'coverageNotes',
