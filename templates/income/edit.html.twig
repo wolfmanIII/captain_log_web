@@ -109,33 +109,64 @@
         </div>
     </fieldset>
 
-    {% set detail_sections = {
-        'charterDetails': 'CHARTER Details',
-        'subsidyDetails': 'SUBSIDY Details',
-        'freightDetails': 'FREIGHT Details',
-        'passengersDetails': 'PASSENGERS Details',
-        'servicesDetails': 'SERVICES Details',
-        'insuranceDetails': 'INSURANCE Details',
-        'mailDetails': 'MAIL Details',
-        'interestDetails': 'INTEREST Details',
-        'tradeDetails': 'TRADE Details',
-        'salvageDetails': 'SALVAGE Details',
-        'prizeDetails': 'PRIZE Details',
-        'contractDetails': 'CONTRACT Details',
+    {% set detail_configs = {
+        'charterDetails': {
+            'title': 'CHARTER Details',
+            'fields': ['areaOrRoute','purpose','manifestSummary','startDay','startYear','endDay','endYear','paymentTerms','deposit','extras','damageTerms','cancellationTerms']
+        },
+        'subsidyDetails': {
+            'title': 'SUBSIDY Details',
+            'fields': ['programRef','origin','destination','startDay','startYear','endDay','endYear','serviceLevel','subsidyAmount','paymentTerms','milestones','reportingRequirements','nonComplianceTerms','proofRequirements','cancellationTerms']
+        },
+        'freightDetails': {
+            'title': 'FREIGHT Details',
+            'fields': ['origin','destination','pickupDay','pickupYear','deliveryDay','deliveryYear','cargoDescription','cargoQty','declaredValue','paymentTerms','liabilityLimit','cancellationTerms']
+        },
+        'passengersDetails': {
+            'title': 'PASSENGERS Details',
+            'fields': ['origin','destination','departureDay','departureYear','arrivalDay','arrivalYear','classOrBerth','qty','passengerNames','passengerContact','baggageAllowance','extraBaggage','paymentTerms','refundChangePolicy']
+        },
+        'servicesDetails': {
+            'title': 'SERVICES Details',
+            'fields': ['location','vesselId','serviceType','requestedBy','startDay','startYear','endDay','endYear','workSummary','partsMaterials','risks','paymentTerms','extras','liabilityLimit','cancellationTerms']
+        },
+        'insuranceDetails': {
+            'title': 'INSURANCE Details',
+            'fields': ['claimId','policyNumber','incidentRef','incidentDay','incidentYear','incidentLocation','incidentCause','lossType','verifiedLoss','deductible','paymentTerms','acceptanceEffect','subrogationTerms','coverageNotes']
+        },
+        'mailDetails': {
+            'title': 'MAIL Details',
+            'fields': ['runId','authorityRef','origin','destination','dispatchDay','dispatchYear','deliveryDay','deliveryYear','mailType','packageCount','totalMass','securityLevel','sealCodes','paymentTerms','proofOfDelivery','liabilityLimit']
+        },
+        'interestDetails': {
+            'title': 'INTEREST Details',
+            'fields': ['receiptId','accountRef','instrument','principal','interestRate','startDay','startYear','endDay','endYear','calcMethod','interestEarned','netPaid','paymentTerms','disputeWindow']
+        },
+        'tradeDetails': {
+            'title': 'TRADE Details',
+            'fields': ['location','transferPoint','transferCondition','goodsDescription','qty','grade','batchIds','unitPrice','paymentTerms','deliveryMethod','deliveryDay','deliveryYear','asIsOrWarranty','warrantyText','claimWindow','returnPolicy']
+        },
+        'salvageDetails': {
+            'title': 'SALVAGE Details',
+            'fields': ['claimId','caseRef','source','siteLocation','recoveredItemsSummary','qtyValue','hazards','paymentTerms','splitTerms','rightsBasis','awardTrigger','disputeProcess']
+        },
+        'prizeDetails': {
+            'title': 'PRIZE Details',
+            'fields': ['prizeId','caseRef','jurisdiction','legalBasis','prizeDescription','estimatedValue','disposition','paymentTerms','shareSplit','awardTrigger']
+        },
+        'contractDetails': {
+            'title': 'CONTRACT Details',
+            'fields': ['jobType','location','objective','successCondition','startDay','startYear','deadlineDay','deadlineYear','bonus','expensesPolicy','deposit','restrictions','confidentialityLevel','failureTerms','cancellationTerms']
+        },
     } %}
 
-    {% for detail_name, detail_label in detail_sections %}
+    {% for detail_name, config in detail_configs %}
         {% if form[detail_name] is defined %}
-            <fieldset class="fieldset grid grid-cols-3 bg-base-200 border-base-300 gap-4 p-4 border rounded w-250">
-                <legend class="fieldset-legend">{% include 'icons/income.html.twig' %} {{ detail_label }}</legend>
-                {% for child in form[detail_name] %}
-                    <div>
-                        {{ form_label(child) }}
-                        {{ form_widget(child) }}
-                        {{ form_errors(child) }}
-                    </div>
-                {% endfor %}
-            </fieldset>
+            {% include 'income/_detail_section.html.twig' with {
+                detail_form: form[detail_name],
+                title: config.title,
+                fields: config.fields
+            } %}
         {% endif %}
     {% endfor %}
 
