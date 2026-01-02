@@ -13,26 +13,34 @@
         {{ form_widget(detail_form.destination) }}
         {{ form_errors(detail_form.destination) }}
     </div>
-    <div>
-        {{ form_label(detail_form.dispatchDay) }}
-        {{ form_widget(detail_form.dispatchDay) }}
-        {{ form_errors(detail_form.dispatchDay) }}
+
+    <div class="col-span-3 grid grid-cols-2 gap-4">
+        <div class="col-span-1 grid grid-cols-2 gap-4">
+            <div>
+                {{ form_label(detail_form.dispatchDay) }}
+                {{ form_widget(detail_form.dispatchDay) }}
+                {{ form_errors(detail_form.dispatchDay) }}
+            </div>
+            <div>
+                {{ form_label(detail_form.dispatchYear) }}
+                {{ form_widget(detail_form.dispatchYear) }}
+                {{ form_errors(detail_form.dispatchYear) }}
+            </div>
+        </div>
+        <div class="col-span-1 grid grid-cols-2 gap-4">
+            <div>
+                {{ form_label(detail_form.deliveryDay) }}
+                {{ form_widget(detail_form.deliveryDay) }}
+                {{ form_errors(detail_form.deliveryDay) }}
+            </div>
+            <div>
+                {{ form_label(detail_form.deliveryYear) }}
+                {{ form_widget(detail_form.deliveryYear) }}
+                {{ form_errors(detail_form.deliveryYear) }}
+            </div>
+        </div>
     </div>
-    <div>
-        {{ form_label(detail_form.dispatchYear) }}
-        {{ form_widget(detail_form.dispatchYear) }}
-        {{ form_errors(detail_form.dispatchYear) }}
-    </div>
-    <div>
-        {{ form_label(detail_form.deliveryDay) }}
-        {{ form_widget(detail_form.deliveryDay) }}
-        {{ form_errors(detail_form.deliveryDay) }}
-    </div>
-    <div>
-        {{ form_label(detail_form.deliveryYear) }}
-        {{ form_widget(detail_form.deliveryYear) }}
-        {{ form_errors(detail_form.deliveryYear) }}
-    </div>
+
     <div>
         {{ form_label(detail_form.mailType) }}
         {{ form_widget(detail_form.mailType) }}

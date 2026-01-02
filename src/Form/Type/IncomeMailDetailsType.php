@@ -81,10 +81,21 @@ class IncomeMailDetailsType extends AbstractType
                 'scale' => 2,
                 'attr' => ['class' => 'input m-1 w-full'],
             ])
-            ->add('securityLevel', TextType::class, [
+            ->add('securityLevel', ChoiceType::class, [
                 'required' => false,
                 'label' => 'Security level',
-                'attr' => ['class' => 'input m-1 w-full'],
+                'placeholder' => '-- Select security --',
+                'choices' => [
+                    'Open' => 'Open',
+                    'Sealed' => 'Sealed',
+                    'Registered' => 'Registered',
+                    'Restricted' => 'Restricted',
+                    'Secure' => 'Secure',
+                    'High Security' => 'High Security',
+                    'Diplomatic' => 'Diplomatic',
+                    'Black (Need-to-Know)' => 'Black (Need-to-Know)',
+                ],
+                'attr' => ['class' => 'select m-1 w-full'],
             ])
             ->add('sealCodes', TextType::class, [
                 'required' => false,
