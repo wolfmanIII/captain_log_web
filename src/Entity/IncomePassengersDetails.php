@@ -54,9 +54,6 @@ class IncomePassengersDetails
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $extraBaggage = null;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 11, scale: 2, nullable: true)]
-    private ?string $fareTotal = null;
-
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $paymentTerms = null;
 
@@ -220,18 +217,6 @@ class IncomePassengersDetails
     public function setExtraBaggage(?string $extraBaggage): static
     {
         $this->extraBaggage = $extraBaggage;
-
-        return $this;
-    }
-
-    public function getFareTotal(): ?string
-    {
-        return $this->fareTotal;
-    }
-
-    public function setFareTotal(?string $fareTotal): static
-    {
-        $this->fareTotal = $fareTotal;
 
         return $this;
     }
