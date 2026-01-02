@@ -148,9 +148,9 @@
         </div>
     </fieldset>
 
-    <fieldset class="fieldset grid grid-cols-3 bg-base-200 border-base-300 gap-4 p-4 border border-warning rounded w-250">
-        <legend class="fieldset-legend">{% include 'icons/income.html.twig' %} Cancellation</legend>
-        {% if income.id %}
+    {% if income.id %}
+        <fieldset class="fieldset grid grid-cols-3 bg-base-200 border-base-300 gap-4 p-4 border border-warning rounded w-250">
+            <legend class="fieldset-legend">{% include 'icons/income.html.twig' %} Cancellation</legend>
             <div class="col-span-3">
                 <div class="grid grid-cols-3 gap-4 items-end">
                     <div>
@@ -168,8 +168,8 @@
                     </div>
                 </div>
             </div>
-        {% endif %}
-    </fieldset>
+        </fieldset>
+    {% endif %}
 
     <button type="submit" class="btn btn-outline btn-primary mt-4 mb-4 mr-4">
         Save

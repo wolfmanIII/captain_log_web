@@ -1,5 +1,4 @@
 import { Controller } from "@hotwired/stimulus";
-import { Turbo } from "@hotwired/turbo";
 
 export default class extends Controller {
     change(event) {
@@ -12,6 +11,10 @@ export default class extends Controller {
             url.searchParams.delete("category");
         }
 
-        Turbo.visit(url.toString(), { action: "replace" });
+        if (window.Turbo && typeof window.Turbo.visit === "function") {
+            window.Turbo.visit(url.toString(), { action: "replace" });
+        } else {
+            window.location.href = url.toString();
+        }
     }
 }
