@@ -24,7 +24,7 @@ class IncomePrizeDetailsType extends AbstractType
             ->add('legalBasis', ChoiceType::class, [
                 'required' => false,
                 'label' => 'Legal basis',
-                'placeholder' => 'Select legal basis',
+                'placeholder' => '-- Select legal basis --',
                 'choices' => [
                     'Imperial Warrant' => 'Imperial Warrant',
                     'Port Authority Writ' => 'Port Authority Writ',
@@ -53,7 +53,7 @@ class IncomePrizeDetailsType extends AbstractType
             ->add('disposition', ChoiceType::class, [
                 'required' => false,
                 'label' => 'Disposition',
-                'placeholder' => 'Select disposition',
+                'placeholder' => '-- Select disposition --',
                 'choices' => [
                     'Returned to Owner' => 'Returned to Owner',
                     'Released (No Action)' => 'Released (No Action)',

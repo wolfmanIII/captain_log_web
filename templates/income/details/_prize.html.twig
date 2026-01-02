@@ -3,16 +3,19 @@
         {% include 'icons/income.html.twig' %} PRIZE Details
     </legend>
 
-    <div>
-        {{ form_label(detail_form.caseRef) }}
-        {{ form_widget(detail_form.caseRef) }}
-        {{ form_errors(detail_form.caseRef) }}
+    <div class="col-span-3 grid grid-cols-2 gap-4">
+        <div>
+            {{ form_label(detail_form.legalBasis) }}
+            {{ form_widget(detail_form.legalBasis) }}
+            {{ form_errors(detail_form.legalBasis) }}
+        </div>
+        <div>
+            {{ form_label(detail_form.caseRef) }}
+            {{ form_widget(detail_form.caseRef) }}
+            {{ form_errors(detail_form.caseRef) }}
+        </div>
     </div>
-    <div class="col-span-3">
-        {{ form_label(detail_form.legalBasis) }}
-        {{ form_widget(detail_form.legalBasis) }}
-        {{ form_errors(detail_form.legalBasis) }}
-    </div>
+
     <div class="col-span-3">
         {{ form_label(detail_form.prizeDescription) }}
         {{ form_widget(detail_form.prizeDescription) }}
