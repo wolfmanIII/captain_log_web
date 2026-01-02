@@ -39,7 +39,7 @@ class IncomePrizeDetailsType extends AbstractType
                 ],
                 'attr' => ['class' => 'select m-1 w-full'],
             ])
-            ->add('prizeDescription', TextareaType::class, [
+            ->add('prizeDescription', ChoiceType::class, [
                 'required' => false,
                 'label' => 'Prize description',
                 'placeholder' => '-- Select prize type --',
