@@ -253,7 +253,6 @@ final class IncomeController extends BaseController
             '{{PRIZE_ID}}' => $income->getCode(),
             '{{SERVICE_ID}}' => $income->getCode(),
             '{{PROGRAM_REF}}' => $this->fallback($income->getCode()),
-            '{{CASE_REF}}' => $this->fallback(null),
             '{{VESSEL_NAME}}' => $ship?->getName() ?? '—',
             '{{CURRENCY}}' => $currency,
             '{{NOTES}}' => $this->fallback($income->getNote()),
