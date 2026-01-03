@@ -9,72 +9,79 @@
 
 {% block pageContent %}
 
-    {% if ship.mortgageSigned %}
-        <div class="alert alert-info alert-outline w-315">
-            The Ship has Mortgage signed! It can not be updated.
-        </div>
-    {% endif %}
+    <div class="flex flex-col items-center gap-4">
 
-    {{ form_start(form) }}
+        {{ form_start(form) }}
 
-    <fieldset class="fieldset grid grid-cols-2 bg-base-200 border-base-300 gap-4 p-4 border rounded w-250">
-        <legend class="fieldset-legend">Ship</legend>
+        <fieldset class="fieldset grid grid-cols-2 bg-base-200 border-base-300 gap-4 p-4 border rounded w-250">
+            <legend class="fieldset-legend">Ship</legend>
 
-        <div class="col-span-2">
-            <div class="alert alert-info alert-outline shadow-sm w-full">
-                <div class="flex items-center gap-3">
-                    {% include 'icons/far-trader.html.twig' %}
-                    <div>
-                        <h3 class="font-semibold">Ship sheet</h3>
-                        <p class="text-sm opacity-80">Update class and price before mortgages and embarkations: every jump starts with an aligned bridge.</p>
+            {% if ship.mortgageSigned %}
+                <div class="col-span-2">
+                    <div class="alert alert-info alert-outline w-full">
+                        The Ship has Mortgage signed! It can not be updated.
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="col-span-2">
+                <div class="alert alert-info alert-outline shadow-sm w-full">
+                    <div class="flex items-center gap-3">
+                        {% include 'icons/far-trader.html.twig' %}
+                        <div>
+                            <h3 class="font-semibold">Ship sheet</h3>
+                            <p class="text-sm opacity-80">Update class and price before mortgages and embarkations: every jump starts with an aligned bridge.</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        {% if ship.id %}
+            {% if ship.id %}
+                <div>
+                    <label class="label">Code</label>
+                    <div><b>{{ ship.code }}</b></div>
+                </div>
+                <div></div>
+            {% endif %}
+
             <div>
-                <label class="label">Code</label>
-                <div><b>{{ ship.code }}</b></div>
+                <label class="label">Name</label>
+                {{ form_widget(form.name) }}
+                {{ form_errors(form.name) }}
+            </div>
+
+            <div>
+                <label class="label">Type</label>
+                {{ form_widget(form.type) }}
+                {{ form_errors(form.type) }}
+            </div>
+
+            <div>
+                <label class="label">Class</label>
+                {{ form_widget(form.class) }}
+                {{ form_errors(form.class) }}
             </div>
             <div></div>
-        {% endif %}
 
-        <div>
-            <label class="label">Name</label>
-            {{ form_widget(form.name) }}
-            {{ form_errors(form.name) }}
+            <div>
+                {{ form_label(form.price) }}
+                {{ form_widget(form.price) }}
+                {{ form_errors(form.price) }}
+            </div>
+
+        </fieldset>
+
+        <div class="flex gap-4">
+            <button type="submit"
+                    class="btn btn-outline btn-primary mt-4 mb-4"
+                    {% if not (ship.id ? can_edit : can_create) %} disabled {% endif %}
+            >
+                Save
+            </button>
+            <a href="{{ path('app_ship_index') }}" role="button" class="btn btn-outline btn-default mt-4 mb-4">Cancel</a>
         </div>
 
-        <div>
-            <label class="label">Type</label>
-            {{ form_widget(form.type) }}
-            {{ form_errors(form.type) }}
-        </div>
-
-        <div>
-            <label class="label">Class</label>
-            {{ form_widget(form.class) }}
-            {{ form_errors(form.class) }}
-        </div>
-        <div></div>
-
-        <div>
-            {{ form_label(form.price) }}
-            {{ form_widget(form.price) }}
-            {{ form_errors(form.price) }}
-        </div>
-
-    </fieldset>
-
-    <button type="submit"
-            class="btn btn-outline btn-primary mt-4 mb-4 mr-4"
-            {% if not (ship.id ? can_edit : can_create) %} disabled {% endif %}
-    >
-        Save
-    </button>
-    <a href="{{ path('app_ship_index') }}" role="button" class="btn btn-outline btn-default mt-4 mb-4 mr-4">Cancel</a>
-
-    {{ form_end(form) }}
+        {{ form_end(form) }}
+    </div>
 
 {% endblock %}
