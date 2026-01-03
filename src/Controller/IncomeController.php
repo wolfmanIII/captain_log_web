@@ -256,7 +256,6 @@ final class IncomeController extends BaseController
             '{{CASE_REF}}' => $this->fallback(null),
             '{{VESSEL_NAME}}' => $ship?->getName() ?? '—',
             '{{CURRENCY}}' => $currency,
-            '{{PAYMENT_TERMS}}' => $this->fallback($income->getNote()),
             '{{NOTES}}' => $this->fallback($income->getNote()),
             '{{PAYMENT}}' => $this->formatMoney($income->getAmount(), $currency),
         ];
