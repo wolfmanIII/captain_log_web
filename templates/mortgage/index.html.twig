@@ -36,6 +36,7 @@
                         <th>Code</th>
                         <th>Name</th>
                         <th>Ship</th>
+                        <th>Campaign</th>
                         <th class="text-right">Ship Price(Cr)</th>
                         <th class="text-right">Ship Cost(Cr)</th>
                         <th>Signed</th>
@@ -49,6 +50,16 @@
                                 <td>{{ mortgage.code }}</td>
                                 <td>{{ mortgage.name }}</td>
                                 <td>{{ mortgage.ship.name }} - {{ mortgage.ship.type }} - {{ mortgage.ship.class }}</td>
+                                <td>
+                                    {% if mortgage.ship.campaign %}
+                                        <div class="flex items-center gap-2">
+                                            {% include 'icons/campaign.html.twig' %}
+                                            <span>{{ mortgage.ship.campaign.title }}</span>
+                                        </div>
+                                    {% else %}
+                                        <span class="opacity-60">—</span>
+                                    {% endif %}
+                                </td>
                                 <td class="text-right">{{ mortgage.ship.price|number_format(2, ',', '.') }}</td>
                                 <td class="text-right">{{ mortgage.calculateShipCost|number_format(2, ',', '.') }}</td>
                                 <td>
