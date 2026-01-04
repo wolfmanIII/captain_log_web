@@ -4,94 +4,98 @@
 
 {% block pageContent %}
 
-    {{ form_start(form) }}
+    <div class="flex flex-col items-center gap-4">
 
-    {{ form_widget(form._token) }}
+        {{ form_start(form) }}
 
-    <fieldset class="fieldset grid grid-cols-2 bg-base-200 border-base-300 gap-4 p-4 border rounded w-250">
-        <legend class="fieldset-legend">Cost</legend>
+        {{ form_widget(form._token) }}
 
-        <div class="col-span-2">
-            <div class="alert alert-info alert-outline shadow-sm w-full">
-                <div class="flex items-center gap-3">
-                    {% include 'icons/cost.html.twig' %}
-                    <div>
-                        <h3 class="font-semibold">Track your outflows</h3>
-                        <p class="text-sm opacity-80">Log maintenance, gear and travel: knowing where credits slip helps prep the next jump.</p>
+        <fieldset class="fieldset grid grid-cols-2 bg-base-200 border-base-300 gap-4 p-4 border rounded w-250">
+            <legend class="fieldset-legend">Cost</legend>
+
+            <div class="col-span-2">
+                <div class="alert alert-info alert-outline shadow-sm w-full">
+                    <div class="flex items-center gap-3">
+                        {% include 'icons/cost.html.twig' %}
+                        <div>
+                            <h3 class="font-semibold">Track your outflows</h3>
+                            <p class="text-sm opacity-80">Log maintenance, gear and travel: knowing where credits slip helps prep the next jump.</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        {% if cost.id %}
+            {% if cost.id %}
+                <div>
+                    <label class="label">Code</label>
+                    <div><b>{{ cost.code }}</b></div>
+                </div>
+                <div></div>
+            {% endif %}
+
             <div>
-                <label class="label">Code</label>
-                <div><b>{{ cost.code }}</b></div>
+                <label class="label">Title</label>
+                {{ form_widget(form.title) }}
+                {{ form_errors(form.title) }}
             </div>
-            <div></div>
-        {% endif %}
 
-        <div>
-            <label class="label">Title</label>
-            {{ form_widget(form.title) }}
-            {{ form_errors(form.title) }}
-        </div>
+            <div>
+                <label class="label">Amount(Cr)</label>
+                {{ form_widget(form.amount) }}
+                {{ form_errors(form.amount) }}
+            </div>
 
-        <div>
-            <label class="label">Amount(Cr)</label>
-            {{ form_widget(form.amount) }}
-            {{ form_errors(form.amount) }}
-        </div>
+            <div>
+                <label class="label">Payment Day</label>
+                {{ form_widget(form.paymentDay) }}
+                {{ form_errors(form.paymentDay) }}
+            </div>
 
-        <div>
-            <label class="label">Payment Day</label>
-            {{ form_widget(form.paymentDay) }}
-            {{ form_errors(form.paymentDay) }}
-        </div>
+            <div>
+                <label class="label">Payment Year</label>
+                {{ form_widget(form.paymentYear) }}
+                {{ form_errors(form.paymentYear) }}
+            </div>
 
-        <div>
-            <label class="label">Payment Year</label>
-            {{ form_widget(form.paymentYear) }}
-            {{ form_errors(form.paymentYear) }}
-        </div>
+            <div>
+                <label class="label">Company</label>
+                {{ form_widget(form.company) }}
+                {{ form_errors(form.company) }}
+            </div>
 
-        <div>
-            <label class="label">Company</label>
-            {{ form_widget(form.company) }}
-            {{ form_errors(form.company) }}
-        </div>
+            <div>
+                <label class="label">Category</label>
+                {{ form_widget(form.costCategory) }}
+                {{ form_errors(form.costCategory) }}
+            </div>
 
-        <div>
-            <label class="label">Category</label>
-            {{ form_widget(form.costCategory) }}
-            {{ form_errors(form.costCategory) }}
-        </div>
+            <div>
+                <label class="label">Ship</label>
+                {{ form_widget(form.ship) }}
+                {{ form_errors(form.ship) }}
+            </div>
 
-        <div>
-            <label class="label">Ship</label>
-            {{ form_widget(form.ship) }}
-            {{ form_errors(form.ship) }}
-        </div>
+            <div>
+                <label class="label">Local Law</label>
+                {{ form_widget(form.localLaw) }}
+                {{ form_errors(form.localLaw) }}
+            </div>
 
-        <div>
-            <label class="label">Local Law</label>
-            {{ form_widget(form.localLaw) }}
-            {{ form_errors(form.localLaw) }}
-        </div>
+            <div class="col-span-2">
+                <label class="label">Note</label>
+                {{ form_widget(form.note) }}
+                {{ form_errors(form.note) }}
+            </div>
 
-        <div class="col-span-2">
-            <label class="label">Note</label>
-            {{ form_widget(form.note) }}
-            {{ form_errors(form.note) }}
-        </div>
+        </fieldset>
 
-    </fieldset>
+        <button type="submit" class="btn btn-outline btn-primary mt-4 mb-4 mr-4">
+            Save
+        </button>
+        <a href="{{ path('app_cost_index') }}" role="button" class="btn btn-outline btn-default mt-4 mb-4 mr-4">Cancel</a>
 
-    <button type="submit" class="btn btn-outline btn-primary mt-4 mb-4 mr-4">
-        Save
-    </button>
-    <a href="{{ path('app_cost_index') }}" role="button" class="btn btn-outline btn-default mt-4 mb-4 mr-4">Cancel</a>
-
-    {{ form_end(form, { render_rest: false }) }}
+        {{ form_end(form, { render_rest: false }) }}
+    
+    </div>
 
 {% endblock %}

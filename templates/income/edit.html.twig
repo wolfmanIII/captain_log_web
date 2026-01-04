@@ -4,190 +4,194 @@
 
 {% block pageContent %}
 
-    {{ form_start(form) }}
+    <div class="flex flex-col items-center gap-4">
 
-    {{ form_widget(form._token) }}
+        {{ form_start(form) }}
 
-    <fieldset class="fieldset grid grid-cols-3 bg-base-200 border-base-300 gap-4 p-4 border rounded w-250">
-        <legend class="fieldset-legend">{% include 'icons/income.html.twig' %} Contract</legend>
+        {{ form_widget(form._token) }}
 
-        <div class="col-span-3">
-            <div class="alert alert-info alert-outline shadow-sm w-full">
-                <div class="flex items-center gap-3">
-                    {% include 'icons/income.html.twig' %}
-                    <div>
-                        <h3 class="font-semibold">Log your income</h3>
-                        <p class="text-sm opacity-80">Contracts, freight and charter: keep them tidy here to know when you can fund the next jump.</p>
+        <fieldset class="fieldset grid grid-cols-3 bg-base-200 border-base-300 gap-4 p-4 border rounded w-250">
+            <legend class="fieldset-legend">{% include 'icons/income.html.twig' %} Contract</legend>
+
+            <div class="col-span-3">
+                <div class="alert alert-info alert-outline shadow-sm w-full">
+                    <div class="flex items-center gap-3">
+                        {% include 'icons/income.html.twig' %}
+                        <div>
+                            <h3 class="font-semibold">Log your income</h3>
+                            <p class="text-sm opacity-80">Contracts, freight and charter: keep them tidy here to know when you can fund the next jump.</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        {% if income.id %}
-            <div class="col-span-3">
-                <label class="label">Code</label>
-                <div><b>{{ income.code }}</b></div>
-            </div>
-        {% endif %}
-
-        <div class="col-span-2">
-            {{ form_label(form.title) }}
-            {{ form_widget(form.title) }}
-            {{ form_errors(form.title) }}
-        </div>
-
-        <div class="col-span-1">
-            {{ form_label(form.localLaw) }}
-            {{ form_widget(form.localLaw) }}
-            {{ form_errors(form.localLaw) }}
-        </div>
-
-        <div class="col-span-1">
-            {{ form_label(form.company) }}
-            {{ form_widget(form.company) }}
-            {{ form_errors(form.company) }}
-        </div>
-
-        <div class="col-span-1">
-            {{ form_label(form.incomeCategory) }}
-            {{ form_widget(form.incomeCategory) }}
-            {{ form_errors(form.incomeCategory) }}
-        </div>
-
-        <div class="col-span-1">
-            {{ form_label(form.ship) }}
-            {{ form_widget(form.ship) }}
-            {{ form_errors(form.ship) }}
-        </div>
-
-        <div class="col-span-1">
-            {{ form_label(form.signingLocation) }}
-            {{ form_widget(form.signingLocation) }}
-            {{ form_errors(form.signingLocation) }}
-        </div>
-
-        <div class="col-span-1">
-            {{ form_label(form.signingDay) }}
-            {{ form_widget(form.signingDay) }}
-            {{ form_errors(form.signingDay) }}
-        </div>
-
-        <div class="col-span-1">
-            {{ form_label(form.signingYear) }}
-            {{ form_widget(form.signingYear) }}
-            {{ form_errors(form.signingYear) }}
-        </div>
-
-        <div class="col-span-1">
-            {{ form_label(form.amount) }}
-            {{ form_widget(form.amount) }}
-            {{ form_errors(form.amount) }}
-        </div>
-
-        <div class="col-span-1">
-            {{ form_label(form.paymentDay) }}
-            {{ form_widget(form.paymentDay) }}
-            {{ form_errors(form.paymentDay) }}
-        </div>
-
-        <div class="col-span-1">
-            {{ form_label(form.paymentYear) }}
-            {{ form_widget(form.paymentYear) }}
-            {{ form_errors(form.paymentYear) }}
-        </div>
-
-        <div class="col-span-1">
-            {{ form_label(form.expirationDay) }}
-            {{ form_widget(form.expirationDay) }}
-            {{ form_errors(form.expirationDay) }}
-        </div>
-
-        <div class="col-span-1">
-            {{ form_label(form.expirationYear) }}
-            {{ form_widget(form.expirationYear) }}
-            {{ form_errors(form.expirationYear) }}
-        </div>
-    </fieldset>
-
-    {% if form.charterDetails is defined %}
-        {% include 'income/details/_charter.html.twig' with { detail_form: form.charterDetails } %}
-    {% endif %}
-    {% if form.subsidyDetails is defined %}
-        {% include 'income/details/_subsidy.html.twig' with { detail_form: form.subsidyDetails } %}
-    {% endif %}
-    {% if form.freightDetails is defined %}
-        {% include 'income/details/_freight.html.twig' with { detail_form: form.freightDetails } %}
-    {% endif %}
-    {% if form.passengersDetails is defined %}
-        {% include 'income/details/_passengers.html.twig' with { detail_form: form.passengersDetails } %}
-    {% endif %}
-    {% if form.servicesDetails is defined %}
-        {% include 'income/details/_services.html.twig' with { detail_form: form.servicesDetails } %}
-    {% endif %}
-    {% if form.insuranceDetails is defined %}
-        {% include 'income/details/_insurance.html.twig' with { detail_form: form.insuranceDetails } %}
-    {% endif %}
-    {% if form.mailDetails is defined %}
-        {% include 'income/details/_mail.html.twig' with { detail_form: form.mailDetails } %}
-    {% endif %}
-    {% if form.interestDetails is defined %}
-        {% include 'income/details/_interest.html.twig' with { detail_form: form.interestDetails } %}
-    {% endif %}
-    {% if form.tradeDetails is defined %}
-        {% include 'income/details/_trade.html.twig' with { detail_form: form.tradeDetails } %}
-    {% endif %}
-    {% if form.salvageDetails is defined %}
-        {% include 'income/details/_salvage.html.twig' with { detail_form: form.salvageDetails } %}
-    {% endif %}
-    {% if form.prizeDetails is defined %}
-        {% include 'income/details/_prize.html.twig' with { detail_form: form.prizeDetails } %}
-    {% endif %}
-    {% if form.contractDetails is defined %}
-        {% include 'income/details/_contract.html.twig' with { detail_form: form.contractDetails } %}
-    {% endif %}
-
-    <fieldset class="fieldset grid grid-cols-3 bg-base-200 border-base-300 gap-4 p-4 border rounded w-250">
-        <legend class="fieldset-legend">{% include 'icons/income.html.twig' %} Note</legend>
-        <div class="col-span-3">
-            {{ form_label(form.note) }}
-            {{ form_widget(form.note) }}
-            {{ form_errors(form.note) }}
-        </div>
-    </fieldset>
-
-    {% if income.id %}
-        <fieldset class="fieldset grid grid-cols-3 bg-base-200 border-base-300 gap-4 p-4 border border-warning rounded w-250">
-            <legend class="fieldset-legend">{% include 'icons/income.html.twig' %} Cancellation</legend>
-            <div class="col-span-3">
-                <div class="grid grid-cols-3 gap-4 items-end">
-                    <div>
-                        {{ form_label(form.cancelDay) }}
-                        {{ form_widget(form.cancelDay) }}
-                        {{ form_errors(form.cancelDay) }}
-                    </div>
-                    <div>
-                        {{ form_label(form.cancelYear) }}
-                        {{ form_widget(form.cancelYear) }}
-                        {{ form_errors(form.cancelYear) }}
-                    </div>
-                    <div class="alert alert-warning alert-outline">
-                        Fill only if the contract was canceled: this date closes its validity window
-                    </div>
+            {% if income.id %}
+                <div class="col-span-3">
+                    <label class="label">Code</label>
+                    <div><b>{{ income.code }}</b></div>
                 </div>
+            {% endif %}
+
+            <div class="col-span-2">
+                {{ form_label(form.title) }}
+                {{ form_widget(form.title) }}
+                {{ form_errors(form.title) }}
+            </div>
+
+            <div class="col-span-1">
+                {{ form_label(form.localLaw) }}
+                {{ form_widget(form.localLaw) }}
+                {{ form_errors(form.localLaw) }}
+            </div>
+
+            <div class="col-span-1">
+                {{ form_label(form.company) }}
+                {{ form_widget(form.company) }}
+                {{ form_errors(form.company) }}
+            </div>
+
+            <div class="col-span-1">
+                {{ form_label(form.incomeCategory) }}
+                {{ form_widget(form.incomeCategory) }}
+                {{ form_errors(form.incomeCategory) }}
+            </div>
+
+            <div class="col-span-1">
+                {{ form_label(form.ship) }}
+                {{ form_widget(form.ship) }}
+                {{ form_errors(form.ship) }}
+            </div>
+
+            <div class="col-span-1">
+                {{ form_label(form.signingLocation) }}
+                {{ form_widget(form.signingLocation) }}
+                {{ form_errors(form.signingLocation) }}
+            </div>
+
+            <div class="col-span-1">
+                {{ form_label(form.signingDay) }}
+                {{ form_widget(form.signingDay) }}
+                {{ form_errors(form.signingDay) }}
+            </div>
+
+            <div class="col-span-1">
+                {{ form_label(form.signingYear) }}
+                {{ form_widget(form.signingYear) }}
+                {{ form_errors(form.signingYear) }}
+            </div>
+
+            <div class="col-span-1">
+                {{ form_label(form.amount) }}
+                {{ form_widget(form.amount) }}
+                {{ form_errors(form.amount) }}
+            </div>
+
+            <div class="col-span-1">
+                {{ form_label(form.paymentDay) }}
+                {{ form_widget(form.paymentDay) }}
+                {{ form_errors(form.paymentDay) }}
+            </div>
+
+            <div class="col-span-1">
+                {{ form_label(form.paymentYear) }}
+                {{ form_widget(form.paymentYear) }}
+                {{ form_errors(form.paymentYear) }}
+            </div>
+
+            <div class="col-span-1">
+                {{ form_label(form.expirationDay) }}
+                {{ form_widget(form.expirationDay) }}
+                {{ form_errors(form.expirationDay) }}
+            </div>
+
+            <div class="col-span-1">
+                {{ form_label(form.expirationYear) }}
+                {{ form_widget(form.expirationYear) }}
+                {{ form_errors(form.expirationYear) }}
             </div>
         </fieldset>
-    {% endif %}
 
-    <button type="submit" class="btn btn-outline btn-primary mt-4 mb-4 mr-4">
-        Save
-    </button>
-    {% if income.id %}
-        <a href="{{ path('app_income_pdf', { id: income.id }) }}" target="_blank" class="btn btn-outline btn-secondary mt-4 mb-4 mr-4">
-            PDF
-        </a>
-    {% endif %}
-    <a href="{{ path('app_income_index') }}" role="button" class="btn btn-outline btn-default mt-4 mb-4 mr-4">Cancel</a>
+        {% if form.charterDetails is defined %}
+            {% include 'income/details/_charter.html.twig' with { detail_form: form.charterDetails } %}
+        {% endif %}
+        {% if form.subsidyDetails is defined %}
+            {% include 'income/details/_subsidy.html.twig' with { detail_form: form.subsidyDetails } %}
+        {% endif %}
+        {% if form.freightDetails is defined %}
+            {% include 'income/details/_freight.html.twig' with { detail_form: form.freightDetails } %}
+        {% endif %}
+        {% if form.passengersDetails is defined %}
+            {% include 'income/details/_passengers.html.twig' with { detail_form: form.passengersDetails } %}
+        {% endif %}
+        {% if form.servicesDetails is defined %}
+            {% include 'income/details/_services.html.twig' with { detail_form: form.servicesDetails } %}
+        {% endif %}
+        {% if form.insuranceDetails is defined %}
+            {% include 'income/details/_insurance.html.twig' with { detail_form: form.insuranceDetails } %}
+        {% endif %}
+        {% if form.mailDetails is defined %}
+            {% include 'income/details/_mail.html.twig' with { detail_form: form.mailDetails } %}
+        {% endif %}
+        {% if form.interestDetails is defined %}
+            {% include 'income/details/_interest.html.twig' with { detail_form: form.interestDetails } %}
+        {% endif %}
+        {% if form.tradeDetails is defined %}
+            {% include 'income/details/_trade.html.twig' with { detail_form: form.tradeDetails } %}
+        {% endif %}
+        {% if form.salvageDetails is defined %}
+            {% include 'income/details/_salvage.html.twig' with { detail_form: form.salvageDetails } %}
+        {% endif %}
+        {% if form.prizeDetails is defined %}
+            {% include 'income/details/_prize.html.twig' with { detail_form: form.prizeDetails } %}
+        {% endif %}
+        {% if form.contractDetails is defined %}
+            {% include 'income/details/_contract.html.twig' with { detail_form: form.contractDetails } %}
+        {% endif %}
 
-    {{ form_end(form, { render_rest: false }) }}
+        <fieldset class="fieldset grid grid-cols-3 bg-base-200 border-base-300 gap-4 p-4 border rounded w-250">
+            <legend class="fieldset-legend">{% include 'icons/income.html.twig' %} Note</legend>
+            <div class="col-span-3">
+                {{ form_label(form.note) }}
+                {{ form_widget(form.note) }}
+                {{ form_errors(form.note) }}
+            </div>
+        </fieldset>
+
+        {% if income.id %}
+            <fieldset class="fieldset grid grid-cols-3 bg-base-200 border-base-300 gap-4 p-4 border border-warning rounded w-250">
+                <legend class="fieldset-legend">{% include 'icons/income.html.twig' %} Cancellation</legend>
+                <div class="col-span-3">
+                    <div class="grid grid-cols-3 gap-4 items-end">
+                        <div>
+                            {{ form_label(form.cancelDay) }}
+                            {{ form_widget(form.cancelDay) }}
+                            {{ form_errors(form.cancelDay) }}
+                        </div>
+                        <div>
+                            {{ form_label(form.cancelYear) }}
+                            {{ form_widget(form.cancelYear) }}
+                            {{ form_errors(form.cancelYear) }}
+                        </div>
+                        <div class="alert alert-warning alert-outline">
+                            Fill only if the contract was canceled: this date closes its validity window
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        {% endif %}
+
+        <button type="submit" class="btn btn-outline btn-primary mt-4 mb-4 mr-4">
+            Save
+        </button>
+        {% if income.id %}
+            <a href="{{ path('app_income_pdf', { id: income.id }) }}" target="_blank" class="btn btn-outline btn-secondary mt-4 mb-4 mr-4">
+                PDF
+            </a>
+        {% endif %}
+        <a href="{{ path('app_income_index') }}" role="button" class="btn btn-outline btn-default mt-4 mb-4 mr-4">Cancel</a>
+
+        {{ form_end(form, { render_rest: false }) }}
+
+    </div>
 
 {% endblock %}

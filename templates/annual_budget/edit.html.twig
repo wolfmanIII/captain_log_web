@@ -4,78 +4,82 @@
 
 {% block pageContent %}
 
-    {{ form_start(form) }}
+    <div class="flex flex-col items-center gap-4">
 
-    <fieldset class="fieldset grid grid-cols-2 bg-base-200 border-base-300 gap-4 p-4 border rounded w-250">
-        <legend class="fieldset-legend">Annual Budget</legend>
+        {{ form_start(form) }}
 
-        {{ form_widget(form._token) }}
+        <fieldset class="fieldset grid grid-cols-2 bg-base-200 border-base-300 gap-4 p-4 border rounded w-250">
+            <legend class="fieldset-legend">Annual Budget</legend>
 
-        {% if budget.id %}
-            <div>
-                <label class="label">Code</label>
-                <div><b>{{ budget.code }}</b></div>
-            </div>
-            <div></div>
-        {% endif %}
+            {{ form_widget(form._token) }}
 
-        <div class="col-span-2">
-            <div class="alert alert-info alert-outline shadow-sm w-full">
-                <div class="flex items-center gap-3">
-                    {% include 'icons/annual-budget.html.twig' %}
-                    <div>
-                        <h3 class="font-semibold">Mission window</h3>
-                        <p class="text-sm opacity-80">Set start and end for the ship budget: plan credits and missions on the imperial calendar.</p>
+            {% if budget.id %}
+                <div>
+                    <label class="label">Code</label>
+                    <div><b>{{ budget.code }}</b></div>
+                </div>
+                <div></div>
+            {% endif %}
+
+            <div class="col-span-2">
+                <div class="alert alert-info alert-outline shadow-sm w-full">
+                    <div class="flex items-center gap-3">
+                        {% include 'icons/annual-budget.html.twig' %}
+                        <div>
+                            <h3 class="font-semibold">Mission window</h3>
+                            <p class="text-sm opacity-80">Set start and end for the ship budget: plan credits and missions on the imperial calendar.</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div>
-            <label class="label">Start Day</label>
-            {{ form_widget(form.startDay) }}
-            {{ form_errors(form.startDay) }}
-        </div>
+            <div>
+                <label class="label">Start Day</label>
+                {{ form_widget(form.startDay) }}
+                {{ form_errors(form.startDay) }}
+            </div>
 
-        <div>
-            <label class="label">Start Year</label>
-            {{ form_widget(form.startYear) }}
-            {{ form_errors(form.startYear) }}
-        </div>
+            <div>
+                <label class="label">Start Year</label>
+                {{ form_widget(form.startYear) }}
+                {{ form_errors(form.startYear) }}
+            </div>
 
-        <div>
-            <label class="label">End Day</label>
-            {{ form_widget(form.endDay) }}
-            {{ form_errors(form.endDay) }}
-        </div>
+            <div>
+                <label class="label">End Day</label>
+                {{ form_widget(form.endDay) }}
+                {{ form_errors(form.endDay) }}
+            </div>
 
-        <div>
-            <label class="label">End Year</label>
-            {{ form_widget(form.endYear) }}
-            {{ form_errors(form.endYear) }}
-        </div>
+            <div>
+                <label class="label">End Year</label>
+                {{ form_widget(form.endYear) }}
+                {{ form_errors(form.endYear) }}
+            </div>
 
-        <div>
-            <label class="label">Ship</label>
-            {{ form_widget(form.ship) }}
-            {{ form_errors(form.ship) }}
-        </div>
+            <div>
+                <label class="label">Ship</label>
+                {{ form_widget(form.ship) }}
+                {{ form_errors(form.ship) }}
+            </div>
 
-        <div></div>
+            <div></div>
 
-        <div class="col-span-2">
-            <label class="label">Note</label>
-            {{ form_widget(form.note) }}
-            {{ form_errors(form.note) }}
-        </div>
+            <div class="col-span-2">
+                <label class="label">Note</label>
+                {{ form_widget(form.note) }}
+                {{ form_errors(form.note) }}
+            </div>
 
-    </fieldset>
+        </fieldset>
 
-    <button type="submit" class="btn btn-outline btn-primary mt-4 mb-4 mr-4">
-        Save
-    </button>
-    <a href="{{ path('app_annual_budget_index') }}" role="button" class="btn btn-outline btn-default mt-4 mb-4 mr-4">Cancel</a>
+        <button type="submit" class="btn btn-outline btn-primary mt-4 mb-4 mr-4">
+            Save
+        </button>
+        <a href="{{ path('app_annual_budget_index') }}" role="button" class="btn btn-outline btn-default mt-4 mb-4 mr-4">Cancel</a>
 
-    {{ form_end(form, { render_rest: false }) }}
+        {{ form_end(form, { render_rest: false }) }}
+
+    </div>
 
 {% endblock %}

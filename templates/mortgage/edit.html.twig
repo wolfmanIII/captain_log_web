@@ -15,211 +15,225 @@
 
 {% block pageContent %}
 
-    {{ form_start(form) }}
+    <div class="flex flex-col items-center gap-4">
+    
+        {{ form_start(form) }}
 
-    <fieldset class="fieldset bg-base-200 border-base-300 gap-4 p-4 border rounded w-315">
-        <legend class="fieldset-legend">Mortgage</legend>
+        <fieldset class="fieldset bg-base-200 border-base-300 gap-4 p-4 border rounded w-315">
+            <legend class="fieldset-legend">Mortgage</legend>
 
-        <div class="w-full mb-2">
-            <div class="alert alert-info alert-outline shadow-sm w-full">
-                <div class="flex items-center gap-3">
-                    {% include 'icons/handbook.html.twig' %}
-                    <div>
-                        <h3 class="font-semibold">Ship mortgage</h3>
-                        <p class="text-sm opacity-80">Calculate costs, interests and insurance before signing: every jump starts with clean numbers.</p>
+            <div class="w-full mb-2">
+                <div class="alert alert-info alert-outline shadow-sm w-full">
+                    <div class="flex items-center gap-3">
+                        {% include 'icons/handbook.html.twig' %}
+                        <div>
+                            <h3 class="font-semibold">Ship mortgage</h3>
+                            <p class="text-sm opacity-80">Calculate costs, interests and insurance before signing: every jump starts with clean numbers.</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        {% if mortgage.id %}
+            {% if mortgage.id %}
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="label mt-1 mb-1">Code</label>
+                        <div><b>{{ mortgage.code }}</b></div>
+                    </div>
+
+                    <div class="{{ mortgage.signed ? 'alert alert-info alert-outline' : '' }}">
+                        <label class="label mt-1 mb-1">Signed</label>
+                        {% if mortgage.signed %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        {% else %}
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        {% endif %}
+                    </div>
+
+                </div>
+            {% endif %}
+
+            <div class="grid grid-cols-3 gap-4">
+                <div>
+                    <label class="label">Ship Price</label>
+                    {{ form_widget(form.ship) }}
+                    {{ form_errors(form.ship) }}
+                </div>
+                <div>
+                    <label class="label">Start Day</label>
+                    {{ form_widget(form.startDay) }}
+                    {{ form_errors(form.startDay) }}
+                </div>
+                <div>
+                    <label class="label">Start Year</label>
+                    {{ form_widget(form.startYear) }}
+                    {{ form_errors(form.startYear) }}
+                </div>
+            </div>
+
             <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <label class="label mt-1 mb-1">Code</label>
-                    <div><b>{{ mortgage.code }}</b></div>
+                    <label class="label">Company</label>
+                    {{ form_widget(form.company) }}
+                    {{ form_errors(form.company) }}
                 </div>
 
-                <div class="{{ mortgage.signed ? 'alert alert-info alert-outline' : '' }}">
-                    <label class="label mt-1 mb-1">Signed</label>
-                    {% if mortgage.signed %}
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                    {% else %}
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <line x1="18" y1="6" x2="6" y2="18"></line>
-                                <line x1="6" y1="6" x2="18" y2="18"></line>
-                        </svg>
-                    {% endif %}
+                <div>
+                    <label class="label">Local Law</label>
+                    {{ form_widget(form.localLaw) }}
+                    {{ form_errors(form.localLaw) }}
                 </div>
-
-            </div>
-        {% endif %}
-
-        <div class="grid grid-cols-3 gap-4">
-            <div>
-                <label class="label">Ship Price</label>
-                {{ form_widget(form.ship) }}
-                {{ form_errors(form.ship) }}
-            </div>
-            <div>
-                <label class="label">Start Day</label>
-                {{ form_widget(form.startDay) }}
-                {{ form_errors(form.startDay) }}
-            </div>
-            <div>
-                <label class="label">Start Year</label>
-                {{ form_widget(form.startYear) }}
-                {{ form_errors(form.startYear) }}
-            </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-4">
-            <div>
-                <label class="label">Company</label>
-                {{ form_widget(form.company) }}
-                {{ form_errors(form.company) }}
             </div>
 
-            <div>
-                <label class="label">Local Law</label>
-                {{ form_widget(form.localLaw) }}
-                {{ form_errors(form.localLaw) }}
+            <div class="grid grid-cols-3 gap-4">
+                <div>
+                    <label class="label">Discount(%)</label>
+                    {{ form_widget(form.discount) }}
+                    {{ form_errors(form.discount) }}
+                </div>
+                <div>
+                    <label class="label">Ship Shares</label>
+                    {{ form_widget(form.shipShares) }}
+                    {{ form_errors(form.shipShares) }}
+                </div>
+                <div>
+                    <label class="label">Advance Payment(Cr)</label>
+                    {{ form_widget(form.advancePayment) }}
+                    {{ form_errors(form.advancePayment) }}
+                </div>
             </div>
-        </div>
 
-        <div class="grid grid-cols-3 gap-4">
-            <div>
-                <label class="label">Discount(%)</label>
-                {{ form_widget(form.discount) }}
-                {{ form_errors(form.discount) }}
+            <div class="grid grid-cols-2 gap-4">
+                {{ include('mortgage/interest_rate_table.html.twig') }}
+                {{ include('mortgage/insurance_table.html.twig') }}
             </div>
-            <div>
-                <label class="label">Ship Shares</label>
-                {{ form_widget(form.shipShares) }}
-                {{ form_errors(form.shipShares) }}
-            </div>
-            <div>
-                <label class="label">Advance Payment(Cr)</label>
-                {{ form_widget(form.advancePayment) }}
-                {{ form_errors(form.advancePayment) }}
-            </div>
-        </div>
 
-        <div class="grid grid-cols-2 gap-4">
-            {{ include('mortgage/interest_rate_table.html.twig') }}
-            {{ include('mortgage/insurance_table.html.twig') }}
-        </div>
+            {% if mortgage.id %}
+                <div class="grid grid-cols-1 gap-4">
+                    {{ include('mortgage/mortgage_summary.html.twig') }}
+                </div>
+                <div class="grid grid-cols-1 gap-4">
+                    {{ include('mortgage/crew_table.html.twig') }}
+                </div>
+            {% endif %}
+
+        </fieldset>
+
+        <button
+            type="submit"
+            name="action" value="save"
+            class="btn btn-outline btn-primary mt-4 mb-4 mr-4"
+            {% if not (mortgage.id ? can_edit : can_create) %} disabled {% endif %}
+        >Save</button>
+
+        <button
+            type="submit"
+            name="action" value="sign"
+            class="btn btn-outline btn-warning mt-4 mb-4 mr-4"
+            {% if not can_sign %} disabled {% endif %}
+        >Sign</button>
 
         {% if mortgage.id %}
-            <div class="grid grid-cols-1 gap-4">
-                {{ include('mortgage/mortgage_summary.html.twig') }}
+            <a
+                href="{{ path('app_mortgage_pdf', {id: mortgage.id}) }}"
+                role="button"
+                target="_blank"
+                class="btn btn-outline btn-secondary mt-4 mb-4 mr-4"
+                {% if not can_pdf %} disabled {% endif %}
+            >PDF</a>
+        {% else %}
+            <a
+                href="#"
+                role="button"
+                target="_blank"
+                class="btn btn-outline btn-secondary mt-4 mb-4 mr-4"
+                disabled
+            >PDF</a>
+        {% endif %}
+        <a href="{{ path('app_mortgage_index') }}" role="button" class="btn btn-outline btn-default mt-4 mb-4 mr-4">Cancel</a>
+
+        {{ form_end(form) }}
+
+        <dialog id="coverage_modal" class="modal">
+            <div class="modal-box">
+                <h3 class="text-lg font-bold">Insurance Coverage</h3>
+                <p class="py-4">Press ESC key or click the button below to close</p>
+                <div class="modal-action">
+                <form method="dialog">
+                    <!-- if there is a button in form, it will close the modal -->
+                    <button class="btn">Close</button>
+                </form>
+                </div>
             </div>
-            <div class="grid grid-cols-1 gap-4">
-                {{ include('mortgage/crew_table.html.twig') }}
+        </dialog>
+
+        <dialog id="interest_rate_modal" class="modal">
+            <div class="modal-box">
+                <h3 class="text-lg font-bold">Hello!</h3>
+                <p class="py-4">Press ESC key or click the button below to close</p>
+                <div class="modal-action">
+                <form method="dialog">
+                    <!-- if there is a button in form, it will close the modal -->
+                    <button class="btn">Close</button>
+                </form>
+                </div>
             </div>
+        </dialog>
+
+        {% if can_pay %}
+            <dialog id="pay_installment_modal" class="modal">
+                <div class="modal-box">
+                    <header class="prose">
+                        <h3>Payment</h3>
+                    </header>
+
+                    {{ form_start(form, {
+                        action: path('app_mortgage_pay', {id: mortgage.id}),
+                        method: 'POST'
+                    }) }}
+                    <fieldset class="fieldset grid grid-cols-2 bg-base-200 border-base-300 gap-4 p-4 border rounded w-full">
+                        <legend class="fieldset-legend">Installment</legend>
+                        <div>
+                            <label class="label">Payment Day</label>
+                            {{ form_widget(payment_form.paymentDay) }}
+                        </div>
+                        <div>
+                            <label class="label">Payment Year</label>
+                            {{ form_widget(payment_form.paymentYear) }}
+                        </div>
+                        <div>
+                            <label class="label">Payment(Cr)</label>
+                            {{ form_widget(payment_form.payment) }}
+                        </div>
+                    </fieldset>
+
+                    <div class="modal-action">
+                        <button
+                            type="submit"
+                            name="action" value="save"
+                            class="btn btn-outline btn-primary mt-4 mb-4 mr-4"
+                            {% if not can_pay %} disabled {% endif %}
+                        >Pay</button>
+                        <a href="{{ path('app_mortgage_edit', {id: mortgage.id}) }}" role="button" class="btn btn-outline btn-default mt-4 mb-4 mr-4">Cancel</a>
+                    </div>
+                    {{ form_end(payment_form) }}
+                </div>
+                <form method="dialog">
+                    <!-- if there is a button in form, it will close the modal -->
+                    <button class="btn">Close</button>
+                </form>
+            </dialog>
         {% endif %}
 
-    </fieldset>
-
-    <button
-        type="submit"
-        name="action" value="save"
-        class="btn btn-outline btn-primary mt-4 mb-4 mr-4"
-        {% if not (mortgage.id ? can_edit : can_create) %} disabled {% endif %}
-    >Save</button>
-
-    <button
-        type="submit"
-        name="action" value="sign"
-        class="btn btn-outline btn-warning mt-4 mb-4 mr-4"
-        {% if not can_sign %} disabled {% endif %}
-    >Sign</button>
-
-    <a
-        href="{{ path('app_mortgage_pdf', {id: mortgage.id}) }}"
-        role="button"
-        target="_blank"
-        class="btn btn-outline btn-secondary mt-4 mb-4 mr-4"
-        {% if not can_pdf %} disabled {% endif %}
-    >PDF</a>
-    <a href="{{ path('app_mortgage_index') }}" role="button" class="btn btn-outline btn-default mt-4 mb-4 mr-4">Cancel</a>
-
-    {{ form_end(form) }}
-
-    <dialog id="coverage_modal" class="modal">
-        <div class="modal-box">
-            <h3 class="text-lg font-bold">Insurance Coverage</h3>
-            <p class="py-4">Press ESC key or click the button below to close</p>
-            <div class="modal-action">
-            <form method="dialog">
-                <!-- if there is a button in form, it will close the modal -->
-                <button class="btn">Close</button>
-            </form>
-            </div>
-        </div>
-    </dialog>
-
-    <dialog id="interest_rate_modal" class="modal">
-        <div class="modal-box">
-            <h3 class="text-lg font-bold">Hello!</h3>
-            <p class="py-4">Press ESC key or click the button below to close</p>
-            <div class="modal-action">
-            <form method="dialog">
-                <!-- if there is a button in form, it will close the modal -->
-                <button class="btn">Close</button>
-            </form>
-            </div>
-        </div>
-    </dialog>
-
-    {% if can_pay %}
-        <dialog id="pay_installment_modal" class="modal">
-            <div class="modal-box">
-                <header class="prose">
-                    <h3>Payment</h3>
-                </header>
-
-                {{ form_start(form, {
-                    action: path('app_mortgage_pay', {id: mortgage.id}),
-                    method: 'POST'
-                }) }}
-                <fieldset class="fieldset grid grid-cols-2 bg-base-200 border-base-300 gap-4 p-4 border rounded w-full">
-                    <legend class="fieldset-legend">Installment</legend>
-                    <div>
-                        <label class="label">Payment Day</label>
-                        {{ form_widget(payment_form.paymentDay) }}
-                    </div>
-                    <div>
-                        <label class="label">Payment Year</label>
-                        {{ form_widget(payment_form.paymentYear) }}
-                    </div>
-                    <div>
-                        <label class="label">Payment(Cr)</label>
-                        {{ form_widget(payment_form.payment) }}
-                    </div>
-                </fieldset>
-
-                <div class="modal-action">
-                    <button
-                        type="submit"
-                        name="action" value="save"
-                        class="btn btn-outline btn-primary mt-4 mb-4 mr-4"
-                        {% if not can_pay %} disabled {% endif %}
-                    >Pay</button>
-                    <a href="{{ path('app_mortgage_edit', {id: mortgage.id}) }}" role="button" class="btn btn-outline btn-default mt-4 mb-4 mr-4">Cancel</a>
-                </div>
-                {{ form_end(payment_form) }}
-            </div>
-            <form method="dialog">
-                <!-- if there is a button in form, it will close the modal -->
-                <button class="btn">Close</button>
-            </form>
-        </dialog>
-    {% endif %}
+    </div>
 
 {% endblock %}

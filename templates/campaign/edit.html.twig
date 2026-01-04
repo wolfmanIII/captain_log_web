@@ -4,7 +4,7 @@
 
 {% block pageContent %}
 
-    <div class="p-6">
+    <div class="flex flex-col items-center gap-4">
 
         {{ form_start(form) }}
 
@@ -14,7 +14,7 @@
             <div class="col-span-2">
                 <div class="alert alert-info alert-outline shadow-sm w-full">
                     <div class="flex items-center gap-3">
-                        {% include 'icons/campaign.html.twig' %}
+                        {% include 'icons/alien-structure-1.html.twig' %}
                         <div>
                             <h3 class="font-semibold">Campaign</h3>
                             <p class="text-sm opacity-80">Titolo, descrizione e anno di inizio; sessionDay/sessionYear saranno gestiti a parte.</p>

@@ -9,93 +9,97 @@
 
 {% block pageContent %}
 
-    {% if crew.mortgageSigned %}
-        <div class="alert alert-info alert-outline w-315">
-            The Crew Member is in a Ship that has Mortgage signed! It can not be updated.
-        </div>
-    {% endif %}
+    <div class="flex flex-col items-center gap-4">
 
-    {{ form_start(form) }}
+        {% if crew.mortgageSigned %}
+            <div class="alert alert-info alert-outline w-315">
+                The Crew Member is in a Ship that has Mortgage signed! It can not be updated.
+            </div>
+        {% endif %}
 
-    {{ form_widget(form._token) }}
+        {{ form_start(form) }}
 
-    <fieldset class="fieldset grid grid-cols-2 bg-base-200 border-base-300 gap-4 p-4 border rounded w-250">
-        <legend class="fieldset-legend">Ship</legend>
+        {{ form_widget(form._token) }}
 
-        <div class="col-span-2">
-            <div class="alert alert-info alert-outline shadow-sm w-full">
-                <div class="flex items-center gap-3">
-                    {% include 'icons/crew.html.twig' %}
-                    <div>
-                        <h3 class="font-semibold">Crew sheet</h3>
-                        <p class="text-sm opacity-80">Define bridge roles and captain before departure: the crew is the heart of your ship.</p>
+        <fieldset class="fieldset grid grid-cols-2 bg-base-200 border-base-300 gap-4 p-4 border rounded w-250">
+            <legend class="fieldset-legend">Ship</legend>
+
+            <div class="col-span-2">
+                <div class="alert alert-info alert-outline shadow-sm w-full">
+                    <div class="flex items-center gap-3">
+                        {% include 'icons/crew.html.twig' %}
+                        <div>
+                            <h3 class="font-semibold">Crew sheet</h3>
+                            <p class="text-sm opacity-80">Define bridge roles and captain before departure: the crew is the heart of your ship.</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
 
-        {% if crew.id %}
+            {% if crew.id %}
+                <div>
+                    <label class="label">Code</label>
+                    <div><b>{{ crew.code }}</b></div>
+                </div>
+                <div></div>
+            {% endif %}
+
             <div>
-                <label class="label">Code</label>
-                <div><b>{{ crew.code }}</b></div>
+                <label class="label">Name</label>
+                {{ form_widget(form.name) }}
+                {{ form_errors(form.name) }}
+            </div>
+
+            <div>
+                <label class="label">Surname</label>
+                {{ form_widget(form.surname) }}
+                {{ form_errors(form.surname) }}
+            </div>
+
+            <div>
+                <label class="label">Nickname</label>
+                {{ form_widget(form.nickname) }}
+                {{ form_errors(form.nickname) }}
             </div>
             <div></div>
-        {% endif %}
 
-        <div>
-            <label class="label">Name</label>
-            {{ form_widget(form.name) }}
-            {{ form_errors(form.name) }}
-        </div>
+            <div>
+                <label class="label">Birth Day</label>
+                {{ form_widget(form.birthDay) }}
+                {{ form_errors(form.birthDay) }}
+            </div>
 
-        <div>
-            <label class="label">Surname</label>
-            {{ form_widget(form.surname) }}
-            {{ form_errors(form.surname) }}
-        </div>
+            <div>
+                <label class="label">Birth Year</label>
+                {{ form_widget(form.birthYear) }}
+                {{ form_errors(form.birthYear) }}
+            </div>
 
-        <div>
-            <label class="label">Nickname</label>
-            {{ form_widget(form.nickname) }}
-            {{ form_errors(form.nickname) }}
-        </div>
-        <div></div>
+            <div>
+                <label class="label">Ship</label>
+                {{ form_widget(form.ship) }}
+                {{ form_errors(form.ship) }}
+            </div>
 
-        <div>
-            <label class="label">Birth Day</label>
-            {{ form_widget(form.birthDay) }}
-            {{ form_errors(form.birthDay) }}
-        </div>
+            <div class="row-span-3">
+                <label class="label">Ship Roles</label>
+                {{ form_widget(form.shipRoles) }}
+                {{ form_errors(form.shipRoles) }}
+            </div>
 
-        <div>
-            <label class="label">Birth Year</label>
-            {{ form_widget(form.birthYear) }}
-            {{ form_errors(form.birthYear) }}
-        </div>
+        </fieldset>
 
-        <div>
-            <label class="label">Ship</label>
-            {{ form_widget(form.ship) }}
-            {{ form_errors(form.ship) }}
-        </div>
+        <button type="submit"
+                class="btn btn-outline btn-primary mt-4 mb-4 mr-4"
+                {% if not (crew.id ? can_edit : can_create) %} disabled {% endif %}
+        >
+            Save
+        </button>
+        <a href="{{ path('app_crew_index') }}" role="button" class="btn btn-outline btn-default mt-4 mb-4 mr-4">Cancel</a>
 
-        <div class="row-span-3">
-            <label class="label">Ship Roles</label>
-            {{ form_widget(form.shipRoles) }}
-            {{ form_errors(form.shipRoles) }}
-        </div>
+        {{ form_end(form, { render_rest: false }) }}
 
-    </fieldset>
-
-    <button type="submit"
-            class="btn btn-outline btn-primary mt-4 mb-4 mr-4"
-            {% if not (crew.id ? can_edit : can_create) %} disabled {% endif %}
-    >
-        Save
-    </button>
-    <a href="{{ path('app_crew_index') }}" role="button" class="btn btn-outline btn-default mt-4 mb-4 mr-4">Cancel</a>
-
-    {{ form_end(form, { render_rest: false }) }}
+    </div>
 
 {% endblock %}

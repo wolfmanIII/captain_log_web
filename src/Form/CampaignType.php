@@ -4,7 +4,7 @@ namespace App\Form;
 
 use App\Entity\Campaign;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -24,7 +24,7 @@ class CampaignType extends AbstractType
                 'required' => false,
                 'attr' => ['class' => 'textarea m-1 w-full', 'rows' => 3],
             ])
-            ->add('startingYear', IntegerType::class, [
+            ->add('startingYear', NumberType::class, [
                 'label' => 'Starting year',
                 'required' => false,
                 'attr' => ['class' => 'input m-1 w-full'],
