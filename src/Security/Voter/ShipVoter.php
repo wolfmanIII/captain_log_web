@@ -10,10 +10,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 final class ShipVoter extends Voter
 {
-    public const EDIT = 'SHIP_EDIT';
-    public const CALENDAR_EDIT = 'SHIP_CALENDAR_EDIT';
     public const CREATE = 'SHIP_CREATE';
     public const VIEW = 'SHIP_VIEW';
+    public const EDIT = 'SHIP_EDIT';
     public const DELETE = 'SHIP_DELETE';
     public const CREW_REMOVE = 'SHIP_CREW_REMOVE';
 
@@ -24,7 +23,6 @@ final class ShipVoter extends Voter
         }
 
         return in_array($attribute, [
-            self::CALENDAR_EDIT,
             self::CREATE,
             self::EDIT,
             self::VIEW,
@@ -42,7 +40,6 @@ final class ShipVoter extends Voter
         }
 
         return match ($attribute) {
-            self::CALENDAR_EDIT => $this->canCalendarEdit($subject, $user),
             self::CREATE      => $this->canCreate($subject, $user),
             self::VIEW        => $this->canView($subject, $user),
             self::EDIT        => $this->canEdit($subject, $user),
@@ -65,11 +62,6 @@ final class ShipVoter extends Voter
     private function canEdit(Ship $ship, ?UserInterface $user = null): bool
     {
         return $this->isOwner($ship, $user) && !$ship->hasMortgageSigned();
-    }
-
-    private function canCalendarEdit(Ship $ship, ?UserInterface $user = null): bool
-    {
-        return $this->isOwner($ship, $user);
     }
 
     private function canDelete(Ship $ship, ?UserInterface $user = null): bool
