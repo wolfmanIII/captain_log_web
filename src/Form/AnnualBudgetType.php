@@ -45,6 +45,7 @@ class AnnualBudgetType extends AbstractType
                     if ($user) {
                         $qb->andWhere('s.user = :user')->setParameter('user', $user);
                     }
+                    $qb->andWhere('s.campaign IS NOT NULL');
                     return $qb;
                 },
                 'attr' => ['class' => 'select m-1 w-full'],
