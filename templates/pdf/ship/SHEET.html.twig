@@ -50,10 +50,10 @@
     {% macro render_item(label, item) %}
         {% set desc = item.description ?? '—' %}
         {% set tons = item.tons is defined and item.tons is not null
-            ? item.tons|format_number({ minimum_fraction_digits: 2, maximum_fraction_digits: 2, grouping_used: true }, 'decimal', 'default', locale ?? 'en')
+            ? item.tons|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', locale ?? 'en')
             : '—' %}
         {% set cost = item.cost_mcr is defined and item.cost_mcr is not null
-            ? item.cost_mcr|format_number({ minimum_fraction_digits: 3, maximum_fraction_digits: 3, grouping_used: true }, 'decimal', 'default', locale ?? 'en')
+            ? item.cost_mcr|format_number({ min_fraction_digit: 3, max_fraction_digit: 3, grouping_used: true }, 'decimal', 'default', locale ?? 'en')
             : '—' %}
         <tr>
             <th style="width: 28%;">{{ label }}</th>
@@ -81,10 +81,10 @@
                 {% for row in rows %}
                     {% set desc = row.description ?? '—' %}
                     {% set tons = row.tons is defined and row.tons is not null
-                        ? row.tons|format_number({ minimum_fraction_digits: 2, maximum_fraction_digits: 2, grouping_used: true }, 'decimal', 'default', locale ?? 'en')
+                        ? row.tons|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', locale ?? 'en')
                         : '—' %}
                     {% set cost = row.cost_mcr is defined and row.cost_mcr is not null
-                        ? row.cost_mcr|format_number({ minimum_fraction_digits: 3, maximum_fraction_digits: 3, grouping_used: true }, 'decimal', 'default', locale ?? 'en')
+                        ? row.cost_mcr|format_number({ min_fraction_digit: 3, max_fraction_digit: 3, grouping_used: true }, 'decimal', 'default', locale ?? 'en')
                         : '—' %}
                     <tr>
                         <td>{{ desc ?: '—' }}</td>
@@ -127,7 +127,7 @@
                 <div class="item">
                     <div class="label">Price (Cr)</div>
                     <div class="val">{{ ship.price is not null
-                        ? ship.price|format_number({ minimum_fraction_digits: 2, maximum_fraction_digits: 2, grouping_used: true }, 'decimal', 'default', locale ?? 'en')
+                        ? ship.price|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', locale ?? 'en')
                         : '—' }}</div>
                 </div>
                 {% set sessionDay = ship.campaign ? ship.campaign.sessionDay : ship.sessionDay %}
