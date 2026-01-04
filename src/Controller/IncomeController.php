@@ -173,10 +173,16 @@ final class IncomeController extends BaseController
         $html = strtr($html, $placeholders);
 
         $pdf = $pdfGenerator->renderFromHtml($html, [
+            'margin-top' => '18mm',
+            'margin-bottom' => '20mm',
+            'margin-left' => '10mm',
+            'margin-right' => '10mm',
             'footer-right' => 'Page [page] / [toPage]',
-            'footer-font-size' => 9,
-            'footer-spacing' => 4,
-            'margin-bottom' => '18mm',
+            'footer-font-size' => 8,
+            'footer-spacing' => 8,
+            'disable-smart-shrinking' => true,
+            'print-media-type' => true,
+            'enable-local-file-access' => true,
         ]);
 
         return new Response($pdf, 200, [
