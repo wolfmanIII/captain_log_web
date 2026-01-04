@@ -56,13 +56,19 @@
             </div>
 
             <div>
-                {{ form_label(form.contact) }}
+                <div class="flex items-center gap-1">
+                    {{ form_label(form.contact) }}
+                    {% if form.contact.vars.required %}{% include 'icons/required.html.twig' %}{% endif %}
+                </div>
                 {{ form_widget(form.contact) }}
                 {{ form_errors(form.contact) }}
             </div>
 
             <div>
-                {{ form_label(form.signLabel) }}
+                <div class="flex items-center gap-1">
+                    {{ form_label(form.signLabel) }}
+                    {% if form.signLabel.vars.required %}{% include 'icons/required.html.twig' %}{% endif %}
+                </div>
                 {{ form_widget(form.signLabel) }}
                 {{ form_errors(form.signLabel) }}
             </div>

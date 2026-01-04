@@ -21,11 +21,11 @@ class CompanyType extends AbstractType
                 'attr' => ['class' => 'input m-1 w-full'],
             ])
             ->add('contact', TextType::class, [
-                'required' => false,
+                'required' => true,
                 'attr' => ['class' => 'input m-1 w-full'],
             ])
             ->add('signLabel', TextType::class, [
-                'required' => false,
+                'required' => true,
                 'attr' => ['class' => 'input m-1 w-full'],
             ])
             ->add('companyRole', EntityType::class, [
