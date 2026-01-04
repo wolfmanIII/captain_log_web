@@ -45,25 +45,25 @@
             {% endif %}
 
             <div>
-                <label class="label">Name</label>
+                {{ form_label(form.name) }}
                 {{ form_widget(form.name) }}
                 {{ form_errors(form.name) }}
             </div>
 
             <div>
-                <label class="label">Type</label>
+                {{ form_label(form.type) }}
                 {{ form_widget(form.type) }}
                 {{ form_errors(form.type) }}
             </div>
 
             <div>
-                <label class="label">Class</label>
+                {{ form_label(form.class) }}
                 {{ form_widget(form.class) }}
                 {{ form_errors(form.class) }}
             </div>
 
             <div>
-                <label class="label">Campaign</label>
+                {{ form_label(form.campaign) }}
                 {{ form_widget(form.campaign) }}
                 {{ form_errors(form.campaign) }}
             </div>

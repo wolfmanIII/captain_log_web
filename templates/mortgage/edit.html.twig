@@ -62,55 +62,55 @@
                 </div>
             {% endif %}
 
-            <div class="grid grid-cols-3 gap-4">
-                <div>
-                    <label class="label">Ship Price</label>
-                    {{ form_widget(form.ship) }}
-                    {{ form_errors(form.ship) }}
-                </div>
-                <div>
-                    <label class="label">Start Day</label>
-                    {{ form_widget(form.startDay) }}
-                    {{ form_errors(form.startDay) }}
-                </div>
-                <div>
-                    <label class="label">Start Year</label>
-                    {{ form_widget(form.startYear) }}
-                    {{ form_errors(form.startYear) }}
-                </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="label">Company</label>
-                    {{ form_widget(form.company) }}
-                    {{ form_errors(form.company) }}
+                <div class="grid grid-cols-3 gap-4">
+                    <div>
+                        {{ form_label(form.ship) }}
+                        {{ form_widget(form.ship) }}
+                        {{ form_errors(form.ship) }}
+                    </div>
+                    <div>
+                        {{ form_label(form.startDay) }}
+                        {{ form_widget(form.startDay) }}
+                        {{ form_errors(form.startDay) }}
+                    </div>
+                    <div>
+                        {{ form_label(form.startYear) }}
+                        {{ form_widget(form.startYear) }}
+                        {{ form_errors(form.startYear) }}
+                    </div>
                 </div>
 
-                <div>
-                    <label class="label">Local Law</label>
-                    {{ form_widget(form.localLaw) }}
-                    {{ form_errors(form.localLaw) }}
-                </div>
-            </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        {{ form_label(form.company) }}
+                        {{ form_widget(form.company) }}
+                        {{ form_errors(form.company) }}
+                    </div>
 
-            <div class="grid grid-cols-3 gap-4">
-                <div>
-                    <label class="label">Discount(%)</label>
-                    {{ form_widget(form.discount) }}
-                    {{ form_errors(form.discount) }}
+                    <div>
+                        {{ form_label(form.localLaw) }}
+                        {{ form_widget(form.localLaw) }}
+                        {{ form_errors(form.localLaw) }}
+                    </div>
                 </div>
-                <div>
-                    <label class="label">Ship Shares</label>
-                    {{ form_widget(form.shipShares) }}
-                    {{ form_errors(form.shipShares) }}
+
+                <div class="grid grid-cols-3 gap-4">
+                    <div>
+                        {{ form_label(form.discount) }}
+                        {{ form_widget(form.discount) }}
+                        {{ form_errors(form.discount) }}
+                    </div>
+                    <div>
+                        {{ form_label(form.shipShares) }}
+                        {{ form_widget(form.shipShares) }}
+                        {{ form_errors(form.shipShares) }}
+                    </div>
+                    <div>
+                        {{ form_label(form.advancePayment) }}
+                        {{ form_widget(form.advancePayment) }}
+                        {{ form_errors(form.advancePayment) }}
+                    </div>
                 </div>
-                <div>
-                    <label class="label">Advance Payment(Cr)</label>
-                    {{ form_widget(form.advancePayment) }}
-                    {{ form_errors(form.advancePayment) }}
-                </div>
-            </div>
 
             <div class="grid grid-cols-2 gap-4">
                 {{ include('mortgage/interest_rate_table.html.twig') }}

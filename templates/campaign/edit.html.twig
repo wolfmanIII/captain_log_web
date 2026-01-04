@@ -32,19 +32,19 @@
             {% endif %}
 
             <div>
-                <label class="label">Title</label>
+                {{ form_label(form.title) }}
                 {{ form_widget(form.title) }}
                 {{ form_errors(form.title) }}
             </div>
 
             <div>
-                <label class="label">Starting year</label>
+                {{ form_label(form.startingYear) }}
                 {{ form_widget(form.startingYear) }}
                 {{ form_errors(form.startingYear) }}
             </div>
 
             <div class="col-span-2">
-                <label class="label">Description</label>
+                {{ form_label(form.description) }}
                 {{ form_widget(form.description) }}
                 {{ form_errors(form.description) }}
             </div>

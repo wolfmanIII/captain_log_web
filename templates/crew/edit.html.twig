@@ -46,44 +46,44 @@
             {% endif %}
 
             <div>
-                <label class="label">Name</label>
+                {{ form_label(form.name) }}
                 {{ form_widget(form.name) }}
                 {{ form_errors(form.name) }}
             </div>
 
             <div>
-                <label class="label">Surname</label>
+                {{ form_label(form.surname) }}
                 {{ form_widget(form.surname) }}
                 {{ form_errors(form.surname) }}
             </div>
 
             <div>
-                <label class="label">Nickname</label>
+                {{ form_label(form.nickname) }}
                 {{ form_widget(form.nickname) }}
                 {{ form_errors(form.nickname) }}
             </div>
             <div></div>
 
             <div>
-                <label class="label">Birth Day</label>
+                {{ form_label(form.birthDay) }}
                 {{ form_widget(form.birthDay) }}
                 {{ form_errors(form.birthDay) }}
             </div>
 
             <div>
-                <label class="label">Birth Year</label>
+                {{ form_label(form.birthYear) }}
                 {{ form_widget(form.birthYear) }}
                 {{ form_errors(form.birthYear) }}
             </div>
 
             <div>
-                <label class="label">Ship</label>
+                {{ form_label(form.ship) }}
                 {{ form_widget(form.ship) }}
                 {{ form_errors(form.ship) }}
             </div>
 
             <div class="row-span-3">
-                <label class="label">Ship Roles</label>
+                {{ form_label(form.shipRoles) }}
                 {{ form_widget(form.shipRoles) }}
                 {{ form_errors(form.shipRoles) }}
             </div>

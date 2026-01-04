@@ -34,55 +34,55 @@
             {% endif %}
 
             <div>
-                <label class="label">Title</label>
+                {{ form_label(form.title) }}
                 {{ form_widget(form.title) }}
                 {{ form_errors(form.title) }}
             </div>
 
             <div>
-                <label class="label">Amount(Cr)</label>
+                {{ form_label(form.amount) }}
                 {{ form_widget(form.amount) }}
                 {{ form_errors(form.amount) }}
             </div>
 
             <div>
-                <label class="label">Payment Day</label>
+                {{ form_label(form.paymentDay) }}
                 {{ form_widget(form.paymentDay) }}
                 {{ form_errors(form.paymentDay) }}
             </div>
 
             <div>
-                <label class="label">Payment Year</label>
+                {{ form_label(form.paymentYear) }}
                 {{ form_widget(form.paymentYear) }}
                 {{ form_errors(form.paymentYear) }}
             </div>
 
             <div>
-                <label class="label">Company</label>
+                {{ form_label(form.company) }}
                 {{ form_widget(form.company) }}
                 {{ form_errors(form.company) }}
             </div>
 
             <div>
-                <label class="label">Category</label>
+                {{ form_label(form.costCategory) }}
                 {{ form_widget(form.costCategory) }}
                 {{ form_errors(form.costCategory) }}
             </div>
 
             <div>
-                <label class="label">Ship</label>
+                {{ form_label(form.ship) }}
                 {{ form_widget(form.ship) }}
                 {{ form_errors(form.ship) }}
             </div>
 
             <div>
-                <label class="label">Local Law</label>
+                {{ form_label(form.localLaw) }}
                 {{ form_widget(form.localLaw) }}
                 {{ form_errors(form.localLaw) }}
             </div>
 
             <div class="col-span-2">
-                <label class="label">Note</label>
+                {{ form_label(form.note) }}
                 {{ form_widget(form.note) }}
                 {{ form_errors(form.note) }}
             </div>

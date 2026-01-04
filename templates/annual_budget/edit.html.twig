@@ -34,31 +34,31 @@
             </div>
 
             <div>
-                <label class="label">Start Day</label>
+                {{ form_label(form.startDay) }}
                 {{ form_widget(form.startDay) }}
                 {{ form_errors(form.startDay) }}
             </div>
 
             <div>
-                <label class="label">Start Year</label>
+                {{ form_label(form.startYear) }}
                 {{ form_widget(form.startYear) }}
                 {{ form_errors(form.startYear) }}
             </div>
 
             <div>
-                <label class="label">End Day</label>
+                {{ form_label(form.endDay) }}
                 {{ form_widget(form.endDay) }}
                 {{ form_errors(form.endDay) }}
             </div>
 
             <div>
-                <label class="label">End Year</label>
+                {{ form_label(form.endYear) }}
                 {{ form_widget(form.endYear) }}
                 {{ form_errors(form.endYear) }}
             </div>
 
             <div>
-                <label class="label">Ship</label>
+                {{ form_label(form.ship) }}
                 {{ form_widget(form.ship) }}
                 {{ form_errors(form.ship) }}
             </div>
@@ -66,7 +66,7 @@
             <div></div>
 
             <div class="col-span-2">
-                <label class="label">Note</label>
+                {{ form_label(form.note) }}
                 {{ form_widget(form.note) }}
                 {{ form_errors(form.note) }}
             </div>
