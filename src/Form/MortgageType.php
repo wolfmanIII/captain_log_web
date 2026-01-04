@@ -15,7 +15,6 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -37,11 +36,11 @@ class MortgageType extends AbstractType
 
         $builder
             //->add('name', TextType::class, ['attr' => ['class' => 'input m-1 w-full'],])
-            ->add('startDay', NumberType::class, [
+            ->add('startDay', IntegerType::class, [
                 'attr' => $this->limits->dayAttr(['class' => 'input m-1 w-full']),
                 'disabled' => $disabled,
                 ])
-            ->add('startYear', NumberType::class, [
+            ->add('startYear', IntegerType::class, [
                 'attr' => $this->limits->yearAttr(['class' => 'input m-1 w-full'], $campaignStartYear),
                 'disabled' => $disabled,
                 ])
@@ -70,6 +69,10 @@ class MortgageType extends AbstractType
                         $ship->getType(),
                         number_format($ship->getPrice(), 2, ',', '.') . " Cr"
                     ),
+                'choice_attr' => function (Ship $ship): array {
+                    $start = $ship->getCampaign()?->getStartingYear();
+                    return ['data-start-year' => $start ?? ''];
+                },
                 'query_builder' => function (ShipRepository $repo) use ($user, $currentShipId) {
                     $qb = $repo->createQueryBuilder('s')
                         ->leftJoin('s.mortgage', 'm')
@@ -87,7 +90,12 @@ class MortgageType extends AbstractType
 
                     return $qb;
                 },
-                'attr' => ['class' => 'select m-1 w-full'],
+                'attr' => [
+                    'class' => 'select m-1 w-full',
+                    'data-controller' => 'year-limit',
+                    'data-year-limit-default-value' => $this->limits->getYearMin(),
+                    'data-action' => 'change->year-limit#onShipChange',
+                ],
                 'disabled' => $disabled,
             ])
             ->add('interestRate', EntityType::class, [

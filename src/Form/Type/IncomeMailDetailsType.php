@@ -33,22 +33,22 @@ class IncomeMailDetailsType extends AbstractType
                 'label' => 'Destination',
                 'attr' => ['class' => 'input m-1 w-full'],
             ])
-            ->add('dispatchDay', NumberType::class, [
+            ->add('dispatchDay', IntegerType::class, [
                 'required' => false,
                 'label' => 'Dispatch Day',
                 'attr' => $this->limits->dayAttr(['class' => 'input m-1 w-full']),
             ])
-            ->add('dispatchYear', NumberType::class, [
+            ->add('dispatchYear', IntegerType::class, [
                 'required' => false,
                 'label' => 'Dispatch Year',
                 'attr' => $this->limits->yearAttr(['class' => 'input m-1 w-full'], $campaignStartYear),
             ])
-            ->add('deliveryDay', NumberType::class, [
+            ->add('deliveryDay', IntegerType::class, [
                 'required' => false,
                 'label' => 'Delivery Day',
                 'attr' => $this->limits->dayAttr(['class' => 'input m-1 w-full']),
             ])
-            ->add('deliveryYear', NumberType::class, [
+            ->add('deliveryYear', IntegerType::class, [
                 'required' => false,
                 'label' => 'Delivery Year',
                 'attr' => $this->limits->yearAttr(['class' => 'input m-1 w-full'], $campaignStartYear),

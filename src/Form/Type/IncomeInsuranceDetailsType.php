@@ -6,6 +6,7 @@ use App\Entity\IncomeInsuranceDetails;
 use App\Form\Config\DayYearLimits;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -27,12 +28,12 @@ class IncomeInsuranceDetailsType extends AbstractType
                 'label' => 'Incident ref',
                 'attr' => ['class' => 'input m-1 w-full'],
             ])
-            ->add('incidentDay', NumberType::class, [
+            ->add('incidentDay', IntegerType::class, [
                 'required' => false,
                 'label' => 'Incident Day',
                 'attr' => $this->limits->dayAttr(['class' => 'input m-1 w-full']),
             ])
-            ->add('incidentYear', NumberType::class, [
+            ->add('incidentYear', IntegerType::class, [
                 'required' => false,
                 'label' => 'Incident Year',
                 'attr' => $this->limits->yearAttr(['class' => 'input m-1 w-full'], $campaignStartYear),

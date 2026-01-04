@@ -7,7 +7,7 @@ use App\Entity\Ship;
 use App\Entity\ShipRole;
 use App\Form\Config\DayYearLimits;
 use App\Repository\ShipRepository;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -41,12 +41,12 @@ class CrewType extends AbstractType
                 'required' => false,
                 'disabled' => $disabled,
             ])
-            ->add('birthYear', NumberType::class, [
+            ->add('birthYear', IntegerType::class, [
                 'attr' => $this->limits->yearAttr(['class' => 'input m-1 w-full'], $campaignStartYear),
                 'required' => false,
                 'disabled' => $disabled,
             ])
-            ->add('birthDay', NumberType::class, [
+            ->add('birthDay', IntegerType::class, [
                 'attr' => $this->limits->dayAttr(['class' => 'input m-1 w-full']),
                 'required' => false,
                 'disabled' => $disabled,
@@ -60,6 +60,10 @@ class CrewType extends AbstractType
                 'class' => Ship::class,
                 'choice_label' => 'name',
                 'required' => false,
+                'choice_attr' => function (Ship $ship): array {
+                    $start = $ship->getCampaign()?->getStartingYear();
+                    return ['data-start-year' => $start ?? ''];
+                },
                 'query_builder' => function (ShipRepository $repo) use ($user) {
                     $qb = $repo->createQueryBuilder('s')->orderBy('s.name', 'ASC');
                     if ($user) {
@@ -68,7 +72,12 @@ class CrewType extends AbstractType
 
                     return $qb;
                 },
-                'attr' => ['class' => 'select m-1 w-full'],
+                'attr' => [
+                    'class' => 'select m-1 w-full',
+                    'data-controller' => 'year-limit',
+                    'data-year-limit-default-value' => $this->limits->getYearMin(),
+                    'data-action' => 'change->year-limit#onShipChange',
+                ],
                 'disabled' => $disabled,
             ])
             ->add('shipRoles', EntityType::class, [

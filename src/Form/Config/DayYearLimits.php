@@ -42,6 +42,12 @@ class DayYearLimits
         return array_merge([
             'min' => $min,
             'max' => $this->yearMax,
+            'data-year-limit-target' => 'yearInput',
         ], $attr);
+    }
+
+    public function getYearMin(): int
+    {
+        return $this->yearMin;
     }
 }

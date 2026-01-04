@@ -5,7 +5,7 @@ namespace App\Form\Type;
 use App\Entity\IncomePassengersDetails;
 use App\Form\Config\DayYearLimits;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -31,22 +31,22 @@ class IncomePassengersDetailsType extends AbstractType
                 'label' => 'Destination',
                 'attr' => ['class' => 'input m-1 w-full'],
             ])
-            ->add('departureDay', NumberType::class, [
+            ->add('departureDay', IntegerType::class, [
                 'required' => false,
                 'label' => 'Departure Day',
                 'attr' => $this->limits->dayAttr(['class' => 'input m-1 w-full']),
             ])
-            ->add('departureYear', NumberType::class, [
+            ->add('departureYear', IntegerType::class, [
                 'required' => false,
                 'label' => 'Departure Year',
                 'attr' => $this->limits->yearAttr(['class' => 'input m-1 w-full'], $campaignStartYear),
             ])
-            ->add('arrivalDay', NumberType::class, [
+            ->add('arrivalDay', IntegerType::class, [
                 'required' => false,
                 'label' => 'Arrival Day',
                 'attr' => $this->limits->dayAttr(['class' => 'input m-1 w-full']),
             ])
-            ->add('arrivalYear', NumberType::class, [
+            ->add('arrivalYear', IntegerType::class, [
                 'required' => false,
                 'label' => 'Arrival Year',
                 'attr' => $this->limits->yearAttr(['class' => 'input m-1 w-full'], $campaignStartYear),

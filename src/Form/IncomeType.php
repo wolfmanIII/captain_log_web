@@ -14,7 +14,7 @@ use App\Repository\ShipRepository;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -39,11 +39,11 @@ class IncomeType extends AbstractType
             ->add('title', TextType::class, [
                 'attr' => ['class' => 'input m-1 w-full'],
             ])
-            ->add('signingDay', NumberType::class, [
+            ->add('signingDay', IntegerType::class, [
                 'required' => true,
                 'attr' => $this->dayYearLimits->dayAttr(['class' => 'input m-1 w-full']),
             ])
-            ->add('signingYear', NumberType::class, [
+            ->add('signingYear', IntegerType::class, [
                 'required' => true,
                 'attr' => $this->dayYearLimits->yearAttr(['class' => 'input m-1 w-full'], $campaignStartYear),
             ])
@@ -52,29 +52,29 @@ class IncomeType extends AbstractType
                 'label' => 'Signing Location',
                 'attr' => ['class' => 'input m-1 w-full'],
             ])
-            ->add('paymentDay', NumberType::class, [
+            ->add('paymentDay', IntegerType::class, [
                 'required' => false,
                 'attr' => $this->dayYearLimits->dayAttr(['class' => 'input m-1 w-full']),
             ])
-            ->add('paymentYear', NumberType::class, [
+            ->add('paymentYear', IntegerType::class, [
                 'required' => false,
                 'attr' => $this->dayYearLimits->yearAttr(['class' => 'input m-1 w-full'], $campaignStartYear),
             ])
-            ->add('expirationDay', NumberType::class, [
+            ->add('expirationDay', IntegerType::class, [
                 'label' => 'Expiration Day',
                 'required' => false,
                 'attr' => $this->dayYearLimits->dayAttr(['class' => 'input m-1 w-full']),
             ])
-            ->add('expirationYear', NumberType::class, [
+            ->add('expirationYear', IntegerType::class, [
                 'label' => 'Expiration Year',
                 'required' => false,
                 'attr' => $this->dayYearLimits->yearAttr(['class' => 'input m-1 w-full'], $campaignStartYear),
             ])
-            ->add('cancelDay', NumberType::class, [
+            ->add('cancelDay', IntegerType::class, [
                 'required' => false,
                 'attr' => $this->dayYearLimits->dayAttr(['class' => 'input m-1 w-full']),
             ])
-            ->add('cancelYear', NumberType::class, [
+            ->add('cancelYear', IntegerType::class, [
                 'required' => false,
                 'attr' => $this->dayYearLimits->yearAttr(['class' => 'input m-1 w-full'], $campaignStartYear),
             ])
@@ -97,6 +97,12 @@ class IncomeType extends AbstractType
                 'placeholder' => '-- Select a Ship --',
                 'required' => false,
                 'choice_label' => fn (Ship $ship) => sprintf('%s - %s(%s)', $ship->getName(), $ship->getType(), $ship->getClass()),
+                'choice_attr' => function (Ship $ship): array {
+                    $start = $ship->getCampaign()?->getStartingYear();
+                    return [
+                        'data-start-year' => $start ?? '',
+                    ];
+                },
                 'query_builder' => function (ShipRepository $repo) use ($user) {
                     $qb = $repo->createQueryBuilder('s')->orderBy('s.name', 'ASC');
                     if ($user) {
@@ -105,7 +111,12 @@ class IncomeType extends AbstractType
                     $qb->andWhere('s.campaign IS NOT NULL');
                     return $qb;
                 },
-                'attr' => ['class' => 'select m-1 w-full'],
+                'attr' => [
+                    'class' => 'select m-1 w-full',
+                    'data-controller' => 'income-details year-limit',
+                    'data-year-limit-default-value' => $this->dayYearLimits->getYearMin(),
+                    'data-action' => 'change->year-limit#onShipChange',
+                ],
             ])
             ->add('company', EntityType::class, [
                 'class' => Company::class,

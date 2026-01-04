@@ -5,6 +5,7 @@ namespace App\Form\Type;
 use App\Entity\IncomeFreightDetails;
 use App\Form\Config\DayYearLimits;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -31,22 +32,22 @@ class IncomeFreightDetailsType extends AbstractType
                 'label' => 'Destination',
                 'attr' => ['class' => 'input m-1 w-full'],
             ])
-            ->add('pickupDay', NumberType::class, [
+            ->add('pickupDay', IntegerType::class, [
                 'required' => false,
                 'label' => 'Pickup Day',
                 'attr' => $this->limits->dayAttr(['class' => 'input m-1 w-full']),
             ])
-            ->add('pickupYear', NumberType::class, [
+            ->add('pickupYear', IntegerType::class, [
                 'required' => false,
                 'label' => 'Pickup Year',
                 'attr' => $this->limits->yearAttr(['class' => 'input m-1 w-full'], $campaignStartYear),
             ])
-            ->add('deliveryDay', NumberType::class, [
+            ->add('deliveryDay', IntegerType::class, [
                 'required' => false,
                 'label' => 'Delivery Day',
                 'attr' => $this->limits->dayAttr(['class' => 'input m-1 w-full']),
             ])
-            ->add('deliveryYear', NumberType::class, [
+            ->add('deliveryYear', IntegerType::class, [
                 'required' => false,
                 'label' => 'Delivery Year',
                 'attr' => $this->limits->yearAttr(['class' => 'input m-1 w-full'], $campaignStartYear),

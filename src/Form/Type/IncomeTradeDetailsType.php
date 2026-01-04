@@ -88,12 +88,12 @@ class IncomeTradeDetailsType extends AbstractType
                 'label' => 'Delivery method',
                 'attr' => ['class' => 'textarea m-1 w-full', 'rows' => 2],
             ])
-            ->add('deliveryDay', NumberType::class, [
+            ->add('deliveryDay', IntegerType::class, [
                 'required' => false,
                 'label' => 'Delivery Day',
                 'attr' => $this->limits->dayAttr(['class' => 'input m-1 w-full']),
             ])
-            ->add('deliveryYear', NumberType::class, [
+            ->add('deliveryYear', IntegerType::class, [
                 'required' => false,
                 'label' => 'Delivery Year',
                 'attr' => $this->limits->yearAttr(['class' => 'input m-1 w-full'], $campaignStartYear),

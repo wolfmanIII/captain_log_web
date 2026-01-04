@@ -5,6 +5,7 @@ namespace App\Form\Type;
 use App\Entity\IncomeCharterDetails;
 use App\Form\Config\DayYearLimits;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -43,22 +44,22 @@ class IncomeCharterDetailsType extends AbstractType
                 'label' => 'Manifest summary',
                 'attr' => ['class' => 'textarea m-1 w-full', 'rows' => 3],
             ])
-            ->add('startDay', NumberType::class, [
+            ->add('startDay', IntegerType::class, [
                 'required' => false,
                 'label' => 'Start Day',
                 'attr' => $this->limits->dayAttr(['class' => 'input m-1 w-full']),
             ])
-            ->add('startYear', NumberType::class, [
+            ->add('startYear', IntegerType::class, [
                 'required' => false,
                 'label' => 'Start Year',
                 'attr' => $this->limits->yearAttr(['class' => 'input m-1 w-full'], $campaignStartYear),
             ])
-            ->add('endDay', NumberType::class, [
+            ->add('endDay', IntegerType::class, [
                 'required' => false,
                 'label' => 'End Day',
                 'attr' => $this->limits->dayAttr(['class' => 'input m-1 w-full']),
             ])
-            ->add('endYear', NumberType::class, [
+            ->add('endYear', IntegerType::class, [
                 'required' => false,
                 'label' => 'End Year',
                 'attr' => $this->limits->yearAttr(['class' => 'input m-1 w-full'], $campaignStartYear),

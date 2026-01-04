@@ -8,7 +8,7 @@ use App\Form\Config\DayYearLimits;
 use App\Repository\ShipRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -27,22 +27,26 @@ class AnnualBudgetType extends AbstractType
         $campaignStartYear = $budget?->getShip()?->getCampaign()?->getStartingYear();
 
         $builder
-            ->add('startDay', NumberType::class, [
+            ->add('startDay', IntegerType::class, [
                 'attr' => $this->limits->dayAttr(['class' => 'input m-1 w-full']),
             ])
-            ->add('startYear', NumberType::class, [
+            ->add('startYear', IntegerType::class, [
                 'attr' => $this->limits->yearAttr(['class' => 'input m-1 w-full'], $campaignStartYear),
             ])
-            ->add('endDay', NumberType::class, [
+            ->add('endDay', IntegerType::class, [
                 'attr' => $this->limits->dayAttr(['class' => 'input m-1 w-full']),
             ])
-            ->add('endYear', NumberType::class, [
+            ->add('endYear', IntegerType::class, [
                 'attr' => $this->limits->yearAttr(['class' => 'input m-1 w-full'], $campaignStartYear),
             ])
             ->add('ship', EntityType::class, [
                 'class' => Ship::class,
                 'placeholder' => '-- Select a Ship --',
                 'choice_label' => fn (Ship $ship) => sprintf('%s (%s)', $ship->getName(), $ship->getClass()),
+                'choice_attr' => function (Ship $ship): array {
+                    $start = $ship->getCampaign()?->getStartingYear();
+                    return ['data-start-year' => $start ?? ''];
+                },
                 'query_builder' => function (ShipRepository $repo) use ($user) {
                     $qb = $repo->createQueryBuilder('s')->orderBy('s.name', 'ASC');
                     if ($user) {
@@ -51,7 +55,12 @@ class AnnualBudgetType extends AbstractType
                     $qb->andWhere('s.campaign IS NOT NULL');
                     return $qb;
                 },
-                'attr' => ['class' => 'select m-1 w-full'],
+                'attr' => [
+                    'class' => 'select m-1 w-full',
+                    'data-controller' => 'year-limit',
+                    'data-year-limit-default-value' => $this->limits->getYearMin(),
+                    'data-action' => 'change->year-limit#onShipChange',
+                ],
             ])
             ->add('note', TextareaType::class, [
                 'required' => false,

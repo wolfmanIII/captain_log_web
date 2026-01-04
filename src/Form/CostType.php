@@ -13,7 +13,7 @@ use App\Repository\ShipRepository;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -40,11 +40,11 @@ class CostType extends AbstractType
                 'label' => 'Amount (Cr)',
                 'attr' => ['class' => 'input m-1 w-full'],
             ])
-            ->add('paymentDay', NumberType::class, [
+            ->add('paymentDay', IntegerType::class, [
                 'required' => false,
                 'attr' => $this->limits->dayAttr(['class' => 'input m-1 w-full']),
             ])
-            ->add('paymentYear', NumberType::class, [
+            ->add('paymentYear', IntegerType::class, [
                 'required' => false,
                 'attr' => $this->limits->yearAttr(['class' => 'input m-1 w-full'], $campaignStartYear),
             ])
@@ -59,6 +59,10 @@ class CostType extends AbstractType
                 'class' => Ship::class,
                 'placeholder' => '-- Select a Ship --',
                 'choice_label' => fn (Ship $ship) => sprintf('%s - %s(%s)', $ship->getName(), $ship->getType(), $ship->getClass()),
+                'choice_attr' => function (Ship $ship): array {
+                    $start = $ship->getCampaign()?->getStartingYear();
+                    return ['data-start-year' => $start ?? ''];
+                },
                 'query_builder' => function (ShipRepository $repo) use ($user) {
                     $qb = $repo->createQueryBuilder('s')->orderBy('s.name', 'ASC');
                     if ($user) {
@@ -67,7 +71,12 @@ class CostType extends AbstractType
                     $qb->andWhere('s.campaign IS NOT NULL');
                     return $qb;
                 },
-                'attr' => ['class' => 'select m-1 w-full'],
+                'attr' => [
+                    'class' => 'select m-1 w-full',
+                    'data-controller' => 'year-limit',
+                    'data-year-limit-default-value' => $this->limits->getYearMin(),
+                    'data-action' => 'change->year-limit#onShipChange',
+                ],
             ])
             ->add('company', EntityType::class, [
                 'class' => Company::class,
