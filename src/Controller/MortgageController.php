@@ -204,7 +204,7 @@ final class MortgageController extends BaseController
             'margin-bottom' => '15mm',
             'margin-left' => '0mm',
             'margin-right' => '0mm',
-            'footer-right' => 'Page [page] / [topage]',
+            'footer-right' => 'Page [page] / [toPage]',
             'footer-font-size' => 9,
             'footer-spacing' => 6,
             'enable-local-file-access' => true,
