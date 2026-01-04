@@ -109,35 +109,167 @@
             "code": "STE",
             "name": "Steward",
             "description": "Spaceship Steward"
+        },
+        {
+            "code": "PAS",
+            "name": "Passenger",
+            "description": "Spaceship Passenger"
+        }
+    ],
+    "cost_categories": [
+        {
+            "code": "PERSONAL",
+            "description": "Personal cost"
+        },
+        {
+            "code": "CREW_GEAR",
+            "description": "Crew gear cost"
+        },
+        {
+            "code": "SHIP_GEAR",
+            "description": "Ship gear cost"
+        },
+        {
+            "code": "SHIP_SOFTWARE",
+            "description": "Ship software cost"
+        },
+        {
+            "code": "SHIP_MAINT",
+            "description": "Ship maintenance cost"
+        },
+        {
+            "code": "SHIP_REPAIR",
+            "description": "Ship repair cost"
+        },
+        {
+            "code": "MEDICAL",
+            "description": "Medical cost"
+        },
+        {
+            "code": "TRAVEL",
+            "description": "Travel cost"
+        },
+        {
+            "code": "PENALTY",
+            "description": "Penalty cost"
+        },
+        {
+            "code": "MORTGAGE_PENALTY",
+            "description": "Mortgage penalty cost"
+        },
+        {
+            "code": "LEGAL",
+            "description": "Legal cost"
+        },
+        {
+            "code": "RECRUITMENT",
+            "description": "Recruitment cost"
         }
     ],
     "income_categories": [
-        { "code": "FREIGHT", "description": "Cargo transport revenue (paid freight contracts)" },
-        { "code": "PASSENGERS", "description": "Passenger fares (tickets, berths, passage fees)" },
-        { "code": "MAIL", "description": "Mail contract revenue (official postal/courier runs)" },
-        { "code": "CHARTER", "description": "Charter hire income (ship rented/contracted as a whole)" },
-        { "code": "CONTRACT", "description": "Mission/contract payouts (patron jobs, bounties, assignments)" },
-        { "code": "TRADE", "description": "Trading profit (speculative trade margin, buy/sell spread)" },
-        { "code": "SALVAGE", "description": "Salvage and recovery income (wrecks, derelicts, recovered goods)" },
-        { "code": "PRIZE", "description": "Prize money / captured cargo or ship awards (legal seizure)" },
-        { "code": "SUBSIDY", "description": "Subsidies and grants (e.g., subsidized route payments)" },
-        { "code": "SERVICES", "description": "Service fees (refueling, repairs, towing, escort services, etc.)" },
-        { "code": "INSURANCE", "description": "Insurance payouts (claims, compensation for losses)" },
-        { "code": "INTEREST", "description": "Interest and investment income (financial returns)" }
+        {
+            "code": "FREIGHT",
+            "description": "Cargo transport revenue (paid freight contracts)"
+        },
+        {
+            "code": "PASSENGERS",
+            "description": "Passenger fares (tickets, berths, passage fees)"
+        },
+        {
+            "code": "MAIL",
+            "description": "Mail contract revenue (official postal/courier runs)"
+        },
+        {
+            "code": "CHARTER",
+            "description": "Charter hire income (ship rented/contracted as a whole)"
+        },
+        {
+            "code": "CONTRACT",
+            "description": "Mission/contract payouts (patron jobs, bounties, assignments)"
+        },
+        {
+            "code": "TRADE",
+            "description": "Trading profit (speculative trade margin, buy/sell spread)"
+        },
+        {
+            "code": "SALVAGE",
+            "description": "Salvage and recovery income (wrecks, derelicts, recovered goods)"
+        },
+        {
+            "code": "PRIZE",
+            "description": "Prize money / captured cargo or ship awards (legal seizure)"
+        },
+        {
+            "code": "SUBSIDY",
+            "description": "Subsidies and grants (e.g., subsidized route payments)"
+        },
+        {
+            "code": "SERVICES",
+            "description": "Service fees (refueling, repairs, towing, escort services, etc.)"
+        },
+        {
+            "code": "INSURANCE",
+            "description": "Insurance payouts (claims, compensation for losses)"
+        },
+        {
+            "code": "INTEREST",
+            "description": "Interest and investment income (financial returns)"
+        }
     ],
-    "cost_categories": [
-        { "code": "PERSONAL", "description": "Personal cost" },
-        { "code": "CREW_GEAR", "description": "Crew gear cost" },
-        { "code": "SHIP_GEAR", "description": "Ship gear cost" },
-        { "code": "SHIP_SOFTWARE", "description": "Ship software cost" },
-        { "code": "SHIP_MAINT", "description": "Ship maintenance cost" },
-        { "code": "SHIP_REPAIR", "description": "Ship repair cost" },
-        { "code": "MEDICAL", "description": "Medical cost" },
-        { "code": "TRAVEL", "description": "Travel cost" },
-        { "code": "PENALTY", "description": "Penalty cost" },
-        { "code": "MORTGAGE_PENALTY", "description": "Mortgage penalty cost" },
-        { "code": "LEGAL", "description": "Legal cost" },
-        { "code": "RECRUITMENT", "description": "Recruitment cost" }
-    ],
-    "local_laws": []
+    "local_laws": [
+        {
+            "code": "IMPERIAL",
+            "short_description": "Imperial Laws",
+            "description": "Applies Imperial law and Imperial administrative practice (including port authority regulations, customs enforcement, and recognized commercial codes) as interpreted by the local Imperial office and competent courts.",
+            "disclaimer": "This document is valid only where Imperial jurisdiction is recognized. Local port rules, customs inspections, and emergency powers may override these terms. Disputes are handled under Imperial procedures unless a higher local authority lawfully asserts control."
+        },
+        {
+            "code": "ASLAN",
+            "short_description": "Aslan Laws",
+            "description": "Applies Aslan clan-based law and contract custom, where status, property rights, and obligations may be interpreted through clan authority and local ihatei/pride enforcement norms.",
+            "disclaimer": "Valid only in territories recognizing Aslan legal authority. Clan rulings and local custom may supersede written terms. Disputes may be resolved by clan arbitration, honor-compensation, or local adjudication as required."
+        },
+        {
+            "code": "VARGR",
+            "short_description": "Vargr Laws",
+            "description": "Applies Vargr polity law and local enforcement practice, where contracts may be interpreted under shifting authority structures and \u201ccharismatic\u201d legitimacy of local leadership and courts.",
+            "disclaimer": "Valid only in systems recognizing the stated Vargr authority. Enforcement may depend on local governance and current standing orders. Disputes are subject to local adjudication and may be reinterpreted if authority changes."
+        },
+        {
+            "code": "SWORD_WORLDS",
+            "short_description": "Sword World Laws",
+            "description": "Applies Sword Worlds law and customary practice, typically emphasizing martial jurisdiction, strict enforcement, and local codes tied to settlement/planetary authority.",
+            "disclaimer": "Valid only in Sword Worlds\u2013controlled space. Local military/security directives and port regulations may override contract terms. Disputes may be handled by local courts or command authority as applicable."
+        },
+        {
+            "code": "DARRIAN_CONFEDERATION",
+            "short_description": "Darrian Confederation Laws",
+            "description": "Applies Darrian Confederation law and standardized commercial procedures, typically formal, documented, and process-driven, with strong emphasis on technical compliance and verified records.",
+            "disclaimer": "Valid only where Darrian jurisdiction is recognized. Regulatory compliance, inspection, and documentation requirements may supersede any informal agreement. Disputes follow Darrian adjudication/arbitration processes."
+        },
+        {
+            "code": "ZHODANI_CONSULATE",
+            "short_description": "Zhodani Consulate Laws",
+            "description": "Applies Zhodani Consulate law and administrative practice, including strong state oversight and security regulations that may affect privacy, inspection, and permitted activities.",
+            "disclaimer": "Valid only under Zhodani jurisdiction. Security directives and lawful authority requirements may override terms. Disputes follow Consulate procedures and may require official review."
+        },
+        {
+            "code": "SOLOMANI_CONFEDERATION",
+            "short_description": "Solomani Confederation Laws",
+            "description": "Applies Solomani Confederation law and local administrative practice, including customs, licensing, and trade controls as issued by competent Solomani authorities.",
+            "disclaimer": "Valid only where Solomani jurisdiction is recognized. Local regulations, inspections, and security restrictions may override these terms. Disputes are handled under Solomani procedures."
+        },
+        {
+            "code": "INDEPENDENT",
+            "short_description": "Independent Laws",
+            "description": "Applies the laws of the local world/system authority named in the document, including port authority rules, customs, and emergency powers.",
+            "disclaimer": "This document is governed by local law at the point of enforcement. Port authority orders, inspections, and safety requirements may override contract terms. Disputes are handled by the competent local authority."
+        },
+        {
+            "code": "UNKNOWN_OR_DISPUTED",
+            "short_description": "Unknown or Disputed",
+            "description": "Jurisdiction is unclear, contested, or changing; the controlling authority is determined at the time and place of enforcement (port authority, military control, or court ruling).",
+            "disclaimer": "Terms may be suspended or reinterpreted by the authority currently in control. Parties accept that enforcement, seizure, or rerouting may occur under lawful orders. Disputes will be resolved by the controlling authority\u2019s process."
+        }
+    ]
 }
