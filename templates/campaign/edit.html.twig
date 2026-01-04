@@ -47,7 +47,10 @@
             </div>
 
             <div>
-                {{ form_label(form.startingYear) }}
+                <div class="flex items-center gap-1">
+                    {{ form_label(form.startingYear) }}
+                    {% if form.startingYear.vars.required %}{% include 'icons/required.html.twig' %}{% endif %}
+                </div>
                 {{ form_widget(form.startingYear) }}
                 {{ form_errors(form.startingYear) }}
             </div>
