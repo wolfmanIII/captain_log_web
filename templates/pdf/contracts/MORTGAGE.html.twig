@@ -77,7 +77,9 @@
                 <td class="text-right">
                     <div class="text-2xl font-bold">Ship Mortgage Agreement</div>
                     <div class="text-sm font-bold">Code: {{ mortgage.code }}{% if mortgage.signed %} • Signed{% endif %}</div>
-                    <div class="text-sm">Generated on: Day {{ ship.sessionDay ?? '—' }} / Year {{ ship.sessionYear ?? '—' }}</div>
+                    {% set sessionDay = ship.campaign ? ship.campaign.sessionDay : ship.sessionDay %}
+                    {% set sessionYear = ship.campaign ? ship.campaign.sessionYear : ship.sessionYear %}
+                    <div class="text-sm">Generated on: Day {{ sessionDay ?? '—' }} / Year {{ sessionYear ?? '—' }}</div>
                 </td>
             </tr>
         </table>

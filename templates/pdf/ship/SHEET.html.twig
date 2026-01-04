@@ -120,11 +120,13 @@
                     <div class="label">Price (Cr)</div>
                     <div class="val">{{ ship.price is not null ? ship.price|number_format(2, '.', ',') : '—' }}</div>
                 </div>
+                {% set sessionDay = ship.campaign ? ship.campaign.sessionDay : ship.sessionDay %}
+                {% set sessionYear = ship.campaign ? ship.campaign.sessionYear : ship.sessionYear %}
                 <div class="item">
                     <div class="label">Session</div>
                     <div class="val">
-                        {% if ship.sessionDay or ship.sessionYear %}
-                            Day {{ ship.sessionDay ?: '—' }} / {{ ship.sessionYear ?: '—' }}
+                        {% if sessionDay or sessionYear %}
+                            Day {{ sessionDay ?: '—' }} / {{ sessionYear ?: '—' }}
                         {% else %}
                             —
                         {% endif %}
