@@ -36,6 +36,9 @@ class Ship
     #[ORM\JoinColumn(nullable: true)]
     private ?User $user = null;
 
+    #[ORM\ManyToOne(inversedBy: 'ships')]
+    private ?Campaign $campaign = null;
+
     #[ORM\Column(nullable: true)]
     private ?int $sessionDay = null;
 
@@ -144,6 +147,18 @@ class Ship
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getCampaign(): ?Campaign
+    {
+        return $this->campaign;
+    }
+
+    public function setCampaign(?Campaign $campaign): static
+    {
+        $this->campaign = $campaign;
 
         return $this;
     }
