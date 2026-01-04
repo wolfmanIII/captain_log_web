@@ -23,6 +23,15 @@
             </li>
 
             <li>
+                <a href="{{ path('app_company_index') }}"
+                   class="{% if controller_name == constant('App\\Controller\\CompanyController::CONTROLLER_NAME') %}menu-active{% endif %}"
+                >
+                    {% include 'icons/company.html.twig' %}
+                    <span>Companies</span>
+                </a>
+            </li>
+
+            <li>
                 <a href="{{ path('app_ship_index') }}"
                    class="{% if controller_name == constant('App\\Controller\\ShipController::CONTROLLER_NAME') %}menu-active{% endif %}"
                 >
@@ -67,15 +76,6 @@
                 >
                     {% include 'icons/income.html.twig' %}
                     <span>Contracts</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="{{ path('app_company_index') }}"
-                   class="{% if controller_name == constant('App\\Controller\\CompanyController::CONTROLLER_NAME') %}menu-active{% endif %}"
-                >
-                    {% include 'icons/company.html.twig' %}
-                    <span>Companies</span>
                 </a>
             </li>
 
