@@ -37,6 +37,7 @@ class Ship
     private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'ships')]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Campaign $campaign = null;
 
     #[ORM\Column(nullable: true)]

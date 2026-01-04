@@ -16,6 +16,8 @@ final class Version20260111100000 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
+        $platform = $this->connection->getDatabasePlatform()->getName();
+
         // Tabella campaign
         $campaign = $schema->createTable('campaign');
         $campaign->addColumn('id', 'integer', ['autoincrement' => true]);
@@ -33,19 +35,23 @@ final class Version20260111100000 extends AbstractMigration
         if (!$ship->hasColumn('campaign_id')) {
             $ship->addColumn('campaign_id', 'integer', ['notnull' => false]);
             $ship->addIndex(['campaign_id'], 'IDX_EF4E8F97F639F774');
-            $ship->addForeignKeyConstraint('campaign', ['campaign_id'], ['id'], [], 'FK_EF4E8F97F639F774');
+            if ($platform !== 'sqlite') {
+                $ship->addForeignKeyConstraint('campaign', ['campaign_id'], ['id'], [], 'FK_EF4E8F97F639F774');
+            }
         }
     }
 
     public function down(Schema $schema): void
     {
+        $platform = $this->connection->getDatabasePlatform()->getName();
+
         if ($schema->hasTable('campaign')) {
             $schema->dropTable('campaign');
         }
 
         if ($schema->hasTable('ship')) {
             $ship = $schema->getTable('ship');
-            if ($ship->hasForeignKey('FK_EF4E8F97F639F774')) {
+            if ($platform !== 'sqlite' && $ship->hasForeignKey('FK_EF4E8F97F639F774')) {
                 $ship->removeForeignKey('FK_EF4E8F97F639F774');
             }
             if ($ship->hasIndex('IDX_EF4E8F97F639F774')) {
