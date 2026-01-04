@@ -36,6 +36,7 @@
                         <th>Title</th>
                         <th>Category</th>
                         <th>Ship</th>
+                        <th>Campaign</th>
                         <th class="text-right">Amount</th>
                         <th class="text-right">Payment (Cr)</th>
                         <th>Action</th>
@@ -49,6 +50,16 @@
                                 <td>{{ cost.title }}</td>
                                 <td>{{ cost.costCategory.description }}</td>
                                 <td>{{ cost.ship.name }}</td>
+                                <td>
+                                    {% if cost.ship.campaign %}
+                                        <div class="flex items-center gap-2">
+                                            {% include 'icons/campaign.html.twig' %}
+                                            <span>{{ cost.ship.campaign.title }}</span>
+                                        </div>
+                                    {% else %}
+                                        <span class="opacity-60">—</span>
+                                    {% endif %}
+                                </td>
                                 <td class="text-right">{{ cost.amount|number_format(2, ',', '.') }}</td>
                                 <td class="text-right">
                                     {% if cost.paymentDay is not null and cost.paymentYear is not null %}
