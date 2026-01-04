@@ -47,7 +47,7 @@
                     {% if mortgages|length > 0 %}
                         {% for mortgage in mortgages %}
                             <tr>
-                                <td>{{ mortgage.code }}</td>
+                                <td>{% include 'components/code_with_copy.html.twig' with { code: mortgage.code } %}</td>
                                 <td>{{ mortgage.name }}</td>
                                 <td>{{ mortgage.ship.name }}</td>
                                 <td>

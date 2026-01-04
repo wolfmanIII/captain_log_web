@@ -48,7 +48,7 @@
                     {% if crew|length > 0 %}
                         {% for member in crew %}
                             <tr>
-                                <td>{{ member.code }}</td>
+                                <td>{% include 'components/code_with_copy.html.twig' with { code: member.code } %}</td>
                                 <td>{{ member.name }}</td>
                                 <td>{{ member.nickname }}</td>
                                 <td>{{ member.surname }}</td>

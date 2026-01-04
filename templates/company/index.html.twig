@@ -44,7 +44,7 @@
                     {% if companies|length > 0 %}
                         {% for company in companies %}
                             <tr>
-                                <td>{{ company.code }}</td>
+                                <td>{% include 'components/code_with_copy.html.twig' with { code: company.code } %}</td>
                                 <td>{{ company.name }}</td>
                                 <td>{{ company.companyRole.description }}</td>
                                 <td>{{ company.contact ?? '-' }}</td>

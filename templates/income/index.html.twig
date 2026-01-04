@@ -49,7 +49,7 @@
                     {% if incomes|length > 0 %}
                         {% for income in incomes %}
                             <tr>
-                                <td>{{ income.code }}</td>
+                                <td>{% include 'components/code_with_copy.html.twig' with { code: income.code } %}</td>
                                 <td>{{ income.title }}</td>
                                 <td>{{ income.incomeCategory.description }}</td>
                                 <td>{{ income.ship.name }}</td>

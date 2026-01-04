@@ -46,7 +46,7 @@
                     {% if costs|length > 0 %}
                         {% for cost in costs %}
                             <tr>
-                                <td>{{ cost.code }}</td>
+                                <td>{% include 'components/code_with_copy.html.twig' with { code: cost.code } %}</td>
                                 <td>{{ cost.title }}</td>
                                 <td>{{ cost.costCategory.description }}</td>
                                 <td>{{ cost.ship.name }}</td>

@@ -48,7 +48,7 @@
                         {% if ships|length > 0 %}
                             {% for ship in ships %}
                             <tr>
-                                <td>{{ ship.code }}</td>
+                                <td>{% include 'components/code_with_copy.html.twig' with { code: ship.code } %}</td>
                                 <td>{{ ship.name }}</td>
                                 <td>{{ ship.type }}</td>
                                 <td>{{ ship.class }}</td>

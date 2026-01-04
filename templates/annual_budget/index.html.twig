@@ -48,7 +48,7 @@
                     {% if budgets|length > 0 %}
                         {% for budget in budgets %}
                             <tr>
-                                <td>{{ budget.code }}</td>
+                                <td>{% include 'components/code_with_copy.html.twig' with { code: budget.code } %}</td>
                                 <td>{{ budget.ship.name }}</td>
                                 <td class="text-right">{{ budget.startDay }}/{{ budget.startYear }}</td>
                                 <td class="text-right">{{ budget.endDay }}/{{ budget.endYear }}</td>
