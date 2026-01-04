@@ -9,7 +9,7 @@
             <h1>Campaign</h1>
         </header>
 
-        <div class="card w-96 bg-base-100 card-lg shadow-sm">
+        <div class="card w-96 bg-base-100 card-lg shadow-sm w-full">
             <div class="card-body">
                 <h2 class="card-title">{{ campaign.title }}</h2>
                 <p>
@@ -18,7 +18,12 @@
                         <span>Session: {{ campaign.sessionDay }}/{{ campaign.sessionYear }}</span><br>
                     {% endif %}
                     {% if campaign.startingYear %}
-                        <span>Start Year: {{ campaign.startingYear }}</span>
+                        <span>Start Year: {{ campaign.startingYear }}</span><br>
+                    {% endif %}
+                    {% if campaign.Description %}
+                        <br>
+                        <span>Description:</span><br>
+                        <div class="w-full">{{ campaign.description }}</div>
                     {% endif %}
                 </p>
             </div>
