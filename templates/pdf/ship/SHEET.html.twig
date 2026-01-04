@@ -47,7 +47,7 @@
         'Cargo': details.cargo ?? {}
     } %}
 
-    {% macro render_item(label, item) %}
+    {% macro render_item(label, item, locale) %}
         {% set desc = item.description ?? '—' %}
         {% set tons = item.tons is defined and item.tons is not null
             ? item.tons|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', locale ?? 'en')
@@ -63,7 +63,7 @@
         </tr>
     {% endmacro %}
 
-    {% macro render_collection(title, items) %}
+    {% macro render_collection(title, items, locale) %}
         {% set rows = items|filter(i => (i.description ?? '') is not empty or (i.tons ?? null) is not null or (i.cost_mcr ?? null) is not null) %}
         {% set rows = rows|length == 0 ? items : rows %}
         {% set rows = rows|length == 0 ? [ {} ] : rows %}
@@ -162,18 +162,18 @@
                 </thead>
                 <tbody>
                     {% for label, item in singleItems %}
-                        {{ _self.render_item(label, item) }}
+                        {{ _self.render_item(label, item, locale) }}
                     {% endfor %}
                 </tbody>
             </table>
         </div>
 
         <div class="grid grid-2">
-            {{ _self.render_collection('Weapons', details.weapons ?? []) }}
-            {{ _self.render_collection('Craft', details.craft ?? []) }}
-            {{ _self.render_collection('Systems', details.systems ?? []) }}
-            {{ _self.render_collection('Staterooms', details.staterooms ?? []) }}
-            {{ _self.render_collection('Software', details.software ?? []) }}
+            {{ _self.render_collection('Weapons', details.weapons ?? [], locale) }}
+            {{ _self.render_collection('Craft', details.craft ?? [], locale) }}
+            {{ _self.render_collection('Systems', details.systems ?? [], locale) }}
+            {{ _self.render_collection('Staterooms', details.staterooms ?? [], locale) }}
+            {{ _self.render_collection('Software', details.software ?? [], locale) }}
         </div>
     </div>
 {% endblock %}
