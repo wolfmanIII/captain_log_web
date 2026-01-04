@@ -105,7 +105,8 @@ final class ShipController extends BaseController
     public function pdf(
         int $id,
         EntityManagerInterface $em,
-        PdfGenerator $pdfGenerator
+        PdfGenerator $pdfGenerator,
+        Request $request
     ): Response {
         $user = $this->getUser();
         if (!$user instanceof \App\Entity\User) {
@@ -132,6 +133,7 @@ final class ShipController extends BaseController
         $pdfContent = $pdfGenerator->render('pdf/ship/SHEET.html.twig', [
             'ship' => $ship,
             'user' => $user,
+            'locale' => $request->getLocale(),
         ], $options);
 
         return new Response($pdfContent, 200, [
@@ -143,7 +145,8 @@ final class ShipController extends BaseController
     #[Route('/ship/{id}/pdf/preview', name: 'app_ship_pdf_preview', methods: ['GET'])]
     public function pdfPreview(
         int $id,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        Request $request
     ): Response {
         $user = $this->getUser();
         if (!$user instanceof \App\Entity\User) {
@@ -158,6 +161,7 @@ final class ShipController extends BaseController
         return $this->render('pdf/ship/SHEET.html.twig', [
             'ship' => $ship,
             'user' => $user,
+            'locale' => $request->getLocale(),
         ]);
     }
 
