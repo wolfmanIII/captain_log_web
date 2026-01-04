@@ -49,8 +49,8 @@
 
     {% macro render_item(label, item) %}
         {% set desc = item.description ?? '—' %}
-        {% set tons = item.tons is defined and item.tons is not null ? item.tons|number_format(2, '.', ',') : '—' %}
-        {% set cost = item.cost_mcr is defined and item.cost_mcr is not null ? item.cost_mcr|number_format(3, '.', ',') : '—' %}
+        {% set tons = item.tons is defined and item.tons is not null ? item.tons|format_number(locale=locale ?? 'en', minimum_fraction_digits=2, maximum_fraction_digits=2, grouping=true) : '—' %}
+        {% set cost = item.cost_mcr is defined and item.cost_mcr is not null ? item.cost_mcr|format_number(locale=locale ?? 'en', minimum_fraction_digits=3, maximum_fraction_digits=3, grouping=true) : '—' %}
         <tr>
             <th style="width: 28%;">{{ label }}</th>
             <td style="width: 47%;">{{ desc ?: '—' }}</td>
@@ -76,8 +76,8 @@
                 <tbody>
                 {% for row in rows %}
                     {% set desc = row.description ?? '—' %}
-                    {% set tons = row.tons is defined and row.tons is not null ? row.tons|number_format(2, '.', ',') : '—' %}
-                    {% set cost = row.cost_mcr is defined and row.cost_mcr is not null ? row.cost_mcr|number_format(3, '.', ',') : '—' %}
+                    {% set tons = row.tons is defined and row.tons is not null ? row.tons|format_number(locale=locale ?? 'en', minimum_fraction_digits=2, maximum_fraction_digits=2, grouping=true) : '—' %}
+                    {% set cost = row.cost_mcr is defined and row.cost_mcr is not null ? row.cost_mcr|format_number(locale=locale ?? 'en', minimum_fraction_digits=3, maximum_fraction_digits=3, grouping=true) : '—' %}
                     <tr>
                         <td>{{ desc ?: '—' }}</td>
                         <td style="text-align: right;">{{ tons }}</td>
@@ -118,7 +118,7 @@
                 </div>
                 <div class="item">
                     <div class="label">Price (Cr)</div>
-                    <div class="val">{{ ship.price is not null ? ship.price|number_format(2, '.', ',') : '—' }}</div>
+                    <div class="val">{{ ship.price is not null ? ship.price|format_number(locale=locale ?? 'en', minimum_fraction_digits=2, maximum_fraction_digits=2, grouping=true) : '—' }}</div>
                 </div>
                 {% set sessionDay = ship.campaign ? ship.campaign.sessionDay : ship.sessionDay %}
                 {% set sessionYear = ship.campaign ? ship.campaign.sessionYear : ship.sessionYear %}
