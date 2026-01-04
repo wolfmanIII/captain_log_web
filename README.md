@@ -21,6 +21,24 @@ Applicazione Symfony 7.3 per la gestione di navi, equipaggi, contratti e mutui, 
 - wkhtmltopdf disponibile a `/usr/local/bin/wkhtmltopdf` (vedi `config/packages/knp_snappy.yaml`)
 - Database supportato da Doctrine (PostgreSQL/MySQL/SQLite)
 
+## KnpSnappy e wkhtmltopdf (patched Qt)
+- Configurazione binario: `config/packages/knp_snappy.yaml` punta a `/usr/local/bin/wkhtmltopdf` (opzione `binary`).
+- Installazione wkhtmltopdf patchato (Ubuntu 22.04/Jammy):
+  ```bash
+  sudo apt-get update
+  sudo apt-get install -y wget xfonts-75dpi
+
+  cd ~
+  wget https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-2/wkhtmltox_0.12.6.1-2.jammy_amd64.deb
+
+  sudo dpkg -i wkhtmltox_0.12.6.1-2.jammy_amd64.deb
+  ```
+- Verifica:
+  ```bash
+  wkhtmltopdf --version
+  ```
+  Deve mostrare `wkhtmltopdf 0.12.6.1 (with patched qt)`.
+
 ## Configurazione
 1. Installa le dipendenze:
    ```bash
