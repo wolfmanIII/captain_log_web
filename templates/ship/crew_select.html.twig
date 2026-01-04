@@ -40,7 +40,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
         </button>
 
-        <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100" data-controller="crew-select">
+        <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100" data-controller="bulk-select">
             <table class="table border-separate border-spacing-0 inner-bordered-table">
                 <!-- head -->
                 <thead>
@@ -100,7 +100,7 @@
                 <h3 class="text-lg font-bold mb-4">Select Crew Members</h3>
 
                 {{ form_start(form) }}
-                <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100" {{ stimulus_controller('crew_select') }}>
+                <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100" {{ stimulus_controller('bulk_select') }}>
                     <table class="table border-separate border-spacing-0 inner-bordered-table">
                         <!-- head -->
                         <thead>
@@ -109,8 +109,8 @@
                                 <input
                                     type="checkbox"
                                     class="checkbox"
-                                    data-crew-select-target="selectAll"
-                                    data-action="change->crew-select#toggleAll"
+                                    data-bulk-select-target="selectAll"
+                                    data-action="change->bulk-select#toggleAll"
                                 >
                             </th>
                             <th>Code</th>
@@ -133,7 +133,7 @@
                                             {{ form_widget(row.selected, {
                                                 attr: {
                                                     class: 'checkbox crew-checkbox',
-                                                    'data-crew-select-target': 'item'
+                                                    'data-bulk-select-target': 'item'
                                                 }
                                             }) }}
                                         </td>

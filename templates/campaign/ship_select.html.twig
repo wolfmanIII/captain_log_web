@@ -74,7 +74,7 @@
                 <h3 class="text-lg font-bold mb-4">Select Ships</h3>
 
                 {{ form_start(form) }}
-                <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100" data-controller="crew-select">
+                <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100" data-controller="bulk-select">
                     <table class="table border-separate border-spacing-0 inner-bordered-table">
                         <thead>
                         <tr>
@@ -82,8 +82,8 @@
                                 <input
                                     type="checkbox"
                                     class="checkbox"
-                                    data-crew-select-target="selectAll"
-                                    data-action="change->crew-select#toggleAll"
+                                    data-bulk-select-target="selectAll"
+                                    data-action="change->bulk-select#toggleAll"
                                 >
                             </th>
                             <th>Code</th>
@@ -103,7 +103,7 @@
                                             {{ form_widget(row.selected, {
                                                 attr: {
                                                     class: 'checkbox crew-checkbox',
-                                                    'data-crew-select-target': 'item'
+                                                    'data-bulk-select-target': 'item'
                                                 }
                                             }) }}
                                         </td>
