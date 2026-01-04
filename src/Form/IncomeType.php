@@ -45,7 +45,7 @@ class IncomeType extends AbstractType
                 'attr' => $this->dayYearLimits->yearAttr(['class' => 'input m-1 w-full']),
             ])
             ->add('signingLocation', TextType::class, [
-                'required' => false,
+                'required' => true,
                 'label' => 'Signing Location',
                 'attr' => ['class' => 'input m-1 w-full'],
             ])
