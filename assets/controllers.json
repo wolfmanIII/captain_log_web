@@ -10,29 +10,31 @@
                 "fetch": "eager"
             }
         },
-        "ai-console": {
-            "enabled": true,
-            "fetch": "eager"
-        },
-        "bulk-select": {
-            "enabled": true,
-            "fetch": "eager"
-        },
-        "income-details": {
-            "enabled": true,
-            "fetch": "eager"
-        },
-        "ship-details": {
-            "enabled": true,
-            "fetch": "eager"
-        },
-        "single-select-table": {
-            "enabled": true,
-            "fetch": "eager"
-        },
-        "year-limit": {
-            "enabled": true,
-            "fetch": "eager"
+        "app": {
+            "ai-console": {
+                "enabled": true,
+                "fetch": "eager"
+            },
+            "bulk-select": {
+                "enabled": true,
+                "fetch": "eager"
+            },
+            "income-details": {
+                "enabled": true,
+                "fetch": "eager"
+            },
+            "ship-details": {
+                "enabled": true,
+                "fetch": "eager"
+            },
+            "single-select-table": {
+                "enabled": true,
+                "fetch": "eager"
+            },
+            "year-limit": {
+                "enabled": true,
+                "fetch": "eager"
+            }
         }
     },
     "entrypoints": []
