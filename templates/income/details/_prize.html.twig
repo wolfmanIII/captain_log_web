@@ -53,14 +53,17 @@
             </div>
         </div>
     </div>
-    <div class="col-span-3">
-        {{ form_label(detail_form.shareSplit) }}
-        {{ form_widget(detail_form.shareSplit) }}
-        {{ form_errors(detail_form.shareSplit) }}
-    </div>
-    <div class="col-span-3">
-        {{ form_label(detail_form.awardTrigger) }}
-        {{ form_widget(detail_form.awardTrigger) }}
-        {{ form_errors(detail_form.awardTrigger) }}
+
+    <div class="col-span-3 grid grid-cols-2 gap-4">
+        <div>
+            {{ form_label(detail_form.shareSplit) }}
+            {{ form_widget(detail_form.shareSplit) }}
+            {{ form_errors(detail_form.shareSplit) }}
+        </div>
+        <div>
+            {{ form_label(detail_form.awardTrigger) }}
+            {{ form_widget(detail_form.awardTrigger) }}
+            {{ form_errors(detail_form.awardTrigger) }}
+        </div>
     </div>
 </fieldset>

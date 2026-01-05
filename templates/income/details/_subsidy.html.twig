@@ -75,29 +75,35 @@
             </div>
         </div>
     </div>
-    <div class="col-span-3">
-        {{ form_label(detail_form.milestones) }}
-        {{ form_widget(detail_form.milestones) }}
-        {{ form_errors(detail_form.milestones) }}
+
+    <div class="col-span-3 grid grid-cols-2 gap-4">
+        <div>
+            {{ form_label(detail_form.milestones) }}
+            {{ form_widget(detail_form.milestones) }}
+            {{ form_errors(detail_form.milestones) }}
+        </div>
+        <div>
+            {{ form_label(detail_form.reportingRequirements) }}
+            {{ form_widget(detail_form.reportingRequirements) }}
+            {{ form_errors(detail_form.reportingRequirements) }}
+        </div>
     </div>
-    <div class="col-span-3">
-        {{ form_label(detail_form.reportingRequirements) }}
-        {{ form_widget(detail_form.reportingRequirements) }}
-        {{ form_errors(detail_form.reportingRequirements) }}
-    </div>
-    <div class="col-span-3">
-        {{ form_label(detail_form.nonComplianceTerms) }}
-        {{ form_widget(detail_form.nonComplianceTerms) }}
-        {{ form_errors(detail_form.nonComplianceTerms) }}
-    </div>
-    <div class="col-span-3">
-        {{ form_label(detail_form.proofRequirements) }}
-        {{ form_widget(detail_form.proofRequirements) }}
-        {{ form_errors(detail_form.proofRequirements) }}
-    </div>
-    <div class="col-span-3">
-        {{ form_label(detail_form.cancellationTerms) }}
-        {{ form_widget(detail_form.cancellationTerms) }}
-        {{ form_errors(detail_form.cancellationTerms) }}
+
+    <div class="col-span-3 grid grid-cols-3 gap-4">
+        <div>
+            {{ form_label(detail_form.nonComplianceTerms) }}
+            {{ form_widget(detail_form.nonComplianceTerms) }}
+            {{ form_errors(detail_form.nonComplianceTerms) }}
+        </div>
+        <div>
+            {{ form_label(detail_form.proofRequirements) }}
+            {{ form_widget(detail_form.proofRequirements) }}
+            {{ form_errors(detail_form.proofRequirements) }}
+        </div>
+        <div>
+            {{ form_label(detail_form.cancellationTerms) }}
+            {{ form_widget(detail_form.cancellationTerms) }}
+            {{ form_errors(detail_form.cancellationTerms) }}
+        </div>
     </div>
 </fieldset>

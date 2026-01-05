@@ -69,14 +69,17 @@
             </div>
         </div>
     </div>
-    <div class="col-span-3">
-        {{ form_label(detail_form.subrogationTerms) }}
-        {{ form_widget(detail_form.subrogationTerms) }}
-        {{ form_errors(detail_form.subrogationTerms) }}
-    </div>
-    <div class="col-span-3">
-        {{ form_label(detail_form.coverageNotes) }}
-        {{ form_widget(detail_form.coverageNotes) }}
-        {{ form_errors(detail_form.coverageNotes) }}
+
+    <div class="col-span-3 grid grid-cols-2 gap-4">
+        <div>
+            {{ form_label(detail_form.subrogationTerms) }}
+            {{ form_widget(detail_form.subrogationTerms) }}
+            {{ form_errors(detail_form.subrogationTerms) }}
+        </div>
+        <div>
+            {{ form_label(detail_form.coverageNotes) }}
+            {{ form_widget(detail_form.coverageNotes) }}
+            {{ form_errors(detail_form.coverageNotes) }}
+        </div>
     </div>
 </fieldset>
