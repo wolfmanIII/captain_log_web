@@ -3,7 +3,9 @@
 
     <div class="min-h-full w-64 bg-gradient-to-b from-slate-800 via-slate-900 to-slate-950 text-cyan-100 flex flex-col items-start border-r border-cyan-500/30">
         <div class="w-full bg-gradient-to-r from-teal-600 via-slate-800 to-slate-900 text-cyan-100 flex items-center justify-center gap-2 py-2 px-3 text-xs uppercase tracking-[0.25em] border-b border-cyan-500/30">
-            {% include 'icons/radar.html.twig' %}
+            <span class="flex items-center justify-center animate-spin-slow">
+                {% include 'icons/radar.html.twig' %}
+            </span>
             <span>Beacon // Dock Ready</span>
         </div>
         <ul class="menu w-full grow">

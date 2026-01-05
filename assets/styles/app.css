@@ -33,6 +33,11 @@
     @apply border-b-0;
 }
 
+@layer utilities {
+    .animate-spin-slow {
+        animation: spin 4s linear infinite;
+    }
+}
 
 @layer components {
     .alert.alert-info {
