@@ -9,6 +9,8 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use App\Form\MDriveDetailItemType;
+use App\Form\JDriveDetailItemType;
 
 class ShipDetailsType extends AbstractType
 {
@@ -21,8 +23,8 @@ class ShipDetailsType extends AbstractType
                 'attr' => ['class' => 'input m-1 w-full'],
             ])
             ->add('hull', ShipDetailItemType::class, ['label' => 'Hull'])
-            ->add('mDrive', ShipDetailItemType::class, ['label' => 'M-Drive'])
-            ->add('jDrive', ShipDetailItemType::class, ['label' => 'J-Drive'])
+            ->add('mDrive', MDriveDetailItemType::class, ['label' => 'M-Drive'])
+            ->add('jDrive', JDriveDetailItemType::class, ['label' => 'J-Drive'])
             ->add('powerPlant', ShipDetailItemType::class, ['label' => 'Power Plant'])
             ->add('fuel', ShipDetailItemType::class, ['label' => 'Fuel Tanks'])
             ->add('bridge', ShipDetailItemType::class, ['label' => 'Bridge'])

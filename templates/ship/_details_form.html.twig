@@ -102,6 +102,20 @@
                         {{ form_errors(item.child.costMcr) }}
                     </div>
                 </div>
+                {% if item.child.thrust is defined %}
+                    <div class="mt-2">
+                        {{ form_label(item.child.thrust) }}
+                        {{ form_widget(item.child.thrust) }}
+                        {{ form_errors(item.child.thrust) }}
+                    </div>
+                {% endif %}
+                {% if item.child.jump is defined %}
+                    <div class="mt-2">
+                        {{ form_label(item.child.jump) }}
+                        {{ form_widget(item.child.jump) }}
+                        {{ form_errors(item.child.jump) }}
+                    </div>
+                {% endif %}
             </div>
         {% endfor %}
     </div>

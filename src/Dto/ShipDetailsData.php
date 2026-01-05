@@ -7,8 +7,8 @@ class ShipDetailsData
     public ?string $techLevel = null;
 
     public ShipDetailItem $hull;
-    public ShipDetailItem $mDrive;
-    public ShipDetailItem $jDrive;
+    public MDriveDetailItem $mDrive;
+    public JDriveDetailItem $jDrive;
     public ShipDetailItem $powerPlant;
     public ShipDetailItem $fuel;
     public ShipDetailItem $bridge;
@@ -31,8 +31,8 @@ class ShipDetailsData
     public function __construct()
     {
         $this->hull = new ShipDetailItem();
-        $this->mDrive = new ShipDetailItem();
-        $this->jDrive = new ShipDetailItem();
+        $this->mDrive = new MDriveDetailItem();
+        $this->jDrive = new JDriveDetailItem();
         $this->powerPlant = new ShipDetailItem();
         $this->fuel = new ShipDetailItem();
         $this->bridge = new ShipDetailItem();
@@ -55,8 +55,8 @@ class ShipDetailsData
         $dto->techLevel = $data['techLevel'] ?? null;
 
         $dto->hull = ShipDetailItem::fromArray($data['hull'] ?? []);
-        $dto->mDrive = ShipDetailItem::fromArray($data['mDrive'] ?? []);
-        $dto->jDrive = ShipDetailItem::fromArray($data['jDrive'] ?? []);
+        $dto->mDrive = MDriveDetailItem::fromArray($data['mDrive'] ?? []);
+        $dto->jDrive = JDriveDetailItem::fromArray($data['jDrive'] ?? []);
         $dto->powerPlant = ShipDetailItem::fromArray($data['powerPlant'] ?? []);
         $dto->fuel = ShipDetailItem::fromArray($data['fuel'] ?? []);
         $dto->bridge = ShipDetailItem::fromArray($data['bridge'] ?? []);
