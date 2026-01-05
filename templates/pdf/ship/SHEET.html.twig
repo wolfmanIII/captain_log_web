@@ -34,20 +34,20 @@
 {% block pageContent %}
     {% set details = ship.shipDetails ?? {} %}
     {% set techLevel = details.techLevel ?? '—' %}
-    {% set singleItems = {
-        'Hull': details.hull ?? {},
-        'M-Drive': details.mDrive ?? {},
-        'J-Drive': details.jDrive ?? {},
-        'Power Plant': details.powerPlant ?? {},
-        'Fuel Tanks': details.fuel ?? {},
-        'Bridge': details.bridge ?? {},
-        'Computer': details.computer ?? {},
-        'Sensors': details.sensors ?? {},
-        'Common Areas': details.commonAreas ?? {},
-        'Cargo': details.cargo ?? {}
-    } %}
+    {% set singleItems = [
+        { label: 'Hull', item: details.hull ?? {}, spec: null },
+        { label: 'M-Drive', item: details.mDrive ?? {}, spec: details.mDrive.thrust ?? details.mDrive.thrust ?? null },
+        { label: 'J-Drive', item: details.jDrive ?? {}, spec: details.jDrive.jump ?? details.jDrive.jump ?? null },
+        { label: 'Power Plant', item: details.powerPlant ?? {}, spec: null },
+        { label: 'Fuel Tanks', item: details.fuel ?? {}, spec: null },
+        { label: 'Bridge', item: details.bridge ?? {}, spec: null },
+        { label: 'Computer', item: details.computer ?? {}, spec: null },
+        { label: 'Sensors', item: details.sensors ?? {}, spec: null },
+        { label: 'Common Areas', item: details.commonAreas ?? {}, spec: null },
+        { label: 'Cargo', item: details.cargo ?? {}, spec: null },
+    ] %}
 
-    {% macro render_item(label, item, locale) %}
+    {% macro render_item(label, item, locale, spec) %}
         {% set desc = item.description ?? '—' %}
         {% set costRaw = item.cost_mcr is defined ? item.cost_mcr : (item.costMcr is defined ? item.costMcr : null) %}
         {% set tons = item.tons is defined and item.tons is not null
@@ -58,9 +58,10 @@
             : '—' %}
         <tr>
             <th style="width: 28%;">{{ label }}</th>
-            <td style="width: 47%;">{{ desc ?: '—' }}</td>
-            <td style="width: 12%; text-align: right;">{{ tons }}</td>
-            <td style="width: 13%; text-align: right;">{{ cost }}</td>
+            <td style="width: 40%;">{{ desc ?: '—' }}</td>
+            <td style="width: 15%; text-align: right;">{{ tons }}</td>
+            <td style="width: 15%; text-align: right;">{{ cost }}</td>
+            <td style="width: 15%;">{{ spec is not null ? spec : '—' }}</td>
         </tr>
     {% endmacro %}
 
@@ -98,6 +99,34 @@
             </table>
         </div>
     {% endmacro %}
+
+    {% set totalCostMcr = 0 %}
+    {% for entry in singleItems %}
+        {% set c = entry.item.cost_mcr is defined ? entry.item.cost_mcr : (entry.item.costMcr is defined ? entry.item.costMcr : null) %}
+        {% if c is not null %}
+            {% set totalCostMcr = totalCostMcr + c %}
+        {% endif %}
+    {% endfor %}
+    {% for row in details.weapons ?? [] %}
+        {% set c = row.cost_mcr is defined ? row.cost_mcr : (row.costMcr is defined ? row.costMcr : null) %}
+        {% if c is not null %}{% set totalCostMcr = totalCostMcr + c %}{% endif %}
+    {% endfor %}
+    {% for row in details.craft ?? [] %}
+        {% set c = row.cost_mcr is defined ? row.cost_mcr : (row.costMcr is defined ? row.costMcr : null) %}
+        {% if c is not null %}{% set totalCostMcr = totalCostMcr + c %}{% endif %}
+    {% endfor %}
+    {% for row in details.systems ?? [] %}
+        {% set c = row.cost_mcr is defined ? row.cost_mcr : (row.costMcr is defined ? row.costMcr : null) %}
+        {% if c is not null %}{% set totalCostMcr = totalCostMcr + c %}{% endif %}
+    {% endfor %}
+    {% for row in details.staterooms ?? [] %}
+        {% set c = row.cost_mcr is defined ? row.cost_mcr : (row.costMcr is defined ? row.costMcr : null) %}
+        {% if c is not null %}{% set totalCostMcr = totalCostMcr + c %}{% endif %}
+    {% endfor %}
+    {% for row in details.software ?? [] %}
+        {% set c = row.cost_mcr is defined ? row.cost_mcr : (row.costMcr is defined ? row.costMcr : null) %}
+        {% if c is not null %}{% set totalCostMcr = totalCostMcr + c %}{% endif %}
+    {% endfor %}
 
     <div class="page">
         <table class="header-table">
@@ -148,6 +177,16 @@
                     <div class="label">Tech level</div>
                     <div class="val">{{ techLevel }}</div>
                 </div>
+                <div class="item">
+                    <div class="label">Total cost (MCr)</div>
+                    <div class="val">
+                        {% if totalCostMcr %}
+                            {{ totalCostMcr|format_number({ min_fraction_digit: 3, max_fraction_digit: 3, grouping_used: true }, 'decimal', 'default', locale ?? 'en') }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -160,11 +199,12 @@
                         <th>Description</th>
                         <th style="text-align: right;">Tons</th>
                         <th style="text-align: right;">Cost (MCr)</th>
+                        <th>Spec</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for label, item in singleItems %}
-                        {{ _self.render_item(label, item, locale) }}
+                    {% for entry in singleItems %}
+                        {{ _self.render_item(entry.label, entry.item, locale, entry.spec) }}
                     {% endfor %}
                 </tbody>
             </table>
