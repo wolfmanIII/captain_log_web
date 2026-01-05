@@ -22,10 +22,9 @@
 
 .inner-bordered-table thead tr:first-child th {
     @apply border-t-0;
-    @apply bg-info-content
+    @apply bg-gradient-to-r from-slate-900 via-slate-800 to-cyan-900 text-cyan-100;
 }
 
 .inner-bordered-table tbody tr:last-child td {
     @apply border-b-0;
 }
-
