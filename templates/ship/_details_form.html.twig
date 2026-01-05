@@ -68,6 +68,7 @@
             {{ form_label(detailsForm.totalCost) }}
             {{ form_widget(detailsForm.totalCost) }}
             {{ form_errors(detailsForm.totalCost) }}
+            <p class="text-xs text-cyan-200 mt-1" data-total-cost-display>—</p>
         </div>
     </div>
 
@@ -170,6 +171,7 @@
     };
     const recalcTotalCost = () => {
         const totalInput = document.querySelector('input[name$="[totalCost]"]');
+        const totalDisplay = document.querySelector('[data-total-cost-display]');
         if (!totalInput) {
             return;
         }
@@ -177,11 +179,22 @@
         let sum = 0;
         costFields.forEach((input) => {
             const val = parseFloat(input.value);
-            if (!Number.isNaN(val)) {
-                sum += val;
-            }
-        });
+        if (!Number.isNaN(val)) {
+            sum += val;
+        }
+    });
         totalInput.value = sum ? sum.toFixed(2) : '';
+        if (totalDisplay) {
+            if (sum) {
+                const locale = document.documentElement.lang || navigator.language || 'en';
+                totalDisplay.textContent = sum.toLocaleString(locale, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                });
+            } else {
+                totalDisplay.textContent = '—';
+            }
+        }
     };
     const initCostListeners = () => {
         document.querySelectorAll('[data-cost-mcr]').forEach((input) => {
