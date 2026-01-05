@@ -22,7 +22,7 @@
 
 .inner-bordered-table thead tr:first-child {
     @apply border-t-0;
-    background: linear-gradient(90deg, #0b1220 0%, #0f172a 50%, #0b1220 100%);
+    @apply bg-gradient-to-r from-slate-900 via-slate-800 to-cyan-900;
 }
 
 .inner-bordered-table thead tr:first-child th {
