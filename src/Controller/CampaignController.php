@@ -2,13 +2,14 @@
 
 namespace App\Controller;
 
+use App\Dto\ShipSelection;
 use App\Entity\Campaign;
 use App\Entity\Ship;
-use App\Dto\ShipSelection;
+use App\Form\Config\DayYearLimits;
 use App\Form\CampaignType;
 use App\Form\ShipSelectType;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -95,6 +96,7 @@ final class CampaignController extends BaseController
     public function ships(
         int $id,
         Request $request,
+        DayYearLimits $limits,
         EntityManagerInterface $em
     ): Response {
         $user = $this->getUser();
@@ -123,15 +125,15 @@ final class CampaignController extends BaseController
         ]);
 
         $calendarForm = $this->createFormBuilder($campaign)
-            ->add('sessionDay', NumberType::class, [
+            ->add('sessionDay', IntegerType::class, [
                 'label' => 'Session Day',
                 'required' => true,
-                'attr' => ['class' => 'input m-1 w-full'],
+                'attr' => $limits->dayAttr(['class' => 'input m-1 w-full']),
             ])
-            ->add('sessionYear', NumberType::class, [
+            ->add('sessionYear', IntegerType::class, [
                 'label' => 'Session Year',
                 'required' => true,
-                'attr' => ['class' => 'input m-1 w-full'],
+                'attr' => $limits->yearAttr(['class' => 'input m-1 w-full'], $campaign->getStartingYear()),
             ])
             ->getForm();
 
