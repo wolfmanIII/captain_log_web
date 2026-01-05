@@ -61,7 +61,7 @@
             <td style="width: 40%;">{{ desc ?: '—' }}</td>
             <td style="width: 15%; text-align: right;">{{ tons }}</td>
             <td style="width: 15%; text-align: right;">{{ cost }}</td>
-            <td style="width: 15%;">{{ spec is not null ? spec : '—' }}</td>
+            <td style="width: 15%;">{{ spec is not null ? label ~ ' ' ~ spec : '—' }}</td>
         </tr>
     {% endmacro %}
 
