@@ -9,30 +9,6 @@
                 "enabled": false,
                 "fetch": "eager"
             }
-        },
-        "controllers/ai_console_controller.js": {
-            "enabled": true,
-            "fetch": "eager"
-        },
-        "controllers/bulk_select_controller.js": {
-            "enabled": true,
-            "fetch": "eager"
-        },
-        "controllers/income_details_controller.js": {
-            "enabled": true,
-            "fetch": "eager"
-        },
-        "controllers/ship_details_controller.js": {
-            "enabled": true,
-            "fetch": "eager"
-        },
-        "controllers/single_select_table_controller.js": {
-            "enabled": true,
-            "fetch": "eager"
-        },
-        "controllers/year_limit_controller.js": {
-            "enabled": true,
-            "fetch": "eager"
         }
     },
     "entrypoints": []
