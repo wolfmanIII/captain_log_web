@@ -24,7 +24,7 @@ class ImperialDateType extends AbstractType
             ->add('display', TextType::class, [
                 'mapped' => false,
                 'required' => false,
-                'label' => 'Session date',
+                'label' => false,
                 'attr' => [
                     'class' => 'input input-bordered w-full',
                     'readonly' => true,
