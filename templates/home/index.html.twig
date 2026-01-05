@@ -4,7 +4,7 @@
 
 {% block pageContent %}
     <div class="min-h-[80vh] overflow-hidden">
-        <div class="relative isolate overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-indigo-900/20 to-cyan-800/10 p-10 shadow-xl">
+        <div class="relative isolate overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-emerald-900/30 to-cyan-800/20 p-10 shadow-xl">
             <div class="absolute inset-0 opacity-30" aria-hidden="true">
                 <div class="absolute -left-10 -top-10 h-64 w-64 rounded-full bg-cyan-500 blur-3xl"></div>
                 <div class="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-indigo-500 blur-3xl"></div>
@@ -22,10 +22,10 @@
                         <p class="text-sm uppercase tracking-[0.3em]">Traveller // Imperial Drift Lane</p>
                     </div>
                     <h1 class="text-4xl md:text-5xl font-bold text-white leading-tight">
-                        Bridge-grade ops for ships, crew, and credits.
+                        Bridge-grade ops for ships, crew, credits and campaigns.
                     </h1>
                     <p class="text-lg text-slate-200/90 max-w-2xl">
-                        Captain Log is the holo-console for your Traveller campaign: ships, crew, one-to-one mortgages per hull, contract PDFs with counterparties and local law, and annual budgets to track routes, income, costs, and installments in real time.
+                        Captain Log is the holo-console for your Traveller campaign: ships, crew, one-to-one mortgages per hull, contract & ship PDFs with counterparties and local law, Campaign calendars that drive year limits, and annual budgets to track routes, income, costs, and installments in real time.
                     </p>
                     <div class="flex flex-wrap gap-3">
                         <a href="{{ path('app_ship_index') }}" class="btn btn-primary">Go to Ships</a>
@@ -41,7 +41,8 @@
                         <span class="badge badge-outline badge-sm">Jump Ready</span>
                         <span class="badge badge-outline badge-sm">Per-Ship Budget</span>
                         <span class="badge badge-outline badge-sm">Owner Secured</span>
-                        <span class="badge badge-outline badge-sm">Contract PDFs</span>
+                        <span class="badge badge-outline badge-sm">Contract & Ship PDFs</span>
+                        <span class="badge badge-outline badge-sm">Campaign Calendar</span>
                     </div>
                 </div>
 
@@ -53,7 +54,7 @@
                                 <p class="text-xs uppercase tracking-widest text-cyan-200/80">Ships</p>
                             </div>
                             <p class="text-2xl font-bold mt-2">Fleets and classes</p>
-                            <p class="text-sm opacity-80 mt-1">Ship sheets, price, mortgage status, crew.</p>
+                            <p class="text-sm opacity-80 mt-1">Ship sheets, price, mortgage status, crew, and printable PDFs with structured details.</p>
                         </div>
                         <div class="rounded-xl bg-white/5 p-4 border border-white/10">
                             <div class="flex items-center gap-2 text-cyan-200">
@@ -69,7 +70,7 @@
                                 <p class="text-xs uppercase tracking-widest text-cyan-200/80">Mortgages</p>
                             </div>
                             <p class="text-2xl font-bold mt-2">Rates and penalties</p>
-                            <p class="text-sm opacity-80 mt-1">Payment plans, interests, insurance, and paid installments.</p>
+                            <p class="text-sm opacity-80 mt-1">Payment plans, interests, insurance, paid installments, e PDF localizzati.</p>
                         </div>
                         <div class="rounded-xl bg-white/5 p-4 border border-white/10">
                             <div class="flex items-center gap-2 text-cyan-200">
@@ -136,8 +137,8 @@
                     </svg>
                     <p class="text-xs uppercase tracking-[0.25em] text-cyan-400">Economy</p>
                 </div>
-                <h3 class="text-xl font-semibold mt-2 text-slate-100">Costs and income</h3>
-                <p class="text-sm text-slate-300 mt-2">Expense and revenue categories tied to company roles and local laws: maintenance, charter, salvage, contracts.</p>
+                <h3 class="text-xl font-semibold mt-2 text-slate-100">Campaign-led costs & income</h3>
+                <p class="text-sm text-slate-300 mt-2">Expense and revenue categories tied to company roles and local laws; year limits auto-set from the Campaign starting year.</p>
             </div>
             <div class="rounded-2xl border border-white/10 bg-base-200/80 p-6 shadow-sm">
                 <div class="flex items-center gap-2 text-cyan-300">
@@ -184,8 +185,8 @@
                     </svg>
                     <p class="text-xs uppercase tracking-[0.25em] text-cyan-400">Campaign</p>
                 </div>
-                <h3 class="text-xl font-semibold mt-2 text-slate-100">Rapid restart</h3>
-                <p class="text-sm text-slate-300 mt-2">With context seeds you can recreate key registries in seconds between sessions.</p>
+                <h3 class="text-xl font-semibold mt-2 text-slate-100">Campaign calendar</h3>
+                <p class="text-sm text-slate-300 mt-2">Session day/year live on the Campaign and cascade to ships, PDFs, and form limits with a Stimulus helper.</p>
             </div>
         </div>
     </div>

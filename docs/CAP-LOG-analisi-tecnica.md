@@ -11,6 +11,7 @@ Questo documento descrive in modo discorsivo l’architettura attuale di Captain
 - **AI:** integrazione esterna “Elara” via HttpClient (chat e status).
 - **PDF:** wkhtmltopdf via KnpSnappy (binario da `WKHTMLTOPDF_PATH`), template contratti in `templates/contracts` e scheda nave in `templates/pdf/ship/SHEET.html.twig`.
 - **Parametri day/year:** limiti configurabili via env (`APP_DAY_MIN/MAX`, `APP_YEAR_MIN/MAX`) e iniettati nei form NumberType dedicati ai campi giorno/anno.
+- **Stimulus form helpers:** controller `year-limit` applica il min anno derivato dallo `startingYear` della Campaign sulla Ship selezionata, con fallback ai limiti env.
 
 ## Dominio applicativo
 - **Campagne e sessioni:** `Campaign` con calendario di sessione (giorno/anno) e relazione 1–N con Ship; le date sessione mostrate nelle liste/PDF derivano dalla Campaign di appartenenza.
@@ -39,6 +40,7 @@ Questo documento descrive in modo discorsivo l’architettura attuale di Captain
 - **Subscriber:** `AssignUserSubscriber` (annotazione `AsDoctrineListener` su `prePersist`) assegna l’utente corrente se mancante. Se la sessione è anonima, non interviene.
 - **Filtro per ownership nei controller:** i controller protetti recuperano le entità tramite repository filtrando per `user` e restituiscono 404 se l’entità non appartiene all’utente loggato, come difesa in profondità rispetto ai voter.
 - **Localizzazione numerica:** `twig/intl-extra` formatta importi in liste e PDF secondo la locale richiesta, inclusi i PDF nave e mutuo.
+- **Validazione day/year:** i form usano `IntegerType` e `DayYearLimits`; il min anno è calcolato dallo startingYear della Campaign collegata alla Ship scelta (fallback `APP_YEAR_MIN`) e propagato lato client via Stimulus.
 
 ## EasyAdmin
 - Dashboard personalizzata (`templates/admin/dashboard.html.twig`) con card di link rapidi per le entità di contesto (InterestRate, Insurance, ShipRole, CostCategory, IncomeCategory, CompanyRole, LocalLaw, Company).
