@@ -32,3 +32,48 @@
 .inner-bordered-table tbody tr:last-child td {
     @apply border-b-0;
 }
+
+/* Gradient alerts per tipo, usando i colori base DaisyUI */
+.alert.alert-info {
+    background: linear-gradient(
+        to right,
+        hsl(var(--info) / 0.9),
+        hsl(var(--info) / 0.75),
+        hsl(var(--info) / 0.6)
+    );
+    color: hsl(var(--info-content));
+    border: 1px solid hsl(var(--info) / 0.35);
+}
+
+.alert.alert-warning {
+    background: linear-gradient(
+        to right,
+        hsl(var(--warning) / 0.9),
+        hsl(var(--warning) / 0.75),
+        hsl(var(--warning) / 0.6)
+    );
+    color: hsl(var(--warning-content));
+    border: 1px solid hsl(var(--warning) / 0.35);
+}
+
+.alert.alert-error {
+    background: linear-gradient(
+        to right,
+        hsl(var(--error) / 0.9),
+        hsl(var(--error) / 0.75),
+        hsl(var(--error) / 0.6)
+    );
+    color: hsl(var(--error-content));
+    border: 1px solid hsl(var(--error) / 0.35);
+}
+
+.alert.alert-success {
+    background: linear-gradient(
+        to right,
+        hsl(var(--success) / 0.9),
+        hsl(var(--success) / 0.75),
+        hsl(var(--success) / 0.6)
+    );
+    color: hsl(var(--success-content));
+    border: 1px solid hsl(var(--success) / 0.35);
+}
