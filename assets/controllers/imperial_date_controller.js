@@ -217,7 +217,7 @@ export default class extends Controller {
             this.yearInputEl.value = this.yearTarget.value;
         }
         this.updateDisplay();
-        // keep popover open so the modal doesn't close/flicker
+        this.closePopover();
     }
 
     setFromAbsoluteDay(day, updateDisplay = true) {
