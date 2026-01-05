@@ -22,11 +22,11 @@
 
 .inner-bordered-table thead tr:first-child {
     @apply border-t-0;
-    background: linear-gradient(90deg, rgb(15, 23, 42) 0%, rgb(30, 41, 59) 50%, rgb(14, 165, 233) 100%);
+    background: linear-gradient(90deg, #0b1220 0%, #0f172a 50%, #0b1220 100%);
 }
 
 .inner-bordered-table thead tr:first-child th {
-    @apply text-cyan-100;
+    @apply text-cyan-100 font-semibold;
 }
 
 .inner-bordered-table tbody tr:last-child td {
