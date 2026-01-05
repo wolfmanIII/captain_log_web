@@ -66,9 +66,13 @@
         </div>
         <div>
             {{ form_label(detailsForm.totalCost) }}
-            {{ form_widget(detailsForm.totalCost) }}
+            <input type="text"
+                   class="input m-1 w-full bg-base-200 text-base-content"
+                   data-total-cost-display
+                   readonly
+                   value="—">
             {{ form_errors(detailsForm.totalCost) }}
-            <p class="text-xs text-cyan-200 mt-1" data-total-cost-display>—</p>
+            {{ form_widget(detailsForm.totalCost, { attr: { class: 'hidden' } }) }}
         </div>
     </div>
 
@@ -178,21 +182,26 @@
         const costFields = document.querySelectorAll('[data-cost-mcr]');
         let sum = 0;
         costFields.forEach((input) => {
-            const val = parseFloat(input.value);
-        if (!Number.isNaN(val)) {
-            sum += val;
-        }
-    });
+            const raw = (input.value || '').trim();
+            if (!raw) {
+                return;
+            }
+            // support both dot and comma decimals
+            const val = parseFloat(raw.replace(',', '.'));
+            if (!Number.isNaN(val)) {
+                sum += val;
+            }
+        });
         totalInput.value = sum ? sum.toFixed(2) : '';
         if (totalDisplay) {
             if (sum) {
                 const locale = document.documentElement.lang || navigator.language || 'en';
-                totalDisplay.textContent = sum.toLocaleString(locale, {
+                totalDisplay.value = sum.toLocaleString(locale, {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                 });
             } else {
-                totalDisplay.textContent = '—';
+                totalDisplay.value = '—';
             }
         }
     };
