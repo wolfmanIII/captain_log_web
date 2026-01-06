@@ -116,7 +116,21 @@ export default class extends Controller {
             this.changeMonth(1);
         });
 
-        header.append(prev, title, next);
+        const headerLeft = document.createElement('div');
+        headerLeft.className = 'flex items-center gap-2';
+        headerLeft.append(prev, title, next);
+
+        const clearBtn = document.createElement('button');
+        clearBtn.type = 'button';
+        clearBtn.className = 'btn btn-ghost btn-xs text-error';
+        clearBtn.textContent = 'Clear';
+        clearBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            this.clearDate();
+        });
+
+        header.append(headerLeft, clearBtn);
 
         const yearRow = document.createElement('div');
         yearRow.className = 'flex items-center gap-2';
@@ -255,5 +269,15 @@ export default class extends Controller {
 
     decodeIcon(ref) {
         return ref || null;
+    }
+
+    clearDate() {
+        this.dayTarget.value = '';
+        this.yearTarget.value = '';
+        if (this.yearInputEl) {
+            this.yearInputEl.value = '';
+        }
+        this.updateDisplay();
+        this.closePopover();
     }
 }
