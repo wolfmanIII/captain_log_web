@@ -3,6 +3,11 @@
         {% include 'icons/income.html.twig' %} FREIGHT Details
     </legend>
 
+    <div class="col-span-3 alert alert-info alert-outline shadow-sm flex items-start gap-2">
+        <span class="pt-0.5 animate-spin-slow">{% include 'icons/radar.html.twig' %}</span>
+        <p class="text-sm">Freight consignment particulars: origin/destination, pickup/delivery window, cargo manifest, declared value and payment/liability terms.</p>
+    </div>
+
     <div>
         {{ form_label(detail_form.origin) }}
         {{ form_widget(detail_form.origin) }}

@@ -3,6 +3,11 @@
         {% include 'icons/income.html.twig' %} SUBSIDY Details
     </legend>
 
+    <div class="col-span-3 alert alert-info alert-outline shadow-sm flex items-start gap-2">
+        <span class="pt-0.5 animate-spin-slow">{% include 'icons/radar.html.twig' %}</span>
+        <p class="text-sm">Subsidy / grant dossier: declared covered route, service level, milestones, reporting duties and cancellation/recovery clauses.</p>
+    </div>
+
     <div>
         {{ form_label(detail_form.programRef) }}
         {{ form_widget(detail_form.programRef) }}

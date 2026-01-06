@@ -3,6 +3,11 @@
         {% include 'icons/income.html.twig' %} TRADE Details
     </legend>
 
+    <div class="col-span-3 alert alert-info alert-outline shadow-sm flex items-start gap-2">
+        <span class="pt-0.5 animate-spin-slow">{% include 'icons/radar.html.twig' %}</span>
+        <p class="text-sm">Buy/sell deal sheet: goods description, quantity/grade, price and payment terms, delivery/transfer conditions and warranty/returns.</p>
+    </div>
+
     <div>
         {{ form_label(detail_form.location) }}
         {{ form_widget(detail_form.location) }}

@@ -3,6 +3,11 @@
         {% include 'icons/income.html.twig' %} CHARTER Details
     </legend>
 
+    <div class="col-span-3 alert alert-info alert-outline shadow-sm flex items-start gap-2">
+        <span class="pt-0.5 animate-spin-slow">{% include 'icons/radar.html.twig' %}</span>
+        <p class="text-sm">Official charter particulars: declared route/purpose, service window, payment terms and deposits as filed by charterer and operator.</p>
+    </div>
+
     <div class="col-span-3 grid grid-cols-3 gap-4">
         <div>
             {{ form_label(detail_form.areaOrRoute) }}
