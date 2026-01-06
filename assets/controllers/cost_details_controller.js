@@ -4,16 +4,23 @@ import { Controller } from '@hotwired/stimulus';
 export default class extends Controller {
     static targets = ['collection', 'list', 'prototype'];
 
+    connect() {
+        // Se non ci sono item, aggiungiamo un prototipo iniziale.
+        if (this.hasListTarget && this.listTarget.children.length === 0) {
+            this.addFromPrototype(this.collectionTarget);
+        }
+    }
+
     addItem(event) {
         const collection = event.currentTarget.closest('[data-cost-details-target="collection"]');
-        if (!collection) {
-            return;
-        }
+        this.addFromPrototype(collection);
+    }
+
+    addFromPrototype(collection) {
+        if (!collection) return;
         const list = collection.querySelector('[data-cost-details-target="list"]');
         const templateEl = collection.querySelector('template[data-cost-details-target="prototype"]');
-        if (!list || !templateEl) {
-            return;
-        }
+        if (!list || !templateEl) return;
 
         const index = list.children.length;
         const html = templateEl.innerHTML.replace(/__name__/g, index);
