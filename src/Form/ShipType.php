@@ -20,20 +20,16 @@ class ShipType extends AbstractType
     {
         /** @var Ship $ship */
         $ship = $options['data'];
-        $disabled = $ship->hasMortgageSigned();
         $detailsData = ShipDetailsData::fromArray($ship->getShipDetails() ?? []);
         $builder
             ->add('name', TextType::class, [
                 'attr' => ['class' => 'input m-1 w-full'],
-                'disabled' => $disabled,
             ])
             ->add('type', TextType::class, [
                 'attr' => ['class' => 'input m-1 w-full'],
-                'disabled' => $disabled,
             ])
             ->add('class', TextType::class, [
                 'attr' => ['class' => 'input m-1 w-full'],
-                'disabled' => $disabled,
             ])
             ->add('campaign', EntityType::class, [
                 'class' => Campaign::class,
@@ -44,12 +40,10 @@ class ShipType extends AbstractType
                     return $repo->createQueryBuilder('c')->orderBy('c.title', 'ASC');
                 },
                 'attr' => ['class' => 'select m-1 w-full'],
-                'disabled' => $disabled,
             ])
             ->add('price', TravellerMoneyType::class, [
                 'label' => 'Price(Cr)',
                 'attr' => ['class' => 'input m-1 w-full'],
-                'disabled' => $disabled,
             ])
             ->add('shipDetails', ShipDetailsType::class, [
                 'mapped' => false,
