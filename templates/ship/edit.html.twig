@@ -84,8 +84,10 @@
             </div>
 
             <div>
-                {{ form_label(form.price) }}
-                {% if form.price.vars.required %}{% include 'icons/required.html.twig' %}{% endif %}
+                <div class="flex items-center gap-1">
+                    {{ form_label(form.price) }}
+                    {% if form.price.vars.required %}{% include 'icons/required.html.twig' %}{% endif %}
+                </div>
                 {{ form_widget(form.price) }}
                 {{ form_errors(form.price) }}
             </div>
