@@ -39,40 +39,26 @@
                 </div>
             </div>
 
-            <div>
+            <div class="col-span-1" data-controller="imperial-date">
                 <div class="flex items-center gap-1">
-                    {{ form_label(form.startDay) }}
-                    {% if form.startDay.vars.required %}{% include 'icons/required.html.twig' %}{% endif %}
+                    {{ form_label(form.startDate) }}
+                    {% if form.startDate.vars.required %}{% include 'icons/required.html.twig' %}{% endif %}
                 </div>
-                {{ form_widget(form.startDay) }}
-                {{ form_errors(form.startDay) }}
+                {{ form_widget(form.startDate.display, { attr: {'data-imperial-date-prev-icon': '«', 'data-imperial-date-next-icon': '»'} }) }}
+                {{ form_widget(form.startDate.year) }}
+                {{ form_widget(form.startDate.day) }}
+                {{ form_errors(form.startDate) }}
             </div>
 
-            <div>
+            <div class="col-span-1" data-controller="imperial-date">
                 <div class="flex items-center gap-1">
-                    {{ form_label(form.startYear) }}
-                    {% if form.startYear.vars.required %}{% include 'icons/required.html.twig' %}{% endif %}
+                    {{ form_label(form.endDate) }}
+                    {% if form.endDate.vars.required %}{% include 'icons/required.html.twig' %}{% endif %}
                 </div>
-                {{ form_widget(form.startYear) }}
-                {{ form_errors(form.startYear) }}
-            </div>
-
-            <div>
-                <div class="flex items-center gap-1">
-                    {{ form_label(form.endDay) }}
-                    {% if form.endDay.vars.required %}{% include 'icons/required.html.twig' %}{% endif %}
-                </div>
-                {{ form_widget(form.endDay) }}
-                {{ form_errors(form.endDay) }}
-            </div>
-
-            <div>
-                <div class="flex items-center gap-1">
-                    {{ form_label(form.endYear) }}
-                    {% if form.endYear.vars.required %}{% include 'icons/required.html.twig' %}{% endif %}
-                </div>
-                {{ form_widget(form.endYear) }}
-                {{ form_errors(form.endYear) }}
+                {{ form_widget(form.endDate.display, { attr: {'data-imperial-date-prev-icon': '«', 'data-imperial-date-next-icon': '»'} }) }}
+                {{ form_widget(form.endDate.year) }}
+                {{ form_widget(form.endDate.day) }}
+                {{ form_errors(form.endDate) }}
             </div>
 
             <div>

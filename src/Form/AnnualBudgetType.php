@@ -5,12 +5,15 @@ namespace App\Form;
 use App\Entity\AnnualBudget;
 use App\Entity\Ship;
 use App\Form\Config\DayYearLimits;
+use App\Form\Type\ImperialDateType;
+use App\Model\ImperialDate;
 use App\Repository\ShipRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class AnnualBudgetType extends AbstractType
@@ -25,19 +28,26 @@ class AnnualBudgetType extends AbstractType
         /** @var AnnualBudget $budget */
         $budget = $builder->getData();
         $campaignStartYear = $budget?->getShip()?->getCampaign()?->getStartingYear();
+        $minYear = max($this->limits->getYearMin(), $campaignStartYear ?? $this->limits->getYearMin());
+        $startDate = new ImperialDate($budget?->getStartYear(), $budget?->getStartDay());
+        $endDate = new ImperialDate($budget?->getEndYear(), $budget?->getEndDay());
 
         $builder
-            ->add('startDay', IntegerType::class, [
-                'attr' => $this->limits->dayAttr(['class' => 'input m-1 w-full']),
+            ->add('startDate', ImperialDateType::class, [
+                'mapped' => false,
+                'label' => 'Start date',
+                'required' => true,
+                'data' => $startDate,
+                'min_year' => $minYear,
+                'max_year' => $this->limits->getYearMax(),
             ])
-            ->add('startYear', IntegerType::class, [
-                'attr' => $this->limits->yearAttr(['class' => 'input m-1 w-full'], $campaignStartYear),
-            ])
-            ->add('endDay', IntegerType::class, [
-                'attr' => $this->limits->dayAttr(['class' => 'input m-1 w-full']),
-            ])
-            ->add('endYear', IntegerType::class, [
-                'attr' => $this->limits->yearAttr(['class' => 'input m-1 w-full'], $campaignStartYear),
+            ->add('endDate', ImperialDateType::class, [
+                'mapped' => false,
+                'label' => 'End date',
+                'required' => true,
+                'data' => $endDate,
+                'min_year' => $minYear,
+                'max_year' => $this->limits->getYearMax(),
             ])
             ->add('ship', EntityType::class, [
                 'class' => Ship::class,
@@ -67,6 +77,26 @@ class AnnualBudgetType extends AbstractType
                 'attr' => ['class' => 'textarea m-1 w-full', 'rows' => 3],
             ])
         ;
+
+        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event): void {
+            /** @var AnnualBudget $budget */
+            $budget = $event->getData();
+            $form = $event->getForm();
+
+            /** @var ImperialDate|null $start */
+            $start = $form->get('startDate')->getData();
+            if ($start instanceof ImperialDate) {
+                $budget->setStartDay($start->getDay());
+                $budget->setStartYear($start->getYear());
+            }
+
+            /** @var ImperialDate|null $end */
+            $end = $form->get('endDate')->getData();
+            if ($end instanceof ImperialDate) {
+                $budget->setEndDay($end->getDay());
+                $budget->setEndYear($end->getYear());
+            }
+        });
     }
 
     public function configureOptions(OptionsResolver $resolver): void
