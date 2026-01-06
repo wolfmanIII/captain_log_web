@@ -33,7 +33,6 @@ class MortgageType extends AbstractType
     {
         /** @var Mortgage $mortgage */
         $mortgage = $options['data'];
-        $disabled = $mortgage->isSigned();
         $user = $options['user'];
         $currentShipId = $mortgage->getShip()?->getId();
         $campaignStartYear = $mortgage->getShip()?->getCampaign()?->getStartingYear();
@@ -49,24 +48,19 @@ class MortgageType extends AbstractType
                 'data' => $startDate,
                 'min_year' => $minYear,
                 'max_year' => $this->limits->getYearMax(),
-                'attr' => ['class' => $disabled ? 'pointer-events-none opacity-60' : ''],
-                'disabled' => $disabled,
             ])
             ->add('shipShares', IntegerType::class, [
                 'attr' => ['class' => 'input m-1 w-full'],
-                'disabled' => $disabled,
                 'required' => false,
             ])
             ->add('advancePayment', TravellerMoneyType::class, [
                 'label' => 'Advance Payment(Cr)',
                 'attr' => ['class' => 'input m-1 w-full'],
                 'required' => false,
-                'disabled' => $disabled,
             ])
             ->add('discount', IntegerType::class, [
                 'label' => 'Discount(%)',
                 'attr' => ['class' => 'input m-1 w-full'], 'required' => false,
-                'disabled' => $disabled,
             ])
             ->add('ship', EntityType::class, [
                 'placeholder' => '-- Select a Ship --',
@@ -104,7 +98,6 @@ class MortgageType extends AbstractType
                     'data-year-limit-default-value' => $this->limits->getYearMin(),
                     'data-action' => 'change->year-limit#onShipChange',
                 ],
-                'disabled' => $disabled,
             ])
             ->add('interestRate', EntityType::class, [
                 'class' => InterestRate::class,
@@ -141,7 +134,6 @@ class MortgageType extends AbstractType
                     return $qb;
                 },
                 'attr' => ['class' => 'select m-1 w-full'],
-                'disabled' => $disabled,
             ])
             ->add('localLaw', EntityType::class, [
                 'class' => LocalLaw::class,
@@ -152,7 +144,6 @@ class MortgageType extends AbstractType
                     return sprintf('%s - %s', $l->getCode(), $label);
                 },
                 'attr' => ['class' => 'select m-1 w-full'],
-                'disabled' => $disabled,
             ])
         ;
 
