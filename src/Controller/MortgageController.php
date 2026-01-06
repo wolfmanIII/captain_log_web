@@ -273,6 +273,8 @@ final class MortgageController extends BaseController
         }
 
         $mortgage->setSigned(false);
+        $mortgage->setSigningDay(null);
+        $mortgage->setSigningYear(null);
         $em->flush();
 
         $this->addFlash('info', 'Mortgage signature cleared.');
