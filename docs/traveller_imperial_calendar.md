@@ -22,7 +22,7 @@ Questi range presuppongono un anno da 365 giorni con una festività interstizial
 
 - **Datatype**: `App\Model\ImperialDate` (`year`, `day` dove `day` è 1–365, 1 = Holiday).  
 - **Form Type**: `App\Form\Type\ImperialDateType` espone un solo campo visibile (`display`, readonly) e due hidden (`year`, `day`). Opzioni: `min_year`, `max_year` (default 1105–9999). La classe CSS `datepicker` è applicata al campo visibile.  
-- **Stimulus datepicker**: controller `assets/controllers/imperial_date_controller.js` apre un popover navigabile per mese (Traveller) con griglia di giorni, pulsanti « » per il cambio mese, posizionato sopra eventuali modali. Seleziona un giorno → chiude il popover e aggiorna `display` in formato `DDD/YYYY` e i campi hidden.  
+- **Stimulus datepicker**: controller `assets/controllers/imperial_date_controller.js` apre un popover navigabile per mese (Traveller) con griglia di giorni, pulsanti « » per il cambio mese, posizionato sopra eventuali modali. Seleziona un giorno → chiude il popover e aggiorna `display` in formato `DDD/YYYY` e i campi hidden. Tasto “Clear” svuota il giorno mantenendo l’anno.  
 - **Trucchi UI**:
   - Per evitare markup SVG nei data-attr, le frecce sono testuali (« ») passate via `data-imperial-date-prev-icon`/`next-icon`.
   - Il popover è `position:absolute` dentro la `.modal-box` con z-index alto e `overflow: visible` sul contenitore per non forzare scroll.

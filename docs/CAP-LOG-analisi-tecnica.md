@@ -15,7 +15,7 @@ Questo documento descrive in modo discorsivo l’architettura attuale di Captain
 
 ## Dominio applicativo
 - **Campagne e sessioni:** `Campaign` con calendario di sessione (giorno/anno) e relazione 1–N con Ship; le date sessione mostrate nelle liste/PDF derivano dalla Campaign di appartenenza.
-- **Navi e mutui:** `Ship`, `Mortgage`, `MortgageInstallment`, `InterestRate`, `Insurance`, `ShipRole`; la scheda nave esporta un PDF dedicato.
+- **Navi e mutui:** `Ship`, `Mortgage`, `MortgageInstallment`, `InterestRate`, `Insurance`, `ShipRole`; la scheda nave esporta un PDF dedicato. Il mutuo conserva `signingDay/Year` derivati dalla sessione della Campaign della nave e `signingLocation` raccolta via modale al momento della firma; il PDF del mutuo può essere generato anche in draft (non firmato) con etichetta “Pro forma draft”.
 - **Dettagli nave strutturati:** campo JSON `shipDetails` su Ship con DTO/form (`ShipDetailsData`, `ShipDetailItemType`) per drive/hull/bridge e collezioni (weapons, craft, systems, staterooms, software); usato anche nel PDF nave.
 - **Annual Budget per nave:** ogni budget è legato a una singola nave e aggrega ricavi (`Income`), costi (`Cost`) e rate del mutuo pagate nel periodo impostato (start/end giorno/anno). Dashboard e grafico mostrano l’andamento temporale Income/Cost.
 - **Equipaggio:** `Crew` con ruoli multipli (`ShipRole`, es. CAP). Metodi helper `hasCaptain()`, `hasMortgageSigned()`.
@@ -71,7 +71,7 @@ Questo documento descrive in modo discorsivo l’architettura attuale di Captain
 - **AI token/URL:** ora in `.env.local`; evitare hardcode. Verificare che la base URL punti al servizio corretto.
 - **Dashboard:** card a sfondo scuro coerenti con tema EasyAdmin dark; testo “Apri” in azzurro.
 - **PDF/wkhtmltopdf:** assicurarsi che il binario sia disponibile e che l’opzione `enable-local-file-access` resti abilitata per caricare asset locali nei PDF.
-- **Form giorno/anno:** limiti validativi configurati via env; aggiornare `.env.local` in base al calendario imperiale usato al tavolo.
+- **Form giorno/anno:** limiti validativi configurati via env; aggiornare `.env.local` in base al calendario imperiale usato al tavolo. Il datepicker imperiale ha pulsanti mese e un tasto Clear che svuota il giorno mantenendo l’anno.
 - **Sessione campagne:** sessionDay/sessionYear vive su Campaign; le Ship mostrano i valori ereditati. Migrazioni legacy potrebbero aver popolato le Ship: mantenerle allineate se si rimuovono i campi.
 - **Ship details JSON:** il form salva blocchi strutturati; se si altera la struttura, valutare migrazioni o normalizzazioni per non perdere dati.
 
