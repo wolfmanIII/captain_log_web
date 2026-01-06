@@ -25,9 +25,10 @@
                         Bridge-grade ops for ships, crew, credits and campaigns.
                     </h1>
                     <p class="text-lg text-slate-200/90 max-w-2xl">
-                        Captain Log is the holo-console for your Traveller campaign: ships, crew, one-to-one mortgages per hull, contract & ship PDFs with counterparties and local law, Campaign calendars that drive year limits, and annual budgets to track routes, income, costs, and installments in real time.
+                        Captain Log is the holo-console for your Traveller campaign: ships, crew, one-to-one mortgages per hull, contract & ship PDFs with counterparties and local law, Campaign calendars that drive year limits, and annual budgets to track routes, income, costs, and installments in real time. Prima cosa: crea una Campaign per fissare il calendario di sessione, tutto il resto si aggancia lì.
                     </p>
                     <div class="flex flex-wrap gap-3">
+                        <a href="{{ path('app_campaign_index') }}" class="btn btn-secondary">Create Campaign</a>
                         <a href="{{ path('app_ship_index') }}" class="btn btn-primary">Go to Ships</a>
                         <a href="{{ path('app_mortgage_index') }}" class="btn btn-outline btn-primary">Manage Mortgages</a>
                         <a href="{{ path('app_annual_budget_index') }}" class="btn btn-outline btn-secondary">Annual Budgets</a>
