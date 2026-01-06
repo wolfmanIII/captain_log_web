@@ -64,6 +64,7 @@ class CostType extends AbstractType
                 'constraints' => [
                     new Count(min: 1, minMessage: 'Add at least one cost detail'),
                 ],
+                'error_bubbling' => false,
             ])
             ->add('paymentDate', ImperialDateType::class, [
                 'mapped' => false,
