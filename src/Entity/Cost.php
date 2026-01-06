@@ -54,6 +54,9 @@ class Cost
     #[ORM\JoinColumn(nullable: true)]
     private ?LocalLaw $localLaw = null;
 
+    #[ORM\Column(type: Types::JSON, nullable: true)]
+    private ?array $costItems = null;
+
     public function __construct()
     {
         $this->setCode(Uuid::v7());
@@ -192,6 +195,21 @@ class Cost
     public function setLocalLaw(?LocalLaw $localLaw): static
     {
         $this->localLaw = $localLaw;
+
+        return $this;
+    }
+
+    /**
+     * Collection of purchased/provided items with keys like description, quantity and cost.
+     */
+    public function getCostItems(): array
+    {
+        return $this->costItems ?? [];
+    }
+
+    public function setCostItems(?array $costItems): static
+    {
+        $this->costItems = $costItems;
 
         return $this;
     }
