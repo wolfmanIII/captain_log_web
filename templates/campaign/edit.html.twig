@@ -23,7 +23,7 @@
                         <div>
                             <p class="uppercase text-xs tracking-[0.25em] text-cyan-300/70">Campaign setup</p>
                             <h3 class="font-semibold text-cyan-100 text-xl leading-tight">Campaign</h3>
-                            <p class="text-sm text-cyan-100/80">Titolo, descrizione e anno di inizio; sessionDay/sessionYear saranno gestiti a parte.</p>
+                            <p class="text-sm text-cyan-100/80">Titolo, descrizione, anno di inizio e session date della campagna.</p>
                         </div>
                     </div>
                 </div>
@@ -53,6 +53,31 @@
                 </div>
                 {{ form_widget(form.startingYear) }}
                 {{ form_errors(form.startingYear) }}
+            </div>
+
+            {% set sess_day = campaign.sessionDay %}
+            {% set sess_year = campaign.sessionYear %}
+            {% set sess_value = sess_day is not null and sess_year is not null ? sess_day|format('%03d') ~ '/' ~ sess_year : '' %}
+            <div data-controller="imperial-date session-date-lock"
+                 data-session-date-lock-starting-selector="#campaign_startingYear">
+                <div class="flex items-center gap-1">
+                    {{ form_label(form.sessionDate) }}
+                    {% if form.sessionDate.vars.required %}{% include 'icons/required.html.twig' %}{% endif %}
+                </div>
+                {{ form_widget(form.sessionDate.display, {
+                    attr: {
+                        'data-imperial-date-prev-icon': '«',
+                        'data-imperial-date-next-icon': '»',
+                        'data-imperial-date-initial-day': sess_day ?? '',
+                        'data-imperial-date-initial-year': sess_year ?? '',
+                        'value': sess_value,
+                        'data-session-date-lock-target': 'dateDisplay',
+                    }
+                }) }}
+                {{ form_widget(form.sessionDate.year, { attr: { 'data-session-date-lock-target': 'yearInput' } }) }}
+                {{ form_widget(form.sessionDate.day, { attr: { 'data-session-date-lock-target': 'dayInput' } }) }}
+                <p class="text-xs text-cyan-200/80 mt-1" data-session-date-lock-target="help">Imposta prima lo starting year per abilitare la session date.</p>
+                {{ form_errors(form.sessionDate) }}
             </div>
 
             <div class="col-span-2">

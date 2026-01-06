@@ -5,6 +5,7 @@ import ImperialDateController from './controllers/imperial_date_controller.js';
 import IncomeDetailsController from './controllers/income_details_controller.js';
 import ShipDetailsController from './controllers/ship_details_controller.js';
 import SingleSelectTableController from './controllers/single_select_table_controller.js';
+import SessionDateLockController from './controllers/session_date_lock_controller.js';
 import YearLimitController from './controllers/year_limit_controller.js';
 
 const app = startStimulusApp();
@@ -15,4 +16,5 @@ app.register('imperial-date', ImperialDateController);
 app.register('income-details', IncomeDetailsController);
 app.register('ship-details', ShipDetailsController);
 app.register('single-select-table', SingleSelectTableController);
+app.register('session-date-lock', SessionDateLockController);
 app.register('year-limit', YearLimitController);

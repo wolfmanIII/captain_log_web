@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: CampaignRepository::class)]
@@ -151,5 +153,15 @@ class Campaign
         }
 
         return $this;
+    }
+
+    #[Assert\Callback]
+    public function validateSessionYear(ExecutionContextInterface $context): void
+    {
+        if ($this->startingYear !== null && $this->sessionYear !== null && $this->sessionYear < $this->startingYear) {
+            $context->buildViolation('Session year must be greater or equal to the starting year.')
+                ->atPath('sessionYear')
+                ->addViolation();
+        }
     }
 }
