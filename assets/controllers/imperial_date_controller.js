@@ -33,12 +33,15 @@ export default class extends Controller {
             10,
         );
 
-        // inizializza hidden con i valori correnti
-        if (Number.isFinite(initialDay)) {
+        // inizializza hidden e display con i valori correnti
+        const hasInitDay = Number.isFinite(initialDay);
+        const hasInitYear = Number.isFinite(initialYear);
+
+        if (hasInitDay) {
             this.dayTarget.value = initialDay;
             this.setFromAbsoluteDay(initialDay, false);
         }
-        if (Number.isFinite(initialYear)) {
+        if (hasInitYear) {
             this.yearTarget.value = initialYear;
         } else if (this.yearTarget.dataset.minYear) {
             this.yearTarget.value = this.yearTarget.dataset.minYear;
