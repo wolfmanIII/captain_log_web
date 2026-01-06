@@ -22,5 +22,4 @@
 ###> node modules ###
 /node_modules/
 ###< node modules ###
-/migrations/
 /.idea/dataSources.xml
