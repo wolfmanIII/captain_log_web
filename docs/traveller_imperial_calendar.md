@@ -27,8 +27,10 @@ Questi range presuppongono un anno da 365 giorni con una festività interstizial
   - Per evitare markup SVG nei data-attr, le frecce sono testuali (« ») passate via `data-imperial-date-prev-icon`/`next-icon`.
   - Il popover è `position:absolute` dentro la `.modal-box` con z-index alto e `overflow: visible` sul contenitore per non forzare scroll.
   - I hidden vengono resi manualmente nei form Twig per evitare wrapper con classi indesiderate (`mb-*`) generati dall’helper di Symfony.
+  - Per mostrare subito valori già salvati, il campo `display` viene precompilato da Twig con `value="DDD/YYYY"` e con `data-imperial-date-initial-day/year` valorizzati (vedi dettagli Income: Charter/Subsidy).
 - **Uso nel form**: `->add('paymentDate', ImperialDateType::class, [...])` con mapping manuale in `FormEvents::SUBMIT` per scrivere `paymentDay`/`paymentYear` sull’entità. Esempi concreti:
   - `src/Form/CostType.php` → mappa `paymentDate` su `paymentDay/paymentYear`; in Twig (`templates/cost/edit.html.twig`) rendere manualmente `display`, `year`, `day` dentro un wrapper `data-controller="imperial-date"` per evitare markup extra.
   - `CampaignController` modale “Update Session” (`templates/campaign/details.html.twig`) usa lo stesso widget e wrapper.
+  - Dettagli Income (es. Charter, Subsidy) applicano lo stesso pattern e pre-valorizzano display + data-* per far emergere i dati già presenti.
 - **Range mapping**: i range qui sopra sono codificati nel controller JS; il server non ricostruisce il mese, ma accetta il day-of-year normalizzato (1–365) rispettando i limiti min/max anno.  
 - **Debug rapidi**: se il popover non si vede sopra una modale, verificare `position` e `overflow` del contenitore (`.modal-box`), e che gli asset siano ricompilati (`php bin/console asset-map:compile`).
