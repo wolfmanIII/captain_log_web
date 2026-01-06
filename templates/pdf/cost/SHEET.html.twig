@@ -5,72 +5,78 @@
 {% block stylesheets %}
     <style>
         body { font-family: 'Inter', 'Segoe UI', sans-serif; font-size: 10px; color: #0f172a; background: #ffffff; }
-        .page { padding: 10px; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .logo { height: 54px; }
-        .title { text-align: right; }
-        .title h1 { margin: 0; font-size: 16px; font-weight: 700; }
-        .title p { margin: 2px 0 0 0; color: #475569; letter-spacing: 0.1em; text-transform: uppercase; font-size: 9px; }
+        .page { padding: 12px; }
+        .header-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+        .header-table td { vertical-align: middle; }
+        .logo { height: 64px; }
+        .subtitle { font-size: 10px; text-transform: uppercase; letter-spacing: 0.18em; color: #475569; margin: 0; text-align: right; }
+        .title { font-size: 16px; font-weight: 700; margin: 2px 0 0 0; color: #0f172a; text-align: right; }
+        .card { background: #f8fafc; border: none; border-radius: 10px; padding: 10px; margin-bottom: 10px; position: relative; overflow: hidden; page-break-inside: avoid; break-inside: avoid; }
+        .card::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 15% 20%, rgba(59,130,246,0.06), transparent 40%), radial-gradient(circle at 75% 15%, rgba(14,165,233,0.08), transparent 35%); pointer-events: none; }
+        .card > * { position: relative; z-index: 1; }
         .section-title { font-size: 11px; font-weight: 700; margin: 0 0 6px 0; color: #0f172a; text-transform: uppercase; letter-spacing: 0.06em; }
         .grid { display: grid; gap: 6px; }
         .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-        .block { page-break-inside: avoid; break-inside: avoid; margin-bottom: 10px; }
         .table { width: 100%; border-collapse: collapse; font-size: 9px; }
         .table th, .table td { border: 1px solid #d4d4d8; padding: 5px; vertical-align: top; }
-        .table th { background: #f3f4f6; text-align: left; }
+        .table th { background: #e5e7eb; text-align: left; }
         .muted { color: #475569; font-size: 9px; }
+        .val { font-weight: 600; color: #0f172a; }
     </style>
 {% endblock %}
 {% block javascripts %}{% endblock %}
 
 {% block pageContent %}
+    {% set locale = locale ?? 'en' %}
     <div class="page">
-        <div class="header">
-            <div>
-                <img src="{{ absolute_url(asset('img/captain-log-logo.png')) }}" alt="Captain Log" class="logo">
-            </div>
-            <div class="title">
-                <p>Mission outflows</p>
-                <h1>Cost Sheet</h1>
-            </div>
-        </div>
+        <table class="header-table">
+            <tr>
+                <td style="text-align: left;">
+                    <img src="{{ absolute_url(asset('img/captain-log-logo.png')) }}" alt="Captain Log" class="logo">
+                </td>
+                <td style="text-align: right;">
+                    <p class="subtitle">Mission outflows</p>
+                    <p class="title">Cost Sheet</p>
+                </td>
+            </tr>
+        </table>
 
-        <div class="block grid grid-2">
+        <div class="card grid grid-2">
             <div>
                 <div class="muted">Code</div>
-                <div>{{ cost.code }}</div>
+                <div class="val">{{ cost.code }}</div>
             </div>
             <div>
                 <div class="muted">Title</div>
-                <div>{{ cost.title }}</div>
+                <div class="val">{{ cost.title }}</div>
             </div>
             <div>
                 <div class="muted">Category</div>
-                <div>{{ cost.costCategory ? cost.costCategory.description : '—' }}</div>
+                <div class="val">{{ cost.costCategory ? cost.costCategory.description : '—' }}</div>
             </div>
             <div>
                 <div class="muted">Company</div>
-                <div>{{ cost.company ? cost.company.name ~ ' — ' ~ cost.company.code : '—' }}</div>
+                <div class="val">{{ cost.company ? cost.company.name ~ ' — ' ~ cost.company.code : '—' }}</div>
             </div>
             <div>
                 <div class="muted">Ship</div>
-                <div>{{ cost.ship ? cost.ship.name ~ ' — ' ~ cost.ship.type ~ ' — ' ~ cost.ship.class : '—' }}</div>
+                <div class="val">{{ cost.ship ? cost.ship.name ~ ' — ' ~ cost.ship.type ~ ' — ' ~ cost.ship.class : '—' }}</div>
             </div>
             <div>
                 <div class="muted">Payment date</div>
-                <div>{{ cost.paymentDay and cost.paymentYear ? cost.paymentDay|format('%03d') ~ '/' ~ cost.paymentYear : '—' }}</div>
+                <div class="val">{{ cost.paymentDay and cost.paymentYear ? cost.paymentDay|format('%03d') ~ '/' ~ cost.paymentYear : '—' }}</div>
             </div>
             <div>
                 <div class="muted">Amount (Cr)</div>
-                <div>{{ cost.amount is not null ? cost.amount|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', locale ?? 'en') : '—' }}</div>
+                <div class="val">{{ cost.amount is not null ? cost.amount|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', locale) : '—' }}</div>
             </div>
             <div>
                 <div class="muted">Local law</div>
-                <div>{{ cost.localLaw ? cost.localLaw.code ~ ' — ' ~ (cost.localLaw.shortDescription ?? cost.localLaw.description) : '—' }}</div>
+                <div class="val">{{ cost.localLaw ? cost.localLaw.code ~ ' — ' ~ (cost.localLaw.shortDescription ?? cost.localLaw.description) : '—' }}</div>
             </div>
         </div>
 
-        <div class="block">
+        <div class="card">
             <div class="section-title">Detail Items</div>
             <table class="table">
                 <thead>
@@ -92,9 +98,9 @@
                     {% set lineTotal = (qty is not null and unit is not null) ? qty * unit : null %}
                     <tr>
                         <td>{{ item.description ?? '—' }}</td>
-                        <td style="text-align: right;">{{ qty is not null ? qty|format_number({ min_fraction_digit: 0, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', locale ?? 'en') : '—' }}</td>
-                        <td style="text-align: right;">{{ unit is not null ? unit|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', locale ?? 'en') : '—' }}</td>
-                        <td style="text-align: right;">{{ lineTotal is not null ? lineTotal|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', locale ?? 'en') : '—' }}</td>
+                        <td style="text-align: right;">{{ qty is not null ? qty|format_number({ min_fraction_digit: 0, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', locale) : '—' }}</td>
+                        <td style="text-align: right;">{{ unit is not null ? unit|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', locale) : '—' }}</td>
+                        <td style="text-align: right;">{{ lineTotal is not null ? lineTotal|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', locale) : '—' }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -102,7 +108,7 @@
         </div>
 
         {% if cost.note %}
-            <div class="block">
+            <div class="card">
                 <div class="section-title">Notes</div>
                 <div class="muted" style="white-space: pre-line;">{{ cost.note }}</div>
             </div>
