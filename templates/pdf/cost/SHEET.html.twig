@@ -35,10 +35,6 @@
                 <td style="text-align: right;">
                     <p class="subtitle">Disbursement docket</p>
                     <p class="title">Payable statement</p>
-                    <p class="muted" style="margin: 4px 0 0 0;">
-                        Docket ref: {{ cost.code }} |
-                        Settlement date: {{ cost.paymentDay and cost.paymentYear ? cost.paymentDay|format('%03d') ~ '/' ~ cost.paymentYear : '—' }}
-                    </p>
                 </td>
             </tr>
         </table>
