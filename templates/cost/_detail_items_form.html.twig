@@ -4,7 +4,7 @@
     <div class="grid grid-cols-3 gap-2 border border-base-300 rounded p-3 relative collection-item bg-base-100">
         <button type="button"
                 class="btn btn-ghost btn-xs absolute right-1 top-1"
-                data-action="ship-details#removeItem">&times;</button>
+                data-action="cost-details#removeItem">&times;</button>
         <div>
             {{ form_label(child.description) }}
             {{ form_widget(child.description) }}
@@ -20,11 +20,11 @@
             {{ form_widget(child.cost) }}
             {{ form_errors(child.cost) }}
         </div>
-    </div>
+</div>
 {% endmacro %}
 
 <fieldset class="fieldset bg-base-200 border-base-300 gap-4 p-4 border rounded w-250"
-         data-controller="ship-details">
+         data-controller="cost-details">
     <legend class="fieldset-legend">Cost detail items</legend>
 
     <div class="col-span-2">
@@ -45,18 +45,18 @@
         </div>
     </div>
 
-    <div class="space-y-2" data-ship-details-target="collection">
+    <div class="space-y-2" data-cost-details-target="collection">
         <div class="flex items-center justify-between">
             <h4 class="font-semibold text-emerald-100">Items</h4>
             <button type="button" class="btn btn-outline btn-xs"
-                    data-action="ship-details#addItem">+ Add</button>
+                    data-action="cost-details#addItem">+ Add</button>
         </div>
-        <div class="space-y-2" data-ship-details-target="list">
+        <div class="space-y-2" data-cost-details-target="list">
             {% for child in form.detailItems %}
                 {{ costDetails.render_item(child) }}
             {% endfor %}
         </div>
-        <template data-ship-details-target="prototype">
+        <template data-cost-details-target="prototype">
             {{ costDetails.render_item(form.detailItems.vars.prototype) }}
         </template>
     </div>
