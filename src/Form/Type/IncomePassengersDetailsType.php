@@ -4,12 +4,15 @@ namespace App\Form\Type;
 
 use App\Entity\IncomePassengersDetails;
 use App\Form\Config\DayYearLimits;
+use App\Form\Type\ImperialDateType;
+use App\Model\ImperialDate;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class IncomePassengersDetailsType extends AbstractType
@@ -21,6 +24,11 @@ class IncomePassengersDetailsType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $campaignStartYear = $options['campaign_start_year'] ?? null;
+        $minYear = $campaignStartYear ?? $this->limits->getYearMin();
+        /** @var IncomePassengersDetails|null $data */
+        $data = $builder->getData();
+        $departureDate = new ImperialDate($data?->getDepartureYear(), $data?->getDepartureDay());
+        $arrivalDate = new ImperialDate($data?->getArrivalYear(), $data?->getArrivalDay());
         $builder
             ->add('origin', TextType::class, [
                 'required' => false,
@@ -32,25 +40,21 @@ class IncomePassengersDetailsType extends AbstractType
                 'label' => 'Destination',
                 'attr' => ['class' => 'input m-1 w-full'],
             ])
-            ->add('departureDay', IntegerType::class, [
+            ->add('departureDate', ImperialDateType::class, [
+                'mapped' => false,
                 'required' => false,
-                'label' => 'Departure Day',
-                'attr' => $this->limits->dayAttr(['class' => 'input m-1 w-full']),
+                'label' => 'Departure date',
+                'data' => $departureDate,
+                'min_year' => $minYear,
+                'max_year' => $this->limits->getYearMax(),
             ])
-            ->add('departureYear', IntegerType::class, [
+            ->add('arrivalDate', ImperialDateType::class, [
+                'mapped' => false,
                 'required' => false,
-                'label' => 'Departure Year',
-                'attr' => $this->limits->yearAttr(['class' => 'input m-1 w-full'], $campaignStartYear),
-            ])
-            ->add('arrivalDay', IntegerType::class, [
-                'required' => false,
-                'label' => 'Arrival Day',
-                'attr' => $this->limits->dayAttr(['class' => 'input m-1 w-full']),
-            ])
-            ->add('arrivalYear', IntegerType::class, [
-                'required' => false,
-                'label' => 'Arrival Year',
-                'attr' => $this->limits->yearAttr(['class' => 'input m-1 w-full'], $campaignStartYear),
+                'label' => 'Arrival date',
+                'data' => $arrivalDate,
+                'min_year' => $minYear,
+                'max_year' => $this->limits->getYearMax(),
             ])
             ->add('classOrBerth', TextType::class, [
                 'required' => false,
@@ -92,6 +96,26 @@ class IncomePassengersDetailsType extends AbstractType
                 'label' => 'Refund/Change policy',
                 'attr' => ['class' => 'textarea m-1 w-full', 'rows' => 2],
             ]);
+
+        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event): void {
+            /** @var IncomePassengersDetails $details */
+            $details = $event->getData();
+            $form = $event->getForm();
+
+            /** @var ImperialDate|null $dep */
+            $dep = $form->get('departureDate')->getData();
+            if ($dep instanceof ImperialDate) {
+                $details->setDepartureDay($dep->getDay());
+                $details->setDepartureYear($dep->getYear());
+            }
+
+            /** @var ImperialDate|null $arr */
+            $arr = $form->get('arrivalDate')->getData();
+            if ($arr instanceof ImperialDate) {
+                $details->setArrivalDay($arr->getDay());
+                $details->setArrivalYear($arr->getYear());
+            }
+        });
     }
 
     public function configureOptions(OptionsResolver $resolver): void

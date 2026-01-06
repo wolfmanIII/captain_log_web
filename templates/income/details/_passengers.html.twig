@@ -15,29 +15,43 @@
     </div>
 
     <div class="col-span-3 grid grid-cols-2 gap-4">
-        <div class="col-span-1 grid grid-cols-2 gap-4">
-            <div>
-                {{ form_label(detail_form.departureDay) }}
-                {{ form_widget(detail_form.departureDay) }}
-                {{ form_errors(detail_form.departureDay) }}
-            </div>
-            <div>
-                {{ form_label(detail_form.departureYear) }}
-                {{ form_widget(detail_form.departureYear) }}
-                {{ form_errors(detail_form.departureYear) }}
-            </div>
+        {% set data = detail_form.vars.data is defined ? detail_form.vars.data : null %}
+        {% set dep_day = data ? data.departureDay : null %}
+        {% set dep_year = data ? data.departureYear : null %}
+        {% set dep_value = dep_day is not null and dep_year is not null ? dep_day|format('%03d') ~ '/' ~ dep_year : '' %}
+        <div class="col-span-1" data-controller="imperial-date">
+            {{ form_label(detail_form.departureDate) }}
+            {{ form_widget(detail_form.departureDate.display, {
+                attr: {
+                    'data-imperial-date-prev-icon': '«',
+                    'data-imperial-date-next-icon': '»',
+                    'data-imperial-date-initial-day': dep_day ?? '',
+                    'data-imperial-date-initial-year': dep_year ?? '',
+                    'value': dep_value,
+                }
+            }) }}
+            {{ form_widget(detail_form.departureDate.year) }}
+            {{ form_widget(detail_form.departureDate.day) }}
+            {{ form_errors(detail_form.departureDate) }}
         </div>
-        <div class="col-span-1 grid grid-cols-2 gap-4">
-            <div>
-                {{ form_label(detail_form.arrivalDay) }}
-                {{ form_widget(detail_form.arrivalDay) }}
-                {{ form_errors(detail_form.arrivalDay) }}
-            </div>
-            <div>
-                {{ form_label(detail_form.arrivalYear) }}
-                {{ form_widget(detail_form.arrivalYear) }}
-                {{ form_errors(detail_form.arrivalYear) }}
-            </div>
+
+        {% set arr_day = data ? data.arrivalDay : null %}
+        {% set arr_year = data ? data.arrivalYear : null %}
+        {% set arr_value = arr_day is not null and arr_year is not null ? arr_day|format('%03d') ~ '/' ~ arr_year : '' %}
+        <div class="col-span-1" data-controller="imperial-date">
+            {{ form_label(detail_form.arrivalDate) }}
+            {{ form_widget(detail_form.arrivalDate.display, {
+                attr: {
+                    'data-imperial-date-prev-icon': '«',
+                    'data-imperial-date-next-icon': '»',
+                    'data-imperial-date-initial-day': arr_day ?? '',
+                    'data-imperial-date-initial-year': arr_year ?? '',
+                    'value': arr_value,
+                }
+            }) }}
+            {{ form_widget(detail_form.arrivalDate.year) }}
+            {{ form_widget(detail_form.arrivalDate.day) }}
+            {{ form_errors(detail_form.arrivalDate) }}
         </div>
     </div>
 
