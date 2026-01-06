@@ -362,6 +362,12 @@
                             {% endif %}
                         </div>
                     </td>
+                    <td style="text-align: center;">
+                        <div><b>Signing Date</b></div>
+                        {% if mortgage.signed %}
+                            {{ mortgage.signingDay }}/{{ mortgage.signingYear }}
+                        {% endif %}
+                    </td>
                     <td style="text-align: right;">
                         <div><b>Counterparty</b></div>
                         {% if mortgage.company %}
