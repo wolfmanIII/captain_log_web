@@ -87,9 +87,12 @@
                         <td>{{ ship.name }} — {{ ship.type }} — {{ ship.class }}</td>
                         <td>
                             <button type="button"
-                                    class="btn btn-outline btn-info btn-xs mr-1 flex items-center gap-1"
+                                    class="btn btn-outline btn-info btn-xs"
                                     onclick="document.getElementById('crew_{{ ship.id }}').showModal()">
-                                {% include 'icons/crew.html.twig' %}
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect>
+                                    <rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect>
+                                </svg>
                             </button>
                             <a href="{{ path('app_campaign_ship_remove', {id: ship.id}) }}"
                                role="button"
@@ -174,7 +177,7 @@
                             </th>
                             <th>Code</th>
                             <th>Ship</th>
-                            <th class="text-right">Price(Cr)</th>
+                            <th>Captain(★)</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -193,7 +196,7 @@
                                         </td>
                                         <td>{% include 'components/code_with_copy.html.twig' with { code: ship.code } %}</td>
                                         <td>{{ ship.name }} — {{ ship.type }} — {{ ship.class }}</td>
-                                        <td class="text-right">{{ ship.price|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', locale) }}</td>
+                                        <td>{{ ship.captain }}</td>
                                     </tr>
                                 {% endfor %}
                             {% else %}

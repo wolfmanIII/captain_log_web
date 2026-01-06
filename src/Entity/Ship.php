@@ -314,6 +314,16 @@ class Ship
         return false;
     }
 
+    public function getCaptain(): ?string
+    {
+        foreach ($this->crews as $crew) {
+            if ($crew->isCaptain()) {
+                return $crew->getName() . " " . $crew->getSurname();
+            }
+        }
+        return null;
+    }
+
     public function hasMortgage(): bool
     {
         return $this->getMortgage() !== null;
