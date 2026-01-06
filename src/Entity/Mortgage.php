@@ -62,6 +62,9 @@ class Mortgage
     #[ORM\Column(nullable: true)]
     private ?int $signingYear = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $signingLocation = null;
+
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: true)]
     private ?User $user = null;
@@ -237,6 +240,18 @@ class Mortgage
     public function setSigningYear(?int $signingYear): static
     {
         $this->signingYear = $signingYear;
+
+        return $this;
+    }
+
+    public function getSigningLocation(): ?string
+    {
+        return $this->signingLocation;
+    }
+
+    public function setSigningLocation(?string $signingLocation): static
+    {
+        $this->signingLocation = $signingLocation;
 
         return $this;
     }
