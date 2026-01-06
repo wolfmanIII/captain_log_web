@@ -52,9 +52,13 @@
                     data-action="cost-details#addItem">+ Add</button>
         </div>
         <div class="space-y-2" data-cost-details-target="list">
-            {% for child in form.detailItems %}
-                {{ costDetails.render_item(child) }}
-            {% endfor %}
+            {% if form.detailItems|length > 0 %}
+                {% for child in form.detailItems %}
+                    {{ costDetails.render_item(child) }}
+                {% endfor %}
+            {% else %}
+                {{ costDetails.render_item(form.detailItems.vars.prototype) }}
+            {% endif %}
         </div>
         <template data-cost-details-target="prototype">
             {{ costDetails.render_item(form.detailItems.vars.prototype) }}
