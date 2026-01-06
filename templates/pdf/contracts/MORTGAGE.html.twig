@@ -342,26 +342,30 @@
         </div>
     {% endif %}
 
-    <table class="sign-table text-sm">
-        <tr>
-            <td>
-                <div><b>Owner / Operator</b></div>
-                <div>
-                    {% if captain %}
-                        <i>{{ captain.name }} {{ captain.surname }}</i>
-                    {% else %}
-                        — 
-                    {% endif %}
-                </div>
-            </td>
-            <td style="text-align: right;">
-                <div><b>Counterparty</b></div>
-                {% if mortgage.company %}
-                    <div><i>{{ mortgage.company.signLabel ?? mortgage.company.name }}</i></div>
-                {% else %}
-                    <div>_____________________</div>
-                {% endif %}
-            </td>
-        </tr>
-    </table>
+    <div class="card mb-4">
+        <div class="card-body p-4">
+            <table class="sign-table text-sm">
+                <tr>
+                    <td>
+                        <div><b>Owner / Operator</b></div>
+                        <div>
+                            {% if captain %}
+                                <i>{{ captain.name }} {{ captain.surname }}</i>
+                            {% else %}
+                                — 
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td style="text-align: right;">
+                        <div><b>Counterparty</b></div>
+                        {% if mortgage.company %}
+                            <div><i>{{ mortgage.company.signLabel ?? mortgage.company.name }}</i></div>
+                        {% else %}
+                            <div>_____________________</div>
+                        {% endif %}
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
 {% endblock %}
