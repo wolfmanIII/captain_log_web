@@ -31,12 +31,12 @@
                         First step: create a Campaign to set the session calendar—everything else hangs off it.
                     </p>
                     <div class="flex flex-wrap gap-3">
-                        {% set cta_classes = 'btn border-none text-cyan-100 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 hover:from-slate-900 hover:via-slate-800 hover:to-slate-700 shadow-lg' %}
-                        <a href="{{ path('app_campaign_index') }}" class="{{ cta_classes }}">Create Campaign</a>
-                        <a href="{{ path('app_ship_index') }}" class="{{ cta_classes }}">Go to Shipyard</a>
-                        <a href="{{ path('app_mortgage_index') }}" class="{{ cta_classes }}">Manage Mortgages</a>
-                        <a href="{{ path('app_annual_budget_index') }}" class="{{ cta_classes }}">Annual Budgets</a>
-                        <a href="{{ path('app_cost_index') }}" class="{{ cta_classes }}">Track Costs</a>
+                        {% set drawer_btn = 'btn border-none text-emerald-50 bg-gradient-to-l from-emerald-950 via-emerald-800 to-emerald-500 hover:from-emerald-900 hover:via-emerald-700 hover:to-emerald-400 shadow-lg shadow-emerald-900/50' %}
+                        <a href="{{ path('app_campaign_index') }}" class="{{ drawer_btn }}">Create Campaign</a>
+                        <a href="{{ path('app_ship_index') }}" class="{{ drawer_btn }}">Go to Shipyard</a>
+                        <a href="{{ path('app_mortgage_index') }}" class="{{ drawer_btn }}">Manage Mortgages</a>
+                        <a href="{{ path('app_annual_budget_index') }}" class="{{ drawer_btn }}">Annual Budgets</a>
+                        <a href="{{ path('app_cost_index') }}" class="{{ drawer_btn }}">Track Costs</a>
                     </div>
                     <div class="flex flex-wrap gap-4 pt-4 text-xs uppercase tracking-[0.25em] text-cyan-200/70">
                         <span class="badge badge-outline badge-sm">Jump Ready</span>
