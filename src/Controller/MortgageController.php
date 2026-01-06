@@ -101,6 +101,9 @@ final class MortgageController extends BaseController
                     $mortgage->setSigningDay($campaign->getSessionDay());
                     $mortgage->setSigningYear($campaign->getSessionYear());
                 }
+
+                $signingLocation = $request->request->get('signing_location');
+                $mortgage->setSigningLocation($signingLocation ?: null);
             }
 
             $em->persist($mortgage);
@@ -267,6 +270,7 @@ final class MortgageController extends BaseController
         $mortgage->setSigned(false);
         $mortgage->setSigningDay(null);
         $mortgage->setSigningYear(null);
+        $mortgage->setSigningLocation(null);
         $em->flush();
 
         $this->addFlash('info', 'Mortgage signature cleared.');

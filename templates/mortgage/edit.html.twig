@@ -154,11 +154,10 @@
         >Save</button>
 
         <button
-            type="submit"
-            form="mortgage_form"
-            name="action" value="sign"
+            type="button"
             class="btn btn-outline btn-warning mt-4 mb-4 mr-4"
             {% if not can_sign %} disabled {% endif %}
+            onclick="document.getElementById('sign_modal').showModal();"
         >Sign</button>
 
         {% if mortgage.id and is_granted('ROLE_ADMIN') %}
@@ -216,6 +215,41 @@
                     <!-- if there is a button in form, it will close the modal -->
                     <button class="btn">Close</button>
                 </form>
+                </div>
+            </div>
+        </dialog>
+
+        {% set sessionDay = mortgage.ship.campaign ? mortgage.ship.campaign.sessionDay : mortgage.ship.sessionDay %}
+        {% set sessionYear = mortgage.ship.campaign ? mortgage.ship.campaign.sessionYear : mortgage.ship.sessionYear %}
+        {% set sessionValue = (sessionDay is not null and sessionYear is not null) ? sessionDay|format('%03d') ~ '/' ~ sessionYear : '—' %}
+        <dialog id="sign_modal" class="modal">
+            <div class="modal-box w-11/12 max-w-xl">
+                <header class="prose mb-4">
+                    <h3>Confirm signing</h3>
+                    <p class="text-sm opacity-80">Session date: <b>{{ sessionValue }}</b></p>
+                </header>
+                <div class="form-control mb-4">
+                    <label class="label">Signing location</label>
+                    <input
+                        type="text"
+                        name="signing_location"
+                        form="mortgage_form"
+                        class="input input-bordered w-full"
+                        placeholder="Enter signing location"
+                        required
+                    >
+                </div>
+                <div class="modal-action">
+                    <button type="button" class="btn" onclick="document.getElementById('sign_modal').close();">Cancel</button>
+                    <button
+                        type="submit"
+                        form="mortgage_form"
+                        name="action"
+                        value="sign"
+                        class="btn btn-warning"
+                    >
+                        Confirm sign
+                    </button>
                 </div>
             </div>
         </dialog>
