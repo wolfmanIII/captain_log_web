@@ -18,6 +18,15 @@
                     <span>Bridge</span>
                 </a>
             </li>
+            <li>
+                <a href="{{ path('app_operation_guide') }}"
+                   class="{% if controller_name == 'OperationGuideController' %}menu-active{% endif %}">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-cyan-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2m-4-8a6 6 0 100 12 6 6 0 000-12z" />
+                    </svg>
+                    <span>Operations Guide</span>
+                </a>
+            </li>
 
             <li class="menu-title">
                 <span class="text-cyan-200/70 text-xs uppercase tracking-[0.2em]">Directory</span>
