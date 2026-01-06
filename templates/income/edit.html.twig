@@ -30,21 +30,21 @@
                     </div>
                 </div>
             </div>
-            <div class="col-span-3">
-                <div class="alert alert-warning alert-outline shadow-sm w-full">
-                    <div class="flex items-start gap-3">
-                        <div class="pt-0.5 animate-spin-slow text-warning">
-                            {% include 'icons/radar.html.twig' %}
-                        </div>
-                        <div>
-                            <div class="font-semibold">Category warning</div>
-                            <p class="text-sm opacity-80">Changing the Income category will wipe the data of the previously saved category.</p>
+            {% if income.id %}
+                <div class="col-span-3">
+                    <div class="alert alert-warning alert-outline shadow-sm w-full">
+                        <div class="flex items-start gap-3">
+                            <div class="pt-0.5 animate-spin-slow text-warning">
+                                {% include 'icons/radar.html.twig' %}
+                            </div>
+                            <div>
+                                <div class="font-semibold">Category warning</div>
+                                <p class="text-sm opacity-80">Changing the Income category will wipe the data of the previously saved category.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            {% if income.id %}
                 <div class="col-span-3">
                     <label class="label">Code</label>
                     <div><b>{{ income.code }}</b></div>
