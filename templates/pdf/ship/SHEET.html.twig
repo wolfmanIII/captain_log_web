@@ -163,14 +163,11 @@
                 </div>
                 {% set sessionDay = ship.campaign ? ship.campaign.sessionDay : ship.sessionDay %}
                 {% set sessionYear = ship.campaign ? ship.campaign.sessionYear : ship.sessionYear %}
+                {% set sessionValue = (sessionDay is not null and sessionYear is not null) ? sessionDay|format('%03d') ~ '/' ~ sessionYear : '—' %}
                 <div class="item">
                     <div class="label">Session</div>
                     <div class="val">
-                        {% if sessionDay or sessionYear %}
-                            Day {{ sessionDay ?: '—' }} / {{ sessionYear ?: '—' }}
-                        {% else %}
-                            —
-                        {% endif %}
+                        {{ sessionValue }}
                     </div>
                 </div>
                 <div class="item">
