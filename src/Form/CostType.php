@@ -156,7 +156,7 @@ class CostType extends AbstractType
                 $lineCost = isset($item['cost']) && is_numeric($item['cost']) ? (float) $item['cost'] : 0.0;
                 $total += $qty * $lineCost;
             }
-            $cost->setAmount(number_format($total, 2, '.', ''));
+            $cost->setAmount(sprintf('%.2f', $total));
         });
     }
 
