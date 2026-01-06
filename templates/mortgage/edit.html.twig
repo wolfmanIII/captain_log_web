@@ -48,13 +48,11 @@
                     </div>
 
                     <div class="{{ mortgage.signed ? 'alert alert-info alert-outline' : '' }}">
-                        <label class="label mt-1 mb-1">Signed</label>
                         {% if mortgage.signed %}
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
+                            <span class="flex items-center justify-center animate-spin-slow">
+                                {% include 'icons/radar.html.twig' %}
+                            </span>
+                            <label class="label mt-1 mb-1">Signed</label>
                         {% else %}
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -62,6 +60,7 @@
                                     <line x1="18" y1="6" x2="6" y2="18"></line>
                                     <line x1="6" y1="6" x2="18" y2="18"></line>
                             </svg>
+                            <label class="label mt-1 mb-1">Not Signed</label>
                         {% endif %}
                     </div>
 
@@ -149,56 +148,54 @@
 
         </fieldset>
 
-        {{ form_end(form) }}
+        <button
+            type="submit"
+            form="mortgage_form"
+            name="action" value="save"
+            class="btn btn-outline btn-primary mt-4 mb-4 mr-4"
+            {% if not (mortgage.id ? can_edit : can_create) %} disabled {% endif %}
+        >Save</button>
 
-        <div class="flex flex-wrap items-center gap-3 mt-4 mb-4 w-full">
-            <button
-                type="submit"
-                form="mortgage_form"
-                name="action" value="save"
-                class="btn btn-outline btn-primary"
-                {% if not (mortgage.id ? can_edit : can_create) %} disabled {% endif %}
-            >Save</button>
+        <button
+            type="submit"
+            form="mortgage_form"
+            name="action" value="sign"
+            class="btn btn-outline btn-warning mt-4 mb-4 mr-4"
+            {% if not can_sign %} disabled {% endif %}
+        >Sign</button>
 
-            <button
-                type="submit"
-                form="mortgage_form"
-                name="action" value="sign"
-                class="btn btn-outline btn-warning"
-                {% if not can_sign %} disabled {% endif %}
-            >Sign</button>
+        {% if mortgage.id and is_granted('ROLE_ADMIN') %}
+            {% set disabledClass = mortgage.signed ? '' : ' opacity-60 pointer-events-none' %}
+            <a
+                href="{{ path('app_mortgage_unsigned', {id: mortgage.id}) }}"
+                role="button"
+                class="btn btn-outline btn-error{{ disabledClass }} mt-4 mb-4 mr-4"
+                {% if not mortgage.signed %}aria-disabled="true"{% endif %}
+            >
+                Unsign
+            </a>
+        {% endif %}
 
-            {% if mortgage.id and is_granted('ROLE_ADMIN') %}
-                {% set disabledClass = mortgage.signed ? '' : ' opacity-60 pointer-events-none' %}
-                <a
-                    href="{{ path('app_mortgage_unsigned', {id: mortgage.id}) }}"
-                    role="button"
-                    class="btn btn-outline btn-error{{ disabledClass }}"
-                    {% if not mortgage.signed %}aria-disabled="true"{% endif %}
-                >
-                    Unsign
-                </a>
-            {% endif %}
+        {% if mortgage.id %}
+            <a
+                href="{{ path('app_mortgage_pdf', {id: mortgage.id}) }}"
+                role="button"
+                target="_blank"
+                class="btn btn-outline btn-secondary mt-4 mb-4 mr-4"
+                {% if not can_pdf %} disabled {% endif %}
+            >PDF</a>
+        {% else %}
+            <a
+                href="#"
+                role="button"
+                target="_blank"
+                class="btn btn-outline btn-secondary mt-4 mb-4 mr-4"
+                disabled
+            >PDF</a>
+        {% endif %}
+        <a href="{{ path('app_mortgage_index') }}" role="button" class="btn btn-outline btn-default mt-4 mb-4 mr-4">Cancel</a>
 
-            {% if mortgage.id %}
-                <a
-                    href="{{ path('app_mortgage_pdf', {id: mortgage.id}) }}"
-                    role="button"
-                    target="_blank"
-                    class="btn btn-outline btn-secondary"
-                    {% if not can_pdf %} disabled {% endif %}
-                >PDF</a>
-            {% else %}
-                <a
-                    href="#"
-                    role="button"
-                    target="_blank"
-                    class="btn btn-outline btn-secondary"
-                    disabled
-                >PDF</a>
-            {% endif %}
-            <a href="{{ path('app_mortgage_index') }}" role="button" class="btn btn-outline btn-default">Cancel</a>
-        </div>
+        {{ form_end(form) }} 
 
         <dialog id="coverage_modal" class="modal">
             <div class="modal-box">
