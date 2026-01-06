@@ -90,7 +90,7 @@ final class MortgageVoter extends Voter
 
     private function canCreatePdf(Mortgage $mortgage, ?UserInterface $user = null): bool
     {
-        return $this->isOwner($mortgage, $user) && $mortgage->isSigned();
+        return $this->isOwner($mortgage, $user);
     }
 
     private function isOwner(Mortgage $mortgage, UserInterface $user): bool

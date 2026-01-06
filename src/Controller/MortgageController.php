@@ -195,10 +195,6 @@ final class MortgageController extends BaseController
             throw new NotFoundHttpException();
         }
 
-        if (!$mortgage->isSigned()) {
-            throw $this->createAccessDeniedException('Mortgage not signed');
-        }
-
         $htmlTemplate = 'pdf/contracts/MORTGAGE.html.twig';
         $context = [
             'mortgage' => $mortgage,
@@ -242,10 +238,6 @@ final class MortgageController extends BaseController
         $mortgage = $em->getRepository(Mortgage::class)->findOneForUser($id, $user);
         if (!$mortgage) {
             throw new NotFoundHttpException();
-        }
-
-        if (!$mortgage->isSigned()) {
-            throw $this->createAccessDeniedException('Mortgage not signed');
         }
 
         return $this->render('pdf/contracts/MORTGAGE.html.twig', [
