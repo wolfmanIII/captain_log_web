@@ -223,13 +223,11 @@
                     }) }}
                     <fieldset class="fieldset grid grid-cols-2 bg-base-200 border-base-300 gap-4 p-4 border rounded w-full">
                         <legend class="fieldset-legend">Installment</legend>
-                        <div>
-                            <label class="label">Payment Day</label>
-                            {{ form_widget(payment_form.paymentDay) }}
-                        </div>
-                        <div>
-                            <label class="label">Payment Year</label>
-                            {{ form_widget(payment_form.paymentYear) }}
+                        <div class="col-span-2" data-controller="imperial-date">
+                            <label class="label">Payment Date</label>
+                            {{ form_widget(payment_form.paymentDate.display, { attr: {'data-imperial-date-prev-icon': '«', 'data-imperial-date-next-icon': '»'} }) }}
+                            {{ form_widget(payment_form.paymentDate.year) }}
+                            {{ form_widget(payment_form.paymentDate.day) }}
                         </div>
                         <div>
                             <label class="label">Payment(Cr)</label>

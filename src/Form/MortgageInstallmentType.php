@@ -4,10 +4,13 @@ namespace App\Form;
 
 use App\Entity\MortgageInstallment;
 use App\Form\Config\DayYearLimits;
+use App\Form\Type\ImperialDateType;
 use App\Form\Type\TravellerMoneyType;
+use App\Model\ImperialDate;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class MortgageInstallmentType extends AbstractType
@@ -22,19 +25,36 @@ class MortgageInstallmentType extends AbstractType
         $installment = $options['data'];
         $summary = $installment->getMortgage()->calculate();
         $campaignStartYear = $installment->getMortgage()?->getShip()?->getCampaign()?->getStartingYear();
+        $minYear = max($this->limits->getYearMin(), $campaignStartYear ?? $this->limits->getYearMin());
+        $paymentDate = new ImperialDate($installment?->getPaymentYear(), $installment?->getPaymentDay());
 
         $builder
-            ->add('paymentDay', IntegerType::class, [
-                'attr' => $this->limits->dayAttr(['class' => 'input m-1 w-full']),
-            ])
-            ->add('paymentYear', IntegerType::class, [
-                'attr' => $this->limits->yearAttr(['class' => 'input m-1 w-full'], $campaignStartYear),
+            ->add('paymentDate', ImperialDateType::class, [
+                'mapped' => false,
+                'label' => 'Payment date',
+                'required' => true,
+                'data' => $paymentDate,
+                'min_year' => $minYear,
+                'max_year' => $this->limits->getYearMax(),
             ])
             ->add('payment', TravellerMoneyType::class, [
                 'attr' => ['class' => 'input m-1 w-full', 'readonly' => 'readonly'],
                 'data' => $summary['total_monthly_payment'],
             ])
         ;
+
+        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event): void {
+            /** @var MortgageInstallment $installment */
+            $installment = $event->getData();
+            $form = $event->getForm();
+
+            /** @var ImperialDate|null $payment */
+            $payment = $form->get('paymentDate')->getData();
+            if ($payment instanceof ImperialDate) {
+                $installment->setPaymentDay($payment->getDay());
+                $installment->setPaymentYear($payment->getYear());
+            }
+        });
     }
 
     public function configureOptions(OptionsResolver $resolver): void
