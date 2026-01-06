@@ -169,16 +169,15 @@
             >Sign</button>
 
             {% if mortgage.id and is_granted('ROLE_ADMIN') %}
-                <form method="post" action="{{ path('app_mortgage_unsigned', {id: mortgage.id}) }}" class="inline-flex">
-                    <input type="hidden" name="_token" value="{{ csrf_token('mortgage_unsigned_' ~ mortgage.id) }}">
-                    <button
-                        type="submit"
-                        class="btn btn-outline btn-error"
-                        {% if not mortgage.signed %}disabled{% endif %}
-                    >
-                        Unsign
-                    </button>
-                </form>
+                {% set disabledClass = mortgage.signed ? '' : ' opacity-60 pointer-events-none' %}
+                <a
+                    href="{{ path('app_mortgage_unsigned', {id: mortgage.id}) }}"
+                    role="button"
+                    class="btn btn-outline btn-error{{ disabledClass }}"
+                    {% if not mortgage.signed %}aria-disabled="true"{% endif %}
+                >
+                    Unsign
+                </a>
             {% endif %}
 
             {% if mortgage.id %}
