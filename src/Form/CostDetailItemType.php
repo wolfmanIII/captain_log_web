@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -20,7 +21,7 @@ class CostDetailItemType extends AbstractType
             ->add('quantity', NumberType::class, [
                 'required' => false,
                 'label' => 'Quantity',
-                'attr' => ['class' => 'input m-1 w-full', 'step' => 'any'],
+                'attr' => ['class' => 'input m-1 w-full', 'min' => 1],
             ])
             ->add('cost', NumberType::class, [
                 'required' => false,
