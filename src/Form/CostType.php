@@ -20,6 +20,7 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -146,6 +147,9 @@ class CostType extends AbstractType
 
             // Calcolo server-side dell'importo totale dai detailItems per evitare valori null.
             $details = $cost->getDetailItems() ?? [];
+            if (count($details) < 1) {
+                $form->get('detailItems')->addError(new FormError('Add at least one cost detail'));
+            }
             $total = 0.0;
             foreach ($details as $item) {
                 $qty = isset($item['quantity']) && is_numeric($item['quantity']) ? (float) $item['quantity'] : 0.0;
