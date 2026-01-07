@@ -10,6 +10,8 @@ use App\Form\CampaignType;
 use App\Form\ShipSelectType;
 use App\Form\Type\ImperialDateType;
 use App\Model\ImperialDate;
+use App\Security\Voter\CampaignVoter;
+use App\Security\Voter\ShipVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -140,10 +142,7 @@ final class CampaignController extends BaseController
             throw new NotFoundHttpException();
         }
 
-        if ($campaign->getShips()->count() > 0) {
-            $this->addFlash('error', 'Cannot delete a campaign with assigned ships.');
-            return $this->redirectToRoute('app_campaign_index');
-        }
+        $this->denyAccessUnlessGranted(CampaignVoter::DELETE, $campaign);
 
         $em->remove($campaign);
         $em->flush();
@@ -246,6 +245,8 @@ final class CampaignController extends BaseController
         if (!$campaign) {
             throw new NotFoundHttpException();
         }
+
+        $this->denyAccessUnlessGranted(ShipVoter::CAMPAIGN_REMOVE, $ship);
 
         $campaign->removeShip($ship);
         $em->persist($campaign);

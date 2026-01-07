@@ -6,6 +6,7 @@ use App\Entity\Insurance;
 use App\Entity\InterestRate;
 use App\Entity\Mortgage;
 use App\Entity\Ship;
+use App\Entity\Campaign;
 use App\Entity\Company;
 use App\Entity\LocalLaw;
 use App\Form\Config\DayYearLimits;
@@ -62,18 +63,43 @@ class MortgageType extends AbstractType
                 'label' => 'Discount(%)',
                 'attr' => ['class' => 'input m-1 w-full'], 'required' => false,
             ])
+            ->add('campaign', EntityType::class, [
+                'class' => Campaign::class,
+                'mapped' => false,
+                'required' => true,
+                'placeholder' => '-- Select a Campaign --',
+                'choice_label' => fn (Campaign $campaign) => $campaign->getTitle(),
+                'data' => $mortgage->getShip()?->getCampaign(),
+                'query_builder' => function (EntityRepository $er) use ($user) {
+                    $qb = $er->createQueryBuilder('c')->orderBy('c.title', 'ASC');
+                    if ($user) {
+                        $qb->andWhere('c.user = :user')->setParameter('user', $user);
+                    }
+                    return $qb;
+                },
+                'attr' => [
+                    'class' => 'select m-1 w-full',
+                    'data-campaign-ship-target' => 'campaign',
+                    'data-action' => 'change->campaign-ship#onCampaignChange',
+                ],
+            ])
             ->add('ship', EntityType::class, [
                 'placeholder' => '-- Select a Ship --',
                 'class' => Ship::class,
+                'disabled' => $mortgage->getShip() === null,
                 'choice_label' => fn (Ship $ship) =>
                     sprintf('%s - %s - %s',
                         $ship->getName(),
                         $ship->getType(),
                         number_format((float) $ship->getPrice(), 2, ',', '.') . " Cr"
-                    ),
+                ),
                 'choice_attr' => function (Ship $ship): array {
                     $start = $ship->getCampaign()?->getStartingYear();
-                    return ['data-start-year' => $start ?? ''];
+                    $campaignId = $ship->getCampaign()?->getId();
+                    return [
+                        'data-start-year' => $start ?? '',
+                        'data-campaign' => $campaignId ? (string) $campaignId : '',
+                    ];
                 },
                 'query_builder' => function (ShipRepository $repo) use ($user, $currentShipId) {
                     $qb = $repo->createQueryBuilder('s')
@@ -94,6 +120,7 @@ class MortgageType extends AbstractType
                 },
                 'attr' => [
                     'class' => 'select m-1 w-full',
+                    'data-campaign-ship-target' => 'ship',
                     'data-controller' => 'year-limit',
                     'data-year-limit-default-value' => $this->limits->getYearMin(),
                     'data-action' => 'change->year-limit#onShipChange',

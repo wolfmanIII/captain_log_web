@@ -117,6 +117,8 @@ final class ShipController extends BaseController
             throw new NotFoundHttpException();
         }
 
+        $originalCampaign = $ship->getCampaign();
+
         $form = $this->createForm(ShipType::class, $ship);
 
         $form->handleRequest($request);
@@ -125,6 +127,14 @@ final class ShipController extends BaseController
             $details = $form->get('shipDetails')->getData();
             if ($details instanceof ShipDetailsData) {
                 $ship->setShipDetails($details->toArray());
+            }
+
+            if ($originalCampaign && $ship->getCampaign() === null) {
+                if (!$this->isGranted(ShipVoter::CAMPAIGN_REMOVE, $ship)) {
+                    $ship->setCampaign($originalCampaign);
+                    $this->addFlash('error', 'Linked records prevent detaching the campaign.');
+                    return $this->redirectToRoute('app_ship_edit', ['id' => $ship->getId()]);
+                }
             }
 
             if (!$this->isGranted(ShipVoter::EDIT, $ship)) {

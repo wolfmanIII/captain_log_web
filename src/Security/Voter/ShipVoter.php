@@ -4,6 +4,7 @@ namespace App\Security\Voter;
 
 use App\Entity\Ship;
 use App\Entity\User;
+use App\Repository\AnnualBudgetRepository;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -15,6 +16,12 @@ final class ShipVoter extends Voter
     public const EDIT = 'SHIP_EDIT';
     public const DELETE = 'SHIP_DELETE';
     public const CREW_REMOVE = 'SHIP_CREW_REMOVE';
+    public const CAMPAIGN_REMOVE = 'SHIP_CAMPAIGN_REMOVE';
+
+    public function __construct(
+        private AnnualBudgetRepository $annualBudgetRepository,
+    ) {
+    }
 
     protected function supports(string $attribute, mixed $subject): bool
     {
@@ -28,6 +35,7 @@ final class ShipVoter extends Voter
             self::VIEW,
             self::DELETE,
             self::CREW_REMOVE,
+            self::CAMPAIGN_REMOVE,
         ], true);
     }
 
@@ -45,6 +53,7 @@ final class ShipVoter extends Voter
             self::EDIT        => $this->canEdit($subject, $user),
             self::DELETE      => $this->canDelete($subject, $user),
             self::CREW_REMOVE => $this->canCrewRemove($subject, $user),
+            self::CAMPAIGN_REMOVE => $this->canCampaignRemove($subject, $user),
             default           => false,
         };
     }
@@ -79,6 +88,27 @@ final class ShipVoter extends Voter
     private function canCrewRemove(Ship $ship, ?UserInterface $user = null): bool
     {
         return $this->canEdit($ship, $user);
+    }
+
+    private function canCampaignRemove(Ship $ship, ?UserInterface $user = null): bool
+    {
+        if (!$this->isOwner($ship, $user)) {
+            return false;
+        }
+
+        if ($ship->getIncomes()->count() > 0) {
+            return false;
+        }
+
+        if ($ship->getCosts()->count() > 0) {
+            return false;
+        }
+
+        if ($ship->getMortgage() !== null) {
+            return false;
+        }
+
+        return $this->annualBudgetRepository->count(['ship' => $ship]) === 0;
     }
 
     private function isOwner(Ship $ship, UserInterface $user): bool
