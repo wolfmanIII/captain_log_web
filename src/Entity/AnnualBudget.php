@@ -221,7 +221,7 @@ class AnnualBudget
 
         if ($this->startYear > $this->endYear) {
             $context->buildViolation('End date must be after or equal to start date.')
-                ->atPath('endYear')
+                ->atPath('endDate')
                 ->addViolation();
             return;
         }
@@ -229,7 +229,7 @@ class AnnualBudget
         if ($this->startYear === $this->endYear && $this->startDay !== null && $this->endDay !== null) {
             if ($this->startDay > $this->endDay) {
                 $context->buildViolation('End date must be after or equal to start date.')
-                    ->atPath('endDay')
+                    ->atPath('endDate')
                     ->addViolation();
             }
         }

@@ -14,7 +14,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormError;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class AnnualBudgetType extends AbstractType
@@ -99,31 +98,6 @@ class AnnualBudgetType extends AbstractType
             }
         });
 
-        $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event): void {
-            $form = $event->getForm();
-            /** @var ImperialDate|null $start */
-            $start = $form->get('startDate')->getData();
-            /** @var ImperialDate|null $end */
-            $end = $form->get('endDate')->getData();
-
-            if (!$start instanceof ImperialDate || !$end instanceof ImperialDate) {
-                return;
-            }
-
-            $startYear = $start->getYear();
-            $endYear = $end->getYear();
-            $startDay = $start->getDay();
-            $endDay = $end->getDay();
-
-            if ($startYear === null || $endYear === null || $startDay === null || $endDay === null) {
-                return;
-            }
-
-            $invalid = $endYear < $startYear || ($endYear === $startYear && $endDay < $startDay);
-            if ($invalid) {
-                $form->get('endDate')->addError(new FormError('End date must be after or equal to start date.'));
-            }
-        });
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -131,6 +105,10 @@ class AnnualBudgetType extends AbstractType
         $resolver->setDefaults([
             'data_class' => AnnualBudget::class,
             'user' => null,
+            'error_mapping' => [
+                'endYear' => 'endDate',
+                'endDay' => 'endDate',
+            ],
         ]);
     }
 }
