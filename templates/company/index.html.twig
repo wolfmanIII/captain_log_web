@@ -27,18 +27,11 @@
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                         </a>
                     </div>
-                    <div class="tooltip tooltip-bottom" data-tip="Show or hide filters">
-                        <button type="button"
-                                class="btn btn-outline btn-default btn-sm"
-                                onclick="document.getElementById('company-filters').classList.toggle('hidden')">
-                            {% include 'icons/search.html.twig' %}
-                        </button>
-                    </div>
                 </div>
             </div>
         </div>
 
-        <form id="company-filters" method="get" action="{{ path('app_company_index') }}" class="mb-6 hidden">
+        <form id="company-filters" method="get" action="{{ path('app_company_index') }}" class="mb-6">
             <fieldset class="rounded-xl border border-cyan-500/30 bg-slate-900/60 p-4">
                 <legend class="px-2 text-xs uppercase tracking-[0.2em] text-cyan-300/70">Company search</legend>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
