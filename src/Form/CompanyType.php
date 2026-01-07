@@ -30,7 +30,7 @@ class CompanyType extends AbstractType
             ])
             ->add('companyRole', EntityType::class, [
                 'class' => CompanyRole::class,
-                'choice_label' => fn (CompanyRole $role) => sprintf('%s - %s', $role->getCode(), $role->getDescription()),
+                'choice_label' => fn (CompanyRole $role) => $role->getShortDescription() ?? $role->getCode(),
                 'attr' => ['class' => 'select m-1 w-full'],
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('cr')->orderBy('cr.code', 'ASC');
