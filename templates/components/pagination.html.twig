@@ -4,22 +4,24 @@
             Showing {{ pagination.from }}-{{ pagination.to }} of {{ pagination.total }}
         </div>
         <div class="join">
-            {% set query = query ?? app.request.query.all %}
+            {% set queryParams = query ?? app.request.query.all %}
+            {% set routeParams = route_params ?? {} %}
+            {% set baseParams = routeParams|merge(queryParams) %}
             {% set prevPage = pagination.current > 1 ? pagination.current - 1 : 1 %}
             {% set nextPage = pagination.current < pagination.total_pages ? pagination.current + 1 : pagination.total_pages %}
             {% set route = route ?? app.request.attributes.get('_route') %}
-            <a class="join-item btn btn-sm btn-outline" href="{{ path(route, query|merge({'page': prevPage})) }}">&laquo;</a>
+            <a class="join-item btn btn-sm btn-outline" href="{{ path(route, baseParams|merge({'page': prevPage})) }}">&laquo;</a>
             {% for page in pagination.pages %}
                 {% if page %}
                     <a class="join-item btn btn-sm {% if page == pagination.current %}btn-primary{% else %}btn-outline{% endif %}"
-                       href="{{ path(route, query|merge({'page': page})) }}">
+                       href="{{ path(route, baseParams|merge({'page': page})) }}">
                         {{ page }}
                     </a>
                 {% else %}
                     <span class="join-item btn btn-sm btn-ghost">…</span>
                 {% endif %}
             {% endfor %}
-            <a class="join-item btn btn-sm btn-outline" href="{{ path(route, query|merge({'page': nextPage})) }}">&raquo;</a>
+            <a class="join-item btn btn-sm btn-outline" href="{{ path(route, baseParams|merge({'page': nextPage})) }}">&raquo;</a>
         </div>
     </div>
 {% endif %}

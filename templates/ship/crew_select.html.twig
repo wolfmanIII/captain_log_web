@@ -237,6 +237,7 @@
                 {% include 'components/pagination.html.twig' with {
                     pagination: crewPagination,
                     route: 'app_ship_crew',
+                    route_params: {'id': ship.id},
                     query: app.request.query.all
                 } %}
 
