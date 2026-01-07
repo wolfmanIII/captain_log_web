@@ -249,14 +249,18 @@
         </dialog>
 
         <dialog id="interest_rate_modal" class="modal">
-            <div class="modal-box">
-                <h3 class="text-lg font-bold">Interest Rate</h3>
-                <p class="py-4">Press ESC key or click the button below to close</p>
+            <div class="modal-box w-11/12 max-w-xl">
+                <h3 class="text-lg font-bold mb-2 flex items-center gap-2">
+                    {% include 'icons/handbook.html.twig' %}
+                    <span>Interest Rate</span>
+                </h3>
+                <p class="py-2 text-sm opacity-80">
+                    This table shows how the bank prices your hull: duration (years), price multipliers/dividers, and the annual interest rate. Pick the correct band before signing so the 13-period schedule reflects the agreed terms and the Campaign session clock.
+                </p>
                 <div class="modal-action">
-                <form method="dialog">
-                    <!-- if there is a button in form, it will close the modal -->
-                    <button class="btn">Close</button>
-                </form>
+                    <form method="dialog">
+                        <button class="btn">Close</button>
+                    </form>
                 </div>
             </div>
         </dialog>
