@@ -13,6 +13,24 @@
 
             {{ form_widget(form._token) }}
 
+            <div class="col-span-2">
+                <div class="relative overflow-hidden rounded-xl border border-cyan-500/30 bg-gradient-to-r from-slate-900 via-slate-800 to-cyan-900 shadow-lg">
+                    <div class="absolute inset-0 opacity-30 mix-blend-screen pointer-events-none"
+                         style="background: radial-gradient(circle at 20% 20%, rgba(59,130,246,0.25), transparent 35%), radial-gradient(circle at 80% 30%, rgba(14,165,233,0.25), transparent 35%);">
+                    </div>
+                    <div class="relative p-4 flex items-start gap-3">
+                        <div class="p-3 rounded-lg bg-cyan-500/10 border border-cyan-400/40">
+                            {% include 'icons/annual-budget.html.twig' %}
+                        </div>
+                        <div>
+                            <p class="uppercase text-xs tracking-[0.25em] text-cyan-300/70">Mission window</p>
+                            <h3 class="font-semibold text-cyan-100 text-xl leading-tight">Annual budget</h3>
+                            <p class="text-sm text-cyan-100/80">Set start and end for the ship budget: plan credits and missions on the imperial calendar.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             {% if form_errors(form) %}
                 <div class="col-span-2 alert alert-error alert-outline flex items-center gap-2">
                     <span class="animate-spin-slow">
@@ -31,24 +49,6 @@
                 </div>
                 <div></div>
             {% endif %}
-
-            <div class="col-span-2">
-                <div class="relative overflow-hidden rounded-xl border border-cyan-500/30 bg-gradient-to-r from-slate-900 via-slate-800 to-cyan-900 shadow-lg">
-                    <div class="absolute inset-0 opacity-30 mix-blend-screen pointer-events-none"
-                         style="background: radial-gradient(circle at 20% 20%, rgba(59,130,246,0.25), transparent 35%), radial-gradient(circle at 80% 30%, rgba(14,165,233,0.25), transparent 35%);">
-                    </div>
-                    <div class="relative p-4 flex items-start gap-3">
-                        <div class="p-3 rounded-lg bg-cyan-500/10 border border-cyan-400/40">
-                            {% include 'icons/annual-budget.html.twig' %}
-                        </div>
-                        <div>
-                            <p class="uppercase text-xs tracking-[0.25em] text-cyan-300/70">Mission window</p>
-                            <h3 class="font-semibold text-cyan-100 text-xl leading-tight">Annual budget</h3>
-                            <p class="text-sm text-cyan-100/80">Set start and end for the ship budget: plan credits and missions on the imperial calendar.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <div class="col-span-1" data-controller="imperial-date">
                 <div class="flex items-center gap-1">
