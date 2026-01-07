@@ -26,9 +26,7 @@
                     </div>
                 </div>
                 <div class="flex gap-2">
-                    <button class="btn btn-outline btn-primary btn-sm" onclick="m_crew_select.showModal()" title="Add crew">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                    </button>
+                    {% comment %} Modal removed as requested {% endcomment %}
                 </div>
             </div>
         </div>
@@ -100,92 +98,6 @@
                 </table>
             </div>
         </div>
-
-        <dialog id="m_crew_select" class="modal">
-            <div class="modal-box w-full max-w-5xl">
-                <h3 class="text-lg font-bold mb-4">Select Crew Members</h3>
-
-                {{ form_start(form) }}
-                <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100" {{ stimulus_controller('bulk_select') }}>
-                    <table class="table border-separate border-spacing-0 inner-bordered-table">
-                        <!-- head -->
-                        <thead>
-                        <tr>
-                            <th>
-                                <input
-                                    type="checkbox"
-                                    class="checkbox"
-                                    data-bulk-select-target="selectAll"
-                                    data-action="change->bulk-select#toggleAll"
-                                >
-                            </th>
-                            <th>Code</th>
-                            <th>Name</th>
-                            <th>Nickname</th>
-                            <th>Surname</th>
-                            <th>Roles</th>
-                            <th>Captain</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-
-                            {% if form.crewSelections|length > 0 %}
-                                {% for row in form.crewSelections %}
-                                    {% set selection = row.vars.data %}
-                                    {% set member = selection.crew %} {# Twig chiama getCrew() #}
-
-                                    <tr>
-                                        <td>
-                                            {{ form_widget(row.selected, {
-                                                attr: {
-                                                    class: 'checkbox crew-checkbox',
-                                                    'data-bulk-select-target': 'item'
-                                                }
-                                            }) }}
-                                        </td>
-                                        <td>{{ member.code }}</td>
-                                        <td>{{ member.name }}</td>
-                                        <td>"{{ member.nickname }}"</td>
-                                        <td>{{ member.surname }}</td>
-                                        <td>
-                                            {% for role in member.shipRoles %}
-                                                {{ role.name }}{% if not loop.last %} - {% endif %}
-                                            {% endfor %}
-                                        </td>
-                                        <td>
-                                            {% if member.captain %}
-                                                <div class="flex justify-center">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                         viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                                                    </svg>
-                                                </div>
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            {% else %}
-                                <tr>
-                                    <td colspan="7">No more crew members to add</td>
-                                </tr>
-                            {% endif %}
-
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="modal-action">
-                    <button type="submit" class="btn btn-outline btn-primary mt-4 mb-4 mr-4">Save</button>
-                    <button type="button" class="btn btn-outline btn-default mt-4 mb-4 mr-4" onclick="m_crew_select.close()">Close</button>
-                </div>
-                {{ form_end(form) }}
-
-            </div>
-            <form method="dialog" class="modal-backdrop">
-                <button>close</button>
-            </form>
-        </dialog>
 
     </div>
 
