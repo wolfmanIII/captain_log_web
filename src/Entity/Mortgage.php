@@ -322,7 +322,7 @@ class Mortgage
         $base = bcdiv($shipPrice, '100', 6);
         $annualPayment = bcmul($base, $annualCost, 6);
 
-        return bcdiv($annualPayment, '12', 6);
+        return bcdiv($annualPayment, '13', 6);
     }
 
     public function calculate(): array
@@ -337,17 +337,17 @@ class Mortgage
                 (string)$duration,
                 6
             ),
-            '12',
+            '13',
             6
         );
 
-        $annualPayment = bcmul($monthlyPayment, '12', 6);
+        $annualPayment = bcmul($monthlyPayment, '13', 6);
 
         $insuranceMonthlyPayment = '0.00';
         $insuranceAnnualPayment = '0.00';
         if ($this->getInsurance()) {
             $insuranceMonthlyPayment = $this->calculateInsuranceCost();
-            $insuranceAnnualPayment = bcmul($insuranceMonthlyPayment, '12', 6);
+            $insuranceAnnualPayment = bcmul($insuranceMonthlyPayment, '13', 6);
         }
 
         $totalMonthlyPayment = bcadd($monthlyPayment, $insuranceMonthlyPayment, 6);

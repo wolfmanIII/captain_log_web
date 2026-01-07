@@ -219,8 +219,9 @@
             </div>
         </dialog>
 
-        {% set sessionDay = mortgage.ship.campaign ? mortgage.ship.campaign.sessionDay : mortgage.ship.sessionDay %}
-        {% set sessionYear = mortgage.ship.campaign ? mortgage.ship.campaign.sessionYear : mortgage.ship.sessionYear %}
+        {% set ship = mortgage.ship ?? null %}
+        {% set sessionDay = ship ? (ship.campaign ? ship.campaign.sessionDay : ship.sessionDay) : null %}
+        {% set sessionYear = ship ? (ship.campaign ? ship.campaign.sessionYear : ship.sessionYear) : null %}
         {% set sessionValue = (sessionDay is not null and sessionYear is not null) ? sessionDay|format('%03d') ~ '/' ~ sessionYear : '—' %}
         <dialog id="sign_modal" class="modal">
             <div class="modal-box w-11/12 max-w-xl">
