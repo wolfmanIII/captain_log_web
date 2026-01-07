@@ -23,6 +23,11 @@ final class CampaignController extends BaseController
     #[Route('/campaign/index', name: 'app_campaign_index', methods: ['GET'])]
     public function index(Request $request, EntityManagerInterface $em): Response
     {
+        $user = $this->getUser();
+        if (!$user instanceof \App\Entity\User) {
+            throw $this->createAccessDeniedException();
+        }
+
         $startingYearFilter = trim((string) $request->query->get('starting_year', ''));
         $filters = [
             'title' => trim((string) $request->query->get('title', '')),
@@ -33,14 +38,14 @@ final class CampaignController extends BaseController
         $page = max(1, (int) $request->query->get('page', 1));
         $perPage = 10;
 
-        $result = $em->getRepository(Campaign::class)->findWithFilters($filters, $page, $perPage);
+        $result = $em->getRepository(Campaign::class)->findWithFilters($filters, $page, $perPage, $user);
         $campaigns = $result['items'];
         $total = $result['total'];
 
         $totalPages = max(1, (int) ceil($total / $perPage));
         if ($page > $totalPages) {
             $page = $totalPages;
-            $result = $em->getRepository(Campaign::class)->findWithFilters($filters, $page, $perPage);
+            $result = $em->getRepository(Campaign::class)->findWithFilters($filters, $page, $perPage, $user);
             $campaigns = $result['items'];
         }
 
@@ -67,6 +72,11 @@ final class CampaignController extends BaseController
     #[Route('/campaign/new', name: 'app_campaign_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $em): Response
     {
+        $user = $this->getUser();
+        if (!$user instanceof \App\Entity\User) {
+            throw $this->createAccessDeniedException();
+        }
+
         $campaign = new Campaign();
         $form = $this->createForm(CampaignType::class, $campaign);
 
@@ -91,7 +101,12 @@ final class CampaignController extends BaseController
         Request $request,
         EntityManagerInterface $em
     ): Response {
-        $campaign = $em->getRepository(Campaign::class)->find($id);
+        $user = $this->getUser();
+        if (!$user instanceof \App\Entity\User) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $campaign = $em->getRepository(Campaign::class)->findOneForUser($id, $user);
         if (!$campaign) {
             throw new NotFoundHttpException();
         }
@@ -115,7 +130,12 @@ final class CampaignController extends BaseController
     #[Route('/campaign/delete/{id}', name: 'app_campaign_delete', methods: ['GET', 'POST'])]
     public function delete(int $id, EntityManagerInterface $em): Response
     {
-        $campaign = $em->getRepository(Campaign::class)->find($id);
+        $user = $this->getUser();
+        if (!$user instanceof \App\Entity\User) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $campaign = $em->getRepository(Campaign::class)->findOneForUser($id, $user);
         if (!$campaign) {
             throw new NotFoundHttpException();
         }
@@ -138,7 +158,7 @@ final class CampaignController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
-        $campaign = $em->getRepository(Campaign::class)->find($id);
+        $campaign = $em->getRepository(Campaign::class)->findOneForUser($id, $user);
         if (!$campaign) {
             throw new NotFoundHttpException();
         }

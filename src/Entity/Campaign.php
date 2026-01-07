@@ -37,6 +37,10 @@ class Campaign
     #[ORM\Column(nullable: true)]
     private ?int $sessionYear = null;
 
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?User $user = null;
+
     /**
      * @var Collection<int, Ship>
      */
@@ -122,6 +126,18 @@ class Campaign
     public function setSessionYear(?int $sessionYear): static
     {
         $this->sessionYear = $sessionYear;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

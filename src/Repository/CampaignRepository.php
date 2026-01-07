@@ -24,8 +24,8 @@ class CampaignRepository extends ServiceEntityRepository
     public function findAllForUser(User $user): array
     {
         return $this->createQueryBuilder('c')
-            ->join('c.ships', 's')
-            ->andWhere('s.user = :user')
+            ->leftJoin('c.ships', 's', 'WITH', 's.user = :user')
+            ->andWhere('c.user = :user OR s.id IS NOT NULL')
             ->setParameter('user', $user)
             ->groupBy('c.id')
             ->orderBy('c.title', 'ASC')
@@ -38,9 +38,15 @@ class CampaignRepository extends ServiceEntityRepository
      *
      * @return array{items: Campaign[], total: int}
      */
-    public function findWithFilters(array $filters, int $page, int $limit): array
+    public function findWithFilters(array $filters, int $page, int $limit, ?User $user = null): array
     {
         $qb = $this->createQueryBuilder('c');
+
+        if ($user) {
+            $qb->leftJoin('c.ships', 's', 'WITH', 's.user = :user')
+                ->andWhere('c.user = :user OR s.id IS NOT NULL')
+                ->setParameter('user', $user);
+        }
 
         if (!empty($filters['title'])) {
             $title = '%'.strtolower($filters['title']).'%';
@@ -66,5 +72,17 @@ class CampaignRepository extends ServiceEntityRepository
             'items' => iterator_to_array($paginator),
             'total' => $paginator->count(),
         ];
+    }
+
+    public function findOneForUser(int $id, User $user): ?Campaign
+    {
+        return $this->createQueryBuilder('c')
+            ->leftJoin('c.ships', 's', 'WITH', 's.user = :user')
+            ->andWhere('c.id = :id')
+            ->andWhere('c.user = :user OR s.id IS NOT NULL')
+            ->setParameter('id', $id)
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }
