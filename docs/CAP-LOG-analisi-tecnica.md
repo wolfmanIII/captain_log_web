@@ -20,8 +20,9 @@ Questo documento descrive in modo discorsivo l’architettura attuale di Captain
 - **Equipaggio:** `Crew` con ruoli (`ShipRole`); la presenza di capitano è validata da validator dedicato.
 - **CostCategory / IncomeCategory:** tabelle di contesto per tipologie di spesa/entrata (code, description), con seeds JSON.
 - **Company e CompanyRole:** controparti contrattuali usate da `Cost`, `Income` e `Mortgage`.
+- **CompanyRole.shortDescription:** etichetta breve usata nelle select e nelle liste per rendere i ruoli immediati.
 - **LocalLaw:** codice, descrizione breve e disclaimer giurisdizionale; referenziato da Cost, Income, Mortgage.
-- **Income dettagliato per categoria:** relazioni 1–1 (Freight, Passengers, Contract, Trade, Subsidy, Services, Insurance, Interest, Mail, Prize, Salvage, Charter, ecc.) con campi specifici; le sottoform sono attivate in base a `IncomeCategory.code`.
+- **Income dettagliato per categoria:** relazioni 1–1 (Freight, Passengers, Contract, Trade, Subsidy, Services, Insurance, Interest, Mail, Prize, Salvage, Charter, ecc.) con campi specifici; le sottoform sono attivate da `IncomeDetailsSubscriber` in base a `IncomeCategory.code` (mappa opzionale consultabile in `ContractFieldConfig`).
 - **Tracciamento utente:** FK `user` (nullable) su Ship, Crew, Mortgage, MortgageInstallment, Cost, Income, AnnualBudget e Company. Un listener Doctrine (`AssignUserSubscriber`) assegna l’utente loggato in `prePersist`.
 
 ### Relazioni principali
@@ -53,7 +54,7 @@ Questo documento descrive in modo discorsivo l’architettura attuale di Captain
 
 
 ## Contratti e PDF
-- Template HTML Twig in `templates/contracts` per le principali categorie di Income; i placeholder sono documentati in `docs/contract-placeholders.md`.
+- Template HTML Twig in `templates/pdf/contracts` per le principali categorie di Income; i placeholder sono documentati in `docs/contract-placeholders.md`.
 - Servizio `PdfGenerator` basato su KnpSnappy/wkhtmltopdf per stampare i contratti Income, il mutuo e la scheda nave; percorso binario configurato in `config/packages/knp_snappy.yaml` via env.
 - I campi opzionali delle sottoform Income sono determinati dal codice categoria e mostrati solo se richiesti (form dinamiche con event subscriber).
 
@@ -64,6 +65,7 @@ Questo documento descrive in modo discorsivo l’architettura attuale di Captain
 ## Note operative e punti di attenzione
 - **User null:** dati preesistenti senza `user` non supereranno i voter; valutare una migrazione di popolamento o un comportamento di fallback.
 - **Filtri per utente:** liste e recuperi puntuali delle entità protette passano sempre da repository che filtrano per `user` e i controller restituiscono 404 se l’entità non appartiene all’utente corrente, riducendo il rischio di ID enumeration.
+- **Ricerca e paginazione:** le principali liste hanno filtri (testo, categoria, ship, campaign) e paginazione 10 elementi per pagina; la UI usa un componente Twig dedicato (`templates/components/pagination.html.twig`).
 - **CSRF login:** configurato via form_login con CSRF abilitato; la configurazione CSRF stateless per `authenticate` è stata rimossa.
 - **Dashboard:** card a sfondo scuro coerenti con tema EasyAdmin dark; testo “Apri” in azzurro.
 - **PDF/wkhtmltopdf:** assicurarsi che il binario sia disponibile e che l’opzione `enable-local-file-access` resti abilitata per caricare asset locali nei PDF.

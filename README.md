@@ -13,6 +13,7 @@ Applicazione Symfony 7.3 per la gestione di navi, equipaggi, contratti e mutui, 
 - Annual Budget per nave: calcolo riepilogativo di ricavi, costi e rate annuali del mutuo (su 13 periodi), più grafico temporale Income/Cost. Esempio: un mutuo di 100.000 Cr con duration 5 anni e multiplier 1.10 genera 13 rate/anno per 5 anni, non 12.
 - Dashboard EasyAdmin personalizzata e CRUD dedicati alle entità di contesto.
 - Comandi di export/import JSON per ripristinare rapidamente i dati di contesto.
+- Liste principali con filtri di ricerca e paginazione (Ship, Crew, Mortgage, Cost, Income, Company, AnnualBudget, Campaign).
 - I controller e i repository filtrano le entità sull’utente proprietario restituendo 404 se non corrispondono, per difesa in profondità oltre ai voter.
 - I calcoli del mutuo usano BCMath e importi normalizzati a stringa per evitare drift tipici dei float; la formattazione numerica nelle liste/PDF è localizzata tramite `twig/intl-extra`.
 - I campi giorno/anno usano `ImperialDateType` (picker Stimulus `imperial-date` con formato `DDD/YYYY`) e limiti min/max: l’anno minimo è derivato dallo `startingYear` della Campaign selezionata (fallback `APP_YEAR_MIN`), applicato dinamicamente dal controller.
@@ -93,5 +94,5 @@ Applicazione Symfony 7.3 per la gestione di navi, equipaggi, contratti e mutui, 
 - La form dettagli nave salva un JSON (`shipDetails`) e alimenta la stampa PDF della scheda nave.
 - Le liste (Ship, Crew, Mortgage, MortgageInstallment, Cost, Income, AnnualBudget) sono filtrate sull’utente proprietario; il salvataggio assegna automaticamente l’utente loggato.
 - Le entità di contesto (InterestRate, Insurance, ShipRole, CostCategory, IncomeCategory, CompanyRole, LocalLaw) sono gestite via EasyAdmin o via comandi di import/export.
-- I contratti Income sono tipizzati per categoria con dettagli dedicati e possono essere stampati in PDF tramite i template in `templates/contracts`.
+- I contratti Income sono tipizzati per categoria con dettagli dedicati e possono essere stampati in PDF tramite i template in `templates/pdf/contracts`.
 - I campi anno usano `IntegerType` con min derivato dalla Campaign associata alla Ship selezionata; il controller Stimulus `year-limit` aggiorna dinamicamente il limite min per i dropdown nave.

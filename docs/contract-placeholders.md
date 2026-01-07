@@ -1,11 +1,11 @@
 ## Contract placeholders – mappatura tecnica (escluso MORTGAGE)
 
-Documento di riferimento per collegare i placeholder dei template di contratto (`templates/contracts/*.html.twig`) alle entità del dominio. I campi non mappati vanno compilati per singola pratica. Il PDF del mutuo è escluso da questa mappatura.
+Documento di riferimento per collegare i placeholder dei template di contratto (`templates/pdf/contracts/*.html.twig`) alle entità del dominio. I campi non mappati vanno compilati per singola pratica. Il PDF del mutuo è escluso da questa mappatura.
 
 ### Entità e campi di riferimento
 - **Ship**: `name`, `type/class`, `price`, `sessionDay/sessionYear` (cronologia di gioco).
-- **Income**: `code` (ID pratica), `amount`, `signingDay/Year`, `paymentDay/Year`, `expirationDay/Year`, `cancelDay/Year`, `note`; FK verso `Ship`, `Company`, `IncomeCategory`, `LocalLaw`.
-- **Company** (+ `CompanyRole`): `name`, `contact`, `signLabel`, ruolo/descrizione (`CompanyRole.code/description/shortDescription`).
+- **Income**: `code` (ID pratica), `amount`, `signingLocation`, `signingDay/Year`, `paymentDay/Year`, `expirationDay/Year`, `cancelDay/Year`, `note`; FK verso `Ship`, `Company`, `IncomeCategory`, `LocalLaw`.
+- **Company** (+ `CompanyRole`): `name`, `contact`, `signLabel`, ruolo/descrizione breve (`CompanyRole.shortDescription`) e descrizione estesa (`CompanyRole.description`).
 - **LocalLaw**: `code`, `shortDescription`, `description`, `disclaimer`.
 - **Crew** (opzionale per liste passeggeri/manifesti).
 
@@ -48,6 +48,6 @@ Documento di riferimento per collegare i placeholder dei template di contratto (
 ### Come gestire i campi opzionali di Income per categoria di contratto
 - **Campi nullable**: aggiungere a `Income` solo i campi richiesti dai contratti, lasciandoli nullable.
 - **Mappa per categoria**: creare un servizio (es. `ContractFieldConfig`) che, dato `IncomeCategory.code` (FREIGHT, PASSENGERS, CONTRACT, TRADE, ecc.), restituisce l’elenco dei campi opzionali da mostrare.
-- **Form dinamica**: in `IncomeType` usare un event subscriber (`PRE_SET_DATA` / `PRE_SUBMIT`) che legge la categoria e aggiunge al form solo i campi previsti dalla mappa.
+- **Form dinamica**: in `IncomeType` un event subscriber (`IncomeDetailsSubscriber`, `PRE_SET_DATA` / `PRE_SUBMIT`) legge la categoria e aggiunge la sottoform corretta; la mappa di campi opzionali rimane utile per allineare template, placeholder e UI.
 - **Validation groups**: abilitare gruppi di validazione per categoria, così vengono validati solo i campi effettivamente resi visibili.
 - **Template modulare** (opzionale): per le sezioni “dati aggiuntivi” per categoria si possono usare partial Twig dedicati; se il form genera già i campi dinamici, i widget standard sono sufficienti.

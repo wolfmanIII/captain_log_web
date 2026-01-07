@@ -14,15 +14,21 @@ flowchart TB
     Ships -->|1..N| Crew
     Ships -->|1..N| Costs
     Costs -->|N..1| CostCategory
+    Costs -->|N..1| Company
+    Costs -->|N..1| LocalLaw
 
     Ships -->|1..N| Incomes
     Incomes -->|N..1| IncomeCategory
     Incomes -->|1..1| IncomeDetails["Details per categoria"]
+    Incomes -->|N..1| Company
+    Incomes -->|N..1| LocalLaw
 
     Ships -->|1..N| AnnualBudgets
     Ships -->|JSON| ShipDetails["shipDetails (JSON)"]
 
     Companies -->|N..1| CompanyRole
+    Mortgage -->|N..1| Company
+    Mortgage -->|N..1| LocalLaw
 
     Campaigns -->|N..1| Ships
 ```
@@ -51,8 +57,8 @@ flowchart TB
 
 - Income è legato a Ship + IncomeCategory + Company + LocalLaw.
 - Ogni categoria ha una tabella dettagli dedicata (Freight, Contract, Trade, Prize, ecc.).
-- La form usa `ContractFieldConfig` per decidere i campi opzionali in base alla categoria.
-- PDF contratto: selezione template in `templates/contracts` e sostituzione placeholder.
+- La form usa `IncomeDetailsSubscriber` per agganciare la sottoform corretta in base alla categoria; `ContractFieldConfig` mantiene la mappa dei campi opzionali.
+- PDF contratto: selezione template in `templates/pdf/contracts` e sostituzione placeholder.
 
 ## Flusso operativo: costi
 
@@ -75,6 +81,7 @@ flowchart TB
 - Asset via Asset Mapper + Tailwind v4 + DaisyUI.
 - Sidebar con badge “Beacon // Dock Ready” e separatori per sezioni.
 - Login con pannelli separati e immagine dedicata.
+- Liste con filtri sempre visibili e paginazione uniforme (10 risultati/pagina).
 
 ## Perché è “Traveller‑centric”
 
