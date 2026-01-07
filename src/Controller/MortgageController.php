@@ -94,6 +94,12 @@ final class MortgageController extends BaseController
             $action = $request->request->get('action');
 
             if ($action === 'sign') {
+                $signingLocation = trim((string)$request->request->get('signing_location'));
+                if ($signingLocation === '') {
+                    $this->addFlash('error', 'Signing location is required to sign.');
+                    return $this->redirectToRoute('app_mortgage_edit', ['id' => $mortgage->getId()]);
+                }
+
                 $mortgage->setSigned(true);
 
                 $campaign = $mortgage->getShip()?->getCampaign();
@@ -102,7 +108,6 @@ final class MortgageController extends BaseController
                     $mortgage->setSigningYear($campaign->getSessionYear());
                 }
 
-                $signingLocation = $request->request->get('signing_location');
                 $mortgage->setSigningLocation($signingLocation ?: null);
             }
 
