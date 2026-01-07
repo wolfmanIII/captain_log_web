@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\AnnualBudgetRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: AnnualBudgetRepository::class)]
@@ -208,5 +210,28 @@ class AnnualBudget
         );
 
         return round($actualBudget, 2, PHP_ROUND_HALF_DOWN);
+    }
+
+    #[Assert\Callback]
+    public function validateDateRange(ExecutionContextInterface $context): void
+    {
+        if ($this->startYear === null || $this->endYear === null) {
+            return;
+        }
+
+        if ($this->startYear > $this->endYear) {
+            $context->buildViolation('End date must be after or equal to start date.')
+                ->atPath('endYear')
+                ->addViolation();
+            return;
+        }
+
+        if ($this->startYear === $this->endYear && $this->startDay !== null && $this->endDay !== null) {
+            if ($this->startDay > $this->endDay) {
+                $context->buildViolation('End date must be after or equal to start date.')
+                    ->atPath('endDay')
+                    ->addViolation();
+            }
+        }
     }
 }
