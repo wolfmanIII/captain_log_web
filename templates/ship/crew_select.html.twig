@@ -252,7 +252,10 @@
         {% for member in ship.crews %}
             {% set roleForm = roleForms[member.id] ?? null %}
             {% if roleForm %}
-                <dialog id="crew_roles_{{ member.id }}" class="modal" data-controller="role-selector">
+                <dialog id="crew_roles_{{ member.id }}"
+                        class="modal"
+                        data-controller="role-selector"
+                        data-action="show->role-selector#prepareSelection close->role-selector#resetSelection cancel->role-selector#resetSelection">
                     <div class="modal-box w-full max-w-3xl">
                         <h3 class="font-semibold text-cyan-100 text-lg mb-2">Assign Roles — {{ member.name }} {{ member.surname }}</h3>
                         {{ form_start(roleForm, {

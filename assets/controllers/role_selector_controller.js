@@ -8,25 +8,7 @@ export default class extends Controller {
             return;
         }
 
-        this.boundReset = this.resetSelection.bind(this);
-        this.boundOnShow = this.prepareSelection.bind(this);
         this.prepareSelection();
-        this.renderChips();
-
-        this.element?.addEventListener('close', this.boundReset);
-        this.element?.addEventListener('cancel', this.boundReset);
-        this.element?.addEventListener('show', this.boundOnShow);
-    }
-
-    disconnect() {
-        this.element?.removeEventListener('close', this.boundReset);
-        this.element?.removeEventListener('cancel', this.boundReset);
-        this.element?.removeEventListener('show', this.boundOnShow);
-    }
-
-    prepareSelection() {
-        this.saveInitialSelection();
-        this.renderChips();
     }
 
     saveInitialSelection() {
