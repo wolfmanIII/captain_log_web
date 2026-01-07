@@ -265,7 +265,15 @@
                             </span>
                             <div class="text-xs">Select one or more bridge roles and confirm to update the crew profile.</div>
                         </div>
-                        {{ form_widget(roleForm.shipRoles) }}
+                        <div data-controller="role-selector" data-role-selector-target="wrapper">
+                            {{ form_widget(roleForm.shipRoles, {
+                                attr: {
+                                    class: 'hidden',
+                                    'data-role-selector-target': 'select'
+                                }
+                            }) }}
+                            <div class="flex flex-wrap gap-2" data-role-selector-target="chips"></div>
+                        </div>
                         <div class="modal-action">
                             <button type="submit" class="btn btn-outline btn-primary btn-sm">Save</button>
                             <button type="button" class="btn btn-outline btn-default btn-sm" onclick="document.getElementById('crew_roles_{{ member.id }}').close()">Close</button>
