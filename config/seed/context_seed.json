@@ -120,6 +120,108 @@
             "description": "Spaceship Passenger"
         }
     ],
+    "company_roles": [
+        {
+            "code": "AUTHORITY",
+            "short_description": "Regulatory authority",
+            "description": "Official body with legal power: permits, inspections, enforcement, fines, seizures, rulings (port authority, customs, court, navy office)."
+        },
+        {
+            "code": "BANK",
+            "short_description": "Banking institution",
+            "description": "Runs accounts and payments, holds deposits, issues loans and guarantees, handles letters of credit and secure transfers."
+        },
+        {
+            "code": "BROKER",
+            "short_description": "Deal broker",
+            "description": "Connects parties and negotiates deals for a commission; typically arranges terms but does not physically move or store goods"
+        },
+        {
+            "code": "COMMS_PROVIDER",
+            "short_description": "Communications provider",
+            "description": "Provides communications services: relays, message routing, data courier dispatch, secure channels, comms infrastructure access."
+        },
+        {
+            "code": "ENERGY_UTILITY",
+            "short_description": "Power utility",
+            "description": "Supplies and manages power/fuel distribution for stations and settlements: generation, grid service, contracts for steady supply."
+        },
+        {
+            "code": "FINANCIER",
+            "short_description": "Venture financier",
+            "description": "Provides investment and high-risk financing: funding ventures, underwriting projects, managing assets for returns rather than basic banking."
+        },
+        {
+            "code": "HOSPITALITY",
+            "short_description": "Passenger hospitality",
+            "description": "Provides passenger-facing services: lodging, berths, catering, lounges, bookings, and general comfort services."
+        },
+        {
+            "code": "INDUSTRIAL_SUPPLIER",
+            "short_description": "Industrial supplier",
+            "description": "Supplies industrial inputs: spare parts, components, tools, materials, consumables, and standardized replacement stock."
+        },
+        {
+            "code": "LOGISTICS_HUB",
+            "short_description": "Cargo logistics hub",
+            "description": "Handles warehousing and cargo operations: storage, consolidation, loading/unloading, scheduling, bonded/controlled storage, handoff coordination."
+        },
+        {
+            "code": "MANUFACTURER",
+            "short_description": "Manufacturer",
+            "description": "Produces goods through fabrication/assembly: factories, workshops, production lines, and contract manufacturing."
+        },
+        {
+            "code": "MEDIA_NETWORK",
+            "short_description": "Media network",
+            "description": "Produces and distributes information and entertainment: news, advertising, broadcasts, propaganda, and content syndication."
+        },
+        {
+            "code": "MEDICAL_PROVIDER",
+            "short_description": "Medical provider",
+            "description": "Delivers medical services and supplies: clinics/medbays, treatment, pharmaceuticals, emergency care, med-evac coordination."
+        },
+        {
+            "code": "MINING_COMPANY",
+            "short_description": "Mining operator.",
+            "description": "Extracts raw resources: ore, volatiles, ice, gas harvesting; primary collection before refinement/processing."
+        },
+        {
+            "code": "MULTI_SERVICE_PROVIDER",
+            "short_description": "Multi-service operator",
+            "description": "General-purpose company that offers multiple services under one roof (one-stop operator)."
+        },
+        {
+            "code": "REFINERY",
+            "short_description": "Refinery",
+            "description": "Processes raw inputs into usable products: fuels, purified chemicals, refined metals/alloys, and industrial-grade materials."
+        },
+        {
+            "code": "RESEARCH_LAB",
+            "short_description": "Research lab.",
+            "description": "Performs R&D and testing: prototypes, experiments, trials, validation, and controlled development of new tech or processes."
+        },
+        {
+            "code": "SECURITY_CONTRACTOR",
+            "short_description": "Security contractor",
+            "description": "Provides security services: escort, protection, investigation, risk assessment, armed response where legal."
+        },
+        {
+            "code": "SHIPYARD",
+            "short_description": "Shipyard",
+            "description": "Builds and overhauls ships: construction, major repairs, refits, drydock services, and certified heavy maintenance."
+        },
+        {
+            "code": "TECH_VENDOR",
+            "short_description": "Technology vendor",
+            "description": "Sells/installs/supports technology systems: software, electronics, sensors, avionics, networks, diagnostics, and maintenance contracts."
+        },
+        {
+            "code": "TRADER",
+            "short_description": "Trade operator",
+            "description": "Trades goods for profit: sourcing, buying low/selling high, managing inventory and market risk as a core business."
+        }
+    ],
     "cost_categories": [
         {
             "code": "PERSONAL",
