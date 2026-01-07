@@ -119,8 +119,8 @@
                     {% endif %}
                     </tbody>
                 </table>
+            </div>
         </div>
-    </div>
 
         <section class="mt-10 space-y-4">
             <div class="rounded-xl border border-base-content/10 bg-slate-900/40 p-4 shadow-inner">
@@ -148,7 +148,6 @@
                         <input type="hidden" name="crew_page" value="1">
                         <button type="submit" class="btn btn-outline btn-primary btn-sm">Search crew</button>
                         <a href="{{ path('app_ship_crew', {id: ship.id}) }}" class="btn btn-ghost btn-sm">Reset</a>
-                    </div>
                     </div>
                 </form>
             </div>
