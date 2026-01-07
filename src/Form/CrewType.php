@@ -3,16 +3,11 @@
 namespace App\Form;
 
 use App\Entity\Crew;
-use App\Entity\Ship;
-use App\Entity\ShipRole;
 use App\Form\Config\DayYearLimits;
 use App\Form\Type\ImperialDateType;
 use App\Model\ImperialDate;
-use App\Repository\ShipRepository;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -55,37 +50,6 @@ class CrewType extends AbstractType
             ->add('birthWorld', TextType::class, [
                 'attr' => ['class' => 'input m-1 w-full'],
                 'required' => false,
-            ])
-            ->add('ship', EntityType::class, [
-                'class' => Ship::class,
-                'choice_label' => 'name',
-                'required' => false,
-                'choice_attr' => function (Ship $ship): array {
-                    $start = $ship->getCampaign()?->getStartingYear();
-                    return ['data-start-year' => $start ?? ''];
-                },
-                'query_builder' => function (ShipRepository $repo) use ($user) {
-                    $qb = $repo->createQueryBuilder('s')->orderBy('s.name', 'ASC');
-                    if ($user) {
-                        $qb->andWhere('s.user = :user')->setParameter('user', $user);
-                    }
-
-                    return $qb;
-                },
-                'attr' => [
-                    'class' => 'select m-1 w-full',
-                    'data-controller' => 'year-limit',
-                    'data-year-limit-default-value' => $this->limits->getYearMin(),
-                    'data-action' => 'change->year-limit#onShipChange',
-                ],
-            ])
-            ->add('shipRoles', EntityType::class, [
-                'class' => ShipRole::class,
-                'choice_label' => function (ShipRole $role) {
-                    return $role->getCode() . ' - ' . $role->getName();
-                },
-                'multiple' => true,
-                'attr' => ['class' => 'select m-1 h-72 w-full'],
             ])
             ->add('background', TextareaType::class, [
                 'required' => false,
