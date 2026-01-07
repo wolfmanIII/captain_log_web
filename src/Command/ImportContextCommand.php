@@ -125,6 +125,7 @@ class ImportContextCommand extends Command
             $entity = (new Insurance())
                 ->setName((string) $row['name'])
                 ->setAnnualCost(isset($row['annual_cost']) ? (string) $row['annual_cost'] : '0.00')
+                ->setLossRefund(isset($row['loss_refund']) ? (string) $row['loss_refund'] : null)
                 ->setCoverage(isset($row['coverage']) && is_array($row['coverage']) ? $row['coverage'] : [])
             ;
 
