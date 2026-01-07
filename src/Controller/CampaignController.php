@@ -140,6 +140,11 @@ final class CampaignController extends BaseController
             throw new NotFoundHttpException();
         }
 
+        if ($campaign->getShips()->count() > 0) {
+            $this->addFlash('error', 'Cannot delete a campaign with assigned ships.');
+            return $this->redirectToRoute('app_campaign_index');
+        }
+
         $em->remove($campaign);
         $em->flush();
 
