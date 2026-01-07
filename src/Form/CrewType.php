@@ -53,7 +53,7 @@ class CrewType extends AbstractType
             ])
             ->add('background', TextareaType::class, [
                 'required' => false,
-                'attr' => ['class' => 'textarea m-1 w-full', 'rows' => 13],
+                'attr' => ['class' => 'textarea m-1 w-full', 'rows' => 10],
             ])
         ;
 
