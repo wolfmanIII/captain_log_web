@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Cost;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -42,5 +43,56 @@ class CostRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult()
         ;
+    }
+
+    /**
+     * @param array{title?: string, category?: int, ship?: int, campaign?: int} $filters
+     *
+     * @return array{items: Cost[], total: int}
+     */
+    public function findForUserWithFilters(User $user, array $filters, int $page, int $limit): array
+    {
+        $qb = $this->createQueryBuilder('c')
+            ->leftJoin('c.costCategory', 'cat')
+            ->leftJoin('c.ship', 's')
+            ->leftJoin('s.campaign', 'camp')
+            ->addSelect('cat', 's', 'camp')
+            ->andWhere('c.user = :user')
+            ->setParameter('user', $user);
+
+        if (!empty($filters['title'])) {
+            $title = '%'.strtolower($filters['title']).'%';
+            $qb->andWhere('LOWER(c.title) LIKE :title')
+                ->setParameter('title', $title);
+        }
+
+        if ($filters['category'] !== null) {
+            $qb->andWhere('cat.id = :category')
+                ->setParameter('category', (int) $filters['category']);
+        }
+
+        if ($filters['ship'] !== null) {
+            $qb->andWhere('s.id = :ship')
+                ->setParameter('ship', (int) $filters['ship']);
+        }
+
+        if ($filters['campaign'] !== null) {
+            $qb->andWhere('camp.id = :campaign')
+                ->setParameter('campaign', (int) $filters['campaign']);
+        }
+
+        $qb->orderBy('c.paymentYear', 'DESC')
+            ->addOrderBy('c.paymentDay', 'DESC');
+
+        $query = $qb->getQuery()
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit);
+
+        $paginator = new Paginator($query);
+
+        return [
+            'items' => iterator_to_array($paginator),
+            'total' => $paginator->count(),
+        ];
     }
 }
