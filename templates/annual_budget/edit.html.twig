@@ -13,6 +13,17 @@
 
             {{ form_widget(form._token) }}
 
+            {% if form_errors(form) %}
+                <div class="col-span-2 alert alert-error alert-outline flex items-center gap-2">
+                    <span class="animate-spin-slow">
+                        {% include 'icons/radar.html.twig' %}
+                    </span>
+                    <div>
+                        {{ form_errors(form) }}
+                    </div>
+                </div>
+            {% endif %}
+
             {% if budget.id %}
                 <div>
                     <label class="label">Code</label>
