@@ -23,7 +23,7 @@
 </div>
 {% endmacro %}
 
-<fieldset class="fieldset bg-base-200 border-base-300 gap-4 p-4 border rounded w-315"
+<fieldset class="fieldset bg-base-200 border-base-300 gap-4 p-4 border rounded w-full"
          data-controller="cost-details"
          data-cost-details-amount-selector="[name='cost[amount]']">
     <legend class="fieldset-legend">Cost detail items</legend>
@@ -58,7 +58,7 @@
         </div>
     </div>
 
-    <div class="space-y-2" data-cost-details-target="collection">
+    <div class="col-span-2 grid grid-cols-1 gap-4" data-cost-details-target="collection">
         <div class="flex items-center justify-between">
             <h4 class="font-semibold text-emerald-100">Items</h4>
             <button type="button" class="btn btn-outline btn-xs"
