@@ -183,7 +183,7 @@
         },
         {
             "code": "MINING_COMPANY",
-            "short_description": "Mining operator.",
+            "short_description": "Mining operator",
             "description": "Extracts raw resources: ore, volatiles, ice, gas harvesting; primary collection before refinement/processing."
         },
         {
@@ -198,7 +198,7 @@
         },
         {
             "code": "RESEARCH_LAB",
-            "short_description": "Research lab.",
+            "short_description": "Research lab",
             "description": "Performs R&D and testing: prototypes, experiments, trials, validation, and controlled development of new tech or processes."
         },
         {
