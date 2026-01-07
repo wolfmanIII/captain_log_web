@@ -194,14 +194,56 @@
         {{ form_end(form) }} 
 
         <dialog id="coverage_modal" class="modal">
-            <div class="modal-box">
-                <h3 class="text-lg font-bold">Insurance Coverage</h3>
-                <p class="py-4">Press ESC key or click the button below to close</p>
+            <div class="modal-box w-11/12 max-w-5xl">
+                <h3 class="text-lg font-bold mb-3 flex items-center gap-2">
+                    {% include 'icons/lifebuoy.html.twig' %}
+                    <span>Insurance Coverage</span>
+                </h3>
+                {% if form.insurance.vars.choices is defined and form.insurance.vars.choices|length > 0 %}
+                    <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 m-1">
+                        <table class="table border-separate border-spacing-0 inner-bordered-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Annual Cost (Cr)</th>
+                                    <th>Loss Refund (%)</th>
+                                    <th>Coverage</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for choice in form.insurance.vars.choices %}
+                                {% set ins = choice.data %}
+                                <tr>
+                                    <td>{{ ins.name }}</td>
+                                    <td class="text-right">
+                                        {{ ins.annualCost|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', app.request.locale ?? 'en') }}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ ins.lossRefund is not null ? ins.lossRefund|format_number({ min_fraction_digit: 2, max_fraction_digit: 2 }, 'decimal', 'default', app.request.locale ?? 'en') ~ ' %' : '—' }}
+                                    </td>
+                                    <td>
+                                        {% if ins.coverage %}
+                                            <ul class="list-disc list-inside text-sm">
+                                                {% for item in ins.coverage %}
+                                                    <li>{{ item }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% else %}
+                                            —
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="py-4">No insurance records available.</p>
+                {% endif %}
                 <div class="modal-action">
-                <form method="dialog">
-                    <!-- if there is a button in form, it will close the modal -->
-                    <button class="btn">Close</button>
-                </form>
+                    <form method="dialog">
+                        <button class="btn">Close</button>
+                    </form>
                 </div>
             </div>
         </dialog>
