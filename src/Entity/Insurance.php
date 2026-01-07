@@ -22,6 +22,9 @@ class Insurance
     #[ORM\Column(type: Types::DECIMAL, precision: 11, scale: 2)]
     private ?string $annual_cost = null;
 
+    #[ORM\Column(type: Types::DECIMAL, precision: 5, scale: 2, nullable: true)]
+    private ?string $lossRefund = null;
+
     #[ORM\Column(type: Types::JSON, nullable: true)]
     private ?array $coverage = null;
 
@@ -65,6 +68,18 @@ class Insurance
         return $this;
     }
 
+    public function getLossRefund(): ?string
+    {
+        return $this->lossRefund;
+    }
+
+    public function setLossRefund(?string $lossRefund): static
+    {
+        $this->lossRefund = $lossRefund;
+
+        return $this;
+    }
+
     public function getCoverage(): ?array
     {
         return $this->coverage ?? [];
@@ -89,7 +104,7 @@ class Insurance
     {
         if (!$this->mortgages->contains($mortgage)) {
             $this->mortgages->add($mortgage);
-            $mortgage->setInsurace($this);
+            $mortgage->setInsurance($this);
         }
 
         return $this;
@@ -99,8 +114,8 @@ class Insurance
     {
         if ($this->mortgages->removeElement($mortgage)) {
             // set the owning side to null (unless already changed)
-            if ($mortgage->getInsurace() === $this) {
-                $mortgage->setInsurace(null);
+            if ($mortgage->getInsurance() === $this) {
+                $mortgage->setInsurance(null);
             }
         }
 

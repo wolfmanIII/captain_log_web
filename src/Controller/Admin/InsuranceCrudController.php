@@ -21,6 +21,7 @@ class InsuranceCrudController extends AbstractCrudController
     {
         yield Field::new('name');
         yield Field::new('annual_cost');
+        yield Field::new('lossRefund')->setLabel('Loss refund (%)')->setHelp('Percentuale di rimborso perdita');
 
         // 👇 Coverage come lista di stringhe
         yield CollectionField::new('coverage')
