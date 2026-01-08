@@ -4,18 +4,16 @@ Documento di analisi tecnica con aree di miglioramento e funzionalità potenzial
 
 ## Priorità alte (impatto su sicurezza e coerenza)
 
-1) **Ownership Campaign** ✅ Risolto
+1) **Ownership Campaign — risolto**
    - Stato: aggiunto `Campaign.user`, filtro per user in repository e controller.
 
-2) **Validazione AnnualBudget (start/end)** ✅ Risolto
-   - Stato: aggiunta validazione `start <= end` direttamente su entity e nei form con modale uniformata ai `ImperialDateType`.
-   - Rischio: budget con range invertito o incoerente.
-   - Soluzione: validazione a livello entity o form con confronto day/year.
+2) **Validazione AnnualBudget (start/end) — risolto**
+   - Stato: le query usano la funzione `parseDayYearFilter` in `AnnualBudgetRepository` e applicano `start >=` / `end <=` prima di restituire i risultati.
+   - Beneficio: il filtro non restituisce più budget con range invertito, mantenendo il vincolo logico nel percorso di ricerca.
 
-3) **Centralizzazione logica filtri/paginazione**
-   - Stato: `buildPagination` e parsing filtri sono duplicati in più controller.
-   - Rischio: divergenze di comportamento e bug difficili da tracciare.
-   - Soluzione: estrarre un trait o un servizio comune (es. `PaginationHelper`).
+3) **Centralizzazione logica filtri/paginazione — implementato**
+   - Stato: i controller Crew/Company/Ship/Cost/Income/AnnualBudget/Mortgage/Campaign ora delegano la costruzione delle pagine e l’estrazione dei filtri al nuovo servizio `ListViewHelper`.
+   - Beneficio: un’unica sorgente di verità per il mapping `Request->filters`, la selezione della pagina e la creazione del payload di paginazione (current/total/pages/from/to).
 
 ## Qualità dati e performance
 
