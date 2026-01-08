@@ -7,8 +7,8 @@ Documento di analisi tecnica con aree di miglioramento e funzionalità potenzial
 1) **Ownership Campaign** ✅ Risolto
    - Stato: aggiunto `Campaign.user`, filtro per user in repository e controller.
 
-2) **Validazione AnnualBudget (start/end)**
-   - Stato: non c’è un vincolo esplicito `start <= end`.
+2) **Validazione AnnualBudget (start/end)** ✅ Risolto
+   - Stato: aggiunta validazione `start <= end` direttamente su entity e nei form con modale uniformata ai `ImperialDateType`.
    - Rischio: budget con range invertito o incoerente.
    - Soluzione: validazione a livello entity o form con confronto day/year.
 

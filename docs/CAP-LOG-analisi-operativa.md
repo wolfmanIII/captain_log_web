@@ -38,7 +38,8 @@ flowchart TB
 1. Definire i **registri di contesto** (Directory): `InterestRate`, `Insurance`, `ShipRole`, `CostCategory`, `IncomeCategory`, `CompanyRole`, `LocalLaw`.
 2. Creare una **Campaign** con calendario imperiale (giorno/anno).
 3. Creare la **Ship** e compilare la scheda dettagli (JSON `shipDetails`) con M‑Drive/J‑Drive e componenti.
-4. Collegare **Crew**, **Mortgage**, **Cost** e **Income** alla nave.
+4. I partner commerciali (**Company**) sono **cross-campaign**: li definisci una volta e li riutilizzi su costi, entrate e mutui di qualsiasi campagna per mantenere la coerenza contrattuale.
+5. Collegare **Crew**, **Mortgage**, **Cost** e **Income** alla nave.
 
 ## Flusso operativo: scheda nave
 
