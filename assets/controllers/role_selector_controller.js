@@ -15,6 +15,8 @@ export default class extends Controller {
         this.element?.addEventListener('close', this.boundReset);
         this.element?.addEventListener('cancel', this.boundReset);
 
+        this.boundOnShow = this.prepareSelection.bind(this);
+        this.element?.addEventListener('modal-show', this.boundOnShow);
         this.observer = new MutationObserver(() => {
             if (this.element?.open) {
                 this.prepareSelection();
@@ -26,6 +28,7 @@ export default class extends Controller {
     disconnect() {
         this.element?.removeEventListener('close', this.boundReset);
         this.element?.removeEventListener('cancel', this.boundReset);
+        this.element?.removeEventListener('modal-show', this.boundOnShow);
         this.observer?.disconnect();
     }
 

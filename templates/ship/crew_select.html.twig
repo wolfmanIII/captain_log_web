@@ -124,7 +124,7 @@
 
         <section class="mt-10 space-y-4">
             <div class="rounded-xl border border-base-content/10 bg-slate-900/40 p-4 shadow-inner">
-                <form method="get" action="{{ path('app_ship_crew', {id: ship.id}) }}" class="space-y-3">
+                <form method="get" action="{{ path('app_ship_crew', {id: ship.id}) }}" class="space-y-3" autocomplete="off">
                     <p class="uppercase text-xs tracking-[0.3em] text-cyan-300/70">Unassigned crew</p>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
@@ -260,7 +260,8 @@
                         <h3 class="font-semibold text-cyan-100 text-lg mb-2">Assign Roles — {{ member.name }} {{ member.surname }}</h3>
                         {{ form_start(roleForm, {
                             action: path('app_ship_crew_assign_roles', {shipId: ship.id, crewId: member.id}),
-                            method: 'POST'
+                            method: 'POST',
+                            attr: { autocomplete: 'off' }
                         }) }}
                         <div class="alert alert-info alert-outline mb-4 flex items-center gap-2">
                             <span class="flex items-center justify-center animate-spin-slow">
@@ -268,11 +269,12 @@
                             </span>
                             <div class="text-xs">Select one or more bridge roles and confirm to update the crew profile.</div>
                         </div>
-                        <div data-controller="role-selector" data-role-selector-target="wrapper">
+                        <div>
                         {{ form_widget(roleForm.shipRoles, {
                             attr: {
                                 class: 'hidden',
-                                'data-role-selector-target': 'select'
+                                'data-role-selector-target': 'select',
+                                autocomplete: 'off'
                             }
                         }) }}
                         <div class="flex flex-wrap gap-2" data-role-selector-target="chips"></div>
