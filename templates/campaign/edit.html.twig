@@ -30,11 +30,10 @@
             </div>
 
             {% if campaign.id %}
-                <div>
-                    <label class="label">Code</label>
-                    <div><b>{{ campaign.code }}</b></div>
+                <div class="col-span-2">
+                    <label class="block text-gray-800">Code</label>
+                    <div class="m-1 w-full"><b>{{ campaign.code }}</b></div>
                 </div>
-                <div></div>
             {% endif %}
 
             <div>
@@ -67,7 +66,7 @@
                 }) }}
                 {{ form_widget(form.sessionDate.year, { attr: { 'data-session-date-lock-target': 'yearInput' } }) }}
                 {{ form_widget(form.sessionDate.day, { attr: { 'data-session-date-lock-target': 'dayInput' } }) }}
-                <p class="text-xs text-cyan-200/80 mt-1" data-session-date-lock-target="help">Imposta prima lo starting year per abilitare la session date.</p>
+                <p class="text-xs text-cyan-200/80 mt-1" data-session-date-lock-target="help">Establish the campaign year-zero to enable the session timestamp.</p>
                 {{ form_errors(form.sessionDate) }}
             </div>
 

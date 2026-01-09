@@ -30,45 +30,32 @@
             </div>
 
             {% if company.id %}
-                <div>
-                    <label class="label">Code</label>
-                    <div><b>{{ company.code }}</b></div>
+                <div class="col-span-2">
+                    <label class="block text-gray-800">Code</label>
+                    <div class="m-1 w-full"><b>{{ company.code }}</b></div>
                 </div>
-                <div></div>
             {% endif %}
 
             <div>
-                <div class="flex items-center gap-1">
-                    {{ form_label(form.name) }}
-                    {% if form.name.vars.required %}{% include 'icons/required.html.twig' %}{% endif %}
-                </div>
+                {{ form_label(form.name) }}
                 {{ form_widget(form.name) }}
                 {{ form_errors(form.name) }}
             </div>
 
             <div>
-                <div class="flex items-center gap-1">
-                    {{ form_label(form.companyRole) }}
-                    {% if form.companyRole.vars.required %}{% include 'icons/required.html.twig' %}{% endif %}
-                </div>
+                {{ form_label(form.companyRole) }}
                 {{ form_widget(form.companyRole) }}
                 {{ form_errors(form.companyRole) }}
             </div>
 
             <div>
-                <div class="flex items-center gap-1">
-                    {{ form_label(form.contact) }}
-                    {% if form.contact.vars.required %}{% include 'icons/required.html.twig' %}{% endif %}
-                </div>
+                {{ form_label(form.contact) }}
                 {{ form_widget(form.contact) }}
                 {{ form_errors(form.contact) }}
             </div>
 
             <div>
-                <div class="flex items-center gap-1">
-                    {{ form_label(form.signLabel) }}
-                    {% if form.signLabel.vars.required %}{% include 'icons/required.html.twig' %}{% endif %}
-                </div>
+                {{ form_label(form.signLabel) }}
                 {{ form_widget(form.signLabel) }}
                 {{ form_errors(form.signLabel) }}
             </div>
