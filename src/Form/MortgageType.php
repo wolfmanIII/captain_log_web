@@ -86,7 +86,6 @@ class MortgageType extends AbstractType
             ->add('ship', EntityType::class, [
                 'placeholder' => '-- Select a Ship --',
                 'class' => Ship::class,
-                'disabled' => $mortgage->getShip() === null,
                 'choice_label' => fn (Ship $ship) =>
                     sprintf('%s - %s - %s',
                         $ship->getName(),

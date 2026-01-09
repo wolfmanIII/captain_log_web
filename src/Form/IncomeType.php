@@ -103,7 +103,7 @@ class IncomeType extends AbstractType
             ->add('campaign', EntityType::class, [
                 'class' => Campaign::class,
                 'mapped' => false,
-                'required' => true,
+                'required' => false,
                 'placeholder' => '-- Select a Campaign --',
                 'choice_label' => fn (Campaign $campaign) => $campaign->getTitle(),
                 'data' => $income->getShip()?->getCampaign(),

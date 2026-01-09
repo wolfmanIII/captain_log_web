@@ -98,7 +98,6 @@ class AnnualBudgetType extends AbstractType
                     'data-action' => 'change->year-limit#onShipChange',
                     'data-campaign-ship-target' => 'ship',
                 ],
-                'disabled' => $budget?->getShip() === null,
             ])
             ->add('note', TextareaType::class, [
                 'required' => false,

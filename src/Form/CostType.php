@@ -105,7 +105,6 @@ class CostType extends AbstractType
             ])
             ->add('ship', EntityType::class, [
                 'class' => Ship::class,
-                'disabled' => $cost->getShip() === null,
                 'placeholder' => '-- Select a Ship --',
                 'choice_label' => fn (Ship $ship) => sprintf('%s - %s(%s)', $ship->getName(), $ship->getType(), $ship->getClass()),
                 'choice_attr' => function (Ship $ship): array {
