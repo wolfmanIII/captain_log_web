@@ -5,6 +5,8 @@
 
 {% block title %}Captain Log - Ship Crew{% endblock %}
 
+{% import '_tooltip.html.twig' as tooltip %}
+
 {% block pageContent %}
 
     <div class="p-10">
@@ -60,7 +62,7 @@
                                 <tr>
                                 <td>{% include 'components/code_with_copy.html.twig' with { code: member.code } %}</td>
                                 <td>{{ member.name }}</td>
-                            <td>"{{ member.nickname }}"</td>
+                            <td>{{ member.nickname }}</td>
                             <td>{{ member.surname }}</td>
                             <td>
                                 {% for role in member.shipRoles %}
@@ -83,6 +85,22 @@
                             </td>
                             <td>
                                 <div class="flex gap-2">
+
+                                    {{ tooltip.button(
+                                        "Update the crew member's ship roles",
+                                        'Update roles',
+                                        'icons/roles.html.twig',
+                                        {
+                                            dim: 14,
+                                            buttonClass: 'btn btn-outline btn-info btn-xs',
+                                            attrs: {
+                                                onclick: "document.getElementById('crew_roles_" ~ member.id ~ "').showModal()"
+                                            }
+                                        }
+                                    ) }}
+
+
+                                    {#
                                     <div class="tooltip" data-tip="Update the crew member's ship roles">
                                         <button type="button"
                                                 class="btn btn-outline btn-info btn-xs"
@@ -96,22 +114,18 @@
                                             </svg>
                                         </button>
                                     </div>
-                                    <div class="tooltip" data-tip="Remove this crew member from the ship">
-                                        <a href="{{ path('app_ship_crew_remove', {id: member.id}) }}"
-                                           role="button"
-                                           class="btn btn-outline btn-error btn-xs"
-                                           {% if not can_remove_crew %}disabled{% endif %}
-                                        >
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-                                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                 stroke-linejoin="round">
-                                                <polyline points="3 6 5 6 21 6"></polyline>
-                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                                <line x1="10" y1="11" x2="10" y2="17"></line>
-                                                <line x1="14" y1="11" x2="14" y2="17"></line>
-                                            </svg>
-                                        </a>
-                                    </div>
+                                    #}
+
+                                    {{ tooltip.link('Remove this crew member from the ship',
+                                        'Edit ship',
+                                        'icons/action-trash.html.twig',
+                                        path('app_ship_crew_remove', {id: member.id}),
+                                        { 
+                                            dim: 14,
+                                            linkClass: 'btn btn-outline btn-error btn-xs' ~ (can_remove_crew ? '' : ' opacity-50 pointer-events-none'),
+                                            attrs: can_remove_crew ? {} : {'aria-disabled': 'true'}
+                                        }) }}
+
                                 </div>
                             </td>
                             </tr>
