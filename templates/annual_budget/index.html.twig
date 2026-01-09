@@ -108,7 +108,7 @@
                                                     'View chart',
                                                     'icons/pipeline.html.twig',
                                                     path('app_annual_budget_chart', {id: budget.id}),
-                                                    { dim: 16, linkClass: 'btn btn-outline btn-primary btn-xs' }) }}
+                                                    { dim: 14, linkClass: 'btn btn-outline btn-primary btn-xs' }) }}
                                 </td>
                                 <td>
                                     {% if budget.ship.campaign %}
@@ -125,12 +125,12 @@
                                                     'Edit annual budget',
                                                     'icons/action-edit.html.twig',
                                                     path('app_annual_budget_edit', {id: budget.id}),
-                                                    { dim: 16, linkClass: 'btn btn-outline btn-primary btn-xs' }) }}
+                                                    { dim: 14, linkClass: 'btn btn-outline btn-primary btn-xs' }) }}
                                     {{ tooltip.link('Retire year ledger',
                                                     'Delete annual budget',
                                                     'icons/action-trash.html.twig',
                                                     path('app_annual_budget_delete', {id: budget.id}),
-                                                    { dim: 16, linkClass: 'btn btn-outline btn-error btn-xs' }) }}
+                                                    { dim: 14, linkClass: 'btn btn-outline btn-error btn-xs' }) }}
                                 </td>
                             </tr>
                         {% endfor %}

@@ -91,19 +91,19 @@
                                                         'Campaign details',
                                                         'icons/spacecraft.html.twig',
                                                         path('app_campaign_details', {id: campaign.id}),
-                                                        { dim: 16, linkClass: 'btn btn-outline btn-secondary btn-xs' }) }}
+                                                        { dim: 14, linkClass: 'btn btn-outline btn-secondary btn-xs' }) }}
                                         {{ tooltip.link('Refine session agenda',
                                                         'Edit campaign',
                                                         'icons/action-edit.html.twig',
                                                         path('app_campaign_edit', {id: campaign.id}),
-                                                        { dim: 16, linkClass: 'btn btn-outline btn-primary btn-xs' }) }}
+                                                        { dim: 14, linkClass: 'btn btn-outline btn-primary btn-xs' }) }}
                                         {% set can_delete = is_granted('campaign_delete', campaign) %}
                                         {{ tooltip.link('Retire campaign',
                                                         'Delete campaign',
                                                         'icons/action-trash.html.twig',
                                                         path('app_campaign_delete', {id: campaign.id}),
                                                         {
-                                                            dim: 16,
+                                                            dim: 14,
                                                             linkClass: 'btn btn-outline btn-error btn-xs' ~ (can_delete ? '' : ' opacity-50 pointer-events-none'),
                                                             attrs: can_delete ? {} : {'aria-disabled': 'true'}
                                                         }) }}

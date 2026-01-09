@@ -15,6 +15,10 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use App\Entity\Ship;
+use App\Entity\Campaign;
+use Doctrine\ORM\EntityRepository;
+use App\Repository\ShipRepository;
 
 class CrewType extends AbstractType
 {
@@ -52,6 +56,55 @@ class CrewType extends AbstractType
             ->add('birthWorld', TextType::class, [
                 'attr' => ['class' => 'input m-1 w-full'],
                 'required' => false,
+            ])
+            ->add('campaign', EntityType::class, [
+                'class' => Campaign::class,
+                'mapped' => false,
+                'required' => true,
+                'placeholder' => '-- Select a Campaign --',
+                'choice_label' => fn (Campaign $campaign) => $campaign->getTitle(),
+                'data' => $crew->getShip()?->getCampaign(),
+                'query_builder' => function (EntityRepository $er) use ($user) {
+                    $qb = $er->createQueryBuilder('c')->orderBy('c.title', 'ASC');
+                    if ($user) {
+                        $qb->andWhere('c.user = :user')->setParameter('user', $user);
+                    }
+                    return $qb;
+                },
+                'attr' => [
+                    'class' => 'select m-1 w-full',
+                    'data-campaign-ship-target' => 'campaign',
+                    'data-action' => 'change->campaign-ship#onCampaignChange',
+                ],
+            ])
+            ->add('ship', EntityType::class, [
+                'class' => Ship::class,
+                'disabled' => $crew->getShip() === null,
+                'placeholder' => '-- Select a Ship --',
+                'choice_label' => fn (Ship $ship) => sprintf('%s - %s(%s)', $ship->getName(), $ship->getType(), $ship->getClass()),
+                'choice_attr' => function (Ship $ship): array {
+                    $start = $ship->getCampaign()?->getStartingYear();
+                    $campaignId = $ship->getCampaign()?->getId();
+                    return [
+                        'data-start-year' => $start ?? '',
+                        'data-campaign' => $campaignId ? (string) $campaignId : '',
+                    ];
+                },
+                'query_builder' => function (ShipRepository $repo) use ($user) {
+                    $qb = $repo->createQueryBuilder('s')->orderBy('s.name', 'ASC');
+                    if ($user) {
+                        $qb->andWhere('s.user = :user')->setParameter('user', $user);
+                    }
+                    $qb->andWhere('s.campaign IS NOT NULL');
+                    return $qb;
+                },
+                'attr' => [
+                    'class' => 'select m-1 w-full',
+                    'data-controller' => 'year-limit',
+                    'data-year-limit-default-value' => $this->limits->getYearMin(),
+                    'data-action' => 'change->year-limit#onShipChange',
+                    'data-campaign-ship-target' => 'ship',
+                ],
             ])
             ->add('background', TextareaType::class, [
                 'required' => false,

@@ -134,7 +134,7 @@
                                                     'Edit crew member',
                                                     'icons/action-edit.html.twig',
                                                     path('app_crew_edit', {id: member.id}),
-                                                    { dim: 16, linkClass: 'btn btn-outline btn-primary btn-xs' }) }}
+                                                    { dim: 14, linkClass: 'btn btn-outline btn-primary btn-xs' }) }}
                                     {% set CAN_DELETE = constant('App\\Security\\Voter\\CrewVoter::DELETE') %}
                                     {% set can_delete = is_granted(CAN_DELETE, member) %}
                                     {{ tooltip.link('Release crew member',
@@ -142,7 +142,7 @@
                                                     'icons/action-trash.html.twig',
                                                     path('app_crew_delete', {id: member.id}),
                                                     {
-                                                        dim: 16,
+                                                        dim: 14,
                                                         linkClass: 'btn btn-outline btn-error btn-xs' ~ (can_delete ? '' : ' opacity-50 pointer-events-none'),
                                                         attrs: can_delete ? {} : {'aria-disabled': 'true'}
                                                     }) }}
