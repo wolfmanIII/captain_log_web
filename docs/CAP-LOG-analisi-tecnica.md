@@ -16,6 +16,7 @@ Questo documento descrive in modo discorsivo l’architettura attuale di Captain
 - **Campagne e sessioni:** `Campaign` con calendario di sessione (giorno/anno) e relazione 1–N con Ship; le date sessione mostrate nelle liste/PDF derivano dalla Campaign della nave.
 - **Navi e mutui:** `Ship`, `Mortgage`, `MortgageInstallment`, `InterestRate`, `Insurance`; il mutuo conserva `signingDay/Year` derivati dalla sessione della Campaign e `signingLocation` raccolta via modale al momento della firma. Il PDF del mutuo è generato da template dedicato; i piani usano 13 periodi/anno (esempio: 5 anni ⇒ 65 rate).
 - **Dettagli nave strutturati:** `Ship.shipDetails` (JSON) con DTO/form (`ShipDetailsData`, `ShipDetailItemType`, `MDriveDetailItemType`, `JDriveDetailItemType`) per hull/drive/bridge e collezioni (weapons, craft, systems, staterooms, software). Il “Total Cost” dei componenti è calcolato lato client e salvato nel JSON, ma **non** modifica `Ship.price`.
+- **Amendment nave:** `ShipAmendment` registra modifiche post‑firma con `patchDetails` (stessa struttura di `Ship.shipDetails`), data effetto e riferimento opzionale a `Cost` (categorie SHIP_GEAR/SHIP_SOFTWARE).
 - **Annual Budget per nave:** ogni budget è legato a una singola nave e aggrega ricavi (`Income`), costi (`Cost`) e rate del mutuo pagate nel periodo (start/end giorno/anno). Dashboard e grafico mostrano la timeline per nave.
 - **Equipaggio:** `Crew` con ruoli (`ShipRole`); la presenza di capitano è validata da validator dedicato.
 - **Status crew e date:** `Crew.status` + date associate (Active/On Leave/Retired/MIA/Deceased) gestite via `ImperialDateType`. La UI mostra la data relativa allo status solo quando la ship è selezionata.
@@ -60,6 +61,7 @@ Questo documento descrive in modo discorsivo l’architettura attuale di Captain
 - Servizio `PdfGenerator` basato su KnpSnappy/wkhtmltopdf per stampare i contratti Income, il mutuo e la scheda nave; percorso binario configurato in `config/packages/knp_snappy.yaml` via env.
 - I campi opzionali delle sottoform Income sono determinati dal codice categoria e mostrati solo se richiesti (form dinamiche con event subscriber).
 - Nel PDF del mutuo l’elenco crew è filtrato: esclusi `Missing (MIA)`/`Deceased` e inclusi solo membri con `activeDate >= signingDate`.
+- Le amendment sono disponibili solo se il mutuo è firmato e vengono gestite in pagina dedicata (`/ship/{id}/amendments/new`).
 
 ## Persistenza e migrazioni
 - Migrazioni versionate in `migrations/` (inclusa quella per `cost_category`).
@@ -84,8 +86,9 @@ Questo documento descrive in modo discorsivo l’architettura attuale di Captain
    - Lo status e la data relativa diventano obbligatori solo quando la ship è selezionata.
    - La lista “unassigned” esclude Missing/Deceased e l’assegnazione imposta Active + session date.
 3. **Mutui, costi e income:** la firma del mutuo avviene con `signingDay/Year` dalla Campaign; costi e entrate hanno `Company`/`LocalLaw` cross-campaign e utilizzano `ImperialDateType` + PDF builder per stampare contratti e schede bianche.
-4. **Annual budget per nave:** aggregare income, cost e rate in 13 periodi annui, validare `start <= end`, formattare le date con `ImperialDate` e rappresentare il bilancio sulla UI e nei PDF.
-5. **UX e riferimenti:** tooltip e badge uniformati (vedi `docs/tooltip-guidelines.md`), sidebar e checklist enfatizzano il flusso "Campaign first → Ships/Crew → Companies → Cost/Income/Mortgage/Budget".
+4. **Amendment nave firmata:** se la nave ha mutuo firmato, le modifiche ai componenti passano tramite `ShipAmendment` con `patchDetails` (stessa struttura di `shipDetails`) e data effetto, con collegamento opzionale a `Cost` (SHIP_GEAR/SHIP_SOFTWARE).
+5. **Annual budget per nave:** aggregare income, cost e rate in 13 periodi annui, validare `start <= end`, formattare le date con `ImperialDate` e rappresentare il bilancio sulla UI e nei PDF.
+6. **UX e riferimenti:** tooltip e badge uniformati (vedi `docs/tooltip-guidelines.md`), sidebar e checklist enfatizzano il flusso "Campaign first → Ships/Crew → Companies → Cost/Income/Mortgage/Budget".
 
 ## UX e documentazione
 

@@ -59,6 +59,12 @@ class Ship
     private Collection $crews;
 
     /**
+     * @var Collection<int, ShipAmendment>
+     */
+    #[ORM\OneToMany(targetEntity: ShipAmendment::class, mappedBy: 'ship')]
+    private Collection $amendments;
+
+    /**
      * @var Collection<int, Cost>
      */
     #[ORM\OneToMany(targetEntity: Cost::class, mappedBy: 'ship')]
@@ -76,6 +82,7 @@ class Ship
         $this->crews = new ArrayCollection();
         $this->costs = new ArrayCollection();
         $this->incomes = new ArrayCollection();
+        $this->amendments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -219,6 +226,35 @@ class Ship
     public function getCrews(): Collection
     {
         return $this->crews;
+    }
+
+    /**
+     * @return Collection<int, ShipAmendment>
+     */
+    public function getAmendments(): Collection
+    {
+        return $this->amendments;
+    }
+
+    public function addAmendment(ShipAmendment $amendment): static
+    {
+        if (!$this->amendments->contains($amendment)) {
+            $this->amendments->add($amendment);
+            $amendment->setShip($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAmendment(ShipAmendment $amendment): static
+    {
+        if ($this->amendments->removeElement($amendment)) {
+            if ($amendment->getShip() === $this) {
+                $amendment->setShip(null);
+            }
+        }
+
+        return $this;
     }
 
     public function addCrew(Crew $crew): static

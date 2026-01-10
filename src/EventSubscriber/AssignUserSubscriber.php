@@ -12,6 +12,7 @@ use App\Entity\Ship;
 use App\Entity\Company;
 use App\Entity\User;
 use App\Entity\Campaign;
+use App\Entity\ShipAmendment;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\Event\PrePersistEventArgs;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -42,6 +43,7 @@ class AssignUserSubscriber
             || $entity instanceof AnnualBudget
             || $entity instanceof Company
             || $entity instanceof Campaign
+            || $entity instanceof ShipAmendment
         ) {
             if (method_exists($entity, 'getUser') && method_exists($entity, 'setUser') && $entity->getUser() === null) {
                 $entity->setUser($user);

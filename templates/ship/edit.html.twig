@@ -96,6 +96,12 @@
                     PDF
                 </a>
             {% endif %}
+            {% if ship.id and ship.mortgageSigned %}
+                <a href="{{ path('app_ship_amendment_new', { id: ship.id }) }}"
+                   class="btn btn-outline btn-info mt-4 mb-4">
+                    Amendments
+                </a>
+            {% endif %}
             <a href="{{ path('app_ship_index') }}" role="button" class="btn btn-outline btn-default mt-4 mb-4">Cancel</a>
         </div>
 

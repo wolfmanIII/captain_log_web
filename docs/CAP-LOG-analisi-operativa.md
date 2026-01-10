@@ -46,6 +46,7 @@ flowchart TB
 - La scheda dettagli è editata via `ShipDetailsType` e salvata come JSON su `Ship.shipDetails`.
 - M‑Drive/J‑Drive hanno campi extra `thrust` e `jump` nel form.
 - “Total Cost” è calcolato client‑side sommando i `cost_mcr` e viene salvato nel JSON, ma **non** modifica `Ship.price`.
+- Se il mutuo è firmato, la scheda nave è bloccata: le modifiche ai componenti passano tramite **Ship Amendment** con `patchDetails` (stessa struttura di `shipDetails`) e data effetto.
 
 ## Flusso operativo: mutuo
 

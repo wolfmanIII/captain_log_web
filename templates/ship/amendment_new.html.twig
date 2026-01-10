@@ -1,0 +1,105 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Captain Log - Ship Amendment{% endblock %}
+
+{% block pageContent %}
+    <div class="flex flex-col items-stretch gap-4">
+        {{ form_start(form) }}
+
+        <fieldset class="fieldset grid grid-cols-2 bg-base-200 border-base-300 gap-4 p-4 border rounded w-full">
+            <legend class="fieldset-legend">Ship Amendment</legend>
+
+            <div class="col-span-2">
+                <div class="relative overflow-hidden rounded-xl border border-cyan-500/30 bg-gradient-to-r from-slate-900 via-slate-800 to-cyan-900 shadow-lg">
+                    <div class="absolute inset-0 opacity-30 mix-blend-screen pointer-events-none"
+                         style="background: radial-gradient(circle at 20% 20%, rgba(59,130,246,0.25), transparent 35%), radial-gradient(circle at 80% 30%, rgba(14,165,233,0.25), transparent 35%);">
+                    </div>
+                    <div class="relative p-4 flex items-start gap-3">
+                        <div class="p-3 rounded-lg bg-cyan-500/10 border border-cyan-400/40">
+                            {% include 'icons/ship-components.html.twig' %}
+                        </div>
+                        <div>
+                            <p class="uppercase text-xs tracking-[0.25em] text-cyan-300/70">Amendment docket</p>
+                            <h3 class="font-semibold text-cyan-100 text-xl leading-tight">Patch a signed hull</h3>
+                            <p class="text-sm text-cyan-100/80">Logged amendments preserve mortgage integrity while documenting post‑signature upgrades.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-span-2">
+                <label class="block text-slate-300">Ship</label>
+                <div class="m-1 w-full"><b>{{ ship.name }} — {{ ship.type }} ({{ ship.class }})</b></div>
+            </div>
+
+            <div>
+                {{ form_label(form.title) }}
+                {{ form_widget(form.title) }}
+                {{ form_errors(form.title) }}
+            </div>
+
+            <div>
+                {{ form_label(form.effectiveDate) }}
+                {{ form_widget(form.effectiveDate.display, { attr: {'data-imperial-date-prev-icon': '«', 'data-imperial-date-next-icon': '»'} }) }}
+                {{ form_widget(form.effectiveDate.year) }}
+                {{ form_widget(form.effectiveDate.day) }}
+                {{ form_errors(form.effectiveDate) }}
+            </div>
+
+            <div class="col-span-2">
+                {{ form_label(form.description) }}
+                {{ form_widget(form.description) }}
+                {{ form_errors(form.description) }}
+            </div>
+
+            <div class="col-span-2">
+                {{ form_label(form.cost) }}
+                {{ form_widget(form.cost) }}
+                {{ form_errors(form.cost) }}
+            </div>
+        </fieldset>
+
+        {% include 'ship/_details_form.html.twig' with { detailsForm: form.patchDetails } %}
+
+        <div class="flex gap-4">
+            <button type="submit" class="btn btn-outline btn-primary mt-4 mb-4">Save amendment</button>
+            <a href="{{ path('app_ship_edit', { id: ship.id }) }}" role="button" class="btn btn-outline btn-default mt-4 mb-4">Back to ship</a>
+        </div>
+
+        {{ form_end(form) }}
+
+        {% if amendments|length > 0 %}
+            <div class="card mt-6 border border-white/10 bg-base-200/80 p-4">
+                <h3 class="text-lg font-semibold text-slate-100 mb-3">Recorded amendments</h3>
+                <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
+                    <table class="table border-separate border-spacing-0 inner-bordered-table text-sm">
+                        <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Title</th>
+                                <th>Effective date</th>
+                                <th>Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for amendment in amendments %}
+                                <tr>
+                                    <td>{% include 'components/code_with_copy.html.twig' with { code: amendment.code } %}</td>
+                                    <td>{{ amendment.title }}</td>
+                                    <td>
+                                        {% if amendment.effectiveDay is not null and amendment.effectiveYear is not null %}
+                                            {{ amendment.effectiveDay|format('%03d') }}/{{ amendment.effectiveYear }}
+                                        {% else %}
+                                            —
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ amendment.cost ? amendment.cost.title : '—' }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
