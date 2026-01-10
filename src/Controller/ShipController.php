@@ -282,7 +282,15 @@ final class ShipController extends BaseController
 
             foreach ($selections as $selection) {
                 if ($selection->isSelected()) {
-                    $ship->addCrew($selection->getCrew());
+                    $crew = $selection->getCrew();
+                    $ship->addCrew($crew);
+                    $crew->setStatus('Active');
+                    $sessionDay = $ship->getCampaign()?->getSessionDay() ?? $ship->getSessionDay();
+                    $sessionYear = $ship->getCampaign()?->getSessionYear() ?? $ship->getSessionYear();
+                    if ($sessionDay !== null && $sessionYear !== null) {
+                        $crew->setActiveDay($sessionDay);
+                        $crew->setActiveYear($sessionYear);
+                    }
                 }
             }
 
@@ -420,8 +428,20 @@ final class ShipController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
+        $status = $crew->getStatus();
+        if (!in_array($status, ['Missing (MIA)', 'Deceased'], true)) {
+            $crew->setStatus(null);
+        }
+        $crew->setActiveDay(null);
+        $crew->setActiveYear(null);
+        $crew->setOnLeaveDay(null);
+        $crew->setOnLeaveYear(null);
+        $crew->setRetiredDay(null);
+        $crew->setRetiredYear(null);
+
         $ship->removeCrew($crew);
         $em->persist($ship);
+        $em->persist($crew);
         $em->flush();
         return $this->redirectToRoute('app_ship_crew', ['id' => $ship->getId()]);
     }

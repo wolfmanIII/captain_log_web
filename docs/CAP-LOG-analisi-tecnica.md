@@ -18,6 +18,7 @@ Questo documento descrive in modo discorsivo l’architettura attuale di Captain
 - **Dettagli nave strutturati:** `Ship.shipDetails` (JSON) con DTO/form (`ShipDetailsData`, `ShipDetailItemType`, `MDriveDetailItemType`, `JDriveDetailItemType`) per hull/drive/bridge e collezioni (weapons, craft, systems, staterooms, software). Il “Total Cost” dei componenti è calcolato lato client e salvato nel JSON, ma **non** modifica `Ship.price`.
 - **Annual Budget per nave:** ogni budget è legato a una singola nave e aggrega ricavi (`Income`), costi (`Cost`) e rate del mutuo pagate nel periodo (start/end giorno/anno). Dashboard e grafico mostrano la timeline per nave.
 - **Equipaggio:** `Crew` con ruoli (`ShipRole`); la presenza di capitano è validata da validator dedicato.
+- **Status crew e date:** `Crew.status` + date associate (Active/On Leave/Retired/MIA/Deceased) gestite via `ImperialDateType`. La UI mostra la data relativa allo status solo quando la ship è selezionata.
 - **CostCategory / IncomeCategory:** tabelle di contesto per tipologie di spesa/entrata (code, description), con seeds JSON.
 - **Company e CompanyRole:** controparti contrattuali usate da `Cost`, `Income` e `Mortgage`.
 - **CompanyRole.shortDescription:** etichetta breve usata nelle select e nelle liste per rendere i ruoli immediati.
@@ -58,6 +59,7 @@ Questo documento descrive in modo discorsivo l’architettura attuale di Captain
 - Template HTML Twig in `templates/pdf/contracts` per le principali categorie di Income; i placeholder sono documentati in `docs/contract-placeholders.md`.
 - Servizio `PdfGenerator` basato su KnpSnappy/wkhtmltopdf per stampare i contratti Income, il mutuo e la scheda nave; percorso binario configurato in `config/packages/knp_snappy.yaml` via env.
 - I campi opzionali delle sottoform Income sono determinati dal codice categoria e mostrati solo se richiesti (form dinamiche con event subscriber).
+- Nel PDF del mutuo l’elenco crew è filtrato: esclusi `Missing (MIA)`/`Deceased` e inclusi solo membri con `activeDate >= signingDate`.
 
 ## Persistenza e migrazioni
 - Migrazioni versionate in `migrations/` (inclusa quella per `cost_category`).
@@ -72,12 +74,15 @@ Questo documento descrive in modo discorsivo l’architettura attuale di Captain
 - **PDF/wkhtmltopdf:** assicurarsi che il binario sia disponibile e che l’opzione `enable-local-file-access` resti abilitata per caricare asset locali nei PDF.
 - **Form giorno/anno:** limiti validativi configurati via env; aggiornare `.env.local` in base al calendario imperiale usato al tavolo. Il datepicker imperiale ha pulsanti mese e un tasto Clear che svuota il giorno mantenendo l’anno.
 - **Sessione campagne:** sessionDay/sessionYear vive su Campaign; le Ship mostrano i valori ereditati. Migrazioni legacy potrebbero aver popolato le Ship: mantenerle allineate se si rimuovono i campi.
+- **Workflow Crew:** l’assegnazione da lista “unassigned” imposta `status=Active` e `activeDay/Year` alla session date; lo sgancio della ship azzera status (salvo `Missing (MIA)`/`Deceased`) e le date Active/On Leave/Retired. L’elenco “unassigned” esclude Missing/Deceased.
 - **Ship details JSON:** il form salva blocchi strutturati; se si altera la struttura, valutare migrazioni o normalizzazioni per non perdere dati.
 
 ## Flussi operativi principali
 
 1. **Setup campagna e contesto:** definire cataloghi (InterestRate, Insurance, ShipRole, CostCategory, IncomeCategory, CompanyRole, LocalLaw), creare la Campaign con calendario imperiale e registrare le ships (incluso `shipDetails` JSON).
 2. **Gestione equipaggio:** associare crew alle ship, assegnare ruoli e capitano via modal Stimulus (`role-selector`), supportare filtri per crew non assegnati e paginazione unificata.
+   - Lo status e la data relativa diventano obbligatori solo quando la ship è selezionata.
+   - La lista “unassigned” esclude Missing/Deceased e l’assegnazione imposta Active + session date.
 3. **Mutui, costi e income:** la firma del mutuo avviene con `signingDay/Year` dalla Campaign; costi e entrate hanno `Company`/`LocalLaw` cross-campaign e utilizzano `ImperialDateType` + PDF builder per stampare contratti e schede bianche.
 4. **Annual budget per nave:** aggregare income, cost e rate in 13 periodi annui, validare `start <= end`, formattare le date con `ImperialDate` e rappresentare il bilancio sulla UI e nei PDF.
 5. **UX e riferimenti:** tooltip e badge uniformati (vedi `docs/tooltip-guidelines.md`), sidebar e checklist enfatizzano il flusso "Campaign first → Ships/Crew → Companies → Cost/Income/Mortgage/Budget".

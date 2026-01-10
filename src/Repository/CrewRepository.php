@@ -104,7 +104,9 @@ class CrewRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('c')
             ->andWhere('c.user = :user')
             ->andWhere('c.ship IS NULL')
+            ->andWhere('c.status NOT IN (:blockedStatus)')
             ->setParameter('user', $user);
+        $qb->setParameter('blockedStatus', ['Missing (MIA)', 'Deceased']);
 
         if (!empty($filters['search'])) {
             $term = '%'.strtolower($filters['search']).'%';

@@ -121,6 +121,7 @@ final class CrewController extends BaseController
             throw new \Symfony\Component\HttpKernel\Exception\NotFoundHttpException();
         }
 
+        $previousShip = $crew->getShip();
         $form = $this->createForm(CrewType::class, $crew, [
             'user' => $user,
             'is_admin' => $this->isGranted('ROLE_ADMIN'),
@@ -128,6 +129,19 @@ final class CrewController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            if ($previousShip !== null && $crew->getShip() === null) {
+                $status = $crew->getStatus();
+                if (!in_array($status, ['Missing (MIA)', 'Deceased'], true)) {
+                    $crew->setStatus(null);
+                }
+                $crew->setActiveDay(null);
+                $crew->setActiveYear(null);
+                $crew->setOnLeaveDay(null);
+                $crew->setOnLeaveYear(null);
+                $crew->setRetiredDay(null);
+                $crew->setRetiredYear(null);
+            }
 
             if (!$crew->getShip()) {
                 foreach($crew->getShipRoles() as $role) {

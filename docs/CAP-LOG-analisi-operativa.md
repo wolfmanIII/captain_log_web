@@ -53,6 +53,7 @@ flowchart TB
 2. Firmare il mutuo (richiede `signing_location` e usa data sessione dalla Campaign).
 3. Registrare rate: creare `MortgageInstallment` con day/year.
 4. Stampare PDF del mutuo tramite template dedicato.
+5. L’equipaggio mostrato nel mutuo (UI + PDF) esclude `Missing (MIA)` e `Deceased` e include solo crew con **active date >= signing date**.
 
 ## Flusso operativo: entrate (Income)
 
@@ -134,4 +135,14 @@ flowchart TB
    - Risultati grafico:
      - **Income**: 22,000.00 Cr
      - **Costs**: 4,200.00 Cr + 7,400.00 Cr (rate mutuo)
-     - Timeline con picchi alle date 115, 117, 118.
+    - Timeline con picchi alle date 115, 117, 118.
+
+## Gestione equipaggio (status e date)
+
+- Gli status disponibili sono: **Active**, **On Leave**, **Retired**, **Missing (MIA)**, **Deceased**.
+- Quando si assegna un crew alla ship dalla lista “unassigned”, lo status diventa **Active** e la data attiva è impostata alla **session date** corrente (Campaign se presente, altrimenti Ship).
+- Quando un crew viene **sganciato** dalla ship:
+  - `status` viene azzerato se non è `Missing (MIA)`/`Deceased`;
+  - le date **Active/On Leave/Retired** vengono azzerate;
+  - le date **MIA/Deceased** restano intatte (storico eventi).
+- La lista degli **unassigned crew** esclude i profili `Missing (MIA)` e `Deceased`.
