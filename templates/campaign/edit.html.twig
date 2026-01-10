@@ -29,6 +29,17 @@
                 </div>
             </div>
 
+            <div class="col-span-2">
+                <div class="alert alert-info alert-outline shadow-sm mt-2">
+                    <span class="flex items-center justify-center animate-spin-slow">
+                        {% include 'icons/radar.html.twig' %}
+                    </span>
+                    <div class="text-sm text-slate-200">
+                        <span class="block">Establish the campaign year-zero to enable the session timestamp.</span>
+                    </div>
+                </div>
+            </div>
+
             {% if campaign.id %}
                 <div class="col-span-2">
                     <label class="block text-slate-300">Code</label>
@@ -66,7 +77,6 @@
                 }) }}
                 {{ form_widget(form.sessionDate.year, { attr: { 'data-session-date-lock-target': 'yearInput' } }) }}
                 {{ form_widget(form.sessionDate.day, { attr: { 'data-session-date-lock-target': 'dayInput' } }) }}
-                <p class="text-xs text-cyan-200/80 mt-1" data-session-date-lock-target="help">Establish the campaign year-zero to enable the session timestamp.</p>
                 {{ form_errors(form.sessionDate) }}
             </div>
 
