@@ -54,7 +54,15 @@ class IncomeVoter extends Voter
 
     private function canEdit(Income $income, User $user): bool
     {
-        return $this->isOwner($income, $user);
+        if (!$this->isOwner($income, $user)) {
+            return false;
+        }
+
+        if ($income->getPaymentDay() !== null || $income->getPaymentYear() !== null) {
+            return false;
+        }
+
+        return true;
     }
 
     private function canDelete(Income $income, User $user): bool

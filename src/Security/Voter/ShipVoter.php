@@ -75,14 +75,35 @@ final class ShipVoter extends Voter
 
     private function canDelete(Ship $ship, ?UserInterface $user = null): bool
     {
-        if (
-            $ship->getCrews()->count() >= 0
-            && $ship->hasMortgage()
-        ) {
+        if (!$this->isOwner($ship, $user)) {
             return false;
         }
 
-        return $this->canEdit($ship, $user);
+        if ($ship->getCampaign() !== null) {
+            return false;
+        }
+
+        if ($ship->getCrews()->count() > 0) {
+            return false;
+        }
+
+        if ($ship->getIncomes()->count() > 0) {
+            return false;
+        }
+
+        if ($ship->getCosts()->count() > 0) {
+            return false;
+        }
+
+        if ($ship->getMortgage() !== null) {
+            return false;
+        }
+
+        if ($this->annualBudgetRepository->count(['ship' => $ship]) > 0) {
+            return false;
+        }
+
+        return true;
     }
 
     private function canCrewRemove(Ship $ship, ?UserInterface $user = null): bool

@@ -3,6 +3,10 @@
 {% block title %}Captain Log - Income{% endblock %}
 
 {% block pageContent %}
+    {% set CAN_CREATE = constant('App\\Security\\Voter\\IncomeVoter::CREATE') %}
+    {% set CAN_EDIT = constant('App\\Security\\Voter\\IncomeVoter::EDIT') %}
+    {% set can_create = is_granted(CAN_CREATE, income) %}
+    {% set can_edit = is_granted(CAN_EDIT, income) %}
 
     <div class="flex flex-col items-stretch gap-4">
 
@@ -212,7 +216,10 @@
             </fieldset>
         {% endif %}
 
-        <button type="submit" class="btn btn-outline btn-primary mt-4 mb-4 mr-4">
+        <button type="submit"
+                class="btn btn-outline btn-primary mt-4 mb-4 mr-4"
+                {% if not (income.id ? can_edit : can_create) %} disabled {% endif %}
+        >
             Save
         </button>
         {% if income.id %}
