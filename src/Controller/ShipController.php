@@ -243,7 +243,8 @@ final class ShipController extends BaseController
         int $id,
         Request $request,
         EntityManagerInterface $em,
-        ListViewHelper $listViewHelper
+        ListViewHelper $listViewHelper,
+        \App\Service\CrewAssignmentService $crewAssignmentService
     ): Response {
         $user = $this->getUser();
         if (!$user instanceof \App\Entity\User) {
@@ -282,15 +283,7 @@ final class ShipController extends BaseController
 
             foreach ($selections as $selection) {
                 if ($selection->isSelected()) {
-                    $crew = $selection->getCrew();
-                    $ship->addCrew($crew);
-                    $crew->setStatus('Active');
-                    $sessionDay = $ship->getCampaign()?->getSessionDay() ?? $ship->getSessionDay();
-                    $sessionYear = $ship->getCampaign()?->getSessionYear() ?? $ship->getSessionYear();
-                    if ($sessionDay !== null && $sessionYear !== null) {
-                        $crew->setActiveDay($sessionDay);
-                        $crew->setActiveYear($sessionYear);
-                    }
+                    $crewAssignmentService->assignToShip($ship, $selection->getCrew());
                 }
             }
 
@@ -406,7 +399,8 @@ final class ShipController extends BaseController
     public function removeCrew(
         int $id,
         Request $request,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        \App\Service\CrewAssignmentService $crewAssignmentService
     ): Response
     {
         $user = $this->getUser();
@@ -428,18 +422,7 @@ final class ShipController extends BaseController
             throw $this->createAccessDeniedException();
         }
 
-        $status = $crew->getStatus();
-        if (!in_array($status, ['Missing (MIA)', 'Deceased'], true)) {
-            $crew->setStatus(null);
-        }
-        $crew->setActiveDay(null);
-        $crew->setActiveYear(null);
-        $crew->setOnLeaveDay(null);
-        $crew->setOnLeaveYear(null);
-        $crew->setRetiredDay(null);
-        $crew->setRetiredYear(null);
-
-        $ship->removeCrew($crew);
+        $crewAssignmentService->removeFromShip($ship, $crew);
         $em->persist($ship);
         $em->persist($crew);
         $em->flush();

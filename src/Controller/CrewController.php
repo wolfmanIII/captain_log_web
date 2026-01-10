@@ -107,7 +107,8 @@ final class CrewController extends BaseController
     public function edit(
         int $id,
         Request $request,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        \App\Service\CrewAssignmentService $crewAssignmentService
     ): Response
     {
         $user = $this->getUser();
@@ -131,16 +132,7 @@ final class CrewController extends BaseController
         if ($form->isSubmitted() && $form->isValid()) {
 
             if ($previousShip !== null && $crew->getShip() === null) {
-                $status = $crew->getStatus();
-                if (!in_array($status, ['Missing (MIA)', 'Deceased'], true)) {
-                    $crew->setStatus(null);
-                }
-                $crew->setActiveDay(null);
-                $crew->setActiveYear(null);
-                $crew->setOnLeaveDay(null);
-                $crew->setOnLeaveYear(null);
-                $crew->setRetiredDay(null);
-                $crew->setRetiredYear(null);
+                $crewAssignmentService->clearAfterDetach($crew);
             }
 
             if (!$crew->getShip()) {
