@@ -4,6 +4,9 @@ namespace App\Security\Voter;
 
 use App\Entity\Company;
 use App\Entity\User;
+use App\Repository\CostRepository;
+use App\Repository\IncomeRepository;
+use App\Repository\MortgageRepository;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -14,6 +17,13 @@ class CompanyVoter extends Voter
     public const EDIT = 'COMPANY_EDIT';
     public const VIEW = 'COMPANY_VIEW';
     public const DELETE = 'COMPANY_DELETE';
+
+    public function __construct(
+        private CostRepository $costRepository,
+        private IncomeRepository $incomeRepository,
+        private MortgageRepository $mortgageRepository,
+    ) {
+    }
 
     protected function supports(string $attribute, mixed $subject): bool
     {
@@ -57,7 +67,23 @@ class CompanyVoter extends Voter
 
     private function canDelete(Company $company, ?UserInterface $user = null): bool
     {
-        return $this->canEdit($company, $user);
+        if (!$this->canEdit($company, $user)) {
+            return false;
+        }
+
+        if ($this->costRepository->count(['company' => $company]) > 0) {
+            return false;
+        }
+
+        if ($this->incomeRepository->count(['company' => $company]) > 0) {
+            return false;
+        }
+
+        if ($this->mortgageRepository->count(['company' => $company]) > 0) {
+            return false;
+        }
+
+        return true;
     }
 
     private function isOwner(Company $company, UserInterface $user): bool
