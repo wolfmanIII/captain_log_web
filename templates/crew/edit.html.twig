@@ -107,18 +107,39 @@
                 </div>
                 <div id="ship-roles-wrapper"
                     data-ship-roles-toggle-target="wrapper"
-                    class="col-span-2 hidden alert alert-success rounded">
-                    
-                    {{ form_widget(form.shipRoles, {
-                        attr: {
-                            class: 'hidden',
-                            'data-role-selector-target': 'select',
-                            autocomplete: 'off'
-                        }
-                    }) }}
-                    {{ form_label(form.shipRoles) }}
-                    <div class="flex flex-wrap gap-2" data-role-selector-target="chips"></div>
-                    {{ form_errors(form.shipRoles) }}
+                    class="col-span-2 hidden">
+                    <div class="relative overflow-hidden rounded-xl border border-cyan-500/30 bg-gradient-to-r from-slate-900 via-slate-800 to-cyan-900 shadow-lg">
+                        <div class="absolute inset-0 opacity-30 mix-blend-screen pointer-events-none"
+                             style="background: radial-gradient(circle at 20% 20%, rgba(59,130,246,0.25), transparent 35%), radial-gradient(circle at 80% 30%, rgba(14,165,233,0.25), transparent 35%);">
+                        </div>
+                        <div class="relative p-4 space-y-3">
+                            <div class="flex items-start gap-3">
+                                <div class="p-3 rounded-lg bg-cyan-500/10 border border-cyan-400/40">
+                                    {% include 'icons/crew.html.twig' %}
+                                </div>
+                                <div>
+                                    <p class="uppercase text-xs tracking-[0.25em] text-cyan-300/70">Ship roles</p>
+                                    <h4 class="font-semibold text-cyan-100 text-lg leading-tight">Bridge manifest</h4>
+                                    <p class="text-sm text-cyan-100/80">Toggle assignments as if sealing the crew roster before departure.</p>
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                {{ form_widget(form.shipRoles, {
+                                    attr: {
+                                        class: 'hidden',
+                                        'data-role-selector-target': 'select',
+                                        autocomplete: 'off'
+                                    }
+                                }) }}
+                                <div class="flex items-center gap-2">
+                                    {{ form_label(form.shipRoles) }}
+                                    <span class="badge badge-outline badge-info badge-xs">tap to toggle</span>
+                                </div>
+                                <div class="flex flex-wrap gap-2" data-role-selector-target="chips"></div>
+                                {{ form_errors(form.shipRoles) }}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 

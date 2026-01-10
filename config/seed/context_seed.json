@@ -2,16 +2,16 @@
     "insurance": [
         {
             "name": "No Insurance",
-            "annual_cost": "0",
-            "loss_refund": "0",
+            "annual_cost": "0.00",
+            "loss_refund": "0.00",
             "coverage": [
                 "No Coverage"
             ]
         },
         {
             "name": "Base",
-            "annual_cost": "0.5",
-            "loss_refund": "25",
+            "annual_cost": "0.50",
+            "loss_refund": "25.00",
             "coverage": [
                 "Collision damage",
                 "Ship theft (not negligence)",
@@ -20,8 +20,8 @@
         },
         {
             "name": "Extended",
-            "annual_cost": "1",
-            "loss_refund": "50",
+            "annual_cost": "1.00",
+            "loss_refund": "50.00",
             "coverage": [
                 "Everything included in Base",
                 "Piracy",
@@ -31,8 +31,8 @@
         },
         {
             "name": "Premium",
-            "annual_cost": "2",
-            "loss_refund": "100",
+            "annual_cost": "2.00",
+            "loss_refund": "100.00",
             "coverage": [
                 "Everything included in Extended",
                 "War zones",
@@ -45,7 +45,7 @@
     "interest_rates": [
         {
             "duration": 40,
-            "price_multiplier": "2",
+            "price_multiplier": "2.00",
             "price_divider": "240",
             "annual_interest_rate": "1.75"
         },
@@ -57,7 +57,7 @@
         },
         {
             "duration": 20,
-            "price_multiplier": "1.5",
+            "price_multiplier": "1.50",
             "price_divider": "160",
             "annual_interest_rate": "2.05"
         },

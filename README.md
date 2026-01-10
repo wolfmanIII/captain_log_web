@@ -76,6 +76,18 @@ Applicazione Symfony 7.3 per la gestione di navi, equipaggi, contratti e mutui, 
   ```bash
   php bin/console app:context:import --file=config/seed/context_seed.json
   ```
+- Dump del database (Postgres):
+  ```bash
+  php bin/console app:db:dump
+  # solo dati
+  php bin/console app:db:dump --data-only --file=var/backup/captain_log.dump
+  ```
+- Import del database (Postgres):
+  ```bash
+  php bin/console app:db:import --file=var/backup/captain_log.dump
+  # ripulisce e reimporta
+  php bin/console app:db:import --clean --file=var/backup/captain_log.dump
+  ```
 
 ## Avvio
 - Server di sviluppo Symfony:
