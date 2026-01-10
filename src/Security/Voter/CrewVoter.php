@@ -58,12 +58,12 @@ final class CrewVoter extends Voter
 
     private function canEdit(Crew $crew, ?UserInterface $user = null): bool
     {
-        return $this->isOwner($crew, $user) && !$crew->hasMortgageSigned();
+        return $this->isOwner($crew, $user);
     }
 
     private function canDelete(Crew $crew, ?UserInterface $user = null): bool
     {
-        return $this->canEdit($crew, $user);
+        return $this->isOwner($crew, $user) && !$crew->hasMortgageSigned();
     }
 
     private function isOwner(Crew $crew, UserInterface $user): bool
