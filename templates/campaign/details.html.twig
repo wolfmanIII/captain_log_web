@@ -7,35 +7,63 @@
     {% set locale = app.request.locale ?? 'en' %}
 
     <div class="p-10 space-y-6">
-        <div class="relative overflow-hidden rounded-xl border border-cyan-500/30 bg-gradient-to-r from-slate-900 via-slate-800 to-cyan-900 shadow-lg">
-            <div class="absolute inset-0 opacity-30 mix-blend-screen pointer-events-none"
+        <div class="relative rounded-xl border border-cyan-500/30 bg-gradient-to-r from-slate-900 via-slate-800 to-cyan-900 shadow-lg">
+            <div class="absolute inset-0 rounded-xl opacity-30 mix-blend-screen pointer-events-none"
                  style="background: radial-gradient(circle at 20% 20%, rgba(59,130,246,0.25), transparent 35%), radial-gradient(circle at 80% 30%, rgba(14,165,233,0.25), transparent 35%);">
             </div>
-            <div class="relative p-6 grid gap-6 lg:grid-cols-[2fr,1fr] items-start">
+            <div class="relative p-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                 <div class="flex items-start gap-4">
                     <div class="p-3 rounded-lg bg-cyan-500/10 border border-cyan-400/40">
                         {% include 'icons/alien-structure-1.html.twig' %}
                     </div>
-                    <div class="space-y-3">
-                        <p class="uppercase text-xs tracking-[0.25em] text-cyan-300/70">Campaign dossier</p>
-                        <h1 class="text-3xl font-semibold text-cyan-100 leading-tight break-words">{{ campaign.title }}</h1>
-                        <div class="flex flex-wrap items-center gap-2 text-sm text-cyan-100/80">
-                            <span class="font-mono px-2 py-1 rounded bg-cyan-500/10 border border-cyan-400/30 break-all">Code: {{ campaign.code }}</span>
-                            {% if campaign.startingYear %}
-                                <span class="px-2 py-1 rounded bg-cyan-500/10 border border-cyan-400/30 text-cyan-100/90">Start: {{ campaign.startingYear }}</span>
-                            {% endif %}
-                            {% if campaign.sessionDay and campaign.sessionYear %}
-                                <span class="px-2 py-1 rounded bg-cyan-500/10 border border-cyan-400/30 text-cyan-100/90">Session: {{ campaign.sessionDay }}/{{ campaign.sessionYear }}</span>
-                            {% endif %}
-                        </div>
-                        {% if campaign.description %}
-                            <div class="mt-2 p-3 rounded-lg bg-slate-900/50 border border-cyan-500/20">
-                                <p class="text-slate-100/80 leading-relaxed whitespace-pre-line break-words">{{ campaign.description }}</p>
-                            </div>
-                        {% endif %}
+                    <div>
+                        <p class="uppercase text-xs tracking-[0.25em] text-cyan-300/70">Campaign tracking</p>
+                        <h1 class="text-3xl font-semibold text-cyan-100 leading-tight">{{ campaign.title }}</h1>
+                        <p class="text-sm text-cyan-100/80">Session clock, hull roster and campaign metadata in one view.</p>
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <div class="tooltip tooltip-left" data-tip="Update session date">
+                        <button class="btn btn-outline btn-secondary btn-md" onclick="m_calendar.showModal()">
+                            {% include 'icons/calendar.html.twig' %}
+                        </button>
+                    </div>
+                    <div class="tooltip tooltip-left" data-tip="Dock ships to campaign">
+                        <button class="btn btn-outline btn-primary btn-md" onclick="m_ship_select.showModal()">
+                            {% include 'icons/far-trader.html.twig' %}
+                        </button>
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="rounded-xl border border-cyan-500/20 bg-base-100 shadow-md p-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-slate-500">
+                <div class="flex flex-col gap-1">
+                    <span class="uppercase text-xs tracking-[0.2em] text-slate-400">Code</span>
+                    <span class="font-mono text-slate-200 break-all">{{ campaign.code }}</span>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <span class="uppercase text-xs tracking-[0.2em] text-slate-400">Starting Year</span>
+                    <span class="text-slate-200">{{ campaign.startingYear ?? '—' }}</span>
+                </div>
+                <div class="flex flex-col gap-1">
+                    <span class="uppercase text-xs tracking-[0.2em] text-slate-400">Session Date</span>
+                    <span class="text-slate-200">
+                        {% if campaign.sessionDay and campaign.sessionYear %}
+                            {{ campaign.sessionDay }}/{{ campaign.sessionYear }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+            {% if campaign.description %}
+                <div class="mt-6 border-t border-base-content/10 pt-3 text-sm text-slate-300">
+                    <div class="uppercase text-xs tracking-[0.2em] text-cyan-300/70 mb-2">Navlog // Operation brief</div>
+                    {{ campaign.description }}
+                </div>
+            {% endif %}
         </div>
 
         <div class="flex items-center justify-between">
@@ -45,15 +73,6 @@
                     <span class="badge badge-outline badge-sm">{{ campaign.ships|length }}</span>
                 </h2>
                 <p class="text-sm opacity-70">Fleet roster attached to this expedition.</p>
-            </div>
-
-            <div class="flex gap-2">
-                <button class="btn btn-outline btn-secondary btn-xs mt-5 mb-5" onclick="m_calendar.showModal()">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line><rect x="8" y="14" width="3" height="3"></rect><rect x="13" y="14" width="3" height="3"></rect></svg>
-                </button>
-                <button class="btn btn-outline btn-primary btn-xs mt-5 mb-5" onclick="m_ship_select.showModal()">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                </button>
             </div>
         </div>
 
@@ -72,21 +91,20 @@
                         <td>{% include 'components/code_with_copy.html.twig' with { code: ship.code } %}</td>
                         <td>{{ ship.name }} — {{ ship.type }} — {{ ship.class }}</td>
                         <td>
-                            <button type="button"
-                                    class="btn btn-outline btn-info btn-xs"
-                                    onclick="document.getElementById('crew_{{ ship.id }}').showModal()">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect>
-                                    <rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect>
-                                </svg>
-                            </button>
+                            <div class="tooltip tooltip-left" data-tip="View crew">
+                                <button type="button"
+                                        class="btn btn-outline btn-info btn-xs"
+                                        onclick="document.getElementById('crew_{{ ship.id }}').showModal()">
+                                    {% include 'icons/crew.html.twig' with { dim: 14 } %}
+                                </button>
+                            </div>
                             {% set can_remove = is_granted('SHIP_CAMPAIGN_REMOVE', ship) %}
                             <div class="tooltip tooltip-left" data-tip="{{ can_remove ? 'Remove ship' : 'Blocked by linked records' }}">
                                 <a href="{{ path('app_campaign_ship_remove', {id: ship.id}) }}"
                                    role="button"
                                    class="btn btn-outline btn-error btn-xs{{ can_remove ? '' : ' opacity-50 pointer-events-none' }}"
                                    {% if not can_remove %}aria-disabled="true"{% endif %}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                                    {% include 'icons/action-trash.html.twig' with { dim: 14 } %}
                                 </a>
                             </div>
                         </td>
