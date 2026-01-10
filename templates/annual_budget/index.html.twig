@@ -29,7 +29,7 @@
                                     'Add annual budget',
                                     'icons/annual-budget.html.twig',
                                     path('app_annual_budget_new'),
-                                    { dim: 18, linkClass: 'btn btn-outline btn-primary btn-sm' }) }}
+                                    { dim: 24, linkClass: 'btn btn-outline btn-primary btn-sm' }) }}
                 </div>
             </div>
         </div>
@@ -106,7 +106,7 @@
                                 <td>
                                     {{ tooltip.link('Inspect budget timeline',
                                                     'View chart',
-                                                    'icons/pipeline.html.twig',
+                                                    'icons/chart.html.twig',
                                                     path('app_annual_budget_chart', {id: budget.id}),
                                                     { dim: 14, linkClass: 'btn btn-outline btn-primary btn-xs' }) }}
                                 </td>
