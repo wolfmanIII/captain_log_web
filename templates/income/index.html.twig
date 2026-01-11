@@ -122,24 +122,24 @@
                                     {% endif %}
                                 </td>
                                 <td class="text-right">{{ income.amount|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', locale) }}</td>
-                                <td class="text-right">{{ income.signingLocation }} - {{ income.signingDay|imperial_date(income.signingYear) ?? '—' }}</td>
+                                <td class="text-right">{{ income.signingLocation }} - {{ (income.signingDay is not null and income.signingYear is not null) ? (income.signingDay|imperial_date(income.signingYear)) : '—' }}</td>
                                 <td class="text-right">
                                     {% if income.paymentDay is not null and income.paymentYear is not null %}
-                                        {{ income.paymentDay|imperial_date(income.paymentYear) ?? '—' }}
+                                        {{ (income.paymentDay is not null and income.paymentYear is not null) ? (income.paymentDay|imperial_date(income.paymentYear)) : '—' }}
                                     {% else %}
                                         <span class="opacity-60">—</span>
                                     {% endif %}
                                 </td>
                                 <td class="text-right">
                                     {% if income.expirationDay is not null and income.expirationYear is not null %}
-                                        {{ income.expirationDay|imperial_date(income.expirationYear) ?? '—' }}
+                                        {{ (income.expirationDay is not null and income.expirationYear is not null) ? (income.expirationDay|imperial_date(income.expirationYear)) : '—' }}
                                     {% else %}
                                         <span class="opacity-60">—</span>
                                     {% endif %}
                                 </td>
                                 <td class="text-right">
                                     {% if income.cancelDay is not null and income.cancelYear is not null %}
-                                        {{ income.cancelDay|imperial_date(income.cancelYear) ?? '—' }}
+                                        {{ (income.cancelDay is not null and income.cancelYear is not null) ? (income.cancelDay|imperial_date(income.cancelYear)) : '—' }}
                                     {% else %}
                                         <span class="opacity-60">—</span>
                                     {% endif %}

@@ -94,7 +94,7 @@
             {% set sd = detail_form.vars.data is defined ? detail_form.vars.data : null %}
             {% set start_day = sd ? sd.startDay : null %}
             {% set start_year = sd ? sd.startYear : null %}
-            {% set start_value = start_day|imperial_date(start_year) ?? '' %}
+            {% set start_value = (start_day is not null and start_year is not null) ? (start_day|imperial_date(start_year)) : '' %}
             {{ form_widget(detail_form.startDate.display, {
                 attr: {
                     'data-imperial-date-prev-icon': '«',
@@ -126,7 +126,7 @@
             </div>
             {% set end_day = sd ? sd.endDay : null %}
             {% set end_year = sd ? sd.endYear : null %}
-            {% set end_value = end_day|imperial_date(end_year) ?? '' %}
+            {% set end_value = (end_day is not null and end_year is not null) ? (end_day|imperial_date(end_year)) : '' %}
             {{ form_widget(detail_form.endDate.display, {
                 attr: {
                     'data-imperial-date-prev-icon': '«',
@@ -333,7 +333,7 @@
         </div>
         {% set proof_day = sd ? sd.deliveryProofDay : null %}
         {% set proof_year = sd ? sd.deliveryProofYear : null %}
-        {% set proof_value = proof_day|imperial_date(proof_year) ?? '' %}
+        {% set proof_value = (proof_day is not null and proof_year is not null) ? (proof_day|imperial_date(proof_year)) : '' %}
         {% set proof_date_help_id = detail_form.deliveryProofDate.vars.id ~ '-help' %}
         <div data-controller="imperial-date">
             <div class="flex items-center gap-2">

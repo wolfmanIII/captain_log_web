@@ -50,9 +50,9 @@
 
     {% macro render_item(label, item, locale, spec, specLabel) %}
         {% set desc = item.description ?? '—' %}
-        {% set costRaw = item.cost_mcr is defined ? item.cost_mcr : (item.costMcr is defined ? item.costMcr : null) %}
-        {% set tons = item.tons is defined and item.tons is not null
-            ? item.tons|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', locale ?? 'en')
+        {% set costRaw = item.cost_mcr ?? item.costMcr ?? null %}
+        {% set tons = (item.tons ?? null) is not null
+            ? (item.tons ?? 0)|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', locale ?? 'en')
             : '—' %}
         {% set cost = costRaw is not null
             ? costRaw|format_number({ min_fraction_digit: 3, max_fraction_digit: 3, grouping_used: true }, 'decimal', 'default', locale ?? 'en')
@@ -83,9 +83,9 @@
                 <tbody>
                 {% for row in rows %}
                     {% set desc = row.description ?? '—' %}
-                    {% set costRaw = row.cost_mcr is defined ? row.cost_mcr : (row.costMcr is defined ? row.costMcr : null) %}
-                    {% set tons = row.tons is defined and row.tons is not null
-                        ? row.tons|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', locale ?? 'en')
+                    {% set costRaw = row.cost_mcr ?? row.costMcr ?? null %}
+                    {% set tons = (row.tons ?? null) is not null
+                        ? (row.tons ?? 0)|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', locale ?? 'en')
                         : '—' %}
                     {% set cost = costRaw is not null
                         ? costRaw|format_number({ min_fraction_digit: 3, max_fraction_digit: 3, grouping_used: true }, 'decimal', 'default', locale ?? 'en')
@@ -103,29 +103,29 @@
 
     {% set totalCostMcr = 0 %}
     {% for entry in singleItems %}
-        {% set c = entry.item.cost_mcr is defined ? entry.item.cost_mcr : (entry.item.costMcr is defined ? entry.item.costMcr : null) %}
+        {% set c = entry.item.cost_mcr ?? entry.item.costMcr ?? null %}
         {% if c is not null %}
             {% set totalCostMcr = totalCostMcr + c %}
         {% endif %}
     {% endfor %}
     {% for row in details.weapons ?? [] %}
-        {% set c = row.cost_mcr is defined ? row.cost_mcr : (row.costMcr is defined ? row.costMcr : null) %}
+        {% set c = row.cost_mcr ?? row.costMcr ?? null %}
         {% if c is not null %}{% set totalCostMcr = totalCostMcr + c %}{% endif %}
     {% endfor %}
     {% for row in details.craft ?? [] %}
-        {% set c = row.cost_mcr is defined ? row.cost_mcr : (row.costMcr is defined ? row.costMcr : null) %}
+        {% set c = row.cost_mcr ?? row.costMcr ?? null %}
         {% if c is not null %}{% set totalCostMcr = totalCostMcr + c %}{% endif %}
     {% endfor %}
     {% for row in details.systems ?? [] %}
-        {% set c = row.cost_mcr is defined ? row.cost_mcr : (row.costMcr is defined ? row.costMcr : null) %}
+        {% set c = row.cost_mcr ?? row.costMcr ?? null %}
         {% if c is not null %}{% set totalCostMcr = totalCostMcr + c %}{% endif %}
     {% endfor %}
     {% for row in details.staterooms ?? [] %}
-        {% set c = row.cost_mcr is defined ? row.cost_mcr : (row.costMcr is defined ? row.costMcr : null) %}
+        {% set c = row.cost_mcr ?? row.costMcr ?? null %}
         {% if c is not null %}{% set totalCostMcr = totalCostMcr + c %}{% endif %}
     {% endfor %}
     {% for row in details.software ?? [] %}
-        {% set c = row.cost_mcr is defined ? row.cost_mcr : (row.costMcr is defined ? row.costMcr : null) %}
+        {% set c = row.cost_mcr ?? row.costMcr ?? null %}
         {% if c is not null %}{% set totalCostMcr = totalCostMcr + c %}{% endif %}
     {% endfor %}
 
@@ -164,7 +164,7 @@
                 </div>
                 {% set sessionDay = ship.campaign ? ship.campaign.sessionDay : ship.sessionDay %}
                 {% set sessionYear = ship.campaign ? ship.campaign.sessionYear : ship.sessionYear %}
-                {% set sessionValue = sessionDay|imperial_date(sessionYear) ?? '—' %}
+                {% set sessionValue = (sessionDay is not null and sessionYear is not null) ? (sessionDay|imperial_date(sessionYear)) : '—' %}
                 <div class="item">
                     <div class="label">Session</div>
                     <div class="val">
@@ -243,7 +243,7 @@
                                     {% endif %}
                                 </td>
                                 <td>
-                                    {{ amendment.effectiveDay|imperial_date(amendment.effectiveYear) ?? '—' }}
+                                    {{ (amendment.effectiveDay is not null and amendment.effectiveYear is not null) ? (amendment.effectiveDay|imperial_date(amendment.effectiveYear)) : '—' }}
                                 </td>
                                 <td>
                                     {% if amendment.cost %}

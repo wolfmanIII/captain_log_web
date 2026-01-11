@@ -106,8 +106,8 @@
                             <tr>
                                 <td>{% include 'components/code_with_copy.html.twig' with { code: budget.code } %}</td>
                                 <td>{{ budget.ship.name }}</td>
-                                <td class="text-right">{{ budget.startDay|imperial_date(budget.startYear) ?? '—' }}</td>
-                                <td class="text-right">{{ budget.endDay|imperial_date(budget.endYear) ?? '—' }}</td>
+                                <td class="text-right">{{ (budget.startDay is not null and budget.startYear is not null) ? (budget.startDay|imperial_date(budget.startYear)) : '—' }}</td>
+                                <td class="text-right">{{ (budget.endDay is not null and budget.endYear is not null) ? (budget.endDay|imperial_date(budget.endYear)) : '—' }}</td>
                                 <td class="text-right">{{ budget.totalIncomeAmount|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', locale) }}</td>
                                 <td class="text-right">{{ budget.totalCostsAmount|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', locale) }}</td>
                                 <td class="text-right">{{ budget.ship.mortgage.calculate.total_annual_payment|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', locale) }}</td>
