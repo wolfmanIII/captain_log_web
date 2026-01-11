@@ -71,7 +71,8 @@
             legend: 'Crew search',
             grid_class: 'md:grid-cols-3',
             fields: filter_fields,
-            reset_path: path('app_crew_index')
+            reset_path: path('app_crew_index'),
+            is_filtered: filters.search or filters.ship or filters.campaign
         } %}
 
         <div class="flow-root">

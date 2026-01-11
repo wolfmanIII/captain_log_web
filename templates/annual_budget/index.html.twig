@@ -75,7 +75,8 @@
             action: path('app_annual_budget_index'),
             legend: 'Annual budget search',
             fields: filter_fields,
-            reset_path: path('app_annual_budget_index')
+            reset_path: path('app_annual_budget_index'),
+            is_filtered: filters.ship or filters.start or filters.end or filters.campaign
         } %}
 
         <div class="flow-root">

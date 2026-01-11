@@ -36,9 +36,9 @@ Documento di analisi tecnica con aree di miglioramento e funzionalità potenzial
    - Stato: creato il partial `templates/components/index_filters.html.twig` usato da tutte le index.
    - Beneficio: layout coerente per label, griglie e pulsanti Search/Reset, con minori duplicazioni.
 
-7) **Feedback su filtri attivi**
-   - Stato: non è evidente quando un filtro è applicato.
-   - Soluzione: badge “Filtered” o styling del fieldset se almeno un filtro è valorizzato.
+7) **Feedback su filtri attivi — risolto**
+   - Stato: badge “Filtered” mostrato nel legend quando almeno un filtro è valorizzato.
+   - Beneficio: i filtri attivi sono evidenti a colpo d’occhio.
 
 8) **Placeholder operativi coerenti**
    - Azione: per filtri day/year usare placeholder uniformi (`Start >= Day/Year or Year`).

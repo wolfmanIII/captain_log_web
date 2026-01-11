@@ -71,7 +71,8 @@
             legend: 'Ship search',
             grid_class: 'md:grid-cols-3',
             fields: filter_fields,
-            reset_path: path('app_ship_index')
+            reset_path: path('app_ship_index'),
+            is_filtered: filters.campaign or filters.name or filters.type_class
         } %}
 
         <div class="flow-root">

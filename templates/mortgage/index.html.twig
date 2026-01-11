@@ -72,7 +72,8 @@
             legend: 'Mortgage search',
             grid_class: 'md:grid-cols-3',
             fields: filter_fields,
-            reset_path: path('app_mortgage_index')
+            reset_path: path('app_mortgage_index'),
+            is_filtered: filters.name or filters.ship or filters.campaign
         } %}
 
         <div class="flow-root">

@@ -82,7 +82,8 @@
             action: path('app_income_index'),
             legend: 'Income search',
             fields: filter_fields,
-            reset_path: path('app_income_index')
+            reset_path: path('app_income_index'),
+            is_filtered: filters.title or filters.category or filters.ship or filters.campaign
         } %}
 
         <div class="flow-root">

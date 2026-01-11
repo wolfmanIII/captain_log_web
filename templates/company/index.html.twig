@@ -68,7 +68,8 @@
             legend: 'Company search',
             grid_class: 'md:grid-cols-3',
             fields: filter_fields,
-            reset_path: path('app_company_index')
+            reset_path: path('app_company_index'),
+            is_filtered: filters.name or filters.role or filters.contact
         } %}
 
         <div class="flow-root">

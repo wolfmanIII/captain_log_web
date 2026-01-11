@@ -172,7 +172,8 @@
                 reset_path: path('app_ship_crew', {id: ship.id}),
                 submit_label: 'Search crew',
                 form_attrs: { autocomplete: 'off' },
-                hidden_fields: filter_hidden
+                hidden_fields: filter_hidden,
+                is_filtered: crewFilters.search or crewFilters.nickname
             } %}
 
             <div class="rounded-xl border border-base-content/10 bg-base-100 p-4 shadow-inner">
