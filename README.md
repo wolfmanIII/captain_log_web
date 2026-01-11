@@ -115,6 +115,7 @@ Applicazione Symfony 7.3 per la gestione di navi, equipaggi, contratti e mutui, 
   # ripulisce e reimporta
   php bin/console app:db:import --clean --file=var/backup/captain_log.dump
   ```
+  Nota: il dump/import gestisce solo i dati. Esegui le migration **prima** dell’import per ricreare PK/FK/unique/index, oppure usa un dump schema+data.
 
 ## Avvio
 - Server di sviluppo Symfony:

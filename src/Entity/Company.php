@@ -8,6 +8,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: CompanyRepository::class)]
+#[ORM\Table(indexes: [
+    new ORM\Index(name: 'idx_company_user', columns: ['user_id']),
+    new ORM\Index(name: 'idx_company_role', columns: ['company_role_id']),
+])]
 class Company
 {
     #[ORM\Id]

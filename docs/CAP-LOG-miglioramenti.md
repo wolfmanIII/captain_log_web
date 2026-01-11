@@ -17,7 +17,7 @@ Documento di analisi tecnica con aree di miglioramento e funzionalità potenzial
 
 ## Qualità dati e performance
 
-4) **Indici database mirati**
+4) **Indici database mirati — risolto**
    - Entità: `Cost`, `Income`, `Mortgage`, `AnnualBudget`, `Crew`, `Ship`, `Company`, `Campaign`, `ShipAmendment`.
    - Indici consigliati: `user_id`, `ship_id`, `campaign_id`, `income_category_id`, `cost_category_id`, `company_role_id`, `cost_id`.
    - Note: per `Cost` valutare anche indice su `payment_day/payment_year` se si filtrano date in liste o report.

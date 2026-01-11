@@ -12,6 +12,9 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: CampaignRepository::class)]
+#[ORM\Table(indexes: [
+    new ORM\Index(name: 'idx_campaign_user', columns: ['user_id']),
+])]
 class Campaign
 {
     #[ORM\Id]

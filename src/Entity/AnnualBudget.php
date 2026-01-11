@@ -10,6 +10,10 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: AnnualBudgetRepository::class)]
+#[ORM\Table(indexes: [
+    new ORM\Index(name: 'idx_budget_user', columns: ['user_id']),
+    new ORM\Index(name: 'idx_budget_ship', columns: ['ship_id']),
+])]
 class AnnualBudget
 {
     #[ORM\Id]
