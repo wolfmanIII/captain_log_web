@@ -10,6 +10,7 @@ use App\Entity\MortgageInstallment;
 use App\Entity\Ship;
 use App\Form\AnnualBudgetType;
 use App\Security\Voter\AnnualBudgetVoter;
+use App\Service\ImperialDateHelper;
 use App\Service\ListViewHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -155,7 +156,7 @@ final class AnnualBudgetController extends BaseController
     }
 
     #[Route('/annual-budget/chart/{id}', name: 'app_annual_budget_chart', methods: ['GET'])]
-    public function chart(int $id, EntityManagerInterface $em): Response
+    public function chart(int $id, EntityManagerInterface $em, ImperialDateHelper $imperialDateHelper): Response
     {
         $user = $this->getUser();
         if (!$user instanceof \App\Entity\User) {
@@ -173,7 +174,7 @@ final class AnnualBudgetController extends BaseController
         $costs = $em->getRepository(Cost::class)->findAllForUser($user);
         $installments = $em->getRepository(MortgageInstallment::class)->findAllForUser($user);
 
-        [$labels, $incomeSeries, $costSeries] = $this->buildSeries($budget, $incomes, $costs, $installments);
+        [$labels, $incomeSeries, $costSeries] = $this->buildSeries($budget, $incomes, $costs, $installments, $imperialDateHelper);
 
         return $this->render('annual_budget/chart.html.twig', [
             'controller_name' => self::CONTROLLER_NAME,
@@ -184,10 +185,16 @@ final class AnnualBudgetController extends BaseController
         ]);
     }
 
-    private function buildSeries(AnnualBudget $budget, array $incomes, array $costs, array $installments): array
+    private function buildSeries(
+        AnnualBudget $budget,
+        array $incomes,
+        array $costs,
+        array $installments,
+        ImperialDateHelper $imperialDateHelper
+    ): array
     {
-        $startKey = $this->keyFromDayYear($budget->getStartDay(), $budget->getStartYear());
-        $endKey = $this->keyFromDayYear($budget->getEndDay(), $budget->getEndYear());
+        $startKey = $imperialDateHelper->toKey($budget->getStartDay(), $budget->getStartYear());
+        $endKey = $imperialDateHelper->toKey($budget->getEndDay(), $budget->getEndYear());
         $labels = [];
         $incomeMap = [];
         $costMap = [];
@@ -198,12 +205,12 @@ final class AnnualBudgetController extends BaseController
             }
             $day = $income->getPaymentDay() ?? $income->getSigningDay();
             $year = $income->getPaymentYear() ?? $income->getSigningYear();
-            $key = $this->keyFromDayYear($day, $year);
+            $key = $imperialDateHelper->toKey($day, $year);
             if ($key === null || $key < $startKey || $key > $endKey) {
                 continue;
             }
             $incomeMap[$key] = ($incomeMap[$key] ?? 0) + (float) $income->getAmount();
-            $labels[$key] = sprintf('%s/%s', $day, $year);
+            $labels[$key] = $imperialDateHelper->format($day, $year) ?? '—';
         }
 
         foreach ($costs as $cost) {
@@ -215,12 +222,12 @@ final class AnnualBudgetController extends BaseController
             if ($day === null || $year === null) {
                 continue;
             }
-            $key = $this->keyFromDayYear($day, $year);
+            $key = $imperialDateHelper->toKey($day, $year);
             if ($key === null || $key < $startKey || $key > $endKey) {
                 continue;
             }
             $costMap[$key] = ($costMap[$key] ?? 0) + (float) $cost->getAmount();
-            $labels[$key] = sprintf('%s/%s', $day, $year);
+            $labels[$key] = $imperialDateHelper->format($day, $year) ?? '—';
         }
 
         foreach ($installments as $installment) {
@@ -229,12 +236,12 @@ final class AnnualBudgetController extends BaseController
             }
             $day = $installment->getPaymentDay();
             $year = $installment->getPaymentYear();
-            $key = $this->keyFromDayYear($day, $year);
+            $key = $imperialDateHelper->toKey($day, $year);
             if ($key === null || $key < $startKey || $key > $endKey) {
                 continue;
             }
             $costMap[$key] = ($costMap[$key] ?? 0) + (float) $installment->getPayment();
-            $labels[$key] = sprintf('%s/%s', $day, $year);
+            $labels[$key] = $imperialDateHelper->format($day, $year) ?? '—';
         }
 
         ksort($labels);
@@ -247,14 +254,5 @@ final class AnnualBudgetController extends BaseController
         }
 
         return [$orderedLabels, $incomeSeries, $costSeries];
-    }
-
-    private function keyFromDayYear(?int $day, ?int $year): ?int
-    {
-        if ($day === null || $year === null) {
-            return null;
-        }
-
-        return $year * 1000 + $day;
     }
 }

@@ -52,7 +52,7 @@
                             <span class="animate-spin-slow">
                                 {% include 'icons/radar.html.twig' %}
                             </span>
-                            <label class="label mt-1 mb-1">Signed on <b>{{ mortgage.signingLocation }} - {{ mortgage.signingDay }}/{{ mortgage.signingYear }}</b></label>
+                            <label class="label mt-1 mb-1">Signed on <b>{{ mortgage.signingLocation }} - {{ mortgage.signingDay|imperial_date(mortgage.signingYear) ?? '—' }}</b></label>
                         {% else %}
                             <span class="animate-spin-slow">
                                 {% include 'icons/radar.html.twig' %}
@@ -272,7 +272,7 @@
         {% set ship = mortgage.ship ?? null %}
         {% set sessionDay = ship ? (ship.campaign ? ship.campaign.sessionDay : ship.sessionDay) : null %}
         {% set sessionYear = ship ? (ship.campaign ? ship.campaign.sessionYear : ship.sessionYear) : null %}
-        {% set sessionValue = (sessionDay is not null and sessionYear is not null) ? sessionDay|format('%03d') ~ '/' ~ sessionYear : '—' %}
+        {% set sessionValue = sessionDay|imperial_date(sessionYear) ?? '—' %}
         <dialog id="sign_modal" class="modal">
             <div class="modal-box w-11/12 max-w-xl">
                 <header class="prose mb-4">

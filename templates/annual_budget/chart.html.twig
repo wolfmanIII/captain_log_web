@@ -14,7 +14,7 @@
                 <div>
                     <h3 class="font-semibold">Credits on this budget window</h3>
                     <p class="text-sm opacity-80">
-                        Incoming vs outgoing credits for this ship between {{ budget.startDay }}/{{ budget.startYear }} and {{ budget.endDay }}/{{ budget.endYear }}.
+                        Incoming vs outgoing credits for this ship between {{ budget.startDay|imperial_date(budget.startYear) ?? '—' }} and {{ budget.endDay|imperial_date(budget.endYear) ?? '—' }}.
                     </p>
                 </div>
             </div>

@@ -8,6 +8,7 @@ use App\Entity\Ship;
 use App\Form\IncomeType;
 use App\Security\Voter\IncomeVoter;
 use App\Entity\IncomeCategory;
+use App\Service\ImperialDateHelper;
 use App\Service\PdfGenerator;
 use App\Service\ListViewHelper;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,6 +20,11 @@ use Symfony\Component\Routing\Attribute\Route;
 final class IncomeController extends BaseController
 {
     public const CONTROLLER_NAME = 'IncomeController';
+
+    public function __construct(
+        private readonly ImperialDateHelper $imperialDateHelper
+    ) {
+    }
 
     /**
      * @var array<string, string>
@@ -638,10 +644,7 @@ final class IncomeController extends BaseController
 
     private function formatDayYear(?int $day, ?int $year): string
     {
-        if ($day === null && $year === null) {
-            return '—';
-        }
-        return sprintf('Day %s / Year %s', $day ?? '—', $year ?? '—');
+        return $this->imperialDateHelper->format($day, $year) ?? '—';
     }
 
     private function formatMoney(?string $amount, string $currency): string

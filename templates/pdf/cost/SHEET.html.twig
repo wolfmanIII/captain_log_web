@@ -37,7 +37,7 @@
                     <p class="title">Payable statement</p>
                     <p class="muted" style="margin: 4px 0 0 0;">
                         Docket ref: {{ cost.code }} |
-                        {{ cost.paymentDay and cost.paymentYear ? cost.paymentDay|format('%03d') ~ '/' ~ cost.paymentYear : '—' }}
+                        {{ cost.paymentDay|imperial_date(cost.paymentYear) ?? '—' }}
                     </p>
                 </td>
             </tr>

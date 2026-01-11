@@ -4,7 +4,7 @@ Applicazione Symfony 7.3 per la gestione di navi, equipaggi, contratti e mutui, 
 
 ## Caratteristiche principali
 - Navi, equipaggi, ruoli di bordo e mutui (rate, tassi, assicurazioni) con vincolo uno-a-uno nave↔mutuo; firma mutuo con data di sessione della Campaign + location richiesta via modale; stampa PDF della scheda nave e del mutuo (anche in modalità draft). I piani di pagamento usano il calendario Traveller a 13 periodi/anno.
-- Campagne con calendario di sessione (giorno/anno) e relazione 1–N con Ship: le date di sessione sono centralizzate su Campaign e usate ovunque (liste e PDF) tramite l’Imperial datepicker `DDD/YYYY`.
+- Campagne con calendario di sessione (giorno/anno) e relazione 1–N con Ship: le date di sessione sono centralizzate su Campaign e usate ovunque (liste e PDF) tramite l’Imperial datepicker `DDD/YYYY` e il helper di normalizzazione.
 - Tipologie di spesa equipaggio (`CostCategory`) e anagrafiche di contesto (InterestRate, Insurance, ShipRole, CompanyRole, LocalLaw, IncomeCategory).
 - Company e CompanyRole come controparti contrattuali condivise: le companies sono disponibili cross-campaign e portano la propria LocalLaw/ disclaimer nei costi e nei contratti.
 - Entrate e costi legati alla nave con dettagli per categoria (es. Freight, Contract): form dinamiche e PDF contrattuali generati con wkhtmltopdf, con date rese via ImperialDateType + controller Stimulus `imperial-date` (popover con pulsanti di navigazione e tasto Clear per svuotare il giorno).

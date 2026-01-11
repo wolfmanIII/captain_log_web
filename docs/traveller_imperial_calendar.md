@@ -21,6 +21,7 @@ Questi range presuppongono un anno da 365 giorni con una festività interstizial
 ## Note implementative (realizzate)
 
 - **Datatype**: `App\Model\ImperialDate` (`year`, `day` dove `day` è 1–365, 1 = Holiday).  
+- **Helper + Twig filter**: `App\Service\ImperialDateHelper` gestisce parsing (`DDD/YYYY` o solo `YYYY`), chiavi day/year e formattazione; il filtro Twig `imperial_date` rende il formato coerente in UI e PDF.
 - **Form Type**: `App\Form\Type\ImperialDateType` espone un solo campo visibile (`display`, readonly) e due hidden (`year`, `day`). Opzioni: `min_year`, `max_year` (default 1105–9999). La classe CSS `datepicker` è applicata al campo visibile.  
 - **Stimulus datepicker**: controller `assets/controllers/imperial_date_controller.js` apre un popover navigabile per mese (Traveller) con griglia di giorni, pulsanti « » per il cambio mese, posizionato sopra eventuali modali. Seleziona un giorno → chiude il popover e aggiorna `display` in formato `DDD/YYYY` e i campi hidden. Tasto “Clear” svuota il giorno mantenendo l’anno.  
 - **Trucchi UI**:

@@ -50,6 +50,7 @@ flowchart TB
 - “Total Cost” è calcolato client‑side sommando i `cost_mcr` e viene salvato nel JSON, ma **non** modifica `Ship.price`.
 - Se il mutuo è firmato, la scheda nave è bloccata: le modifiche ai componenti passano tramite **Ship Amendment** con `patchDetails` (stessa struttura di `shipDetails`) e **Cost reference obbligatoria** (SHIP_GEAR/SHIP_SOFTWARE). La data effetto viene derivata dalla payment date del Cost selezionato.
 - La select del Cost reference supporta ricerca testuale (Tom Select) e filtra i costi già usati da altri amendment.
+ - Le date in UI/PDF sono formattate in `DDD/YYYY` tramite helper condiviso.
 
 ## Flusso operativo: mutuo
 
@@ -76,6 +77,7 @@ flowchart TB
 
 - Ogni budget è per **una singola nave**.
 - Timeline aggrega **Income**, **Cost** e **MortgageInstallment** per periodo.
+ - Le chiavi day/year sono normalizzate da helper e i filtri accettano `DDD/YYYY` o solo `YYYY`.
 
 ## Ownership e sicurezza (operativa)
 
@@ -145,6 +147,7 @@ flowchart TB
 ## Gestione equipaggio (status e date)
 
 - Gli status disponibili sono: **Active**, **On Leave**, **Retired**, **Missing (MIA)**, **Deceased**.
+- Status e data relativa sono richiesti solo quando la ship è selezionata; la data appare insieme allo status nella form.
 - Quando si assegna un crew alla ship dalla lista “unassigned”, lo status diventa **Active** e la data attiva è impostata alla **session date** corrente (Campaign se presente, altrimenti Ship).
 - Quando un crew viene **sganciato** dalla ship:
   - `status` viene azzerato se non è `Missing (MIA)`/`Deceased`;

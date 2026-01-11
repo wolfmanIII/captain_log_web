@@ -23,12 +23,12 @@ Documento di analisi tecnica con aree di miglioramento e funzionalità potenzial
    - Note: per `Cost` valutare anche indice su `payment_day/payment_year` se si filtrano date in liste o report.
    - Beneficio: query filtrate/paginate più stabili sotto carico.
 
-5) **Normalizzazione date imperiali**
-   - Stato: molte query e filtri costruiscono chiavi day/year manualmente.
-   - Soluzione: helper unico per:
-     - parsing input (`DDD/YYYY`, solo `YYYY`);
-     - confronto e normalizzazione;
-     - serializzazione coerente nelle liste.
+5) **Normalizzazione date imperiali — risolto**
+   - Stato: introdotto `ImperialDateHelper` per parsing (`DDD/YYYY` o solo `YYYY`), normalizzazione e serializzazione coerente.
+   - Usato in:
+     - controller/servizi che calcolano chiavi day/year (AnnualBudget chart, filtri);
+     - formattazione uniforme in UI/PDF tramite filtro Twig `imperial_date`.
+   - Beneficio: formato date consistente ovunque (liste, PDF, grafici) e riduzione di logica duplicata.
 
 ## UX / UI (qualità d’uso)
 

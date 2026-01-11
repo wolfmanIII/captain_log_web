@@ -115,7 +115,7 @@
                                 <td class="text-right">{{ cost.amount|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', locale) }}</td>
                                 <td class="text-right">
                                     {% if cost.paymentDay is not null and cost.paymentYear is not null %}
-                                        {{ cost.paymentDay }}/{{ cost.paymentYear }}
+                                        {{ cost.paymentDay|imperial_date(cost.paymentYear) ?? '—' }}
                                     {% else %}
                                         <span class="opacity-60">—</span>
                                     {% endif %}

@@ -61,7 +61,7 @@
 
             {% set sess_day = campaign.sessionDay %}
             {% set sess_year = campaign.sessionYear %}
-            {% set sess_value = sess_day is not null and sess_year is not null ? sess_day|format('%03d') ~ '/' ~ sess_year : '' %}
+            {% set sess_value = sess_day|imperial_date(sess_year) ?? '' %}
             <div data-controller="imperial-date session-date-lock"
                  data-session-date-lock-starting-selector="#campaign_startingYear">
                 {{ form_label(form.sessionDate) }}

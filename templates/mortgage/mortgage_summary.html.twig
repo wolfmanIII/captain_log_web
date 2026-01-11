@@ -51,7 +51,7 @@
                         <td class="text-right">{{ summary.installments_paid }}</td>
                         <td class="text-right">
                             {% if last_payment %}
-                                {{ last_payment.paymentDay }} / {{ last_payment.paymentYear }}
+                                {{ last_payment.paymentDay|imperial_date(last_payment.paymentYear) ?? '—' }}
                             {% endif %}
                         </td>
                         <td class="text-right">{{ summary.total_mortgage_paid|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', locale) }}</td>

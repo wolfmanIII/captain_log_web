@@ -89,7 +89,7 @@
                                     <td class="text-right">{{ campaign.startingYear ?? '—' }}</td>
                                     <td class="text-right">
                                         {% if campaign.sessionDay and campaign.sessionYear %}
-                                            {{ campaign.sessionDay }}/{{ campaign.sessionYear }}
+                                            {{ campaign.sessionDay|imperial_date(campaign.sessionYear) ?? '—' }}
                                         {% else %}
                                             <span class="opacity-60">—</span>
                                         {% endif %}

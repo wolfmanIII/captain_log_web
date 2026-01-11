@@ -81,11 +81,7 @@
                                     <td>{% include 'components/code_with_copy.html.twig' with { code: amendment.code } %}</td>
                                     <td>{{ amendment.title }}</td>
                                     <td>
-                                        {% if amendment.effectiveDay is not null and amendment.effectiveYear is not null %}
-                                            {{ amendment.effectiveDay|format('%03d') }}/{{ amendment.effectiveYear }}
-                                        {% else %}
-                                            —
-                                        {% endif %}
+                                        {{ amendment.effectiveDay|imperial_date(amendment.effectiveYear) ?? '—' }}
                                     </td>
                                     <td>{{ amendment.cost ? amendment.cost.title : '—' }}</td>
                                     <td>
@@ -130,11 +126,7 @@
                                                             <div class="rounded-lg border border-cyan-500/20 bg-slate-900/40 p-3">
                                                                 <div class="text-[0.65rem] uppercase tracking-[0.25em] text-cyan-300/70">Payment date</div>
                                                                 <div class="text-cyan-100 font-semibold">
-                                                                    {% if amendment.cost.paymentDay is not null and amendment.cost.paymentYear is not null %}
-                                                                        {{ amendment.cost.paymentDay|format('%03d') }}/{{ amendment.cost.paymentYear }}
-                                                                    {% else %}
-                                                                        —
-                                                                    {% endif %}
+                                                                    {{ amendment.cost.paymentDay|imperial_date(amendment.cost.paymentYear) ?? '—' }}
                                                                 </div>
                                                             </div>
                                                         </div>

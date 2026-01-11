@@ -164,7 +164,7 @@
                 </div>
                 {% set sessionDay = ship.campaign ? ship.campaign.sessionDay : ship.sessionDay %}
                 {% set sessionYear = ship.campaign ? ship.campaign.sessionYear : ship.sessionYear %}
-                {% set sessionValue = (sessionDay is not null and sessionYear is not null) ? sessionDay|format('%03d') ~ '/' ~ sessionYear : '—' %}
+                {% set sessionValue = sessionDay|imperial_date(sessionYear) ?? '—' %}
                 <div class="item">
                     <div class="label">Session</div>
                     <div class="val">
@@ -243,11 +243,7 @@
                                     {% endif %}
                                 </td>
                                 <td>
-                                    {% if amendment.effectiveDay is not null and amendment.effectiveYear is not null %}
-                                        {{ amendment.effectiveDay|format('%03d') }}/{{ amendment.effectiveYear }}
-                                    {% else %}
-                                        —
-                                    {% endif %}
+                                    {{ amendment.effectiveDay|imperial_date(amendment.effectiveYear) ?? '—' }}
                                 </td>
                                 <td>
                                     {% if amendment.cost %}

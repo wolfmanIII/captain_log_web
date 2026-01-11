@@ -48,7 +48,7 @@
     {% set data = detail_form.vars.data is defined ? detail_form.vars.data : null %}
     {% set incident_day = data ? data.incidentDay : null %}
     {% set incident_year = data ? data.incidentYear : null %}
-    {% set incident_value = incident_day is not null and incident_year is not null ? incident_day|format('%03d') ~ '/' ~ incident_year : '' %}
+    {% set incident_value = incident_day|imperial_date(incident_year) ?? '' %}
     {% set incident_date_help_id = detail_form.incidentDate.vars.id ~ '-help' %}
     <div data-controller="imperial-date">
         <div class="flex items-center gap-2">
