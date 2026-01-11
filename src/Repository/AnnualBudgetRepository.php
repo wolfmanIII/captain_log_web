@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\AnnualBudget;
 use App\Entity\User;
+use App\Service\ImperialDateHelper;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
@@ -13,7 +14,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class AnnualBudgetRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, private readonly ImperialDateHelper $dateHelper)
     {
         parent::__construct($registry, AnnualBudget::class);
     }
@@ -62,13 +63,13 @@ class AnnualBudgetRepository extends ServiceEntityRepository
                 ->setParameter('ship', (int) $filters['ship']);
         }
 
-        $startKey = $this->parseDayYearFilter($filters['start'] ?? '', false);
+        $startKey = $this->dateHelper->parseFilter($filters['start'] ?? '', false);
         if ($startKey !== null) {
             $qb->andWhere('(b.startYear * 1000 + b.startDay) >= :startKey')
                 ->setParameter('startKey', $startKey);
         }
 
-        $endKey = $this->parseDayYearFilter($filters['end'] ?? '', true);
+        $endKey = $this->dateHelper->parseFilter($filters['end'] ?? '', true);
         if ($endKey !== null) {
             $qb->andWhere('(b.endYear * 1000 + b.endDay) <= :endKey')
                 ->setParameter('endKey', $endKey);
@@ -94,29 +95,5 @@ class AnnualBudgetRepository extends ServiceEntityRepository
         ];
     }
 
-    private function parseDayYearFilter(string $value, bool $isEnd): ?int
-    {
-        $value = trim($value);
-        if ($value === '') {
-            return null;
-        }
-
-        if (str_contains($value, '/')) {
-            [$day, $year] = array_map('trim', explode('/', $value, 2));
-            if (!ctype_digit($day) || !ctype_digit($year)) {
-                return null;
-            }
-
-            return ((int) $year) * 1000 + (int) $day;
-        }
-
-        if (!ctype_digit($value)) {
-            return null;
-        }
-
-        $year = (int) $value;
-        $day = $isEnd ? 999 : 1;
-
-        return $year * 1000 + $day;
-    }
+    // Date parsing centralized in ImperialDateHelper.
 }
