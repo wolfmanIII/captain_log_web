@@ -76,7 +76,11 @@ Applicazione Symfony 7.3 per la gestione di navi, equipaggi, contratti e mutui, 
    ```bash
    npm install tom-select
    ```
-4. Crea `.env.local` con le variabili minime:
+4. Installa Highlight.js:
+   ```bash
+   npm install highlight.js
+   ```
+5. Crea `.env.local` con le variabili minime:
    ```env
    APP_ENV=dev
    APP_SECRET=changeme

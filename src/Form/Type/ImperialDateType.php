@@ -96,9 +96,6 @@ class ImperialDateType extends AbstractType
             'data_class' => ImperialDate::class,
             'min_year' => 1105,
             'max_year' => 9999,
-            'attr' => [
-                'data-controller' => 'imperial-date',
-            ],
         ]);
     }
 }

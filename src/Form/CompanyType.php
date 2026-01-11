@@ -29,9 +29,14 @@ class CompanyType extends AbstractType
                 'attr' => ['class' => 'input m-1 w-full'],
             ])
             ->add('companyRole', EntityType::class, [
+                'placeholder' => "-- Select a Company Role --",
                 'class' => CompanyRole::class,
                 'choice_label' => fn (CompanyRole $role) => $role->getShortDescription() ?? $role->getCode(),
-                'attr' => ['class' => 'select m-1 w-full'],
+                'attr' => [
+                    'class' => 'select m-1 w-full',
+                    'data-controller' => 'tom-select',
+                    'data-tom-select-placeholder-value' => 'Search Company role reference…',
+                ],
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('cr')->orderBy('cr.code', 'ASC');
                 },

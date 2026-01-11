@@ -37,7 +37,7 @@
             </div>
         </div>
 
-        <div class="rounded-xl border border-cyan-500/20 bg-base-100 shadow-md p-4">
+        <div class="rounded-xl bg-base-100 shadow-md p-4 mb-4">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-slate-500">
                 <div class="flex flex-col gap-1">
                     <span class="uppercase text-xs tracking-[0.2em] text-slate-400">Code</span>
@@ -66,13 +66,26 @@
             {% endif %}
         </div>
 
-        <div class="flex items-center justify-between">
-            <div class="prose">
-                <h2 class="flex items-center gap-2">
-                    <span>Ships assigned</span>
-                    <span class="badge badge-outline badge-sm">{{ campaign.ships|length }}</span>
-                </h2>
-                <p class="text-sm opacity-70">Fleet roster attached to this expedition.</p>
+        <div class="my-6 text-center text-sm tracking-[0.35em] text-emerald-300/80">
+            ——— // ———
+        </div>
+
+        <div class="relative overflow-hidden rounded-xl border border-cyan-500/30 bg-gradient-to-r from-slate-900 via-slate-800 to-cyan-900 shadow-lg mb-4">
+            <div class="absolute inset-0 opacity-30 mix-blend-screen pointer-events-none"
+                 style="background: radial-gradient(circle at 20% 20%, rgba(56,189,248,0.2), transparent 40%), radial-gradient(circle at 80% 40%, rgba(34,211,238,0.2), transparent 35%);">
+            </div>
+            <div class="relative p-4 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="p-2 rounded-lg bg-cyan-500/10 border border-cyan-400/40">
+                        {% include 'icons/spaceport.html.twig' %}
+                    </div>
+                    <div>
+                        <p class="uppercase text-xs tracking-[0.3em] text-cyan-300/70">Fleet manifest</p>
+                        <h2 class="text-xl font-semibold text-cyan-100">Ships assigned</h2>
+                        <p class="text-sm text-cyan-100/70">Roster locked to this operation docket.</p>
+                    </div>
+                </div>
+                <span class="badge badge-outline badge-sm text-cyan-100 border-cyan-400/60">{{ campaign.ships|length }}</span>
             </div>
         </div>
 
@@ -259,6 +272,94 @@
                 <button>close</button>
             </form>
         </dialog>
+
+        <div class="my-6 text-center text-sm tracking-[0.35em] text-emerald-300/80">
+            ——— // ———
+        </div>
+
+        <div>
+            <div class="relative overflow-hidden rounded-xl border border-cyan-500/20 bg-gradient-to-r from-slate-900 via-slate-800 to-cyan-900 shadow-md mb-4">
+                <div class="absolute inset-0 opacity-30 mix-blend-screen pointer-events-none"
+                     style="background: radial-gradient(circle at 25% 20%, rgba(45,212,191,0.22), transparent 45%), radial-gradient(circle at 80% 30%, rgba(56,189,248,0.22), transparent 40%);">
+                </div>
+                <div class="relative p-4 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 rounded-lg bg-cyan-500/10 border border-cyan-400/40">
+                            {% include 'icons/calendar.html.twig' %}
+                        </div>
+                        <div>
+                            <p class="uppercase text-xs tracking-[0.3em] text-cyan-300/70">Session archive</p>
+                            <h2 class="text-xl font-semibold text-cyan-100">Session timeline</h2>
+                            <p class="text-sm text-cyan-100/70">Clock changes with full campaign snapshots.</p>
+                        </div>
+                    </div>
+                    <span class="badge badge-outline badge-sm text-cyan-100 border-cyan-400/60">{{ session_logs|length }}</span>
+                </div>
+            </div>
+            <div class="overflow-x-auto rounded-box border border-cyan-500/20 bg-base-100 shadow-md">
+                <table class="table border-separate border-spacing-0 inner-bordered-table">
+                    <thead>
+                    <tr>
+                        <th>Recorded</th>
+                        <th>Session</th>
+                        <th>Operator</th>
+                        <th>Snapshot</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% if session_logs is defined and session_logs|length > 0 %}
+                        {% for log in session_logs %}
+                            {% set log_id = 'session_log_' ~ log.id %}
+                            {% set snapshot = log.payload.snapshot ?? null %}
+                            {% set ships_count = snapshot and snapshot.ships is defined ? snapshot.ships|length : 0 %}
+                            <tr>
+                                <td class="text-sm">{{ log.createdAt ? log.createdAt|date('Y-m-d H:i') : '—' }}</td>
+                                <td class="text-sm">
+                                    {{ log.sessionDay is not null and log.sessionYear is not null
+                                        ? (log.sessionDay|imperial_date(log.sessionYear))
+                                        : '—' }}
+                                </td>
+                                <td class="text-sm">{{ log.user ? log.user.email : 'System' }}</td>
+                                <td>
+                                    <div class="flex items-center gap-2">
+                                        <span class="badge badge-outline badge-sm">Ships {{ ships_count }}</span>
+                                        <button type="button" class="btn btn-outline btn-info btn-xs" onclick="document.getElementById('{{ log_id }}').showModal()">
+                                            View snapshot
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <dialog id="{{ log_id }}" class="modal">
+                                <div class="modal-box w-full max-w-4xl">
+                                    <h3 class="text-lg font-bold mb-3">Session snapshot</h3>
+                                    <div class="text-xs uppercase tracking-[0.2em] text-slate-400 mb-2">
+                                        {{ log.createdAt ? log.createdAt|date('Y-m-d H:i') : '—' }} •
+                                        {{ log.sessionDay is not null and log.sessionYear is not null
+                                            ? (log.sessionDay|imperial_date(log.sessionYear))
+                                            : '—' }}
+                                    </div>
+                                    <div class="overflow-auto max-h-[60vh] rounded-box border border-base-content/10 bg-base-100 p-3 text-xs font-mono whitespace-pre" data-controller="highlight">
+                                        <pre><code class="language-json">{{ log.payload|json_encode(constant('JSON_PRETTY_PRINT')) }}</code></pre>
+                                    </div>
+                                    <div class="modal-action">
+                                        <button type="button" class="btn btn-outline btn-default" onclick="document.getElementById('{{ log_id }}').close()">Close</button>
+                                    </div>
+                                </div>
+                                <form method="dialog" class="modal-backdrop">
+                                    <button>close</button>
+                                </form>
+                            </dialog>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="4">No session logs recorded yet.</td>
+                        </tr>
+                    {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
     </div>
 
