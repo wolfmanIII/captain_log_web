@@ -248,7 +248,13 @@
                                         —
                                     {% endif %}
                                 </td>
-                                <td>{{ amendment.cost ? amendment.cost.title : '—' }}</td>
+                                <td>
+                                    {% if amendment.cost %}
+                                        {{ amendment.cost.code }} — {{ amendment.cost.title }}
+                                    {% else %}
+                                        —
+                                    {% endif %}
+                                </td>
                             </tr>
                         {% endfor %}
                     </tbody>

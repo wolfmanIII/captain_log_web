@@ -49,7 +49,7 @@ class CostType extends AbstractType
             ->add('amount', TravellerMoneyType::class, [
                 'label' => 'Amount (Cr)',
                 'attr' => ['class' => 'input m-1 w-full', 'readonly' => true],
-                'empty_data' => '0.00',
+                //'empty_data' => '0.00',
             ])
             ->add('detailItems', CollectionType::class, [
                 'entry_type' => CostDetailItemType::class,

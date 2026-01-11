@@ -15,6 +15,8 @@ class TravellerMoneyType extends AbstractType
             'currency' => false,
             'grouping' => false,
             'scale' => 2,
+            'html5' => false,
+            'input' => 'string',
         ]);
 
     }

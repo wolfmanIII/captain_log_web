@@ -72,12 +72,23 @@
 
             <div class="col-span-2 grid grid-cols-2 gap-4">
                 <div>
-                    <div class="flex items-center gap-1">
+                    {% set amount_help_id = form.amount.vars.id ~ '-help' %}
+                    <div class="flex items-center gap-2">
                         {{ form_label(form.amount) }}
-                        {% if form.amount.vars.required %}{% include 'icons/required.html.twig' %}{% endif %}
+                        <label for="{{ amount_help_id }}" class="badge badge-outline badge-info cursor-pointer badge-xs">?</label>
                     </div>
                     {{ form_widget(form.amount) }}
                     {{ form_errors(form.amount) }}
+                    <input type="checkbox" id="{{ amount_help_id }}" class="modal-toggle hidden" />
+                    <div class="modal" role="dialog">
+                        <div class="modal-box">
+                            <h3 class="font-bold">Amount</h3>
+                            <p class="py-2 text-sm">Auto-calculated from the detail items (qty × cost). If the total is 0, the field stays empty.</p>
+                            <div class="modal-action">
+                                <label for="{{ amount_help_id }}" class="btn btn-primary">Close</label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div data-controller="imperial-date">
                     {{ form_label(form.paymentDate) }}

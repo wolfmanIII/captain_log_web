@@ -75,7 +75,7 @@
             </div>
             <div>
                 {% if is_amendment %}
-                    Total Cost is auto-calculated and stored with the amendment details; the financial reference is the selected Cost ref.
+                    Total Cost is auto-calculated and stored with the amendment details; it does not affect the financial reference, which remains the selected Cost ref.
                 {% else %}
                     Total Cost is auto-calculated and stored with the ship details, but it does not affect the Ship Price field: set your ship price independently.
                 {% endif %}
@@ -89,15 +89,29 @@
             {{ form_widget(detailsForm.techLevel) }}
             {{ form_errors(detailsForm.techLevel) }}
         </div>
+        {% set total_help_id = detailsForm.totalCost.vars.id ~ '-help' %}
         <div>
-            {{ form_label(detailsForm.totalCost) }}
+            <div class="flex items-center gap-2">
+                {{ form_label(detailsForm.totalCost) }}
+                <label for="{{ total_help_id }}" class="badge badge-outline badge-info cursor-pointer badge-xs">?</label>
+            </div>
             <input type="text"
-                   class="input m-1 w-full bg-base-200 text-base-content"
+                   class="input m-1 w-full"
                    data-ship-details-target="totalDisplay"
                    readonly
-                   value="—">
+                   value="">
             {{ form_errors(detailsForm.totalCost) }}
             {{ form_widget(detailsForm.totalCost, { attr: { class: 'hidden', 'data-ship-details-target': 'totalInput' } }) }}
+            <input type="checkbox" id="{{ total_help_id }}" class="modal-toggle hidden" />
+            <div class="modal" role="dialog">
+                <div class="modal-box">
+                    <h3 class="font-bold">Total Cost</h3>
+                    <p class="py-2 text-sm">Auto-calculated from the component rows. If the total is 0, the field stays empty.</p>
+                    <div class="modal-action">
+                        <label for="{{ total_help_id }}" class="btn btn-primary">Close</label>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

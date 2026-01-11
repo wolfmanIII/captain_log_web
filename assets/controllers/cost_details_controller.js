@@ -70,7 +70,7 @@ export default class extends Controller {
         const amountSelector = this.element.dataset.costDetailsAmountSelector || '[name$="[amount]"]';
         const amountInput = document.querySelector(amountSelector);
         if (amountInput) {
-            amountInput.value = total ? total.toFixed(2) : '';
+            amountInput.value = total ? total.toFixed(2).replace('.', ',') : '';
         }
     }
 }

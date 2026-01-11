@@ -68,7 +68,7 @@ export default class extends Controller {
                     maximumFractionDigits: 2,
                 });
             } else {
-                this.totalDisplayTarget.value = '—';
+                this.totalDisplayTarget.value = '';
             }
         }
     }

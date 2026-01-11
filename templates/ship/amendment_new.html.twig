@@ -38,14 +38,6 @@
                 {{ form_errors(form.title) }}
             </div>
 
-            <div data-controller="imperial-date">
-                {{ form_label(form.effectiveDate) }}
-                {{ form_widget(form.effectiveDate.display, { attr: {'data-imperial-date-prev-icon': '«', 'data-imperial-date-next-icon': '»'} }) }}
-                {{ form_widget(form.effectiveDate.year) }}
-                {{ form_widget(form.effectiveDate.day) }}
-                {{ form_errors(form.effectiveDate) }}
-            </div>
-
             <div class="col-span-2">
                 {{ form_label(form.description) }}
                 {{ form_widget(form.description) }}
@@ -79,10 +71,12 @@
                                 <th>Title</th>
                                 <th>Effective date</th>
                                 <th>Cost</th>
+                                <th>Summary</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for amendment in amendments %}
+                                {% set summary_id = 'cost-summary-' ~ (amendment.id ?? loop.index) %}
                                 <tr>
                                     <td>{% include 'components/code_with_copy.html.twig' with { code: amendment.code } %}</td>
                                     <td>{{ amendment.title }}</td>
@@ -94,6 +88,74 @@
                                         {% endif %}
                                     </td>
                                     <td>{{ amendment.cost ? amendment.cost.title : '—' }}</td>
+                                    <td>
+                                        {% if amendment.cost %}
+                                            <label for="{{ summary_id }}" class="btn btn-outline btn-info btn-xs">View</label>
+                                            <input type="checkbox" id="{{ summary_id }}" class="modal-toggle hidden" />
+                                            <div class="modal" role="dialog">
+                                                <div class="modal-box">
+                                                    <h3 class="font-bold">Cost summary</h3>
+                                                    <table class="table text-sm mt-3">
+                                                        <tbody>
+                                                            <tr>
+                                                                <th>Code</th>
+                                                                <td>{{ amendment.cost.code }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Title</th>
+                                                                <td>{{ amendment.cost.title }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Amount(Cr)</th>
+                                                                <td>
+                                                                    {{ amendment.cost.amount|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', app.request.locale ?? 'en') }}
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Payment date</th>
+                                                                <td>
+                                                                    {% if amendment.cost.paymentDay is not null and amendment.cost.paymentYear is not null %}
+                                                                        {{ amendment.cost.paymentDay|format('%03d') }}/{{ amendment.cost.paymentYear }}
+                                                                    {% else %}
+                                                                        —
+                                                                    {% endif %}
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Company</th>
+                                                                <td>{{ amendment.cost.company ? amendment.cost.company.name : '—' }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Category</th>
+                                                                <td>
+                                                                    {% if amendment.cost.costCategory %}
+                                                                        {{ amendment.cost.costCategory.code }} — {{ amendment.cost.costCategory.description }}
+                                                                    {% else %}
+                                                                        —
+                                                                    {% endif %}
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Local law</th>
+                                                                <td>
+                                                                    {% if amendment.cost.localLaw %}
+                                                                        {{ amendment.cost.localLaw.code }} — {{ amendment.cost.localLaw.shortDescription ?? '—' }}
+                                                                    {% else %}
+                                                                        —
+                                                                    {% endif %}
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                    <div class="modal-action">
+                                                        <label for="{{ summary_id }}" class="btn btn-primary">Close</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            —
+                                        {% endif %}
+                                    </td>
                                 </tr>
                             {% endfor %}
                         </tbody>

@@ -7,8 +7,6 @@ use App\Entity\Cost;
 use App\Entity\Ship;
 use App\Entity\ShipAmendment;
 use App\Form\Config\DayYearLimits;
-use App\Form\Type\ImperialDateType;
-use App\Model\ImperialDate;
 use App\Repository\CostRepository;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -35,7 +33,6 @@ class ShipAmendmentType extends AbstractType
         $user = $options['user'];
 
         $minYear = $ship->getCampaign()?->getStartingYear() ?? $this->limits->getYearMin();
-        $effectiveDate = new ImperialDate($amendment->getEffectiveYear(), $amendment->getEffectiveDay());
         $detailsData = ShipDetailsData::fromArray($amendment->getPatchDetails() ?? []);
 
         $builder
@@ -45,13 +42,6 @@ class ShipAmendmentType extends AbstractType
             ->add('description', TextareaType::class, [
                 'required' => false,
                 'attr' => ['class' => 'textarea m-1 w-full', 'rows' => 6],
-            ])
-            ->add('effectiveDate', ImperialDateType::class, [
-                'mapped' => false,
-                'label' => 'Effective date',
-                'data' => $effectiveDate,
-                'min_year' => $minYear,
-                'max_year' => $this->limits->getYearMax(),
             ])
             ->add('cost', EntityType::class, [
                 'class' => Cost::class,
@@ -87,11 +77,10 @@ class ShipAmendmentType extends AbstractType
             $amendment = $event->getData();
             $form = $event->getForm();
 
-            /** @var ImperialDate|null $effective */
-            $effective = $form->get('effectiveDate')->getData();
-            if ($effective instanceof ImperialDate) {
-                $amendment->setEffectiveDay($effective->getDay());
-                $amendment->setEffectiveYear($effective->getYear());
+            $cost = $amendment->getCost();
+            if ($cost) {
+                $amendment->setEffectiveDay($cost->getPaymentDay());
+                $amendment->setEffectiveYear($cost->getPaymentYear());
             }
 
             /** @var ShipDetailsData $details */
