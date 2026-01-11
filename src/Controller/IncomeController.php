@@ -141,8 +141,6 @@ final class IncomeController extends BaseController
             throw new NotFoundHttpException();
         }
 
-        $this->denyAccessUnlessGranted(IncomeVoter::EDIT, $income);
-
         $categoryParam = $request->query->get('category');
         if ($categoryParam) {
             $category = $em->getRepository(IncomeCategory::class)->find($categoryParam);

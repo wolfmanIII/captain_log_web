@@ -114,8 +114,6 @@ final class CostController extends BaseController
             throw new NotFoundHttpException();
         }
 
-        $this->denyAccessUnlessGranted(CostVoter::EDIT, $cost);
-
         $form = $this->createForm(CostType::class, $cost, ['user' => $user]);
         $form->handleRequest($request);
 
