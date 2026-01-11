@@ -39,6 +39,7 @@ flowchart TB
 
 1. Definire i **registri di contesto** (Directory): `InterestRate`, `Insurance`, `ShipRole`, `CostCategory`, `IncomeCategory`, `CompanyRole`, `LocalLaw`.
 2. Creare una **Campaign** con calendario imperiale (giorno/anno).
+   - Ogni cambio della session date crea un **log di sessione** con snapshot JSON (Campaign + Ships + log operativi), visibile in pagina dettagli.
 3. Creare la **Ship** e compilare la scheda dettagli (JSON `shipDetails`) con M‑Drive/J‑Drive e componenti.
 4. I partner commerciali (**Company**) sono **cross-campaign**: li definisci una volta e li riutilizzi su costi, entrate e mutui di qualsiasi campagna per mantenere la coerenza contrattuale.
 5. Collegare **Crew**, **Mortgage**, **Cost** e **Income** alla nave.
@@ -50,7 +51,7 @@ flowchart TB
 - “Total Cost” è calcolato client‑side sommando i `cost_mcr` e viene salvato nel JSON, ma **non** modifica `Ship.price`.
 - Se il mutuo è firmato, la scheda nave è bloccata: le modifiche ai componenti passano tramite **Ship Amendment** con `patchDetails` (stessa struttura di `shipDetails`) e **Cost reference obbligatoria** (SHIP_GEAR/SHIP_SOFTWARE). La data effetto viene derivata dalla payment date del Cost selezionato.
 - La select del Cost reference supporta ricerca testuale (Tom Select) e filtra i costi già usati da altri amendment.
- - Le date in UI/PDF sono formattate in `DDD/YYYY` tramite helper condiviso.
+- Le date in UI/PDF sono formattate in `DDD/YYYY` tramite helper condiviso.
 
 ## Flusso operativo: mutuo
 
@@ -65,6 +66,7 @@ flowchart TB
 - Income è legato a Ship + IncomeCategory + Company + LocalLaw.
 - Ogni categoria ha una tabella dettagli dedicata (Freight, Contract, Trade, Prize, ecc.).
 - La form usa `IncomeDetailsSubscriber` per agganciare la sottoform corretta in base alla categoria; `ContractFieldConfig` mantiene la mappa dei campi opzionali.
+- Lo **status** è automatico: `Draft` di default, `Signed` quando la signing date è completa.
 - PDF contratto: selezione template in `templates/pdf/contracts` e sostituzione placeholder.
 
 ## Flusso operativo: costi
@@ -72,12 +74,13 @@ flowchart TB
 - Cost è legato a Ship + CostCategory (+ LocalLaw, Company).
 - Le date di pagamento sono in formato imperiale (day/year).
 - Le righe dettaglio (`detailItems`) alimentano il calcolo dell’amount, che resta read‑only in form.
+- I PDF riportano la **template version** per tracciabilità.
 
 ## Flusso operativo: annual budget
 
 - Ogni budget è per **una singola nave**.
 - Timeline aggrega **Income**, **Cost** e **MortgageInstallment** per periodo.
- - Le chiavi day/year sono normalizzate da helper e i filtri accettano `DDD/YYYY` o solo `YYYY`.
+- Le chiavi day/year sono normalizzate da helper e i filtri accettano `DDD/YYYY` o solo `YYYY`.
 
 ## Ownership e sicurezza (operativa)
 
@@ -91,6 +94,7 @@ flowchart TB
 - Sidebar con badge “Beacon // Dock Ready” e separatori per sezioni.
 - Login con pannelli separati e immagine dedicata.
 - Liste con filtri sempre visibili e paginazione uniforme (10 risultati/pagina).
+- Session timeline Campaign con JSON formattato e highlight.
 
 ## Perché è “Traveller‑centric”
 

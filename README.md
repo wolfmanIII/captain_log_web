@@ -5,13 +5,16 @@ Applicazione Symfony 7.3 per la gestione di navi, equipaggi, contratti e mutui, 
 ## Caratteristiche principali
 - Navi, equipaggi, ruoli di bordo e mutui (rate, tassi, assicurazioni) con vincolo uno-a-uno nave↔mutuo; firma mutuo con data di sessione della Campaign + location richiesta via modale; stampa PDF della scheda nave e del mutuo (anche in modalità draft). I piani di pagamento usano il calendario Traveller a 13 periodi/anno.
 - Campagne con calendario di sessione (giorno/anno) e relazione 1–N con Ship: le date di sessione sono centralizzate su Campaign e usate ovunque (liste e PDF) tramite l’Imperial datepicker `DDD/YYYY` e il helper di normalizzazione.
+- Session timeline per Campaign: ogni cambio di session date genera un log con snapshot JSON della campagna (e delle ship collegate), leggibile in pagina con highlight.
 - Tipologie di spesa equipaggio (`CostCategory`) e anagrafiche di contesto (InterestRate, Insurance, ShipRole, CompanyRole, LocalLaw, IncomeCategory).
 - Company e CompanyRole come controparti contrattuali condivise: le companies sono disponibili cross-campaign e portano la propria LocalLaw/ disclaimer nei costi e nei contratti.
 - Entrate e costi legati alla nave con dettagli per categoria (es. Freight, Contract): form dinamiche e PDF contrattuali generati con wkhtmltopdf, con date rese via ImperialDateType + controller Stimulus `imperial-date` (popover con pulsanti di navigazione e tasto Clear per svuotare il giorno).
+- Income con status **Draft/Signed**: lo stato è impostato automaticamente dalla signing date (se completa → Signed).
 - Scheda dettagli nave salvata come JSON (`shipDetails`) con campi base e collezioni (weapons, craft, systems, staterooms, software) editabili da form dedicata.
 - Amendments nave post‑firma: `ShipAmendment` con `patchDetails` (stessa struttura di `shipDetails`) e **Cost reference obbligatoria** (categorie SHIP_GEAR/SHIP_SOFTWARE) con payment date valorizzata; la data effetto viene derivata dalla payment date del Cost e l’amendment compare nel PDF della nave.
 - La select Cost reference per gli amendments usa Tom Select con ricerca, inizializzato via Stimulus e asset locali in `assets/vendor/tom-select/`.
 - Tracciamento dell’utente proprietario su Ship, Crew, Mortgage, MortgageInstallment, Cost, Income e budget; i voter bloccano l’accesso se l’utente non coincide. Il PDF del mutuo può essere generato anche non firmato (marcato “Pro forma draft”).
+- PDF contratti/mutuo/schede con **template version** centralizzata (`config/template_versions.php`) per audit e tracciabilità.
 - Stato equipaggio con date operative: l’assegnazione da “unassigned crew” imposta `Active` + session date; lo sgancio azzera status e date operative (salvo `Missing (MIA)`/`Deceased`). Crew `Missing/Deceased` non compaiono tra gli unassigned e non vengono mostrati nei crew list del mutuo se non attivi alla data di firma.
 - Annual Budget per nave: calcolo riepilogativo di ricavi, costi e rate annuali del mutuo (su 13 periodi), più grafico temporale Income/Cost. Esempio: un mutuo di 100.000 Cr con duration 5 anni e multiplier 1.10 genera 13 rate/anno per 5 anni, non 12.
 - Cost detail items con amount auto‑calcolato: le righe dettaglio alimentano il totale e la stampa PDF del Cost.

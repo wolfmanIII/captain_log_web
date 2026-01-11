@@ -8,6 +8,7 @@ Questo documento descrive in modo discorsivo l’architettura attuale di Captain
 - **Framework:** Symfony 7.3 (PHP ≥ 8.2), asset mapper, Stimulus, Twig, Tailwind + DaisyUI per la UI, Tom Select per le select con ricerca.
 - **Date imperiali:** helper `ImperialDateHelper` + filtro Twig `imperial_date` per formattazione coerente `DDD/YYYY`.
 - **Tom Select (integrazione):** inizializzato via controller Stimulus `tom-select`; asset JS/CSS caricati da `assets/vendor/tom-select/` per evitare importmap bare‑module.
+- **Highlight.js:** usato per la formattazione dei JSON (session timeline Campaign) con asset locali in `assets/vendor/highlightjs/`.
 - **Persistenza:** Doctrine ORM con PostgreSQL/MySQL/SQLite.
 - **Admin:** EasyAdmin per le entità di contesto.
 - **PDF:** wkhtmltopdf via KnpSnappy (binario da `WKHTMLTOPDF_PATH`), template contratti in `templates/pdf/contracts` e scheda nave in `templates/pdf/ship/SHEET.html.twig`.
@@ -16,6 +17,7 @@ Questo documento descrive in modo discorsivo l’architettura attuale di Captain
 
 ## Dominio applicativo
 - **Campagne e sessioni:** `Campaign` con calendario di sessione (giorno/anno) e relazione 1–N con Ship; le date sessione mostrate nelle liste/PDF derivano dalla Campaign della nave.
+- **Session timeline Campaign:** `CampaignSessionLog` registra ogni aggiornamento della session date con snapshot JSON (campaign + ships + log operativi) e lo mostra in pagina con highlight.
 - **Navi e mutui:** `Ship`, `Mortgage`, `MortgageInstallment`, `InterestRate`, `Insurance`; il mutuo conserva `signingDay/Year` derivati dalla sessione della Campaign e `signingLocation` raccolta via modale al momento della firma. Il PDF del mutuo è generato da template dedicato; i piani usano 13 periodi/anno (esempio: 5 anni ⇒ 65 rate).
 - **Dettagli nave strutturati:** `Ship.shipDetails` (JSON) con DTO/form (`ShipDetailsData`, `ShipDetailItemType`, `MDriveDetailItemType`, `JDriveDetailItemType`) per hull/drive/bridge e collezioni (weapons, craft, systems, staterooms, software). Il “Total Cost” dei componenti è calcolato lato client e salvato nel JSON, ma **non** modifica `Ship.price`.
 - **Amendment nave:** `ShipAmendment` registra modifiche post‑firma con `patchDetails` (stessa struttura di `Ship.shipDetails`) e **Cost reference obbligatoria** (categorie SHIP_GEAR/SHIP_SOFTWARE). La data effetto viene derivata dalla payment date del Cost selezionato; la select Cost usa ricerca (Tom Select) e filtra cost già usati da altri amendment.
@@ -27,7 +29,7 @@ Questo documento descrive in modo discorsivo l’architettura attuale di Captain
 - **Company e CompanyRole:** controparti contrattuali usate da `Cost`, `Income` e `Mortgage`.
 - **CompanyRole.shortDescription:** etichetta breve usata nelle select e nelle liste per rendere i ruoli immediati.
 - **LocalLaw:** codice, descrizione breve e disclaimer giurisdizionale; referenziato da Cost, Income, Mortgage.
-- **Income dettagliato per categoria:** relazioni 1–1 (Freight, Passengers, Contract, Trade, Subsidy, Services, Insurance, Interest, Mail, Prize, Salvage, Charter, ecc.) con campi specifici; le sottoform sono attivate da `IncomeDetailsSubscriber` in base a `IncomeCategory.code` (mappa opzionale consultabile in `ContractFieldConfig`).
+- **Income dettagliato per categoria:** relazioni 1–1 (Freight, Passengers, Contract, Trade, Subsidy, Services, Insurance, Interest, Mail, Prize, Salvage, Charter, ecc.) con campi specifici; le sottoform sono attivate da `IncomeDetailsSubscriber` in base a `IncomeCategory.code` (mappa opzionale consultabile in `ContractFieldConfig`). Lo status è **Draft/Signed** e viene impostato automaticamente dalla signing date (se completa → Signed).
 - **Tracciamento utente:** FK `user` (nullable) su Ship, Crew, Mortgage, MortgageInstallment, Cost, Income, AnnualBudget e Company. Un listener Doctrine (`AssignUserSubscriber`) assegna l’utente loggato in `prePersist`.
 - **Company cross-campaign:** le controparti (`Company`, `CompanyRole`, `LocalLaw`) vengono definite una volta e riutilizzate su più campagne; questo garantisce consistenza nei costi/entrate e nei PDF, tenendo separati contesto e sessione.
 
@@ -47,7 +49,7 @@ Questo documento descrive in modo discorsivo l’architettura attuale di Captain
 - **Subscriber:** `AssignUserSubscriber` (Doctrine `prePersist`) assegna l’utente corrente se mancante.
 - **Filtro per ownership nei controller:** accesso alle entità tramite repository `findOneForUser`/`findAllForUser`, con 404 se l’utente non coincide (difesa in profondità oltre ai voter).
 - **Localizzazione numerica:** `twig/intl-extra` formatta importi in liste e PDF secondo la locale richiesta.
-- **Validazione day/year:** i form usano `IntegerType` e `DayYearLimits`; il min anno deriva dallo `startingYear` della Campaign della Ship selezionata (fallback `APP_YEAR_MIN`) ed è propagato lato client via Stimulus.
+- **Validazione day/year:** i form usano `IntegerType` e `DayYearLimits`; il min anno deriva dallo `startingYear` della Campaign della Ship selezionata (fallback `APP_YEAR_MIN`) ed è propagato lato client via Stimulus. Il validator `ImperialDateComplete` forza la compilazione completa day+year quando il campo è required.
 
 ## EasyAdmin
 - Dashboard personalizzata (`templates/admin/dashboard.html.twig`) con card di link rapidi per le entità di contesto (InterestRate, Insurance, ShipRole, CostCategory, IncomeCategory, CompanyRole, LocalLaw, Company).
@@ -61,7 +63,7 @@ Questo documento descrive in modo discorsivo l’architettura attuale di Captain
 
 ## Contratti e PDF
 - Template HTML Twig in `templates/pdf/contracts` per le principali categorie di Income; i placeholder sono documentati in `docs/contract-placeholders.md`.
-- Servizio `PdfGenerator` basato su KnpSnappy/wkhtmltopdf per stampare i contratti Income, il mutuo e la scheda nave; percorso binario configurato in `config/packages/knp_snappy.yaml` via env.
+- Servizio `PdfGenerator` basato su KnpSnappy/wkhtmltopdf per stampare i contratti Income, il mutuo e la scheda nave; percorso binario configurato in `config/packages/knp_snappy.yaml` via env. Le versioni dei template sono centralizzate in `config/template_versions.php` e richiamate nei PDF.
 - I campi opzionali delle sottoform Income sono determinati dal codice categoria e mostrati solo se richiesti (form dinamiche con event subscriber).
 - Le date nei PDF e nelle liste sono formattate `DDD/YYYY` tramite `ImperialDateHelper` e filtro Twig `imperial_date`.
 - Nel PDF del mutuo l’elenco crew è filtrato: esclusi `Missing (MIA)`/`Deceased` e inclusi solo membri con `activeDate >= signingDate`.

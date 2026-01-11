@@ -28,8 +28,10 @@
                 <span class="badge badge-outline badge-sm">Cross-campaign Companies</span>
                 <span class="badge badge-outline badge-sm">Imperial Dates</span>
                 <span class="badge badge-outline badge-sm">Crew Status Timeline</span>
+                <span class="badge badge-outline badge-sm">Session Timeline Logs</span>
                 <span class="badge badge-outline badge-sm">Mortgage Signature</span>
                 <span class="badge badge-outline badge-sm">Contract PDFs</span>
+                <span class="badge badge-outline badge-sm">Template Version</span>
                 <span class="badge badge-outline badge-sm">Ship Amendments</span>
             </div>
         </div>
@@ -48,6 +50,7 @@
             <ul class="mt-3 text-sm text-slate-300 space-y-2">
                 <li>Session date drives form limits and PDF “generated on” stamps.</li>
                 <li>Ships inherit the campaign calendar for all day/year fields.</li>
+                <li>Every update is logged as a session timeline entry with a JSON snapshot.</li>
                 <li>Campaign is the anchor for costs, income, and mortgage signatures.</li>
                 <li>Dates are normalized everywhere as DDD/YYYY.</li>
             </ul>
@@ -143,8 +146,9 @@
             </p>
             <ul class="mt-3 text-sm text-slate-300 space-y-2">
                 <li>Imperial dates are shown as DDD/YYYY with optional clear.</li>
+                <li>Status flips Draft → Signed when signing day/year is complete.</li>
                 <li>Category‑specific details are enforced by dynamic forms.</li>
-                <li>Contract PDFs mirror the data structure for auditing.</li>
+                <li>Contract PDFs mirror the data structure and include template version.</li>
             </ul>
         </div>
 
@@ -160,7 +164,7 @@
             <ul class="mt-3 text-sm text-slate-300 space-y-2">
                 <li>Detail items feed the computed amount field (read‑only).</li>
                 <li>Payment dates use imperial day/year.</li>
-                <li>PDF formatting stays consistent across contracts.</li>
+                <li>PDF formatting stays consistent across contracts (template versioned).</li>
             </ul>
         </div>
 

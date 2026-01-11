@@ -38,7 +38,7 @@
         <div class="rounded-2xl border border-white/10 bg-base-200/80 p-6 shadow-sm">
             <p class="text-xs uppercase tracking-[0.25em] text-cyan-400 mb-2">Step 1</p>
             <h3 class="text-xl font-semibold text-slate-100">Spin up the Campaign</h3>
-            <p class="text-sm text-slate-300 mt-2">Name the op, drop a short brief, and set the session calendar (day/year). Keep the session date updated as in-game time advances: every downstream date (mortgage, PDFs, forms) syncs to this clock. All date fields render as DDD/YYYY for quick scans.</p>
+            <p class="text-sm text-slate-300 mt-2">Name the op, drop a short brief, and set the session calendar (day/year). Keep the session date updated as in-game time advances: every downstream date (mortgage, PDFs, forms) syncs to this clock. Each update is logged in the session timeline with a JSON snapshot. All date fields render as DDD/YYYY for quick scans.</p>
             <div class="mt-3 text-cyan-200 flex items-center gap-2">
                 {% include 'icons/alien-structure-1.html.twig' %}
                 <span class="text-xs uppercase tracking-[0.2em]">Campaign control</span>
@@ -94,7 +94,7 @@
         <div class="rounded-2xl border border-white/10 bg-base-200/80 p-6 shadow-sm">
             <p class="text-xs uppercase tracking-[0.25em] text-cyan-400 mb-2">Step 7</p>
             <h3 class="text-xl font-semibold text-slate-100">Log the Income</h3>
-            <p class="text-sm text-slate-300 mt-2">Add income per ship and category (Freight, Contract, etc.) with dedicated details and printable PDFs. Signing date/location and local law keep contracts coherent with the table’s timeline.</p>
+            <p class="text-sm text-slate-300 mt-2">Add income per ship and category (Freight, Contract, etc.) with dedicated details and printable PDFs. Signing date/location and local law keep contracts coherent with the table’s timeline; the status flips from Draft to Signed automatically when the signing date is complete.</p>
             <div class="mt-3 text-cyan-200 flex items-center gap-2">
                 {% include 'icons/income.html.twig' %}
                 <span class="text-xs uppercase tracking-[0.2em]">Credits in</span>
@@ -139,7 +139,7 @@
         <div class="rounded-2xl border border-white/10 bg-base-200/80 p-6 shadow-sm">
             <p class="text-xs uppercase tracking-[0.25em] text-cyan-400 mb-2">Step 12</p>
             <h3 class="text-xl font-semibold text-slate-100">Print contract PDFs</h3>
-            <p class="text-sm text-slate-300 mt-2">When a job is ready, export the contract PDF and keep the counterparty and local law visible at the table.</p>
+            <p class="text-sm text-slate-300 mt-2">When a job is ready, export the contract PDF and keep the counterparty and local law visible at the table. Each PDF carries a template version marker for audit and reprints.</p>
             <div class="mt-3 text-cyan-200 flex items-center gap-2">
                 {% include 'icons/pdf.html.twig' %}
                 <span class="text-xs uppercase tracking-[0.2em]">Signed copy</span>
