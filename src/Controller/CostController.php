@@ -179,7 +179,7 @@ final class CostController extends BaseController
             throw new NotFoundHttpException();
         }
 
-        $this->denyAccessUnlessGranted(CostVoter::EDIT, $cost);
+        $this->denyAccessUnlessGranted(CostVoter::VIEW, $cost);
 
         $pdf = $pdfGenerator->render('pdf/cost/SHEET.html.twig', [
             'cost' => $cost,

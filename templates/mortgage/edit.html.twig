@@ -10,6 +10,7 @@
 {% set can_sign = is_granted(CAN_SIGN, mortgage) %}
 {% set can_pay = is_granted(CAN_PAY, mortgage) %}
 {% set can_pdf = is_granted(CAN_PDF, mortgage) %}
+{% import '_tooltip.html.twig' as tooltip %}
 
 {% block title %}Captain Log - Mortgage{% endblock %}
 
@@ -31,10 +32,24 @@
                         <div class="p-3 rounded-lg bg-cyan-500/10 border border-cyan-400/40">
                             {% include 'icons/handbook.html.twig' %}
                         </div>
-                        <div>
+                        <div class="flex-1">
                             <p class="uppercase text-xs tracking-[0.25em] text-cyan-300/70">Ship mortgage</p>
                             <h3 class="font-semibold text-cyan-100 text-xl leading-tight">Finance your ship</h3>
                             <p class="text-sm text-cyan-100/80">Calculate costs, interests and insurance before signing: every jump starts with clean numbers.</p>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            {% if mortgage.id and can_pdf %}
+                                {{ tooltip.link('Open mortgage PDF',
+                                                'Mortgage PDF',
+                                                'icons/pdf.html.twig',
+                                                path('app_mortgage_pdf', { id: mortgage.id }),
+                                                { dim: 16, linkClass: 'btn btn-outline btn-secondary btn-sm', attrs: { target: '_blank', rel: 'noopener' } }) }}
+                            {% else %}
+                                {{ tooltip.button('PDF unavailable',
+                                                  'Mortgage PDF',
+                                                  'icons/pdf.html.twig',
+                                                  { dim: 16, buttonClass: 'btn btn-outline btn-secondary btn-sm', attrs: { disabled: 'disabled' } }) }}
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -176,23 +191,6 @@
             </a>
         {% endif %}
 
-        {% if mortgage.id %}
-            <a
-                href="{{ path('app_mortgage_pdf', {id: mortgage.id}) }}"
-                role="button"
-                target="_blank"
-                class="btn btn-outline btn-secondary mt-4 mb-4 mr-4"
-                {% if not can_pdf %} disabled {% endif %}
-            >PDF</a>
-        {% else %}
-            <a
-                href="#"
-                role="button"
-                target="_blank"
-                class="btn btn-outline btn-secondary mt-4 mb-4 mr-4"
-                disabled
-            >PDF</a>
-        {% endif %}
         <a href="{{ path('app_mortgage_index') }}" role="button" class="btn btn-outline btn-default mt-4 mb-4 mr-4">Cancel</a>
 
         {{ form_end(form) }} 

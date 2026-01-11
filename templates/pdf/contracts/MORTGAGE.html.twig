@@ -98,6 +98,7 @@
                     {% set sessionYear = ship.campaign ? ship.campaign.sessionYear : ship.sessionYear %}
                     {% set sessionValue = (sessionDay is not null and sessionYear is not null) ? (sessionDay|imperial_date(sessionYear)) : '—' %}
                     <div class="text-sm">Generated on: {{ sessionValue }}</div>
+                    <div class="text-sm">Template: {{ template_version('pdf/contracts/MORTGAGE.html.twig') }}</div>
                 </td>
             </tr>
         </table>

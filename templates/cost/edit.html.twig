@@ -7,6 +7,7 @@
     {% set CAN_EDIT = constant('App\\Security\\Voter\\CostVoter::EDIT') %}
     {% set can_create = is_granted(CAN_CREATE, cost) %}
     {% set can_edit = is_granted(CAN_EDIT, cost) %}
+    {% import '_tooltip.html.twig' as tooltip %}
 
     <div class="flex flex-col items-stretch gap-4">
 
@@ -26,11 +27,20 @@
                         <div class="p-3 rounded-lg bg-cyan-500/10 border border-cyan-400/40">
                             {% include 'icons/cost.html.twig' %}
                         </div>
-                        <div>
+                        <div class="flex-1">
                             <p class="uppercase text-xs tracking-[0.25em] text-cyan-300/70">Mission outflows</p>
                             <h3 class="font-semibold text-cyan-100 text-xl leading-tight">Track your outflows</h3>
                             <p class="text-sm text-cyan-100/80">Log maintenance, gear and travel: knowing where credits slip helps prep the next jump.</p>
                         </div>
+                        {% if cost.id %}
+                            <div class="flex items-start gap-2">
+                                {{ tooltip.link('Open cost PDF',
+                                                'Cost PDF',
+                                                'icons/pdf.html.twig',
+                                                path('app_cost_pdf', { id: cost.id }),
+                                                { dim: 16, linkClass: 'btn btn-outline btn-secondary btn-sm', attrs: { target: '_blank', rel: 'noopener' } }) }}
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -137,11 +147,6 @@
         >
             Save
         </button>
-        {% if cost.id %}
-            <a href="{{ path('app_cost_pdf', { id: cost.id }) }}" target="_blank" class="btn btn-outline btn-secondary mt-4 mb-4 mr-4">
-                PDF
-            </a>
-        {% endif %}
         <a href="{{ path('app_cost_index') }}" role="button" class="btn btn-outline btn-default mt-4 mb-4 mr-4">Cancel</a>
 
         {{ form_end(form, { render_rest: false }) }}

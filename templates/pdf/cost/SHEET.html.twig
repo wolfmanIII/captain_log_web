@@ -39,6 +39,9 @@
                         Docket ref: {{ cost.code }} |
                         {{ (cost.paymentDay is not null and cost.paymentYear is not null) ? (cost.paymentDay|imperial_date(cost.paymentYear)) : '—' }}
                     </p>
+                    <p class="muted" style="margin: 2px 0 0 0;">
+                        Template: {{ template_version('pdf/cost/SHEET.html.twig') }}
+                    </p>
                 </td>
             </tr>
         </table>

@@ -4,10 +4,10 @@ Documento di analisi tecnica con aree di miglioramento e funzionalità potenzial
 
 ## Priorità alte (impatto su sicurezza e coerenza)
 
-1) **Ownership Campaign — risolto**
+1) **Ownership Campaign [DONE]**
    - Stato: aggiunto `Campaign.user`, filtro per user in repository e controller.
 
-2) **Validazione AnnualBudget (start/end) — risolto**
+2) **Validazione AnnualBudget (start/end) [DONE]**
    - Stato: le query usano la funzione `parseDayYearFilter` in `AnnualBudgetRepository` e applicano `start >=` / `end <=` prima di restituire i risultati.
    - Beneficio: il filtro non restituisce più budget con range invertito, mantenendo il vincolo logico nel percorso di ricerca.
 
@@ -17,13 +17,13 @@ Documento di analisi tecnica con aree di miglioramento e funzionalità potenzial
 
 ## Qualità dati e performance
 
-4) **Indici database mirati — risolto**
+4) **Indici database mirati [DONE]**
    - Entità: `Cost`, `Income`, `Mortgage`, `AnnualBudget`, `Crew`, `Ship`, `Company`, `Campaign`, `ShipAmendment`.
    - Indici consigliati: `user_id`, `ship_id`, `campaign_id`, `income_category_id`, `cost_category_id`, `company_role_id`, `cost_id`.
    - Note: per `Cost` valutare anche indice su `payment_day/payment_year` se si filtrano date in liste o report.
    - Beneficio: query filtrate/paginate più stabili sotto carico.
 
-5) **Normalizzazione date imperiali — risolto**
+5) **Normalizzazione date imperiali [DONE]**
    - Stato: introdotto `ImperialDateHelper` per parsing (`DDD/YYYY` o solo `YYYY`), normalizzazione e serializzazione coerente.
    - Usato in:
      - controller/servizi che calcolano chiavi day/year (AnnualBudget chart, filtri);
@@ -32,15 +32,15 @@ Documento di analisi tecnica con aree di miglioramento e funzionalità potenzial
 
 ## UX / UI (qualità d’uso)
 
-6) **Componente filtri riusabile — risolto**
+6) **Componente filtri riusabile [DONE]**
    - Stato: creato il partial `templates/components/index_filters.html.twig` usato da tutte le index.
    - Beneficio: layout coerente per label, griglie e pulsanti Search/Reset, con minori duplicazioni.
 
-7) **Feedback su filtri attivi — risolto**
+7) **Feedback su filtri attivi [DONE]**
    - Stato: badge “Filtered” mostrato nel legend quando almeno un filtro è valorizzato.
    - Beneficio: i filtri attivi sono evidenti a colpo d’occhio.
 
-8) **Placeholder operativi coerenti — risolto**
+8) **Placeholder operativi coerenti [DONE]**
    - Stato: placeholder uniformi applicati ai filtri day/year (Annual Budget: `Start >= Day/Year or Year`, `End <= Day/Year or Year`).
 
 9) **Select con ricerca per Cost ref in Amendments — implementato**
@@ -49,12 +49,12 @@ Documento di analisi tecnica con aree di miglioramento e funzionalità potenzial
 
 ## Contratti e PDF
 
-10) **ContractFieldConfig come fonte unica — risolto**
+10) **ContractFieldConfig come fonte unica [DONE]**
    - Stato: `ContractFieldConfig` guida i campi opzionali e i placeholder per i dettagli Income.
    - Beneficio: configurazione unica per campi mostrati/placeholder, con coerenza tra form e logica.
 
-11) **Tracciamento versione dei template**
-   - Opzione: inserire una versione o hash nei PDF generati per auditing.
+11) **Tracciamento versione dei template [DONE]**
+   - Soluzione: mappa centralizzata in `config/template_versions.php` + helper Twig `template_version()`.
 
 ## Test e affidabilità
 
@@ -67,7 +67,7 @@ Documento di analisi tecnica con aree di miglioramento e funzionalità potenzial
 
 ## Possibili evoluzioni (opzionali)
 
-13) **Workflow “Draft → Signed” per contratti Income — risolto**
+13) **Workflow “Draft → Signed” per contratti Income [DONE]**
    - Stato: introdotto `status` su Income con valori Draft/Signed.
    - Beneficio: distingue pre‑accordi e contratti finali in modo uniforme.
 
