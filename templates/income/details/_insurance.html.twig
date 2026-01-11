@@ -66,7 +66,7 @@
         }) }}
         {{ form_widget(detail_form.incidentDate.year) }}
         {{ form_widget(detail_form.incidentDate.day) }}
-        {{ form_errors(detail_form.incidentDate) }}
+        {{ form_errors(detail_form.incidentDate.display) }}
         <input type="checkbox" id="{{ incident_date_help_id }}" class="modal-toggle hidden" />
         <div class="modal" role="dialog">
             <div class="modal-box">

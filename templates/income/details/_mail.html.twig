@@ -87,7 +87,7 @@
             }) }}
             {{ form_widget(detail_form.dispatchDate.year) }}
             {{ form_widget(detail_form.dispatchDate.day) }}
-            {{ form_errors(detail_form.dispatchDate) }}
+            {{ form_errors(detail_form.dispatchDate.display) }}
             <input type="checkbox" id="{{ dispatch_help_id }}" class="modal-toggle hidden" />
             <div class="modal" role="dialog">
                 <div class="modal-box">
@@ -119,7 +119,7 @@
             }) }}
             {{ form_widget(detail_form.deliveryDate.year) }}
             {{ form_widget(detail_form.deliveryDate.day) }}
-            {{ form_errors(detail_form.deliveryDate) }}
+            {{ form_errors(detail_form.deliveryDate.display) }}
             <input type="checkbox" id="{{ delivery_help_id }}" class="modal-toggle hidden" />
             <div class="modal" role="dialog">
                 <div class="modal-box">
@@ -329,7 +329,7 @@
             }) }}
             {{ form_widget(detail_form.deliveryProofDate.year) }}
             {{ form_widget(detail_form.deliveryProofDate.day) }}
-            {{ form_errors(detail_form.deliveryProofDate) }}
+            {{ form_errors(detail_form.deliveryProofDate.display) }}
             <input type="checkbox" id="{{ proof_date_help_id }}" class="modal-toggle hidden" />
             <div class="modal" role="dialog">
                 <div class="modal-box">

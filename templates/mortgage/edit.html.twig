@@ -106,7 +106,7 @@
                         {{ form_widget(form.startDate.display, { attr: {'data-imperial-date-prev-icon': '«', 'data-imperial-date-next-icon': '»'} }) }}
                         {{ form_widget(form.startDate.year) }}
                         {{ form_widget(form.startDate.day) }}
-                        {{ form_errors(form.startDate) }}
+                        {{ form_errors(form.startDate.display) }}
                     </div>
                 </div>
 
@@ -322,6 +322,7 @@
                             {{ form_widget(payment_form.paymentDate.display, { attr: {'data-imperial-date-prev-icon': '«', 'data-imperial-date-next-icon': '»'} }) }}
                             {{ form_widget(payment_form.paymentDate.year) }}
                             {{ form_widget(payment_form.paymentDate.day) }}
+                            {{ form_errors(payment_form.paymentDate.display) }}
                         </div>
                         <div>
                             <label class="label">Payment(Cr)</label>

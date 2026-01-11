@@ -77,7 +77,7 @@
                 }) }}
                 {{ form_widget(form.sessionDate.year, { attr: { 'data-session-date-lock-target': 'yearInput' } }) }}
                 {{ form_widget(form.sessionDate.day, { attr: { 'data-session-date-lock-target': 'dayInput' } }) }}
-                {{ form_errors(form.sessionDate) }}
+                {{ form_errors(form.sessionDate.display) }}
             </div>
 
             <div class="col-span-2">

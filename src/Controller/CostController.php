@@ -80,9 +80,9 @@ final class CostController extends BaseController
         }
 
         $cost = new Cost();
+
         $form = $this->createForm(CostType::class, $cost, ['user' => $user]);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $em->persist($cost);
             $em->flush();

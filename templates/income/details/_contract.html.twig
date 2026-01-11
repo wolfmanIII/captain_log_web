@@ -131,7 +131,7 @@
             }) }}
             {{ form_widget(detail_form.startDate.year) }}
             {{ form_widget(detail_form.startDate.day) }}
-            {{ form_errors(detail_form.startDate) }}
+            {{ form_errors(detail_form.startDate.display) }}
             <input type="checkbox" id="{{ start_help_id }}" class="modal-toggle hidden" />
             <div class="modal" role="dialog">
                 <div class="modal-box">
@@ -160,7 +160,7 @@
             }) }}
             {{ form_widget(detail_form.deadlineDate.year) }}
             {{ form_widget(detail_form.deadlineDate.day) }}
-            {{ form_errors(detail_form.deadlineDate) }}
+            {{ form_errors(detail_form.deadlineDate.display) }}
             <input type="checkbox" id="{{ deadline_help_id }}" class="modal-toggle hidden" />
             <div class="modal" role="dialog">
                 <div class="modal-box">

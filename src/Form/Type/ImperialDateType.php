@@ -3,12 +3,14 @@
 namespace App\Form\Type;
 
 use App\Model\ImperialDate;
+use App\Validator\ImperialDateComplete;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ImperialDateType extends AbstractType
@@ -41,7 +43,7 @@ class ImperialDateType extends AbstractType
                 ],
             ])
             ->add('year', HiddenType::class, [
-                'required' => true,
+                'required' => false,
                 'attr' => [
                     'data-imperial-date-target' => 'year',
                     'data-min-year' => $options['min_year'],
@@ -50,7 +52,7 @@ class ImperialDateType extends AbstractType
                 'data' => $initialYear,
             ])
             ->add('day', HiddenType::class, [
-                'required' => true,
+                'required' => false,
                 'attr' => [
                     'data-imperial-date-target' => 'day',
                 ],
@@ -80,6 +82,13 @@ class ImperialDateType extends AbstractType
             $day = $data['day'] ?? null;
             $year = $data['year'] ?? null;
 
+            if ($day === null || $day === '') {
+                $data['day'] = null;
+                $data['year'] = null;
+                $event->setData($data);
+                return;
+            }
+
             if ($day !== null) {
                 $event->getForm()->get('day')->setData((int) $day);
             }
@@ -96,6 +105,13 @@ class ImperialDateType extends AbstractType
             'data_class' => ImperialDate::class,
             'min_year' => 1105,
             'max_year' => 9999,
+            'error_bubbling' => false,
+            'error_mapping' => ['.' => 'display'],
+            'constraints' => static function (Options $options): array {
+                return [
+                    new ImperialDateComplete(required: (bool) $options['required']),
+                ];
+            },
         ]);
     }
 }

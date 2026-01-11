@@ -95,7 +95,7 @@
                     {{ form_widget(form.birthDate.display, { attr: {'data-imperial-date-prev-icon': '«', 'data-imperial-date-next-icon': '»'} }) }}
                     {{ form_widget(form.birthDate.year) }}
                     {{ form_widget(form.birthDate.day) }}
-                    {{ form_errors(form.birthDate) }}
+                    {{ form_errors(form.birthDate.display) }}
                 </div>
                 <div>
                     {{ form_label(form.birthWorld) }}
@@ -203,6 +203,7 @@
                             {{ form_widget(attribute(form, row.field).display, { attr: {'data-imperial-date-prev-icon': '«', 'data-imperial-date-next-icon': '»'} }) }}
                             {{ form_widget(attribute(form, row.field).year) }}
                             {{ form_widget(attribute(form, row.field).day) }}
+                            {{ form_errors(attribute(form, row.field).display) }}
                         </div>
                     {% endfor %}
                 </div>

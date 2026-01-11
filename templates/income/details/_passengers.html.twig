@@ -87,7 +87,7 @@
             }) }}
             {{ form_widget(detail_form.departureDate.year) }}
             {{ form_widget(detail_form.departureDate.day) }}
-            {{ form_errors(detail_form.departureDate) }}
+            {{ form_errors(detail_form.departureDate.display) }}
             <input type="checkbox" id="{{ dep_help_id }}" class="modal-toggle hidden" />
             <div class="modal" role="dialog">
                 <div class="modal-box">
@@ -120,7 +120,7 @@
             }) }}
             {{ form_widget(detail_form.arrivalDate.year) }}
             {{ form_widget(detail_form.arrivalDate.day) }}
-            {{ form_errors(detail_form.arrivalDate) }}
+            {{ form_errors(detail_form.arrivalDate.display) }}
             <input type="checkbox" id="{{ arr_help_id }}" class="modal-toggle hidden" />
             <div class="modal" role="dialog">
                 <div class="modal-box">
@@ -327,7 +327,7 @@
             }) }}
             {{ form_widget(detail_form.deliveryProofDate.year) }}
             {{ form_widget(detail_form.deliveryProofDate.day) }}
-            {{ form_errors(detail_form.deliveryProofDate) }}
+            {{ form_errors(detail_form.deliveryProofDate.display) }}
             <input type="checkbox" id="{{ proof_date_help_id }}" class="modal-toggle hidden" />
             <div class="modal" role="dialog">
                 <div class="modal-box">

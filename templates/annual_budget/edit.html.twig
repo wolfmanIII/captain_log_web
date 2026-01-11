@@ -57,7 +57,7 @@
                     {{ form_widget(form.startDate.display, { attr: {'data-imperial-date-prev-icon': '«', 'data-imperial-date-next-icon': '»'} }) }}
                     {{ form_widget(form.startDate.year) }}
                     {{ form_widget(form.startDate.day) }}
-                    {{ form_errors(form.startDate) }}
+                    {{ form_errors(form.startDate.display) }}
                 </div>
 
                 <div data-controller="imperial-date">
@@ -65,7 +65,7 @@
                     {{ form_widget(form.endDate.display, { attr: {'data-imperial-date-prev-icon': '«', 'data-imperial-date-next-icon': '»'} }) }}
                     {{ form_widget(form.endDate.year) }}
                     {{ form_widget(form.endDate.day) }}
-                    {{ form_errors(form.endDate) }}
+                    {{ form_errors(form.endDate.display) }}
                 </div>
             </div>
 
