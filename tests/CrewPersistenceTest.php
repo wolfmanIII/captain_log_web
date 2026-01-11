@@ -14,6 +14,7 @@ use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMSetup;
+use Doctrine\ORM\Mapping\UnderscoreNamingStrategy;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\Persistence\ManagerRegistry;
 use PHPUnit\Framework\TestCase;
@@ -29,6 +30,7 @@ class CrewPersistenceTest extends TestCase
             paths: [dirname(__DIR__) . '/src/Entity'],
             isDevMode: true,
         );
+        $config->setNamingStrategy(new UnderscoreNamingStrategy(CASE_LOWER, true));
 
         $connection = DriverManager::getConnection([
             'driver' => 'pdo_sqlite',

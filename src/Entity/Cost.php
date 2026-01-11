@@ -9,12 +9,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: CostRepository::class)]
-#[ORM\Table(indexes: [
-    new ORM\Index(name: 'idx_cost_user', columns: ['user_id']),
-    new ORM\Index(name: 'idx_cost_ship', columns: ['ship_id']),
-    new ORM\Index(name: 'idx_cost_category', columns: ['cost_category_id']),
-    new ORM\Index(name: 'idx_cost_payment_date', columns: ['payment_day', 'payment_year']),
-])]
+#[ORM\Index(name: 'idx_cost_user', columns: ['user_id'])]
+#[ORM\Index(name: 'idx_cost_ship', columns: ['ship_id'])]
+#[ORM\Index(name: 'idx_cost_category', columns: ['cost_category_id'])]
+#[ORM\Index(name: 'idx_cost_payment_date', columns: ['payment_day', 'payment_year'])]
 class Cost
 {
     #[ORM\Id]

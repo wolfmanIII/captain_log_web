@@ -58,7 +58,7 @@ Documento di analisi tecnica con aree di miglioramento e funzionalità potenzial
 
 ## Test e affidabilità
 
-12) **Test funzionali minimi**
+12) **Test funzionali minimi [DONE]**
    - Scopo: proteggere i flussi principali.
    - Copertura consigliata:
      - filtro + paginazione (Crew/Ship/Cost/Income);

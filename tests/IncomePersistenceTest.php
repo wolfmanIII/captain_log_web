@@ -25,6 +25,7 @@ use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMSetup;
+use Doctrine\ORM\Mapping\UnderscoreNamingStrategy;
 use Doctrine\ORM\Tools\SchemaTool;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Uid\Uuid;
@@ -39,6 +40,7 @@ class IncomePersistenceTest extends TestCase
             paths: [dirname(__DIR__) . '/src/Entity'],
             isDevMode: true,
         );
+        $config->setNamingStrategy(new UnderscoreNamingStrategy(CASE_LOWER, true));
 
         $connection = DriverManager::getConnection([
             'driver' => 'pdo_sqlite',

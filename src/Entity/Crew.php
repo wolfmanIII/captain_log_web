@@ -10,10 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: CrewRepository::class)]
-#[ORM\Table(indexes: [
-    new ORM\Index(name: 'idx_crew_user', columns: ['user_id']),
-    new ORM\Index(name: 'idx_crew_ship', columns: ['ship_id']),
-])]
+#[ORM\Index(name: 'idx_crew_user', columns: ['user_id'])]
+#[ORM\Index(name: 'idx_crew_ship', columns: ['ship_id'])]
 #[Captain]
 class Crew
 {

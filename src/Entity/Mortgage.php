@@ -11,10 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: MortgageRepository::class)]
-#[ORM\Table(indexes: [
-    new ORM\Index(name: 'idx_mortgage_user', columns: ['user_id']),
-    new ORM\Index(name: 'idx_mortgage_ship', columns: ['ship_id']),
-])]
+#[ORM\Index(name: 'idx_mortgage_user', columns: ['user_id'])]
+#[ORM\Index(name: 'idx_mortgage_ship', columns: ['ship_id'])]
 class Mortgage
 {
     private const SHIP_SHARE_VALUE = 1000000;
