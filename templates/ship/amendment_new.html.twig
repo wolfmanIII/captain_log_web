@@ -38,7 +38,7 @@
                 {{ form_errors(form.title) }}
             </div>
 
-            <div>
+            <div data-controller="imperial-date">
                 {{ form_label(form.effectiveDate) }}
                 {{ form_widget(form.effectiveDate.display, { attr: {'data-imperial-date-prev-icon': '«', 'data-imperial-date-next-icon': '»'} }) }}
                 {{ form_widget(form.effectiveDate.year) }}
@@ -59,7 +59,7 @@
             </div>
         </fieldset>
 
-        {% include 'ship/_details_form.html.twig' with { detailsForm: form.patchDetails } %}
+        {% include 'ship/_details_form.html.twig' with { detailsForm: form.patchDetails, is_amendment: true } %}
 
         <div class="flex gap-4">
             <button type="submit" class="btn btn-outline btn-primary mt-4 mb-4">Save amendment</button>

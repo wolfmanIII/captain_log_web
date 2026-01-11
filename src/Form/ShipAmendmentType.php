@@ -55,8 +55,8 @@ class ShipAmendmentType extends AbstractType
             ])
             ->add('cost', EntityType::class, [
                 'class' => Cost::class,
-                'required' => false,
-                'placeholder' => '-- Optional cost reference --',
+                'required' => true,
+                'placeholder' => '-- Select cost reference --',
                 'choice_label' => fn (Cost $cost) => sprintf('%s — %s', $cost->getTitle(), $cost->getAmount()),
                 'query_builder' => function (CostRepository $repo) use ($ship, $user) {
                     $qb = $repo->createQueryBuilder('c')

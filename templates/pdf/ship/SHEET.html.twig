@@ -33,6 +33,7 @@
 
 {% block pageContent %}
     {% set details = ship.shipDetails ?? {} %}
+    {% set amendments = ship.amendments ?? [] %}
     {% set techLevel = details.techLevel ?? '—' %}
     {% set singleItems = [
         { label: 'Hull', item: details.hull ?? {}, spec: null, specLabel: null },
@@ -217,5 +218,42 @@
             {{ _self.render_collection('Staterooms', details.staterooms ?? [], locale) }}
             {{ _self.render_collection('Software', details.software ?? [], locale) }}
         </div>
+
+        {% if amendments|length > 0 %}
+            <div class="card">
+                <div class="section-title">Amendments Log</div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Code</th>
+                            <th>Title</th>
+                            <th>Effective date</th>
+                            <th>Cost ref</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for amendment in amendments %}
+                            <tr>
+                                <td>{{ amendment.code }}</td>
+                                <td>
+                                    <div class="value">{{ amendment.title }}</div>
+                                    {% if amendment.description %}
+                                        <div class="muted">{{ amendment.description }}</div>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if amendment.effectiveDay is not null and amendment.effectiveYear is not null %}
+                                        {{ amendment.effectiveDay|format('%03d') }}/{{ amendment.effectiveYear }}
+                                    {% else %}
+                                        —
+                                    {% endif %}
+                                </td>
+                                <td>{{ amendment.cost ? amendment.cost.title : '—' }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
     </div>
 {% endblock %}
