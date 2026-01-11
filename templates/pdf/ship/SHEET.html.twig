@@ -229,6 +229,7 @@
                             <th>Title</th>
                             <th>Effective date</th>
                             <th>Cost ref</th>
+                            <th>Amount(Cr)</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -251,6 +252,13 @@
                                 <td>
                                     {% if amendment.cost %}
                                         {{ amendment.cost.code }} — {{ amendment.cost.title }}
+                                    {% else %}
+                                        —
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if amendment.cost %}
+                                        {{ amendment.cost.amount|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', locale) }}
                                     {% else %}
                                         —
                                     {% endif %}

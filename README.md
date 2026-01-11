@@ -49,11 +49,36 @@ Applicazione Symfony 7.3 per la gestione di navi, equipaggi, contratti e mutui, 
    ```bash
    composer install
    ```
-2. Crea `.env.local` con le variabili minime:
+2. Interfaccia grafica, Tailwind, Tipography e DaisyUI
+   #### Installare nvm (nodejs version manager)
+   ```bash
+   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+   ```
+   #### Aggiornare il proprio profilo utente, file .bash_profile o .bashrc nella propria home directory
+   ```bash
+   export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+   ```
+   #### Ricaricare la configurazione della shell
+   ```bash
+   source ~/.bashrc
+   ```
+   ### Installare nodejs e i plugin aggiuntivi per Tailwind
+   ```bash
+   nvm install --lts
+   npm init
+   npm install -D @tailwindcss/typography
+   npm i -D daisyui@latest
+   ```
+3. Installa Tom Select (usato per la select con ricerca):
+   ```bash
+   npm install tom-select
+   ```
+4. Crea `.env.local` con le variabili minime:
    ```env
    APP_ENV=dev
    APP_SECRET=changeme
-   DATABASE_URL="mysql://user:pass@127.0.0.1:3306/captain_log_web?serverVersion=8.0"
+   DATABASE_URL="postgresql://user:pass@127.0.0.1:5432/captain_log_web?serverVersion=16&charset=utf8"
    APP_DAY_MIN=1
    APP_DAY_MAX=365
    APP_YEAR_MIN=0
@@ -63,11 +88,11 @@ Applicazione Symfony 7.3 per la gestione di navi, equipaggi, contratti e mutui, 
    # wkhtmltopdf
    WKHTMLTOPDF_PATH="/usr/local/bin/wkhtmltopdf"
    ```
-3. Esegui le migrazioni:
+5. Esegui le migrazioni:
    ```bash
    php bin/console doctrine:migrations:migrate
    ```
-4. Crea un utente (se sono presenti i comandi appositi, ad es. `app:user:create`) e assegna il ruolo necessario (`ROLE_ADMIN` per l’area /admin).
+6. Crea un utente (se sono presenti i comandi appositi, ad es. `app:user:create`) e assegna il ruolo necessario (`ROLE_ADMIN` per l’area /admin).
 
 ## Comandi utili
 - Esporta dati di contesto (InterestRate, Insurance, ShipRole, CostCategory, IncomeCategory, CompanyRole, LocalLaw):

@@ -90,63 +90,81 @@
                                     <td>{{ amendment.cost ? amendment.cost.title : '—' }}</td>
                                     <td>
                                         {% if amendment.cost %}
-                                            <label for="{{ summary_id }}" class="btn btn-outline btn-info btn-xs">View</label>
+                                            <label for="{{ summary_id }}" class="btn btn-outline btn-info btn-xs">
+                                                {% include 'icons/cost.html.twig' with { dim: 14 } %}
+                                            </label>
                                             <input type="checkbox" id="{{ summary_id }}" class="modal-toggle hidden" />
                                             <div class="modal" role="dialog">
                                                 <div class="modal-box">
-                                                    <h3 class="font-bold">Cost summary</h3>
-                                                    <table class="table text-sm mt-3">
-                                                        <tbody>
-                                                            <tr>
-                                                                <th>Code</th>
-                                                                <td>{{ amendment.cost.code }}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <th>Title</th>
-                                                                <td>{{ amendment.cost.title }}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <th>Amount(Cr)</th>
-                                                                <td>
-                                                                    {{ amendment.cost.amount|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', app.request.locale ?? 'en') }}
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <th>Payment date</th>
-                                                                <td>
+                                                    <div class="relative overflow-hidden rounded-xl border border-cyan-500/30 bg-gradient-to-r from-slate-900 via-slate-800 to-cyan-900 shadow-lg">
+                                                        <div class="absolute inset-0 opacity-30 mix-blend-screen pointer-events-none"
+                                                             style="background: radial-gradient(circle at 20% 20%, rgba(59,130,246,0.25), transparent 35%), radial-gradient(circle at 80% 30%, rgba(14,165,233,0.25), transparent 35%);">
+                                                        </div>
+                                                        <div class="relative p-4 flex items-start gap-3">
+                                                            <div class="p-3 rounded-lg bg-cyan-500/10 border border-cyan-400/40">
+                                                                {% include 'icons/cost.html.twig' %}
+                                                            </div>
+                                                            <div>
+                                                                <p class="uppercase text-xs tracking-[0.25em] text-cyan-300/70">Cost dossier</p>
+                                                                <h3 class="font-semibold text-cyan-100 text-xl leading-tight">Amendment cost brief</h3>
+                                                                <p class="text-sm text-cyan-100/80">Audit snapshot tied to the selected Cost ref.</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="mt-4 grid gap-3 text-sm">
+                                                        <div class="rounded-lg border border-cyan-500/20 bg-slate-900/40 p-3">
+                                                            <div class="text-[0.65rem] uppercase tracking-[0.25em] text-cyan-300/70">Cost code</div>
+                                                            <div class="text-cyan-100 font-semibold">{{ amendment.cost.code }}</div>
+                                                        </div>
+                                                        <div class="rounded-lg border border-cyan-500/20 bg-slate-900/40 p-3">
+                                                            <div class="text-[0.65rem] uppercase tracking-[0.25em] text-cyan-300/70">Title</div>
+                                                            <div class="text-cyan-100 font-semibold">{{ amendment.cost.title }}</div>
+                                                        </div>
+                                                        <div class="grid grid-cols-2 gap-3">
+                                                            <div class="rounded-lg border border-cyan-500/20 bg-slate-900/40 p-3">
+                                                                <div class="text-[0.65rem] uppercase tracking-[0.25em] text-cyan-300/70">Amount</div>
+                                                                <div class="text-cyan-100 font-semibold">
+                                                                    {{ amendment.cost.amount|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', app.request.locale ?? 'en') }} Cr
+                                                                </div>
+                                                            </div>
+                                                            <div class="rounded-lg border border-cyan-500/20 bg-slate-900/40 p-3">
+                                                                <div class="text-[0.65rem] uppercase tracking-[0.25em] text-cyan-300/70">Payment date</div>
+                                                                <div class="text-cyan-100 font-semibold">
                                                                     {% if amendment.cost.paymentDay is not null and amendment.cost.paymentYear is not null %}
                                                                         {{ amendment.cost.paymentDay|format('%03d') }}/{{ amendment.cost.paymentYear }}
                                                                     {% else %}
                                                                         —
                                                                     {% endif %}
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <th>Company</th>
-                                                                <td>{{ amendment.cost.company ? amendment.cost.company.name : '—' }}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <th>Category</th>
-                                                                <td>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="rounded-lg border border-cyan-500/20 bg-slate-900/40 p-3">
+                                                            <div class="text-[0.65rem] uppercase tracking-[0.25em] text-cyan-300/70">Company</div>
+                                                            <div class="text-cyan-100 font-semibold">{{ amendment.cost.company ? amendment.cost.company.name : '—' }}</div>
+                                                        </div>
+                                                        <div class="grid grid-cols-2 gap-3">
+                                                            <div class="rounded-lg border border-cyan-500/20 bg-slate-900/40 p-3">
+                                                                <div class="text-[0.65rem] uppercase tracking-[0.25em] text-cyan-300/70">Category</div>
+                                                                <div class="text-cyan-100 font-semibold">
                                                                     {% if amendment.cost.costCategory %}
                                                                         {{ amendment.cost.costCategory.code }} — {{ amendment.cost.costCategory.description }}
                                                                     {% else %}
                                                                         —
                                                                     {% endif %}
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <th>Local law</th>
-                                                                <td>
+                                                                </div>
+                                                            </div>
+                                                            <div class="rounded-lg border border-cyan-500/20 bg-slate-900/40 p-3">
+                                                                <div class="text-[0.65rem] uppercase tracking-[0.25em] text-cyan-300/70">Local law</div>
+                                                                <div class="text-cyan-100 font-semibold">
                                                                     {% if amendment.cost.localLaw %}
                                                                         {{ amendment.cost.localLaw.code }} — {{ amendment.cost.localLaw.shortDescription ?? '—' }}
                                                                     {% else %}
                                                                         —
                                                                     {% endif %}
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     <div class="modal-action">
                                                         <label for="{{ summary_id }}" class="btn btn-primary">Close</label>
                                                     </div>

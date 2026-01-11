@@ -12,6 +12,7 @@ import CostDetailsController from './controllers/cost_details_controller.js';
 import RoleSelectorController from './controllers/role_selector_controller.js';
 import ShipRolesToggleController from './controllers/ship_roles_toggle_controller.js';
 import CrewStatusDateController from './controllers/crew_status_date_controller.js';
+import TomSelectController from './controllers/tom_select_controller.js';
 
 const app = startStimulusApp();
 
@@ -28,3 +29,4 @@ app.register('year-limit', YearLimitController);
 app.register('role-selector', RoleSelectorController);
 app.register('ship-roles-toggle', ShipRolesToggleController);
 app.register('crew-status-date', CrewStatusDateController);
+app.register('tom-select', TomSelectController);

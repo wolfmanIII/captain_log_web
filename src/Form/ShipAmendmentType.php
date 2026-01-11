@@ -48,15 +48,24 @@ class ShipAmendmentType extends AbstractType
                 'required' => true,
                 'placeholder' => '-- Select cost reference --',
                 'choice_label' => fn (Cost $cost) => sprintf('%s — %s', $cost->getTitle(), $cost->getAmount()),
-                'query_builder' => function (CostRepository $repo) use ($ship, $user) {
+                'query_builder' => function (CostRepository $repo) use ($ship, $user, $amendment) {
+                    $amendmentId = $amendment?->getId();
                     $qb = $repo->createQueryBuilder('c')
                         ->leftJoin('c.costCategory', 'cc')
+                        ->leftJoin(ShipAmendment::class, 'sa', 'WITH', 'sa.cost = c')
                         ->andWhere('c.ship = :ship')
                         ->andWhere('cc.code IN (:codes)')
+                        ->andWhere('c.paymentDay IS NOT NULL')
+                        ->andWhere('c.paymentYear IS NOT NULL')
+                        ->andWhere('sa.id IS NULL' . ($amendmentId ? ' OR sa.id = :amendmentId' : ''))
                         ->setParameter('ship', $ship)
                         ->setParameter('codes', ['SHIP_GEAR', 'SHIP_SOFTWARE'])
                         ->orderBy('c.paymentYear', 'DESC')
                         ->addOrderBy('c.paymentDay', 'DESC');
+
+                    if ($amendmentId) {
+                        $qb->setParameter('amendmentId', $amendmentId);
+                    }
 
                     if ($user) {
                         $qb->andWhere('c.user = :user')->setParameter('user', $user);
@@ -64,7 +73,11 @@ class ShipAmendmentType extends AbstractType
 
                     return $qb;
                 },
-                'attr' => ['class' => 'select m-1 w-full'],
+                'attr' => [
+                    'class' => 'select m-1 w-full',
+                    'data-controller' => 'tom-select',
+                    'data-tom-select-placeholder-value' => 'Search cost reference…',
+                ],
             ])
             ->add('patchDetails', ShipDetailsType::class, [
                 'mapped' => false,
