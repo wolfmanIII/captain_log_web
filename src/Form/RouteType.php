@@ -179,10 +179,6 @@ class RouteType extends AbstractType
             }
 
             $waypoints = $route->getWaypoints();
-            if ($waypoints->count() === 0) {
-                $form->get('waypoints')->addError(new FormError('Add at least one waypoint to define a route.'));
-            }
-
             $firstWaypoint = $waypoints->first() ?: null;
             $lastWaypoint = $waypoints->last() ?: null;
             $route->setStartHex($firstWaypoint?->getHex() ?: null);

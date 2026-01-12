@@ -16,7 +16,10 @@ class RouteWaypointType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('position', HiddenType::class)
+            ->add('position', HiddenType::class, [
+                'required' => false,
+                'empty_data' => '0',
+            ])
             ->add('hex', TextType::class, [
                 'attr' => ['class' => 'input m-1 w-full uppercase', 'maxlength' => 4],
             ])

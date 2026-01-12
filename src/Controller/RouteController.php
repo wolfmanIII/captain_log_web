@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Campaign;
 use App\Entity\Route;
+use App\Entity\RouteWaypoint;
 use App\Entity\Ship;
 use App\Form\RouteType;
 use App\Service\ListViewHelper;
@@ -74,6 +75,11 @@ final class RouteController extends BaseController
             return $this->redirectToRoute('app_route_index');
         }
 
+        if ($form->isSubmitted() && !$form->isValid() && $route->getWaypoints()->count() === 0) {
+            $route->addWaypoint(new RouteWaypoint());
+            $form = $this->createForm(RouteType::class, $route, ['user' => $user]);
+        }
+
         return $this->renderTurbo('route/edit.html.twig', [
             'controller_name' => self::CONTROLLER_NAME,
             'route' => $route,
@@ -101,6 +107,11 @@ final class RouteController extends BaseController
             $em->flush();
 
             return $this->redirectToRoute('app_route_index');
+        }
+
+        if ($form->isSubmitted() && !$form->isValid() && $route->getWaypoints()->count() === 0) {
+            $this->addFlash('error', 'Add at least one waypoint to define a route.');
+            return $this->redirectToRoute('app_route_edit', ['id' => $route->getId()]);
         }
 
         return $this->renderTurbo('route/edit.html.twig', [

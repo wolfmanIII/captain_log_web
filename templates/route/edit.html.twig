@@ -85,16 +85,6 @@
                 {{ form_errors(form.fuelEstimate) }}
             </div>
 
-            <div class="col-span-2">
-                <div class="alert alert-info alert-outline shadow-sm">
-                    <span class="flex items-center justify-center animate-spin-slow">
-                        {% include 'icons/radar.html.twig' %}
-                    </span>
-                    <div class="text-sm text-slate-200">
-                        Start/Destination hex are auto‑sealed from the first and last waypoint. At least one waypoint is required to register the route.
-                    </div>
-                </div>
-            </div>
             <div data-controller="imperial-date">
                 {{ form_label(form.startDate) }}
                 {{ form_widget(form.startDate.display, {
@@ -145,7 +135,7 @@
                                 {{ form_label(child.sector) }}
                                 {{ form_widget(child.sector) }}
                                 {{ form_errors(child.sector) }}
-                                <p class="text-xs text-slate-400 mt-1">Sector name or T5SS abbreviation (e.g. Spinward Marches / SM).</p>
+                                <p class="text-xs text-slate-400 mt-1">Sector name must be T5SS abbreviation (e.g. Spinward Marches => spin).</p>
                             </div>
                             <div>
                                 {{ form_label(child.world) }}
