@@ -8,8 +8,10 @@ use App\Entity\RouteWaypoint;
 use App\Entity\Ship;
 use App\Form\RouteType;
 use App\Service\ListViewHelper;
+use App\Service\TravellerMapSectorLookup;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route as RouteAttr;
@@ -159,6 +161,32 @@ final class RouteController extends BaseController
             'controller_name' => self::CONTROLLER_NAME,
             'route' => $route,
             'mapUrl' => $mapUrl,
+        ]);
+    }
+
+    #[RouteAttr('/route/waypoint-lookup', name: 'app_route_waypoint_lookup', methods: ['GET'])]
+    public function waypointLookup(Request $request, TravellerMapSectorLookup $lookup): JsonResponse
+    {
+        $user = $this->getUser();
+        if (!$user instanceof \App\Entity\User) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $sector = trim((string) $request->query->get('sector'));
+        $hex = strtoupper(trim((string) $request->query->get('hex')));
+        if ($sector === '' || $hex === '') {
+            return new JsonResponse(['found' => false], Response::HTTP_BAD_REQUEST);
+        }
+
+        $result = $lookup->lookupWorld($sector, $hex);
+        if (!$result) {
+            return new JsonResponse(['found' => false]);
+        }
+
+        return new JsonResponse([
+            'found' => true,
+            'world' => $result['world'] ?? null,
+            'uwp' => $result['uwp'] ?? null,
         ]);
     }
 

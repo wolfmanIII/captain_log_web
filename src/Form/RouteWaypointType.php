@@ -21,19 +21,29 @@ class RouteWaypointType extends AbstractType
                 'empty_data' => '0',
             ])
             ->add('hex', TextType::class, [
-                'attr' => ['class' => 'input m-1 w-full uppercase', 'maxlength' => 4],
+                'attr' => [
+                    'class' => 'input m-1 w-full uppercase',
+                    'maxlength' => 4,
+                ],
             ])
             ->add('sector', TextType::class, [
                 'required' => false,
-                'attr' => ['class' => 'input m-1 w-full'],
+                'attr' => [
+                    'class' => 'input m-1 w-full',
+                ],
             ])
             ->add('world', TextType::class, [
                 'required' => false,
-                'attr' => ['class' => 'input m-1 w-full'],
+                'attr' => [
+                    'class' => 'input m-1 w-full',
+                ],
             ])
             ->add('uwp', TextType::class, [
                 'required' => false,
-                'attr' => ['class' => 'input m-1 w-full'],
+                'attr' => [
+                    'class' => 'input m-1 w-full',
+                    'readonly' => true,
+                ],
             ])
             ->add('jumpDistance', TextType::class, [
                 'required' => false,

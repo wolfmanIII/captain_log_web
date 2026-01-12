@@ -3,6 +3,9 @@ import { Controller } from '@hotwired/stimulus';
 // Gestione collection waypoints per le rotte (add/remove).
 export default class extends Controller {
     static targets = ['collection', 'list', 'prototype'];
+    static values = {
+        lookupUrl: String,
+    };
 
     addItem(event) {
         const collection = event.currentTarget.closest('[data-route-waypoints-target="collection"]');
@@ -27,6 +30,38 @@ export default class extends Controller {
         const item = event.currentTarget.closest('.collection-item');
         if (item) {
             item.remove();
+        }
+    }
+
+    async lookup(event) {
+        if (!this.hasLookupUrlValue) return;
+        const item = event.currentTarget.closest('.collection-item');
+        if (!item) return;
+
+        const hexInput = item.querySelector('[data-waypoint-hex]');
+        const sectorInput = item.querySelector('[data-waypoint-sector]');
+        const worldInput = item.querySelector('[data-waypoint-world]');
+        const uwpInput = item.querySelector('[data-waypoint-uwp]');
+
+        const hex = hexInput?.value?.trim();
+        const sector = sectorInput?.value?.trim();
+        if (!hex || !sector) return;
+
+        const url = `${this.lookupUrlValue}?hex=${encodeURIComponent(hex)}&sector=${encodeURIComponent(sector)}`;
+        try {
+            const response = await fetch(url, { headers: { 'Accept': 'application/json' } });
+            if (!response.ok) return;
+            const data = await response.json();
+            if (!data?.found) return;
+
+            if (worldInput && !worldInput.value) {
+                worldInput.value = data.world ?? '';
+            }
+            if (uwpInput && !uwpInput.value) {
+                uwpInput.value = data.uwp ?? '';
+            }
+        } catch (error) {
+            // Ignore lookup failures to avoid blocking edits.
         }
     }
 }
