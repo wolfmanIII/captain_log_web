@@ -45,7 +45,7 @@
 
         {% set filter_fields %}
             <div>
-                <label class="label text-[10px] uppercase tracking-[0.2em] text-cyan-500/60 font-bold">VESSEL_NAV</label>
+                <label class="label text-xs uppercase tracking-[0.2em] text-cyan-500/60 font-bold">VESSEL_NAV</label>
                 <select name="ship" class="select w-full bg-slate-950/50 border-slate-800 text-cyan-100 focus:border-cyan-500/50">
                     <option value="">ANY_VESSEL</option>
                     {% for ship in ships %}
@@ -54,15 +54,15 @@
                 </select>
             </div>
             <div>
-                <label class="label text-[10px] uppercase tracking-[0.2em] text-cyan-500/60 font-bold">TEMPORAL_START</label>
+                <label class="label text-xs uppercase tracking-[0.2em] text-cyan-500/60 font-bold">TEMPORAL_START</label>
                 <input type="text" name="start" value="{{ filters.start }}" class="input w-full bg-slate-950/50 border-slate-800 text-cyan-100 placeholder:text-slate-600 focus:border-cyan-500/50" placeholder="Day/Year or Year">
             </div>
             <div>
-                <label class="label text-[10px] uppercase tracking-[0.2em] text-cyan-500/60 font-bold">TEMPORAL_END</label>
+                <label class="label text-xs uppercase tracking-[0.2em] text-cyan-500/60 font-bold">TEMPORAL_END</label>
                 <input type="text" name="end" value="{{ filters.end }}" class="input w-full bg-slate-950/50 border-slate-800 text-cyan-100 placeholder:text-slate-600 focus:border-cyan-500/50" placeholder="Day/Year or Year">
             </div>
             <div>
-                <label class="label text-[10px] uppercase tracking-[0.2em] text-cyan-500/60 font-bold">OPS_CAMPAIGN</label>
+                <label class="label text-xs uppercase tracking-[0.2em] text-cyan-500/60 font-bold">OPS_CAMPAIGN</label>
                 <select name="campaign" class="select w-full bg-slate-950/50 border-slate-800 text-cyan-100 focus:border-cyan-500/50">
                     <option value="">ALL_OPERATIONS</option>
                     {% for campaign in campaigns %}
@@ -86,7 +86,7 @@
                         {# Left: Core Data #}
                         <div class="flex-1">
                             <div class="flex items-center justify-between mb-4">
-                                <div class="px-2 py-0.5 rounded border border-teal-500/40 bg-teal-500/5 text-[10px] font-mono tracking-widest text-teal-400 uppercase">
+                                <div class="px-2 py-0.5 rounded border border-teal-500/40 bg-teal-500/5 text-xs font-mono tracking-widest text-teal-400 uppercase">
                                     CYCLE_LEDGER: {{ budget.code }}
                                 </div>
                                 <div class="flex items-center gap-1 xl:hidden">
@@ -100,7 +100,7 @@
                                     <h3 class="text-2xl font-bold text-teal-100 group-hover:text-teal-400 transition-colors uppercase tracking-wider">
                                         {{ budget.ship.name }}
                                     </h3>
-                                    <p class="text-[10px] text-slate-500 font-mono mt-1">
+                                    <p class="text-sm text-slate-500 font-mono mt-1">
                                         SP_SYSTEM: {{ (budget.startDay is not null and budget.startYear is not null) ? (budget.startDay|imperial_date(budget.startYear)) : '???' }} 
                                         <span class="mx-2 text-slate-700">>></span> 
                                         {{ (budget.endDay is not null and budget.endYear is not null) ? (budget.endDay|imperial_date(budget.endYear)) : '???' }}
@@ -114,15 +114,15 @@
                             {# Budget Matrix - Larger icons/fonts for full width #}
                             <div class="grid grid-cols-3 gap-4 mb-2">
                                 <div class="p-6 rounded-lg bg-slate-950/50 border border-slate-800 flex flex-col items-center group/metric transition-colors hover:border-emerald-500/20">
-                                    <span class="text-[10px] uppercase text-emerald-500/70 font-bold mb-2 tracking-widest">Incomes</span>
+                                    <span class="text-xs uppercase text-emerald-500/70 font-bold mb-2 tracking-widest">Incomes</span>
                                     <span class="text-xl font-mono text-emerald-400 font-bold">{{ budget.totalIncomeAmount|format_number({ max_fraction_digit: 0 }, 'decimal', 'default', locale) }}</span>
                                 </div>
                                 <div class="p-6 rounded-lg bg-slate-950/50 border border-slate-800 flex flex-col items-center group/metric transition-colors hover:border-amber-500/20">
-                                    <span class="text-[10px] uppercase text-amber-500/70 font-bold mb-2 tracking-widest">Costs</span>
+                                    <span class="text-xs uppercase text-amber-500/70 font-bold mb-2 tracking-widest">Costs</span>
                                     <span class="text-xl font-mono text-amber-400 font-bold">{{ budget.totalCostsAmount|format_number({ max_fraction_digit: 0 }, 'decimal', 'default', locale) }}</span>
                                 </div>
                                 <div class="p-6 rounded-lg bg-slate-950/50 border border-slate-800 flex flex-col items-center group/metric transition-colors hover:border-red-500/20">
-                                    <span class="text-[10px] uppercase text-red-500/70 font-bold mb-2 tracking-widest">Mortgage</span>
+                                    <span class="text-xs uppercase text-red-500/70 font-bold mb-2 tracking-widest">Mortgage</span>
                                     <span class="text-xl font-mono text-red-400 font-bold">{{ budget.ship.mortgage.calculate.total_annual_payment|format_number({ max_fraction_digit: 0 }, 'decimal', 'default', locale) }}</span>
                                 </div>
                             </div>
@@ -139,14 +139,14 @@
 
                             <div class="mt-auto p-8 rounded-xl bg-teal-900/10 border-x-2 border-teal-500/40 flex items-center justify-between">
                                 <div class="flex flex-col">
-                                    <span class="text-[10px] uppercase font-bold text-teal-600 tracking-widest leading-none mb-1">Net Surplus</span>
+                                    <span class="text-xs uppercase font-bold text-teal-600 tracking-widest leading-none mb-1">Net Surplus</span>
                                     <div class="text-3xl font-mono font-bold text-teal-300 {{ budget.actualBudget < 0 ? 'text-red-400' : 'text-teal-300' }}">
                                         {{ budget.actualBudget|format_number({ min_fraction_digit: 0, max_fraction_digit: 0 }, 'decimal', 'default', locale) }}
                                         <span class="text-sm text-teal-600 font-normal">Cr</span>
                                     </div>
                                 </div>
                                 <div class="h-14 w-14 rounded-full border-[6px] border-slate-800 flex items-center justify-center bg-slate-950 shadow-inner">
-                                    <span class="text-[11px] font-bold {{ budget.actualBudget < 0 ? 'text-red-500' : 'text-teal-500' }}">%CY</span>
+                                    <span class="text-xs font-bold {{ budget.actualBudget < 0 ? 'text-red-500' : 'text-teal-500' }}">%CY</span>
                                 </div>
                             </div>
                         </div>

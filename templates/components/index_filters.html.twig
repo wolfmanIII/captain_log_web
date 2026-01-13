@@ -7,7 +7,7 @@
           {{ name }}="{{ value }}"
       {% endfor %}>
     <fieldset class="rounded-xl border border-cyan-500/20 bg-slate-950/40 p-6 shadow-lg backdrop-blur-sm">
-        <legend class="px-3 py-0.5 rounded border border-cyan-500/30 bg-slate-900 text-[10px] font-mono uppercase tracking-[0.25em] text-cyan-400 flex items-center gap-2">
+        <legend class="px-3 py-0.5 rounded border border-cyan-500/30 bg-slate-900 text-xs font-mono uppercase tracking-[0.25em] text-cyan-400 flex items-center gap-2">
             <span class="w-2 h-2 rounded-full bg-cyan-500/40 animate-pulse"></span>
             <span>{{ legend|default('FILTER_TERMINAL') }}</span>
             {% if is_filtered|default(false) %}
@@ -26,7 +26,7 @@
             <button type="submit" class="btn btn-sm bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/20 px-6 uppercase tracking-widest font-bold">
                 Apply Filters
             </button>
-            <a href="{{ reset_path }}" class="text-[10px] uppercase tracking-widest text-slate-500 hover:text-red-400 transition-colors font-bold px-2">
+            <a href="{{ reset_path }}" class="text-xs uppercase tracking-widest text-slate-500 hover:text-red-400 transition-colors font-bold px-2">
                 [ RESET_PROTOCOL ]
             </a>
         </div>

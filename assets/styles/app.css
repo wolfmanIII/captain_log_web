@@ -10,6 +10,7 @@
 @layer base {
     body {
         font-family: 'Rajdhani', sans-serif;
+        font-weight: 500;
         @apply text-base;
     }
 
