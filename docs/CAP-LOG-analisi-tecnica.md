@@ -1,8 +1,8 @@
-# Captain Log Web – Analisi tecnica
+# Nav-Fi Web – Analisi tecnica
 
 Applicazione Symfony dedicata alla gestione di navi, equipaggi, contratti e mutui nel contesto del gioco di ruolo **Traveller**.
 
-Questo documento descrive in modo discorsivo l’architettura attuale di Captain Log Web, le sue dipendenze, i componenti applicativi principali e alcuni punti di attenzione operativi.
+Questo documento descrive in modo discorsivo l’architettura attuale di Nav-Fi Web, le sue dipendenze, i componenti applicativi principali e alcuni punti di attenzione operativi.
 
 ## Stack e infrastruttura
 - **Framework:** Symfony 7.3 (PHP ≥ 8.2), asset mapper, Stimulus, Twig, Tailwind 4 + DaisyUI per la UI (tema Abyss), Tom Select per le select con ricerca.

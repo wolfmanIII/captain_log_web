@@ -14,13 +14,13 @@ use Symfony\Component\HttpClient\Exception\TransportException;
 final class ChatController extends BaseController
 {
     public const CONTROLLER_NAME = 'ChatController';
-    private string $elaraBaseUrl;
+    private string $navfiBaseUrl;
 
     public function __construct(
-        #[Autowire(env: 'ELARA_API_TOKEN')] private readonly string $elaraApiToken,
-        #[Autowire(env: 'ELARA_BASE_URL')] string $elaraBaseUrl,
+        #[Autowire(env: 'ELARA_API_TOKEN')] private readonly string $navfiApiToken,
+        #[Autowire(env: 'ELARA_BASE_URL')] string $navfiBaseUrl,
     ) {
-        $this->elaraBaseUrl = rtrim($elaraBaseUrl, '/');
+        $this->navfiBaseUrl = rtrim($navfiBaseUrl, '/');
     }
 
     #[Route('/ai/console', name: 'app_ai_console', methods: ['GET'])]
@@ -28,67 +28,67 @@ final class ChatController extends BaseController
     {
         $testMode = false;
         $offlineFallback = false;
-        $elaraIsReachable = false;
+        $navfiIsReachable = false;
 
         try {
             $response = $httpClient->request(
                 'GET',
-                sprintf('%s/status/engine', $this->elaraBaseUrl),
+                sprintf('%s/status/engine', $this->navfiBaseUrl),
                 [
                     'headers' => [
-                        'Authorization' => sprintf('Bearer %s', $this->elaraApiToken),
+                        'Authorization' => sprintf('Bearer %s', $this->navfiApiToken),
                         'Accept'        => 'application/json',
                     ],
-                    // Elara risponde 302 prima del 200, quindi seguiamo i redirect
+                    // Nav-Fi risponde 302 prima del 200, quindi seguiamo i redirect
                     'max_redirects' => 5,
                 ]
             );
             $status = $response->getStatusCode();
             if (in_array($status, [Response::HTTP_OK, Response::HTTP_FOUND], true)) {
-                $elaraStatus = json_decode($response->getContent(false), true) ?? [];
-                $testMode = ($elaraStatus["test_mode"] ?? 'false') === 'true';
-                $offlineFallback = ($elaraStatus["offline_fallback"] ?? 'true') === 'true';
-                $elaraIsReachable = true;
+                $navfiStatus = json_decode($response->getContent(false), true) ?? [];
+                $testMode = ($navfiStatus["test_mode"] ?? 'false') === 'true';
+                $offlineFallback = ($navfiStatus["offline_fallback"] ?? 'true') === 'true';
+                $navfiIsReachable = true;
             }
         } catch (TransportException $e) {
             // keep defaults
         }
 
-        
+
 
         return $this->render('ai/console.html.twig', [
             'controller_name'   => self::CONTROLLER_NAME,
             'test_mode'         => $testMode,
             'offline_fallback'  => $offlineFallback,
-            'elara_reachable' => $elaraIsReachable,
+            'navfi_reachable' => $navfiIsReachable,
         ]);
     }
 
-    #[Route('/elara/api/chat', name: 'elara_api_chat', methods: ['POST'])]
+    #[Route('/nav-fi/api/chat', name: 'navfi_api_chat', methods: ['POST'])]
     public function chat(Request $request, HttpClientInterface $httpClient): JsonResponse
     {
         $data = json_decode($request->getContent(), true) ?? [];
-        
+
         $response = $httpClient->request(
             'POST',
-            sprintf('%s/api/chat', $this->elaraBaseUrl),
+            sprintf('%s/api/chat', $this->navfiBaseUrl),
             [
                 'headers' => [
-                    'Authorization' => sprintf('Bearer %s', $this->elaraApiToken),
+                    'Authorization' => sprintf('Bearer %s', $this->navfiApiToken),
                     'Accept'        => 'application/json',
                 ],
                 'json'          => $data,
-                // Elara risponde 302 prima del 200, quindi seguiamo i redirect
+                // Nav-Fi risponde 302 prima del 200, quindi seguiamo i redirect
                 'max_redirects' => 5,
-                ]
-            );
+            ]
+        );
 
         $statusCode = $response->getStatusCode();
         $body = $response->getContent(false);
         $payload = json_decode($body, true) ?? [];
 
         if ($statusCode >= Response::HTTP_BAD_REQUEST || !is_array($payload)) {
-            $message = $payload['message'] ?? $payload['error'] ?? 'Errore durante la chiamata al motore Elara.';
+            $message = $payload['message'] ?? $payload['error'] ?? 'Errore durante la chiamata al motore Nav-Fi.';
 
             return $this->json(
                 [
@@ -105,7 +105,7 @@ final class ChatController extends BaseController
         ]);
     }
 
-    #[Route('/elara/api/chat/stream', name: 'elara_api_chat_stream', methods: ['POST'])]
+    #[Route('/nav-fi/api/chat/stream', name: 'navfi_api_chat_stream', methods: ['POST'])]
     public function chatStream(Request $request, HttpClientInterface $httpClient): Response
     {
         $data = json_decode($request->getContent(), true) ?? [];
@@ -113,21 +113,21 @@ final class ChatController extends BaseController
         try {
             $upstreamResponse = $httpClient->request(
                 'POST',
-                sprintf('%s/api/chat/stream', $this->elaraBaseUrl),
+                sprintf('%s/api/chat/stream', $this->navfiBaseUrl),
                 [
                     'headers' => [
-                        'Authorization' => sprintf('Bearer %s', $this->elaraApiToken),
+                        'Authorization' => sprintf('Bearer %s', $this->navfiApiToken),
                         'Accept'        => 'text/event-stream',
                     ],
                     'json'          => $data,
-                    // Elara risponde 302 prima del 200, quindi seguiamo i redirect
+                    // Nav-Fi risponde 302 prima del 200, quindi seguiamo i redirect
                     'max_redirects' => 5,
                 ]
             );
         } catch (TransportException $e) {
             return $this->json(
                 [
-                    'error'  => 'Errore di comunicazione con il motore Elara (stream).',
+                    'error'  => 'Errore di comunicazione con il motore Nav-Fi (stream).',
                     'status' => Response::HTTP_BAD_GATEWAY,
                 ],
                 Response::HTTP_BAD_GATEWAY
@@ -138,7 +138,7 @@ final class ChatController extends BaseController
         if ($statusCode >= Response::HTTP_BAD_REQUEST) {
             $body = $upstreamResponse->getContent(false);
             $payload = json_decode($body, true) ?? [];
-            $message = $payload['message'] ?? $payload['error'] ?? 'Errore durante la chiamata al motore Elara (stream).';
+            $message = $payload['message'] ?? $payload['error'] ?? 'Errore durante la chiamata al motore Nav-Fi (stream).';
 
             return $this->json(
                 [

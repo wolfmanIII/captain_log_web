@@ -1,15 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Captain Log - Elara Ship AI{% endblock %}
+{% block title %}Nav-Fi - Nav-Fi Ship AI{% endblock %}
 
 {% block pageContent %}
     <div class="p-10">
 
         <header class="prose mb-4">
-            <h1>Elara Ship AI</h1>
+            <h1>Nav-Fi Ship AI</h1>
         </header>
         <p class="mt-4 mb-4">
-            Chiedi ad Elara informazioni sulla tua campagna(<code>Elara var/knowledge</code>).
+            Chiedi a Nav-Fi informazioni sulla tua campagna(<code>Nav-Fi var/knowledge</code>).
         </p>
 
         <div class="grid gap-4 lg:grid-cols-[2fr,1fr]" data-controller="ai-console">
@@ -22,7 +22,7 @@
                          data-ai-console-target="messages">
                         {# messaggi verranno inseriti via Stimulus #}
                         <p class="text-sm opacity-70">
-                            Scrivi una domanda qui sotto. Elara userà solo i documenti indicizzati.
+                            Scrivi una domanda qui sotto. Nav-Fi userà solo i documenti indicizzati.
                         </p>
                     </div>
 
@@ -43,7 +43,7 @@
                             </button>
 
                             <span class="text-xs opacity-70">
-                                Engine: <b>ELARA</b>
+                                Engine: <b>NAV-FI</b>
                             </span>
                         </div>
                     </form>
@@ -53,24 +53,24 @@
             {# COLONNA DESTRA: stato & note #}
             <div class="card bg-base-200 shadow-sm">
                 <div class="card-body text-sm gap-3">
-                    <h2 class="card-title text-sm">Stato ELARA Ship AI</h2>
+                    <h2 class="card-title text-sm">Stato NAV-FI Ship AI</h2>
 
                     <ul class="list-disc list-inside text-xs">
                         <li>
                             Reachable:
-                            <span class="{{ not elara_reachable ? 'text-warning' : 'text-success' }}">
-                                {{ elara_reachable ? 'Yes' : 'No' }}
+                            <span class="{{ not navfi_reachable ? 'text-warning' : 'text-success' }}">
+                                {{ navfi_reachable ? 'Yes' : 'No' }}
                             </span>
                         <li>
                             Test mode:
                             <span class="{{ test_mode ? 'text-warning' : 'text-success' }}">
-                                {{ test_mode ? 'Active (no call to Engine ELARA)' : 'Disabled' }}
+                                {{ test_mode ? 'Active (no call to Engine NAV-FI)' : 'Disabled' }}
                             </span>
                         </li>
                         <li>
                             Offline fallback:
                             <span class="{{ offline_fallback ? 'text-success' : 'text-warning' }}">
-                                {{ offline_fallback ? 'Active (use only DB is the engine ELARA do not respond)' : 'Disabled' }}
+                                {{ offline_fallback ? 'Active (use only DB is the engine NAV-FI do not respond)' : 'Disabled' }}
                             </span>
                         </li>
                     </ul>

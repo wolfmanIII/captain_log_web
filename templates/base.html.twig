@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>{% block title %}Captain Log{% endblock %}</title>
+    <title>{% block title %}Nav-Fi{% endblock %}</title>
     
     <link rel="icon" href="{{ asset('img/favicon.ico') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('img/favicon-16.png') }}">
@@ -35,51 +35,85 @@
 
         <!-- CONTENUTO PAGINA -->
         <div class="drawer-content flex flex-col min-h-screen">
-            <nav class="navbar w-full sticky top-0 z-30 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 text-cyan-100">
-                <!-- Bottone: visibile solo su schermi piccoli -->
+            <nav class="navbar w-full sticky top-0 z-30 bg-slate-950/80 backdrop-blur-md border-b border-cyan-500/20 shadow-[0_8px_32px_rgba(0,0,0,0.4)] px-4">
+                <div class="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent opacity-50"></div>
+                
+                <!-- BOOT SEQUENCE // CONNECTIVITY -->
+                <div class="hidden xl:flex absolute left-1/2 -translate-x-1/2 top-0 h-1 px-4 gap-1">
+                    <div class="w-8 h-full bg-cyan-500/20 rounded-b anime-pulse"></div>
+                    <div class="w-12 h-full bg-cyan-500/40 rounded-b animate-pulse"></div>
+                    <div class="w-8 h-full bg-cyan-500/20 rounded-b animate-pulse"></div>
+                </div>
+
+                <!-- MOBILE TOGGLE -->
                 <div class="flex-none lg:hidden">
                     <label for="my-drawer-4"
                            aria-label="open sidebar"
-                           class="btn btn-square btn-ghost drawer-button">
-                        <!-- icona -->
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                             stroke-linejoin="round" stroke-linecap="round"
-                             stroke-width="2" fill="none" stroke="currentColor"
-                             class="my-1.5 inline-block size-4">
-                            <path d="M4 6h16"></path>
-                            <path d="M4 12h16"></path>
-                            <path d="M4 18h16"></path>
+                           class="btn btn-square btn-ghost text-cyan-400 hover:bg-cyan-500/10">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" fill="none" stroke="currentColor" class="size-6">
+                            <path d="M4 6h16M4 12h16M4 18h16"></path>
                         </svg>
                     </label>
                 </div>
 
-                <div class="flex-none px-4">
-                    <img src="{{ asset('img/captain-log-logo.png') }}" width="64" alt="logo">
-                </div>
-                <div class="flex-none text-[42px] font-orbitron">
-                    <b>Captain Log</b>
+                <!-- BRANDING // TELEMETRY -->
+                <div class="flex items-center gap-4">
+                    <div class="relative group">
+                        <div class="absolute -inset-1 bg-cyan-500/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-500"></div>
+                        <img src="{{ asset('img/captain-log-logo.png') }}" class="relative w-12 md:w-16 h-auto filter drop-shadow-[0_0_8px_rgba(34,211,238,0.5)]" alt="logo">
+                    </div>
+                    <div class="flex flex-col">
+                        <div class="flex items-center gap-2">
+                            <span class="text-2xl md:text-3xl font-orbitron font-bold tracking-tight text-white italic">Nav-Fi</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-[11px] font-mono text-cyan-500/60 uppercase tracking-[0.2em] font-bold">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                            Central Systems // Bridge Interface
+                        </div>
+                    </div>
                 </div>
 
                 <div class="flex-1"></div>
 
-                <div class="flex-none px-4">
+                <!-- USER HUD // AUTHENTICATION -->
+                <div class="flex-none">
                     {% if app.user %}
-                        <div class="flex items-center gap-2">
-                            <img src="{{ app.user.gravatarUrl(32) }}"
-                                 alt="avatar"
-                                 class="w-8 h-8 rounded-full border border-base-300">
-                            <span class="text-sm opacity-80">{{ app.user.userIdentifier }}</span>
-                            {% if is_granted('ROLE_SUPER_ADMIN') %}
-                                <span class="badge badge-error badge-outline badge-sm">Super Admin</span>
-                            {% elseif is_granted('ROLE_ADMIN') %}
-                                <span class="badge badge-warning badge-outline badge-sm">Admin</span>
-                            {% endif %}
+                        <div class="flex items-center gap-4 bg-slate-900/40 border border-slate-800 rounded-full pl-1.5 pr-5 py-1.5 hover:border-cyan-500/30 transition-colors">
+                            <div class="relative">
+                                <img src="{{ app.user.gravatarUrl(48) }}"
+                                     alt="avatar"
+                                     class="w-10 h-10 rounded-full border border-cyan-500/40 shadow-[0_0_15px_rgba(6,182,212,0.4)]">
+                                <div class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-emerald-500 border-2 border-slate-950 rounded-full"></div>
+                            </div>
+                            
+                            <div class="hidden md:flex flex-col items-start leading-none gap-1">
+                                <span class="text-xs md:text-sm font-mono font-bold text-cyan-100 uppercase tracking-widest">{{ app.user.userIdentifier }}</span>
+                                <div class="flex items-center gap-1.5">
+                                    {% if is_granted('ROLE_SUPER_ADMIN') %}
+                                        <span class="text-[10px] font-mono font-bold text-rose-500 uppercase tracking-tighter bg-rose-500/10 px-2 py-0.5 border border-rose-500/20">OVERRIDE_AUTH</span>
+                                    {% elseif is_granted('ROLE_ADMIN') %}
+                                        <span class="text-[10px] font-mono font-bold text-amber-500 uppercase tracking-tighter bg-amber-500/10 px-2 py-0.5 border border-amber-500/20">ELEVATED_AUTH</span>
+                                    {% else %}
+                                        <span class="text-[10px] font-mono font-bold text-cyan-500 uppercase tracking-tighter bg-cyan-500/10 px-2 py-0.5 border border-cyan-500/20">STAND_USER</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="w-[1px] h-8 bg-slate-800 mx-1"></div>
+
                             <form method="post" action="{{ path('app_logout') }}">
-                                <button class="btn btn-sm btn-outline">Logout</button>
+                                <button class="group flex items-center gap-2.5 px-2.5 py-1.5 rounded-md hover:bg-rose-500/10 transition-all">
+                                    <span class="hidden sm:inline text-[11px] font-orbitron font-bold text-slate-500 group-hover:text-rose-400 tracking-widest uppercase transition-colors">Eject</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="text-slate-500 group-hover:text-rose-500 transition-colors">
+                                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>
+                                    </svg>
+                                </button>
                             </form>
                         </div>
                     {% else %}
-                        <a href="{{ path('app_login') }}" class="btn btn-sm btn-outline">Login</a>
+                        <a href="{{ path('app_login') }}" class="btn btn-outline border-cyan-500/40 text-cyan-400 font-orbitron uppercase tracking-widest text-[11px] hover:bg-cyan-500/10 hover:border-cyan-400 px-6">
+                            Establish Link // Login
+                        </a>
                     {% endif %}
                 </div>
             </nav>
@@ -114,7 +148,7 @@
                             <path d="M16 7l2 5-2 5"></path>
                             <circle cx="12" cy="12" r="3"></circle>
                         </svg>
-                        <span>Captain Log // Imperial drift lane</span>
+                        <span>Nav-Fi // Imperial drift lane</span>
                     </div>
                 </aside>
             </footer>

@@ -1,6 +1,6 @@
 # Integrazione TravellerMap – Piano tecnico dettagliato
 
-Obiettivo: tracciare e visualizzare rotte Traveller dentro Captain Log, sfruttando TravellerMap (embed e API) mantenendo coerenza con Campaign/Ship e con la UI sci-fi esistente.
+Obiettivo: tracciare e visualizzare rotte Traveller dentro Nav-Fi, sfruttando TravellerMap (embed e API) mantenendo coerenza con Campaign/Ship e con la UI sci-fi esistente.
 
 > Nota: questa proposta separa ciò che è fattibile **senza API ufficiali** (link/iframe) da ciò che richiede **verifica sulla documentazione di TravellerMap**.
 > Quando avremo accesso alla doc ufficiale, confermeremo endpoint, parametri, limiti e CORS.
@@ -62,7 +62,7 @@ Obiettivo: tracciare e visualizzare rotte Traveller dentro Captain Log, sfruttan
   - Service `TravellerMapClient` (HTTP client Symfony) con base URL configurabile via env, con flag di rete (disabilitabile se sandbox).
   - Cache locale (FilesystemAdapter) per ridurre chiamate; timeout basso (es. 5s) e fallback silenzioso in caso di errore.
   - Dati estratti: `world` name, `UWP`, trade codes, stellar data. Salvare su waypoint (non vincolante).
-  - In Captain Log è disponibile un helper `TravellerMapSectorLookup` che scarica i dati raw del settore (`/data/{sector}`) e può compilare `world/UWP` dopo il submit.
+  - In Nav-Fi è disponibile un helper `TravellerMapSectorLookup` che scarica i dati raw del settore (`/data/{sector}`) e può compilare `world/UWP` dopo il submit.
 
 - **Static map overlay (facoltativo)**:
   - Se API static map disponibile: generare URL immagine con markers su hex dei waypoint; salvare URL in Route o rigenerarla on demand.

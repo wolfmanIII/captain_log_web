@@ -1,4 +1,4 @@
-# Captain Log Web
+# Nav-Fi Web
 
 Applicazione Symfony 7.3 per la gestione di navi, equipaggi, contratti e mutui, pensata per il gioco di ruolo **Traveller**. Include area amministrativa EasyAdmin, PDF per i contratti e comandi di import/export dei dati di contesto. Ogni Annual Budget è agganciato a una singola nave e ne aggrega entrate, costi e rate del mutuo.
 

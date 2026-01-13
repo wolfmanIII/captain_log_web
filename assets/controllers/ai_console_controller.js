@@ -35,7 +35,7 @@ export default class extends Controller {
             this.appendMessage(
                 "error",
                 "Streaming fallito: " +
-                    (streamError.message || streamError.toString())
+                (streamError.message || streamError.toString())
             );
         } finally {
             this.toggleLoading(false);
@@ -44,7 +44,7 @@ export default class extends Controller {
     }
 
     async streamAnswer(question, bubbleElement) {
-        const response = await fetch("/elara/api/chat/stream", {
+        const response = await fetch("/nav-fi/api/chat/stream", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -107,7 +107,7 @@ export default class extends Controller {
                 }
 
                 if (payload.done) {
-                    return fullText || "[Nessuna risposta dal engine Elara]";
+                    return fullText || "[Nessuna risposta dal engine Nav-Fi]";
                 }
             }
 
@@ -122,14 +122,14 @@ export default class extends Controller {
             this.setBubbleText(bubbleElement, fullText);
         }
 
-        return fullText || "[Nessuna risposta dal engine Elara]";
+        return fullText || "[Nessuna risposta dal engine Nav-Fi]";
     }
 
     appendMessage(role, text) {
         const wrapper = document.createElement("div");
 
         let chatSideClass = "chat-start";
-        let headerLabel = "Elara";
+        let headerLabel = "Nav-Fi";
         let bubbleExtra = "";
 
         if (role === "user") {

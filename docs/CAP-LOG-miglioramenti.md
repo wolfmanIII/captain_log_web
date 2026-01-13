@@ -1,4 +1,4 @@
-# Captain Log Web – Possibili miglioramenti
+# Nav-Fi Web – Possibili miglioramenti
 
 Documento di analisi tecnica con aree di miglioramento e funzionalità potenziali, basato sullo stato attuale del progetto.
 

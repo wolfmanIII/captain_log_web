@@ -19,9 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 #[AdminDashboard(routePath: '/admin', routeName: 'admin')]
 class DashboardController extends AbstractDashboardController
 {
-    public function __construct(private readonly AdminUrlGenerator $adminUrlGenerator)
-    {
-    }
+    public function __construct(private readonly AdminUrlGenerator $adminUrlGenerator) {}
 
     public function index(): Response
     {
@@ -43,13 +41,13 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('Captain Log Web');
+            ->setTitle('Nav-Fi Web');
     }
 
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        yield MenuItem::linkToRoute('Captain Log', 'fa fa-home', 'app_home');
+        yield MenuItem::linkToRoute('Nav-Fi', 'fa fa-home', 'app_home');
 
         yield MenuItem::section('Settings');
         yield MenuItem::linkToCrud('Interest Rate', 'fas fa-list', InterestRate::class);
