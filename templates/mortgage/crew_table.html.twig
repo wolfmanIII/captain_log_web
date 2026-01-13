@@ -1,62 +1,60 @@
-<div class="grid grid-cols-1 gap-4">
-    <div class="w-full">
-        <label class="block text-slate-300">
-            <span class="label-text">
-                Crew
-            </span>
-        </label>
+<div class="w-full space-y-4">
+    <label class="block">
+        <span class="text-[10px] font-bold font-rajdhani tracking-widest text-slate-400 uppercase">
+            Active Personnel Manifest // Crew Dossiers
+        </span>
+    </label>
 
-        <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 m-1">
-            <table class="table border-separate border-spacing-0 inner-bordered-table">
-                <thead>
-                <tr>
-                    <th>Code</th>
-                    <th>Name</th>
-                    <th>Roles</th>
-                    <th>Captain</th>
+    <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950/40 shadow-inner">
+        <table class="table table-xs w-full border-separate border-spacing-0">
+            <thead>
+                <tr class="border-b border-slate-800">
+                    <th class="font-rajdhani uppercase tracking-widest text-[11px] text-slate-400 bg-slate-900/50">Code</th>
+                    <th class="font-rajdhani uppercase tracking-widest text-[11px] text-slate-400 bg-slate-900/50">Personnel Name</th>
+                    <th class="font-rajdhani uppercase tracking-widest text-[11px] text-slate-400 bg-slate-900/50">Role Allocation</th>
+                    <th class="font-rajdhani uppercase tracking-widest text-[11px] text-slate-400 bg-slate-900/50 text-center">Command Status</th>
                 </tr>
-                </thead>
-                <tbody>
-                {% set signingYear = mortgage.signingYear %}
-                {% set signingDay = mortgage.signingDay %}
-                {% set hasSigning = signingYear and signingDay %}
-                {% set signingIndex = hasSigning ? (signingYear * 1000 + signingDay) : 0 %}
+            </thead>
+            <tbody class="divide-y divide-slate-800/50">
+            {% set signingYear = mortgage.signingYear %}
+            {% set signingDay = mortgage.signingDay %}
+            {% set hasSigning = signingYear and signingDay %}
+            {% set signingIndex = hasSigning ? (signingYear * 1000 + signingDay) : 0 %}
 
-                {% for member in mortgage.ship.crews %}
-                    {% set status = member.status ?? '' %}
-                    {% set activeYear = member.activeYear ?? 0 %}
-                    {% set activeDay = member.activeDay ?? 0 %}
-                    {% set activeIndex = activeYear and activeDay ? (activeYear * 1000 + activeDay) : 0 %}
-                    {% if status not in ['Missing (MIA)', 'Deceased'] %}
-                        {% if not hasSigning or (activeIndex and activeIndex >= signingIndex) %}
-                            <tr>
-                                <td>{{ member.code }}</td>
-                                <td>{{ member.name }} "{{ member.nickname }}" {{ member.surname }}</td>
-                                <td>
-                                    {% for role in member.shipRoles %}
-                                        {{ role.name }}
-                                        {% if loop.index != loop.last %}
-                                            -
-                                        {% endif %}
-                                    {% endfor %}
-                                </td>
-                                <td>
-                                    {% if member.captain %}
-                                        <div class="flex justify-center">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                                            </svg>
-                                        </div>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                        {% endif %}
+            {% for member in mortgage.ship.crews %}
+                {% set status = member.status ?? '' %}
+                {% set activeYear = member.activeYear ?? 0 %}
+                {% set activeDay = member.activeDay ?? 0 %}
+                {% set activeIndex = activeYear and activeDay ? (activeYear * 1000 + activeDay) : 0 %}
+                {% if status not in ['Missing (MIA)', 'Deceased'] %}
+                    {% if not hasSigning or (activeIndex and activeIndex >= signingIndex) %}
+                        <tr class="hover:bg-cyan-500/5 transition-colors">
+                            <td class="p-2 font-mono text-xs text-cyan-400 font-bold uppercase">{{ member.code }}</td>
+                            <td class="p-2 font-rajdhani text-[13px] text-slate-300 uppercase tracking-wide">
+                                {{ member.name }} <span class="text-cyan-500/80 font-bold">"{{ member.nickname }}"</span> {{ member.surname }}
+                            </td>
+                            <td class="p-2 font-rajdhani text-xs text-slate-400 uppercase tracking-widest">
+                                {% for role in member.shipRoles %}
+                                    <span class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300">{{ role.name }}</span>
+                                    {% if not loop.last %}<span class="mx-1 text-slate-600">//</span>{% endif %}
+                                {% endfor %}
+                            </td>
+                            <td class="p-2">
+                                {% if member.captain %}
+                                    <div class="flex justify-center text-amber-500">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                             viewBox="0 0 24 24" fill="currentColor" stroke="currentColor"
+                                             stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                        </svg>
+                                    </div>
+                                {% endif %}
+                            </td>
+                        </tr>
                     {% endif %}
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>

@@ -16,222 +16,168 @@
 
 {% block pageContent %}
 
-    <div class="flex flex-col items-stretch gap-4">
-    
+        <div class="relative rounded-xl border border-cyan-500/30 bg-gradient-to-r from-slate-900 via-slate-800 to-cyan-900 shadow-lg mb-6 overflow-hidden">
+            <div class="absolute inset-0 opacity-30 mix-blend-screen pointer-events-none"
+                 style="background: radial-gradient(circle at 20% 20%, rgba(59,130,246,0.25), transparent 35%), radial-gradient(circle at 80% 30%, rgba(14,165,233,0.25), transparent 35%);">
+            </div>
+            <div class="relative p-4 flex items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <div class="p-2.5 rounded-lg bg-cyan-500/10 border border-cyan-400/40">
+                        {% include 'icons/handbook.html.twig' %}
+                    </div>
+                    <div class="flex-1">
+                        <p class="uppercase text-[10px] tracking-[0.3em] text-cyan-300/70 font-bold font-orbitron mb-0.5">Ship mortgage // Hull Financing</p>
+                        <h3 class="font-bold text-cyan-100 text-2xl leading-tight font-orbitron uppercase">Finance your ship</h3>
+                        <p class="text-xs text-cyan-100/60 font-rajdhani tracking-widest uppercase">Calculate costs and interests: fund the imperial hull.</p>
+                    </div>
+                </div>
+                {% if mortgage.id and can_pdf %}
+                    <div class="flex items-center gap-2">
+                        {{ tooltip.link('Open mortgage PDF', 'Mortgage PDF', 'icons/pdf.html.twig', path('app_mortgage_pdf', { id: mortgage.id }), { dim: 20, linkClass: 'btn btn-outline btn-secondary btn-sm px-4', position: 'tooltip-left', attrs: { target: '_blank', rel: 'noopener' } }) }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
         {{ form_start(form, { attr: { id: 'mortgage_form' } }) }}
 
-        <fieldset class="fieldset bg-base-200 border-base-300 gap-4 p-4 border rounded w-full">
-            <legend class="fieldset-legend">Mortgage</legend>
+        <fieldset class="grid grid-cols-2 bg-slate-900/40 border border-slate-800 gap-6 p-6 rounded-xl shadow-inner mb-6 relative">
+            <legend class="px-3 py-1 rounded bg-slate-800 border border-slate-700 text-[10px] font-bold font-orbitron tracking-[0.3em] text-cyan-500/80 uppercase">Fleet Deployment</legend>
 
-            <div class="w-full mb-2">
-                <div class="relative overflow-hidden rounded-xl border border-cyan-500/30 bg-gradient-to-r from-slate-900 via-slate-800 to-cyan-900 shadow-lg">
-                    <div class="absolute inset-0 opacity-30 mix-blend-screen pointer-events-none"
-                         style="background: radial-gradient(circle at 20% 20%, rgba(59,130,246,0.25), transparent 35%), radial-gradient(circle at 80% 30%, rgba(14,165,233,0.25), transparent 35%);">
-                    </div>
-                    <div class="relative p-4 flex items-start gap-3">
-                        <div class="p-3 rounded-lg bg-cyan-500/10 border border-cyan-400/40">
-                            {% include 'icons/handbook.html.twig' %}
-                        </div>
-                        <div class="flex-1">
-                            <p class="uppercase text-xs tracking-[0.25em] text-cyan-300/70">Ship mortgage</p>
-                            <h3 class="font-semibold text-cyan-100 text-xl leading-tight">Finance your ship</h3>
-                            <p class="text-sm text-cyan-100/80">Calculate costs, interests and insurance before signing: every jump starts with clean numbers.</p>
-                        </div>
-                        <div class="flex items-start gap-2">
-                            {% if mortgage.id and can_pdf %}
-                                {{ tooltip.link('Open mortgage PDF',
-                                                'Mortgage PDF',
-                                                'icons/pdf.html.twig',
-                                                path('app_mortgage_pdf', { id: mortgage.id }),
-                                                { dim: 16, linkClass: 'btn btn-outline btn-secondary btn-sm', attrs: { target: '_blank', rel: 'noopener' } }) }}
-                            {% else %}
-                                {{ tooltip.button('PDF unavailable',
-                                                  'Mortgage PDF',
-                                                  'icons/pdf.html.twig',
-                                                  { dim: 16, buttonClass: 'btn btn-outline btn-secondary btn-sm', attrs: { disabled: 'disabled' } }) }}
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
+            <div class="col-span-2 md:col-span-1">
+                {{ form_label(form.campaign) }}
+                {{ form_widget(form.campaign, { attr: { class: 'select select-bordered w-full bg-slate-950/50 border-slate-700' } }) }}
+                {{ form_errors(form.campaign) }}
             </div>
 
-            {% if mortgage.id %}
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-slate-300">Code</label>
-                        <div class="m-1 w-full"><b>{{ mortgage.code }}</b></div>
-                    </div>
-
-                    <div class="{{ mortgage.signed ? 'alert alert-success alert-outline' : 'alert alert-info alert-outline' }}">
-                        {% if mortgage.signed %}
-                            <span class="animate-spin-slow">
-                                {% include 'icons/radar.html.twig' %}
-                            </span>
-                            <label class="label mt-1 mb-1">Signed on <b>{{ mortgage.signingLocation }} - {{ (mortgage.signingDay is not null and mortgage.signingYear is not null) ? (mortgage.signingDay|imperial_date(mortgage.signingYear)) : '—' }}</b></label>
-                        {% else %}
-                            <span class="animate-spin-slow">
-                                {% include 'icons/radar.html.twig' %}
-                            </span>
-                            <label class="label mt-1 mb-1">Not Signed</label>
-                        {% endif %}
-                    </div>
-
-                </div>
-            {% endif %}
-
-                <div class="grid grid-cols-1 gap-4">
-                    <div class="alert alert-info alert-outline shadow-sm mt-2">
-                        <span class="flex items-center justify-center animate-spin-slow">
-                            {% include 'icons/radar.html.twig' %}
-                        </span>
-                        <div class="text-xs text-slate-200">
-                            Select a campaign to unlock the ship list for this mortgage.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-4 gap-4" data-controller="campaign-ship">
-                    <div>
-                        {{ form_label(form.campaign) }}
-                        {{ form_widget(form.campaign) }}
-                        {{ form_errors(form.campaign) }}
-                    </div>
-                    <div>
-                        {{ form_label(form.ship) }}
-                        {{ form_widget(form.ship) }}
-                        {{ form_errors(form.ship) }}
-                    </div>
-                    <div class="col-span-2" data-controller="imperial-date">
-                        {{ form_label(form.startDate) }}
-                        {{ form_widget(form.startDate.display, { attr: {'data-imperial-date-prev-icon': '«', 'data-imperial-date-next-icon': '»'} }) }}
-                        {{ form_widget(form.startDate.year) }}
-                        {{ form_widget(form.startDate.day) }}
-                        {{ form_errors(form.startDate.display) }}
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        {{ form_label(form.company) }}
-                        {{ form_widget(form.company) }}
-                        {{ form_errors(form.company) }}
-                    </div>
-
-                    <div>
-                        {{ form_label(form.localLaw) }}
-                        {{ form_widget(form.localLaw) }}
-                        {{ form_errors(form.localLaw) }}
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-3 gap-4">
-                    <div>
-                        <div class="flex items-center gap-1">
-                            {{ form_label(form.discount) }}
-                        </div>
-                        {{ form_widget(form.discount) }}
-                        {{ form_errors(form.discount) }}
-                    </div>
-                    <div>
-                        <div class="flex items-center gap-1">
-                            {{ form_label(form.shipShares) }}
-                        </div>
-                        {{ form_widget(form.shipShares) }}
-                        {{ form_errors(form.shipShares) }}
-                    </div>
-                    <div>
-                        <div class="flex items-center gap-1">
-                            {{ form_label(form.advancePayment) }}
-                        </div>
-                        {{ form_widget(form.advancePayment) }}
-                        {{ form_errors(form.advancePayment) }}
-                    </div>
-                </div>
-
-            <div class="grid grid-cols-2 gap-4">
-                {{ include('mortgage/interest_rate_table.html.twig') }}
-                {{ include('mortgage/insurance_table.html.twig') }}
+            <div class="col-span-2 md:col-span-1">
+                {{ form_label(form.ship) }}
+                {{ form_widget(form.ship, { attr: { class: 'select select-bordered w-full bg-slate-950/50 border-slate-700' } }) }}
+                {{ form_errors(form.ship) }}
             </div>
 
-            {% if mortgage.id %}
-                <div class="grid grid-cols-1 gap-4">
-                    {{ include('mortgage/mortgage_summary.html.twig') }}
-                </div>
-                <div class="grid grid-cols-1 gap-4">
-                    {{ include('mortgage/crew_table.html.twig') }}
-                </div>
-            {% endif %}
+            <div class="col-span-2 md:col-span-1" data-controller="imperial-date">
+                {{ form_label(form.startDate) }}
+                {{ form_widget(form.startDate.display, { attr: { class: 'input input-bordered w-full bg-slate-950/50 border-slate-700', 'data-imperial-date-prev-icon': '«', 'data-imperial-date-next-icon': '»'} }) }}
+                {{ form_widget(form.startDate.year) }}
+                {{ form_widget(form.startDate.day) }}
+                {{ form_errors(form.startDate.display) }}
+            </div>
 
+            <div class="col-span-2 md:col-span-1">
+                {{ form_label(form.company) }}
+                {{ form_widget(form.company, { attr: { class: 'select select-bordered w-full bg-slate-950/50 border-slate-700' } }) }}
+                {{ form_errors(form.company) }}
+            </div>
+
+            <div class="col-span-2">
+                {{ form_label(form.localLaw) }}
+                {{ form_widget(form.localLaw, { attr: { class: 'select select-bordered w-full bg-slate-950/50 border-slate-700' } }) }}
+                {{ form_errors(form.localLaw) }}
+            </div>
         </fieldset>
 
-        <button
-            type="submit"
-            form="mortgage_form"
-            name="action" value="save"
-            class="btn btn-outline btn-primary mt-4 mb-4 mr-4"
-            {% if not (mortgage.id ? can_edit : can_create) %} disabled {% endif %}
-        >Save</button>
+        <fieldset class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 bg-slate-900/40 border border-slate-800 gap-6 p-6 rounded-xl shadow-inner mb-6 relative">
+            <legend class="px-3 py-1 rounded bg-slate-800 border border-slate-700 text-[10px] font-bold font-orbitron tracking-[0.3em] text-amber-500/80 uppercase">Financial Architecture</legend>
 
-        <button
-            type="button"
-            class="btn btn-outline btn-warning mt-4 mb-4 mr-4"
-            {% if not can_sign %} disabled {% endif %}
-            onclick="document.getElementById('sign_modal').showModal();"
-        >Sign</button>
+            <div class="col-span-1 md:col-span-1 lg:col-span-1">
+                {{ form_label(form.discount) }}
+                {{ form_widget(form.discount, { attr: { class: 'input input-bordered w-full bg-slate-950/50 border-slate-700 focus:border-cyan-500/50' } }) }}
+                {{ form_errors(form.discount) }}
+            </div>
 
-        {% if mortgage.id and is_granted('ROLE_ADMIN') %}
-            {% set disabledClass = mortgage.signed ? '' : ' opacity-60 pointer-events-none' %}
-            <a
-                href="{{ path('app_mortgage_unsigned', {id: mortgage.id}) }}"
-                role="button"
-                class="btn btn-outline btn-error{{ disabledClass }} mt-4 mb-4 mr-4"
-                {% if not mortgage.signed %}aria-disabled="true"{% endif %}
-            >
-                Unsign
-            </a>
+            <div class="col-span-1 md:col-span-1 lg:col-span-1">
+                {{ form_label(form.shipShares) }}
+                {{ form_widget(form.shipShares, { attr: { class: 'input input-bordered w-full bg-slate-950/50 border-slate-700 focus:border-cyan-500/50' } }) }}
+                {{ form_errors(form.shipShares) }}
+            </div>
+
+            <div class="col-span-1 md:col-span-1 lg:col-span-1">
+                {{ form_label(form.advancePayment) }}
+                {{ form_widget(form.advancePayment, { attr: { class: 'input input-bordered w-full bg-slate-950/50 border-slate-700 focus:border-cyan-500/50' } }) }}
+                {{ form_errors(form.advancePayment) }}
+            </div>
+
+            <div class="col-span-full grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div>
+                    {{ include('mortgage/interest_rate_table.html.twig') }}
+                </div>
+                <div>
+                    {{ include('mortgage/insurance_table.html.twig') }}
+                </div>
+            </div>
+        </fieldset>
+
+        {% if mortgage.id %}
+            <fieldset class="grid grid-cols-1 bg-slate-900/40 border border-slate-800 gap-6 p-6 rounded-xl shadow-inner mb-6 relative">
+                <legend class="px-3 py-1 rounded bg-slate-800 border border-slate-700 text-[10px] font-bold font-orbitron tracking-[0.3em] text-emerald-500/80 uppercase">Amortization Logs</legend>
+                {{ include('mortgage/mortgage_summary.html.twig') }}
+                {{ include('mortgage/crew_table.html.twig') }}
+            </fieldset>
         {% endif %}
 
-        <a href="{{ path('app_mortgage_index') }}" role="button" class="btn btn-outline btn-default mt-4 mb-4 mr-4">Cancel</a>
+        <div class="flex items-center justify-end gap-3 mb-10">
+            <a href="{{ path('app_mortgage_index') }}" class="btn btn-ghost font-orbitron uppercase text-[10px] tracking-widest text-slate-500 hover:text-slate-300 font-bold">Abort Session</a>
 
-        {{ form_end(form) }} 
+            {% if mortgage.id and is_granted('ROLE_ADMIN') %}
+                {% set disabledClass = mortgage.signed ? '' : ' opacity-60 pointer-events-none' %}
+                <a href="{{ path('app_mortgage_unsigned', {id: mortgage.id}) }}" class="btn btn-outline btn-error btn-sm font-orbitron uppercase text-[10px] tracking-widest {{ disabledClass }}">Unsign Hull</a>
+            {% endif %}
+
+            <button type="button" class="btn btn-outline btn-warning btn-sm px-6 font-orbitron uppercase text-[10px] tracking-widest font-bold" {% if not can_sign %} disabled {% endif %} onclick="document.getElementById('sign_modal').showModal();">
+                Authorize Signature
+            </button>
+
+            <button type="submit" form="mortgage_form" name="action" value="save" class="btn btn-primary px-8 font-orbitron uppercase text-[10px] tracking-widest font-bold shadow-lg shadow-cyan-500/10" {% if not (mortgage.id ? can_edit : can_create) %} disabled {% endif %}>
+                Confirm Allocation // Commit to Log
+            </button>
+        </div>
+
+        {{ form_end(form) }}
+ 
 
         <dialog id="coverage_modal" class="modal">
             <div class="modal-box w-11/12 max-w-5xl">
-                <h3 class="text-lg font-bold mb-3 flex items-center gap-2">
-                    {% include 'icons/lifebuoy.html.twig' %}
-                    <span>Insurance Coverage</span>
+                <h3 class="font-bold text-cyan-100 text-lg font-orbitron uppercase tracking-widest mb-6 flex items-center gap-3">
+                    <div class="p-2 rounded-lg bg-cyan-500/10 border border-cyan-400/40">
+                        {% include 'icons/lifebuoy.html.twig' %}
+                    </div>
+                    <span>Insurance Coverage Dossier</span>
                 </h3>
                 {% if form.insurance.vars.choices is defined and form.insurance.vars.choices|length > 0 %}
-                    <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 m-1">
-                        <table class="table border-separate border-spacing-0 inner-bordered-table">
+                    <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950/40 shadow-inner">
+                        <table class="table table-xs w-full border-separate border-spacing-0">
                             <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Annual Cost (% Ship Price)</th>
-                                    <th>Loss Refund (% Ship Cost)</th>
-                                    <th>Coverage</th>
+                                <tr class="border-b border-slate-800">
+                                    <th class="font-rajdhani uppercase tracking-widest text-[11px] text-slate-400 bg-slate-900/50">Plan Name</th>
+                                    <th class="font-rajdhani uppercase tracking-widest text-[11px] text-slate-400 bg-slate-900/50 text-right">Cost (% Ship)</th>
+                                    <th class="font-rajdhani uppercase tracking-widest text-[11px] text-slate-400 bg-slate-900/50 text-right">Refund (% Ship)</th>
+                                    <th class="font-rajdhani uppercase tracking-widest text-[11px] text-slate-400 bg-slate-900/50">Coverage Protocol</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="divide-y divide-slate-800/50">
                             {% for choice in form.insurance.vars.choices %}
                                 {% set ins = choice.data %}
-                                <tr>
-                                    <td>{{ ins.name }}</td>
-                                    <td class="text-right">
-                                        {{ ins.annualCost|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', app.request.locale ?? 'en') }}
+                                <tr class="hover:bg-cyan-500/5 transition-colors text-slate-300">
+                                    <td class="p-2 font-rajdhani text-xs tracking-widest uppercase font-bold">{{ ins.name }}</td>
+                                    <td class="text-right p-2 font-mono text-xs">
+                                        {{ ins.annualCost|format_number({ min_fraction_digit: 2, max_fraction_digit: 2 }, 'decimal', 'default', app.request.locale ?? 'en') }}
                                     </td>
-                                    <td class="text-right">
+                                    <td class="text-right p-2 font-mono text-xs">
                                         {{ ins.lossRefund is not null ? ins.lossRefund|format_number({ min_fraction_digit: 2, max_fraction_digit: 2 }, 'decimal', 'default', app.request.locale ?? 'en') }}
                                     </td>
-                                    <td>
+                                    <td class="p-2">
                                         {% if ins.coverage %}
-                                            <ul class="list-disc list-inside text-sm">
+                                            <ul class="list-none space-y-0.5 text-xs font-rajdhani uppercase tracking-wide">
                                                 {% for item in ins.coverage %}
-                                                    <li>{{ item }}</li>
+                                                    <li class="flex items-center gap-1.5">
+                                                        <span class="w-1 h-1 rounded-full bg-cyan-500/50"></span>
+                                                        {{ item }}
+                                                    </li>
                                                 {% endfor %}
                                             </ul>
                                         {% else %}
-                                            —
+                                            <span class="text-slate-500 italic">—</span>
                                         {% endif %}
                                     </td>
                                 </tr>
@@ -242,9 +188,9 @@
                 {% else %}
                     <p class="py-4">No insurance records available.</p>
                 {% endif %}
-                <div class="modal-action">
+                <div class="modal-action mt-6 gap-3">
                     <form method="dialog">
-                        <button class="btn">Close</button>
+                        <button class="btn btn-ghost btn-sm font-orbitron uppercase text-[10px] tracking-widest font-bold">Terminate Session</button>
                     </form>
                 </div>
             </div>
@@ -252,16 +198,18 @@
 
         <dialog id="interest_rate_modal" class="modal">
             <div class="modal-box w-11/12 max-w-xl">
-                <h3 class="text-lg font-bold mb-2 flex items-center gap-2">
-                    {% include 'icons/interest-rate.html.twig' %}
-                    <span>Interest Rate</span>
+                <h3 class="font-bold text-cyan-100 text-lg font-orbitron uppercase tracking-widest mb-6 flex items-center gap-3">
+                    <div class="p-2 rounded-lg bg-cyan-500/10 border border-cyan-400/40">
+                        {% include 'icons/interest-rate.html.twig' %}
+                    </div>
+                    <span>Financial Bond Registry</span>
                 </h3>
-                <p class="py-2 text-sm opacity-80">
+                <p class="py-2 text-[11px] text-slate-400 font-rajdhani uppercase tracking-widest leading-relaxed">
                     This table shows how the bank prices your hull: duration (years), price multipliers/dividers, and the annual interest rate. Pick the correct band before signing so the 13-period schedule reflects the agreed terms and the Campaign session clock.
                 </p>
-                <div class="modal-action">
+                <div class="modal-action mt-6 gap-3">
                     <form method="dialog">
-                        <button class="btn">Close</button>
+                        <button class="btn btn-ghost btn-sm font-orbitron uppercase text-[10px] tracking-widest font-bold">Terminate Session</button>
                     </form>
                 </div>
             </div>
@@ -273,32 +221,32 @@
         {% set sessionValue = (sessionDay is not null and sessionYear is not null) ? (sessionDay|imperial_date(sessionYear)) : '—' %}
         <dialog id="sign_modal" class="modal">
             <div class="modal-box w-11/12 max-w-xl">
-                <header class="prose mb-4">
-                    <h3>Confirm signing</h3>
-                    <p class="text-sm opacity-80">Session date: <b>{{ sessionValue }}</b></p>
+                <header class="mb-6">
+                    <h3 class="font-bold text-cyan-100 text-lg font-orbitron uppercase tracking-widest">Confirm Authorization</h3>
+                    <p class="text-[10px] text-cyan-100/60 font-rajdhani tracking-widest uppercase">Target Session: <b class="text-cyan-400">{{ sessionValue }}</b></p>
                 </header>
-                <fieldset class="fieldset bg-base-200 border-base-300 gap-4 p-4 border rounded w-full">
-                    <div class="form control gap-1">
-                        <label class="block">Signing location</label>
+                <fieldset class="bg-slate-900/40 border border-slate-800 gap-4 p-4 rounded-xl shadow-inner w-full mb-6">
+                    <div class="form-control gap-1">
+                        <label class="text-[10px] font-bold font-rajdhani tracking-widest text-slate-400 uppercase mb-1">Authorization Location</label>
                         <input
-                        type="text"
-                        name="signing_location"
-                        form="mortgage_form"
-                        class="input m-1 w-full"
-                        placeholder="Enter signing location"
-                    >
-                </div>
+                            type="text"
+                            name="signing_location"
+                            form="mortgage_form"
+                            class="input input-bordered w-full bg-slate-950/50 border-slate-700 focus:border-cyan-500/50 font-rajdhani text-sm"
+                            placeholder="Enter deployment sector..."
+                        >
+                    </div>
                 </fieldset>
-                <div class="modal-action">
-                    <button type="button" class="btn" onclick="document.getElementById('sign_modal').close();">Cancel</button>
+                <div class="modal-action mt-6 gap-3">
+                    <button type="button" class="btn btn-ghost btn-sm font-orbitron uppercase text-[10px] tracking-widest font-bold" onclick="document.getElementById('sign_modal').close();">Abort Session</button>
                     <button
                         type="submit"
                         form="mortgage_form"
                         name="action"
                         value="sign"
-                        class="btn btn-warning"
+                        class="btn btn-warning btn-sm px-6 font-orbitron uppercase text-[10px] tracking-widest font-bold shadow-lg shadow-amber-500/10"
                     >
-                        Confirm sign
+                        Confirm Authorization
                     </button>
                 </div>
             </div>
@@ -307,47 +255,44 @@
         {% if can_pay %}
             <dialog id="pay_installment_modal" class="modal">
                 <div class="modal-box">
-                    <header class="prose">
-                        <h3>Payment</h3>
+                    <header class="mb-6">
+                        <h3 class="font-bold text-cyan-100 text-lg font-orbitron uppercase tracking-widest">Execute Payment</h3>
+                        <p class="text-[10px] text-cyan-100/60 font-rajdhani tracking-widest uppercase">Initiate credit transfer protocol.</p>
                     </header>
 
                     {{ form_start(form, {
                         action: path('app_mortgage_pay', {id: mortgage.id}),
                         method: 'POST'
                     }) }}
-                    <fieldset class="fieldset grid grid-cols-2 bg-base-200 border-base-300 gap-4 p-4 border rounded w-full">
-                        <legend class="fieldset-legend">Installment</legend>
+                    <fieldset class="grid grid-cols-2 bg-slate-900/40 border border-slate-800 gap-4 p-4 rounded-xl shadow-inner w-full mb-6 relative">
+                        <legend class="px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-[9px] font-bold font-orbitron tracking-[0.2em] text-cyan-500/80 uppercase">Installment Authorization</legend>
                         <div class="col-span-2" data-controller="imperial-date">
-                            <label class="label">Payment Date</label>
-                            {{ form_widget(payment_form.paymentDate.display, { attr: {'data-imperial-date-prev-icon': '«', 'data-imperial-date-next-icon': '»'} }) }}
+                            {{ form_label(payment_form.paymentDate) }}
+                            {{ form_widget(payment_form.paymentDate.display, { attr: { class: 'input input-bordered w-full bg-slate-950/50 border-slate-700 focus:border-cyan-500/50', 'data-imperial-date-prev-icon': '«', 'data-imperial-date-next-icon': '»'} }) }}
                             {{ form_widget(payment_form.paymentDate.year) }}
                             {{ form_widget(payment_form.paymentDate.day) }}
                             {{ form_errors(payment_form.paymentDate.display) }}
                         </div>
-                        <div>
-                            <label class="label">Payment(Cr)</label>
-                            {{ form_widget(payment_form.payment) }}
+                        <div class="col-span-2">
+                            {{ form_label(payment_form.payment) }}
+                            {{ form_widget(payment_form.payment, { attr: { class: 'input input-bordered w-full bg-slate-950/50 border-slate-700 focus:border-cyan-500/50 font-mono text-sm' } }) }}
+                            {{ form_errors(payment_form.payment) }}
                         </div>
                     </fieldset>
 
-                    <div class="modal-action">
+                    <div class="modal-action mt-6 gap-3">
+                        <a href="{{ path('app_mortgage_edit', {id: mortgage.id}) }}" role="button" class="btn btn-ghost btn-sm font-orbitron uppercase text-[10px] tracking-widest font-bold">Abort Protocol</a>
                         <button
                             type="submit"
                             name="action" value="save"
-                            class="btn btn-outline btn-primary mt-4 mb-4 mr-4"
+                            class="btn btn-primary btn-sm px-6 font-orbitron uppercase text-[10px] tracking-widest font-bold shadow-lg shadow-cyan-500/10"
                             {% if not can_pay %} disabled {% endif %}
-                        >Pay</button>
-                        <a href="{{ path('app_mortgage_edit', {id: mortgage.id}) }}" role="button" class="btn btn-outline btn-default mt-4 mb-4 mr-4">Cancel</a>
+                        >Execute Transfer</button>
                     </div>
                     {{ form_end(payment_form) }}
                 </div>
-                <form method="dialog">
-                    <!-- if there is a button in form, it will close the modal -->
-                    <button class="btn">Close</button>
-                </form>
             </dialog>
         {% endif %}
 
-    </div>
 
 {% endblock %}

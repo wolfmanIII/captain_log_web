@@ -1,70 +1,50 @@
 {% import _self as costDetails %}
 
 {% macro render_item(child) %}
-    <div class="grid grid-cols-3 gap-2 border border-base-300 rounded p-3 relative collection-item bg-base-100">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 border border-slate-700 bg-slate-950/40 rounded-lg p-4 relative collection-item group hover:border-cyan-500/30 transition-colors">
         <button type="button"
-                class="btn btn-ghost btn-xs absolute right-1 top-1"
+                class="absolute -right-2 -top-2 w-6 h-6 rounded-full bg-slate-800 border border-slate-700 text-slate-400 hover:text-red-400 hover:border-red-500/50 flex items-center justify-center transition-all shadow-lg z-10"
                 data-action="cost-details#removeItem">&times;</button>
-        <div>
+        <div class="md:col-span-1">
             {{ form_label(child.description) }}
-            {{ form_widget(child.description) }}
+            {{ form_widget(child.description, { attr: { class: 'input input-bordered input-sm w-full bg-slate-950/50 border-slate-800' } }) }}
             {{ form_errors(child.description) }}
         </div>
         <div>
             {{ form_label(child.quantity) }}
-            {{ form_widget(child.quantity) }}
+            {{ form_widget(child.quantity, { attr: { class: 'input input-bordered input-sm w-full bg-slate-950/50 border-slate-800' } }) }}
             {{ form_errors(child.quantity) }}
         </div>
         <div>
             {{ form_label(child.cost) }}
-            {{ form_widget(child.cost) }}
+            {{ form_widget(child.cost, { attr: { class: 'input input-bordered input-sm w-full bg-slate-950/50 border-slate-800' } }) }}
             {{ form_errors(child.cost) }}
         </div>
-</div>
+    </div>
 {% endmacro %}
 
-<fieldset class="fieldset bg-base-200 border-base-300 gap-4 p-4 border rounded w-full"
+<fieldset class="grid grid-cols-1 bg-slate-900/40 border border-slate-800 gap-6 p-6 rounded-xl shadow-inner mb-6 relative"
          data-controller="cost-details"
          data-cost-details-amount-selector="[name='cost[amount]']">
-    <legend class="fieldset-legend">Cost detail items</legend>
+    <legend class="px-3 py-1 rounded bg-slate-800 border border-slate-700 text-[10px] font-bold font-orbitron tracking-[0.3em] text-emerald-500/80 uppercase">Line Items // Inventory Adjustment</legend>
 
     {% set detailErrors = form_errors(form.detailItems) %}
     {% if detailErrors is not empty %}
-        <div class="col-span-2 alert alert-error alert-outline shadow-sm mb-2 flex gap-2 items-start">
-            <div class="pt-0.5 animate-spin-slow">
-                {% include 'icons/radar.html.twig' %}
-            </div>
-            <div class="text-sm space-y-1">
-                {{ detailErrors|raw }}
+        <div class="alert alert-error bg-red-500/10 border-red-500/30 text-red-500 text-xs rounded-lg mb-4 py-2">
+            <div class="flex gap-2 items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-4 w-4" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <span>{{ detailErrors|raw }}</span>
             </div>
         </div>
     {% endif %}
 
-    <div class="col-span-2">
-        <div class="relative overflow-hidden rounded-xl border border-cyan-500/30 bg-gradient-to-r from-slate-900 via-slate-800 to-cyan-900 shadow-lg">
-            <div class="absolute inset-0 opacity-30 mix-blend-screen pointer-events-none"
-                 style="background: radial-gradient(circle at 20% 20%, rgba(59,130,246,0.25), transparent 35%), radial-gradient(circle at 80% 30%, rgba(14,165,233,0.25), transparent 35%);">
-            </div>
-            <div class="relative p-4 flex items-start gap-3">
-                <div class="p-3 rounded-lg bg-cyan-500/10 border border-cyan-400/40">
-                    {% include 'icons/cost.html.twig' %}
-                </div>
-                <div>
-                    <p class="uppercase text-xs tracking-[0.25em] text-cyan-300/70">Mission outflows</p>
-                    <h3 class="font-semibold text-cyan-100 text-xl leading-tight">Cost breakdown</h3>
-                    <p class="text-sm text-cyan-100/80">Line items for materials, services or products with quantity and cost (stored as JSON detail items).</p>
-                </div>
-            </div>
+    <div class="grid grid-cols-1 gap-4" data-cost-details-target="collection">
+        <div class="flex items-center justify-between mb-2">
+            <h4 class="text-[10px] uppercase tracking-widest font-rajdhani font-bold text-slate-500">Resource Allocation</h4>
+            <button type="button" class="btn btn-outline btn-xs font-orbitron uppercase tracking-widest text-[9px]"
+                    data-action="cost-details#addItem">+ Add Resource</button>
         </div>
-    </div>
-
-    <div class="col-span-2 grid grid-cols-1 gap-4" data-cost-details-target="collection">
-        <div class="flex items-center justify-between">
-            <h4 class="font-semibold text-emerald-100">Items</h4>
-            <button type="button" class="btn btn-outline btn-xs"
-                    data-action="cost-details#addItem">+ Add</button>
-        </div>
-        <div class="space-y-2" data-cost-details-target="list">
+        <div class="space-y-4" data-cost-details-target="list">
             {% for child in form.detailItems %}
                 {{ costDetails.render_item(child) }}
             {% endfor %}

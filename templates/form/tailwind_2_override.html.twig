@@ -1,7 +1,7 @@
 {% extends 'tailwind_2_layout.html.twig' %}
 
 {%- block form_label -%}
-    {%- set label_attr = label_attr|merge({ class: label_attr.class|default('block text-slate-300') }) -%}
+    {%- set label_attr = label_attr|merge({ class: label_attr.class|default('block text-[10px] uppercase tracking-widest font-rajdhani font-bold text-slate-400 mb-1') }) -%}
     {{- parent() -}}
 {%- endblock form_label -%}
 

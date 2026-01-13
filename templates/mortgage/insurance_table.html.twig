@@ -4,37 +4,36 @@
     data-controller="single-select-table"
     class="w-full"
 >
-    <label class="block text-slate-300">
-        <span class="label-text flex items-center gap-1">
+    <label class="block mb-2">
+        <span class="text-[10px] font-bold font-rajdhani tracking-widest text-slate-400 uppercase flex items-center gap-2">
             {{ form.insurance.vars.label ?? 'Insurance' }}
-            {% if form.insurance.vars.required %}{% include 'icons/required.html.twig' %}{% endif %}
-            <button type="button" class="btn badge badge-sm badge-outline badge-info ml-2" onclick="coverage_modal.showModal()">?</button>
+            <button type="button" class="text-[9px] cursor-pointer text-cyan-500/50 hover:text-cyan-400 transition-colors uppercase font-bold tracking-widest" onclick="coverage_modal.showModal()">[info]</button>
         </span>
     </label>
 
-    <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 m-1">
-        <table class="table w-full border-separate border-spacing-0 inner-bordered-table">
+    <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950/40 shadow-inner">
+        <table class="table table-xs w-full border-separate border-spacing-0">
             <thead>
-                <tr>
-                    <th class="w-10"></th>
-                    <th>Name</th>
-                    <th>Annual Cost(% Ship Price)</th>
-                    <th>Loss Refund(% Ship Cost)</th>
+                <tr class="border-b border-slate-800">
+                    <th class="w-8 bg-slate-900/50"></th>
+                    <th class="font-rajdhani uppercase tracking-widest text-[11px] text-slate-400 bg-slate-900/50">Plan Name</th>
+                    <th class="font-rajdhani uppercase tracking-widest text-[11px] text-slate-400 bg-slate-900/50 text-right">Cost (%)</th>
+                    <th class="font-rajdhani uppercase tracking-widest text-[11px] text-slate-400 bg-slate-900/50 text-right">Refund (%)</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="divide-y divide-slate-800/50">
             {% for choice in form.insurance.vars.choices %}
-                {% set insurance = choice.data %}
+                {% set ins = choice.data %}
                 {% set isSelected = (form.insurance.vars.value == choice.value) %}
                 <tr
                     data-single-select-table-target="row"
-                    class="{% if isSelected %}bg-gradient-to-r from-emerald-900 via-emerald-800 to-emerald-700 text-emerald-50{% endif %}"
+                    class="hover:bg-cyan-500/5 transition-colors {% if isSelected %}bg-emerald-500/10 text-emerald-400{% else %}text-slate-300{% endif %}"
                 >
-                    <td>
+                    <td class="text-center p-2">
                         <input
                             type="radio"
-                            class="radio radio-sm"
-                            name="insurance_radio"  {# nome “finto”, solo per il gruppo #}
+                            class="radio radio-xs radio-primary"
+                            name="insurance_radio"
                             data-single-select-table-target="radio"
                             data-action="change->single-select-table#select"
                             data-value="{{ choice.value }}"
@@ -42,9 +41,9 @@
                             {% if mortgage.signed %} disabled {% endif %}
                         >
                     </td>
-                    <td>{{ insurance.name }}</td>
-                    <td class="text-right">{{ insurance.annualCost|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', locale) }}</td>
-                    <td class="text-right">{{ insurance.lossRefund|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', locale) }}</td>
+                    <td class="p-2 font-rajdhani text-xs tracking-widest uppercase">{{ ins.name }}</td>
+                    <td class="text-right p-2 font-mono text-xs">{{ ins.annualCost|format_number({ min_fraction_digit: 2, max_fraction_digit: 2 }, 'decimal', 'default', locale) }}</td>
+                    <td class="text-right p-2 font-mono text-xs font-bold">{{ ins.lossRefund|format_number({ min_fraction_digit: 2, max_fraction_digit: 2 }, 'decimal', 'default', locale) }}</td>
                 </tr>
             {% endfor %}
             </tbody>

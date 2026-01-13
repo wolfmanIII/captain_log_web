@@ -9,256 +9,192 @@
     {% set can_edit = is_granted(CAN_EDIT, income) %}
     {% import '_tooltip.html.twig' as tooltip %}
 
-    <div class="flex flex-col items-stretch gap-4">
+        <div class="relative rounded-xl border border-cyan-500/30 bg-gradient-to-r from-slate-900 via-slate-800 to-cyan-900 shadow-lg mb-6 overflow-hidden">
+            <div class="absolute inset-0 opacity-30 mix-blend-screen pointer-events-none"
+                 style="background: radial-gradient(circle at 20% 20%, rgba(59,130,246,0.25), transparent 35%), radial-gradient(circle at 80% 30%, rgba(14,165,233,0.25), transparent 35%);">
+            </div>
+            <div class="relative p-4 flex items-center justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <div class="p-2.5 rounded-lg bg-cyan-500/10 border border-cyan-400/40">
+                        {% include 'icons/income.html.twig' %}
+                    </div>
+                    <div class="flex-1">
+                        <p class="uppercase text-[10px] tracking-[0.3em] text-cyan-300/70 font-bold font-orbitron mb-0.5">Ship income // Contract Registry</p>
+                        <h3 class="font-bold text-cyan-100 text-2xl leading-tight font-orbitron uppercase">Log your income</h3>
+                        <p class="text-xs text-cyan-100/60 font-rajdhani tracking-widest uppercase">Contracts, freight and charter: fund the next jump.</p>
+                    </div>
+                </div>
+                {% if income.id %}
+                    <div class="flex items-center gap-2">
+                        {{ tooltip.link('Open income PDF', 'Income PDF', 'icons/pdf.html.twig', path('app_income_pdf', { id: income.id }), { dim: 20, linkClass: 'btn btn-outline btn-secondary btn-sm px-4', position: 'tooltip-left', attrs: { target: '_blank', rel: 'noopener' } }) }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
 
         {{ form_start(form) }}
-
         {{ form_widget(form._token) }}
 
-        <fieldset class="fieldset grid grid-cols-3 bg-base-200 border-base-300 gap-4 p-4 border rounded w-full">
-            <legend class="fieldset-legend">{% include 'icons/income.html.twig' %} Income</legend>
-
-            <div class="col-span-3">
-                <div class="relative overflow-hidden rounded-xl border border-cyan-500/30 bg-gradient-to-r from-slate-900 via-slate-800 to-cyan-900 shadow-lg">
-                    <div class="absolute inset-0 opacity-30 mix-blend-screen pointer-events-none"
-                         style="background: radial-gradient(circle at 20% 20%, rgba(59,130,246,0.25), transparent 35%), radial-gradient(circle at 80% 30%, rgba(14,165,233,0.25), transparent 35%);">
-                    </div>
-                    <div class="relative p-4 flex items-start gap-3">
-                        <div class="p-3 rounded-lg bg-cyan-500/10 border border-cyan-400/40">
-                            {% include 'icons/income.html.twig' %}
-                        </div>
-                        <div class="flex-1">
-                            <p class="uppercase text-xs tracking-[0.25em] text-cyan-300/70">Ship income</p>
-                            <h3 class="font-semibold text-cyan-100 text-xl leading-tight">Log your income</h3>
-                            <p class="text-sm text-cyan-100/80">Contracts, freight and charter: keep them tidy here to know when you can fund the next jump.</p>
-                        </div>
-                        {% if income.id %}
-                            <div class="flex items-start gap-2">
-                                {{ tooltip.link('Open income PDF',
-                                                'Income PDF',
-                                                'icons/pdf.html.twig',
-                                                path('app_income_pdf', { id: income.id }),
-                                                { dim: 16, linkClass: 'btn btn-outline btn-secondary btn-sm', attrs: { target: '_blank', rel: 'noopener' } }) }}
-                            </div>
-                        {% endif %}
-                    </div>
+        {% if income.id %}
+            <div class="alert alert-warning bg-amber-500/10 border-amber-500/30 text-amber-500 text-xs rounded-lg mb-6 py-2">
+                <div class="flex gap-2 items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-4 w-4" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                    <span class="font-bold font-rajdhani tracking-widest uppercase">Warning: Changing category will overwrite specific detail items.</span>
                 </div>
             </div>
-            {% if income.id %}
-                <div class="col-span-3">
-                    <div class="alert alert-warning alert-outline shadow-sm w-full">
-                        <div class="flex items-start gap-3">
-                            <div class="pt-0.5 animate-spin-slow text-warning">
-                                {% include 'icons/radar.html.twig' %}
-                            </div>
-                            <div>
-                                <div class="font-semibold">Category warning</div>
-                                <p class="text-sm opacity-80">Changing the Income category will wipe the data of the previously saved category.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        {% endif %}
 
-                <div class="col-span-3">
-                    <label class="block text-slate-300">Code</label>
-                    <div class="m-1 w-full"><b>{{ income.code }}</b></div>
-                </div>
-            {% endif %}
+        <fieldset class="grid grid-cols-2 bg-slate-900/40 border border-slate-800 gap-6 p-6 rounded-xl shadow-inner mb-6 relative">
+            <legend class="px-3 py-1 rounded bg-slate-800 border border-slate-700 text-[10px] font-bold font-orbitron tracking-[0.3em] text-cyan-500/80 uppercase">Primary Data</legend>
 
-            <div class="col-span-2">
+            <div class="col-span-2 md:col-span-1">
                 {{ form_label(form.title) }}
-                {{ form_widget(form.title) }}
+                {{ form_widget(form.title, { attr: { class: 'input input-bordered w-full bg-slate-950/50 border-slate-700 focus:border-cyan-500/50' } }) }}
                 {{ form_errors(form.title) }}
             </div>
 
-            <div class="col-span-1">
+            <div class="col-span-2 md:col-span-1">
                 {{ form_label(form.localLaw) }}
-                {{ form_widget(form.localLaw) }}
+                {{ form_widget(form.localLaw, { attr: { class: 'select select-bordered w-full bg-slate-950/50 border-slate-700' } }) }}
                 {{ form_errors(form.localLaw) }}
             </div>
 
-            <div class="col-span-3 grid grid-cols-1 gap-4">
-                <div class="alert alert-info alert-outline shadow-sm mt-2">
-                    <span class="flex items-center justify-center animate-spin-slow">
-                        {% include 'icons/radar.html.twig' %}
-                    </span>
-                    <div class="text-xs text-slate-200">
-                        Select a campaign to unlock the ship list for this income.
-                        <div class="mt-1">
-                            Log the campaign and hull only after the crew accepts the contract—no payout enters the ledger before the crew signs on.
-                        </div>
-                    </div>
-                </div>
+            <div class="col-span-2 md:col-span-1">
+                {{ form_label(form.campaign) }}
+                {{ form_widget(form.campaign, { attr: { class: 'select select-bordered w-full bg-slate-950/50 border-slate-700' } }) }}
+                {{ form_errors(form.campaign) }}
             </div>
 
-            <div class="col-span-3 grid grid-cols-2 gap-4" data-controller="campaign-ship">
-                <div>
-                    {{ form_label(form.campaign) }}
-                    {{ form_widget(form.campaign) }}
-                    {{ form_errors(form.campaign) }}
-                </div>
-                <div>
-                    {{ form_label(form.ship) }}
-                    {{ form_widget(form.ship) }}
-                    {{ form_errors(form.ship) }}
-                </div>
+            <div class="col-span-2 md:col-span-1">
+                {{ form_label(form.ship) }}
+                {{ form_widget(form.ship, { attr: { class: 'select select-bordered w-full bg-slate-950/50 border-slate-700' } }) }}
+                {{ form_errors(form.ship) }}
             </div>
 
-            <div class="col-span-1">
+            <div class="col-span-2 md:col-span-1">
                 {{ form_label(form.company) }}
-                {{ form_widget(form.company) }}
+                {{ form_widget(form.company, { attr: { class: 'select select-bordered w-full bg-slate-950/50 border-slate-700' } }) }}
                 {{ form_errors(form.company) }}
             </div>
 
-            <div class="col-span-1">
+            <div class="col-span-2 md:col-span-1">
                 {{ form_label(form.incomeCategory) }}
-                {{ form_widget(form.incomeCategory) }}
+                {{ form_widget(form.incomeCategory, { attr: { class: 'select select-bordered w-full bg-slate-950/50 border-slate-700' } }) }}
                 {{ form_errors(form.incomeCategory) }}
             </div>
+        </fieldset>
 
-            <div class="col-span-1">
+        <fieldset class="grid grid-cols-2 bg-slate-900/40 border border-slate-800 gap-6 p-6 rounded-xl shadow-inner mb-6 relative">
+            <legend class="px-3 py-1 rounded bg-slate-800 border border-slate-700 text-[10px] font-bold font-orbitron tracking-[0.3em] text-amber-500/80 uppercase">Status & Location</legend>
+
+            <div class="col-span-2 md:col-span-1">
                 {% set status_help_id = form.status.vars.id ~ '-help' %}
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-2 mb-1">
                     {{ form_label(form.status) }}
-                    <label for="{{ status_help_id }}" class="badge badge-outline badge-info cursor-pointer badge-xs">?</label>
+                    <label for="{{ status_help_id }}" class="text-[9px] cursor-pointer text-cyan-500/50 hover:text-cyan-400 transition-colors uppercase font-bold tracking-widest">[info]</label>
                 </div>
-                {{ form_widget(form.status) }}
+                {{ form_widget(form.status, { attr: { class: 'select select-bordered w-full bg-slate-950/50 border-slate-700' } }) }}
                 {{ form_errors(form.status) }}
                 <input type="checkbox" id="{{ status_help_id }}" class="modal-toggle hidden" />
                 <div class="modal" role="dialog">
-                    <div class="modal-box">
-                        <div class="flex items-center gap-2">
-                            <span class="animate-spin-slow">{% include 'icons/radar.html.twig' %}</span>
-                            <h3 class="font-bold">Contract status</h3>
-                        </div>
-                        <p class="py-2 text-sm">Status is auto-managed: Draft until a signing date is recorded, then it locks to Signed.</p>
+                    <div class="modal-box bg-slate-900 border border-slate-700">
+                        <h3 class="font-bold text-cyan-100 font-orbitron uppercase tracking-widest text-sm mb-4">Tactical Info: Contract Status</h3>
+                        <p class="py-2 text-sm text-slate-300 font-rajdhani">Status is auto-managed: Draft until a signing date is recorded, then it locks to Signed.</p>
                         <div class="modal-action">
-                            <label for="{{ status_help_id }}" class="btn btn-primary">Close</label>
+                            <label for="{{ status_help_id }}" class="btn btn-primary btn-sm btn-outline font-orbitron uppercase text-[10px]">Close</label>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-span-1">
+            <div class="col-span-2 md:col-span-1">
                 {{ form_label(form.signingLocation) }}
-                {{ form_widget(form.signingLocation) }}
+                {{ form_widget(form.signingLocation, { attr: { class: 'input input-bordered w-full bg-slate-950/50 border-slate-700 focus:border-cyan-500/50' } }) }}
                 {{ form_errors(form.signingLocation) }}
             </div>
 
-            <div class="col-span-1" data-controller="imperial-date">
+            <div class="col-span-2 md:col-span-1" data-controller="imperial-date">
                 {{ form_label(form.signingDate) }}
-                {{ form_widget(form.signingDate.display, { attr: {'data-imperial-date-prev-icon': '«', 'data-imperial-date-next-icon': '»'} }) }}
+                {{ form_widget(form.signingDate.display, { attr: { class: 'input input-bordered w-full bg-slate-950/50 border-slate-700', 'data-imperial-date-prev-icon': '«', 'data-imperial-date-next-icon': '»'} }) }}
                 {{ form_widget(form.signingDate.year) }}
                 {{ form_widget(form.signingDate.day) }}
                 {{ form_errors(form.signingDate.display) }}
             </div>
+        </fieldset>
 
-            <div class="col-span-1">
+        <fieldset class="grid grid-cols-3 bg-slate-900/40 border border-slate-800 gap-6 p-6 rounded-xl shadow-inner mb-6 relative">
+            <legend class="px-3 py-1 rounded bg-slate-800 border border-slate-700 text-[10px] font-bold font-orbitron tracking-[0.3em] text-emerald-500/80 uppercase">Financial Metrics</legend>
+
+            <div class="col-span-3 md:col-span-1">
                 {{ form_label(form.amount) }}
-                {{ form_widget(form.amount) }}
+                {{ form_widget(form.amount, { attr: { class: 'input input-bordered w-full bg-slate-950/50 border-slate-700 focus:border-cyan-500/50' } }) }}
                 {{ form_errors(form.amount) }}
             </div>
 
-            <div class="col-span-1" data-controller="imperial-date">
-                <div class="flex items-center gap-1">
-                    {{ form_label(form.paymentDate) }}
-                </div>
-                {{ form_widget(form.paymentDate.display, { attr: {'data-imperial-date-prev-icon': '«', 'data-imperial-date-next-icon': '»'} }) }}
+            <div class="col-span-3 md:col-span-1" data-controller="imperial-date">
+                {{ form_label(form.paymentDate) }}
+                {{ form_widget(form.paymentDate.display, { attr: { class: 'input input-bordered w-full bg-slate-950/50 border-slate-700', 'data-imperial-date-prev-icon': '«', 'data-imperial-date-next-icon': '»'} }) }}
                 {{ form_widget(form.paymentDate.year) }}
                 {{ form_widget(form.paymentDate.day) }}
                 {{ form_errors(form.paymentDate.display) }}
             </div>
 
-            <div class="col-span-1" data-controller="imperial-date">
-                <div class="flex items-center gap-1">
-                    {{ form_label(form.expirationDate) }}
-                </div>
-                {{ form_widget(form.expirationDate.display, { attr: {'data-imperial-date-prev-icon': '«', 'data-imperial-date-next-icon': '»'} }) }}
+            <div class="col-span-3 md:col-span-1" data-controller="imperial-date">
+                {{ form_label(form.expirationDate) }}
+                {{ form_widget(form.expirationDate.display, { attr: { class: 'input input-bordered w-full bg-slate-950/50 border-slate-700', 'data-imperial-date-prev-icon': '«', 'data-imperial-date-next-icon': '»'} }) }}
                 {{ form_widget(form.expirationDate.year) }}
                 {{ form_widget(form.expirationDate.day) }}
                 {{ form_errors(form.expirationDate.display) }}
             </div>
         </fieldset>
 
-        {% if form.charterDetails is defined %}
-            {% include 'income/details/_charter.html.twig' with { detail_form: form.charterDetails } %}
-        {% endif %}
-        {% if form.subsidyDetails is defined %}
-            {% include 'income/details/_subsidy.html.twig' with { detail_form: form.subsidyDetails } %}
-        {% endif %}
-        {% if form.freightDetails is defined %}
-            {% include 'income/details/_freight.html.twig' with { detail_form: form.freightDetails } %}
-        {% endif %}
-        {% if form.passengersDetails is defined %}
-            {% include 'income/details/_passengers.html.twig' with { detail_form: form.passengersDetails } %}
-        {% endif %}
-        {% if form.servicesDetails is defined %}
-            {% include 'income/details/_services.html.twig' with { detail_form: form.servicesDetails } %}
-        {% endif %}
-        {% if form.insuranceDetails is defined %}
-            {% include 'income/details/_insurance.html.twig' with { detail_form: form.insuranceDetails } %}
-        {% endif %}
-        {% if form.mailDetails is defined %}
-            {% include 'income/details/_mail.html.twig' with { detail_form: form.mailDetails } %}
-        {% endif %}
-        {% if form.interestDetails is defined %}
-            {% include 'income/details/_interest.html.twig' with { detail_form: form.interestDetails } %}
-        {% endif %}
-        {% if form.tradeDetails is defined %}
-            {% include 'income/details/_trade.html.twig' with { detail_form: form.tradeDetails } %}
-        {% endif %}
-        {% if form.salvageDetails is defined %}
-            {% include 'income/details/_salvage.html.twig' with { detail_form: form.salvageDetails } %}
-        {% endif %}
-        {% if form.prizeDetails is defined %}
-            {% include 'income/details/_prize.html.twig' with { detail_form: form.prizeDetails } %}
-        {% endif %}
-        {% if form.contractDetails is defined %}
-            {% include 'income/details/_contract.html.twig' with { detail_form: form.contractDetails } %}
-        {% endif %}
+        {% if form.charterDetails is defined %}{% include 'income/details/_charter.html.twig' with { detail_form: form.charterDetails } %}{% endif %}
+        {% if form.subsidyDetails is defined %}{% include 'income/details/_subsidy.html.twig' with { detail_form: form.subsidyDetails } %}{% endif %}
+        {% if form.freightDetails is defined %}{% include 'income/details/_freight.html.twig' with { detail_form: form.freightDetails } %}{% endif %}
+        {% if form.passengersDetails is defined %}{% include 'income/details/_passengers.html.twig' with { detail_form: form.passengersDetails } %}{% endif %}
+        {% if form.servicesDetails is defined %}{% include 'income/details/_services.html.twig' with { detail_form: form.servicesDetails } %}{% endif %}
+        {% if form.insuranceDetails is defined %}{% include 'income/details/_insurance.html.twig' with { detail_form: form.insuranceDetails } %}{% endif %}
+        {% if form.mailDetails is defined %}{% include 'income/details/_mail.html.twig' with { detail_form: form.mailDetails } %}{% endif %}
+        {% if form.interestDetails is defined %}{% include 'income/details/_interest.html.twig' with { detail_form: form.interestDetails } %}{% endif %}
+        {% if form.tradeDetails is defined %}{% include 'income/details/_trade.html.twig' with { detail_form: form.tradeDetails } %}{% endif %}
+        {% if form.salvageDetails is defined %}{% include 'income/details/_salvage.html.twig' with { detail_form: form.salvageDetails } %}{% endif %}
+        {% if form.prizeDetails is defined %}{% include 'income/details/_prize.html.twig' with { detail_form: form.prizeDetails } %}{% endif %}
+        {% if form.contractDetails is defined %}{% include 'income/details/_contract.html.twig' with { detail_form: form.contractDetails } %}{% endif %}
 
-        <fieldset class="fieldset grid grid-cols-3 bg-base-200 border-base-300 gap-4 p-4 border rounded w-full">
-            <legend class="fieldset-legend">{% include 'icons/income.html.twig' %} Note</legend>
-            <div class="col-span-3">
-                {{ form_label(form.note) }}
-                {{ form_widget(form.note) }}
-                {{ form_errors(form.note) }}
-            </div>
+        <fieldset class="grid grid-cols-1 bg-slate-900/40 border border-slate-800 gap-6 p-6 rounded-xl shadow-inner mb-6 relative">
+            <legend class="px-3 py-1 rounded bg-slate-800 border border-slate-700 text-[10px] font-bold font-orbitron tracking-[0.3em] text-slate-400 uppercase">Operational Notes</legend>
+            {{ form_widget(form.note, { attr: { class: 'textarea textarea-bordered w-full bg-slate-950/50 border-slate-700 h-24 focus:border-cyan-500/50 font-rajdhani', placeholder: 'Enter tactical notes here...' } }) }}
+            {{ form_errors(form.note) }}
         </fieldset>
 
         {% if income.id %}
-            <fieldset class="fieldset grid grid-cols-3 bg-base-200 border-base-300 gap-4 p-4 border border-warning rounded w-full">
-                <legend class="fieldset-legend">{% include 'icons/income.html.twig' %} Cancellation</legend>
-                <div class="col-span-3">
-                    <div class="grid grid-cols-3 gap-4 items-end">
-                        <div class="col-span-2" data-controller="imperial-date">
-                            {{ form_label(form.cancelDate) }}
-                            {{ form_widget(form.cancelDate.display, { attr: {'data-imperial-date-prev-icon': '«', 'data-imperial-date-next-icon': '»'} }) }}
-                            {{ form_widget(form.cancelDate.year) }}
-                            {{ form_widget(form.cancelDate.day) }}
-                            {{ form_errors(form.cancelDate.display) }}
-                        </div>
-                        <div class="alert alert-warning alert-outline">
-                            <div class="pt-0.5 animate-spin-slow text-warning">
-                                {% include 'icons/radar.html.twig' %}
-                            </div>
-                            Fill only if the contract was canceled: this date closes its validity window
-                        </div>
+            <fieldset class="grid grid-cols-1 bg-slate-900/40 border border-red-900/30 gap-6 p-6 rounded-xl shadow-inner mb-8 relative">
+                <legend class="px-3 py-1 rounded bg-red-900/20 border border-red-900/40 text-[10px] font-bold font-orbitron tracking-[0.3em] text-red-500 uppercase">Decommissioning // Cancellation</legend>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                    <div data-controller="imperial-date">
+                        {{ form_label(form.cancelDate) }}
+                        {{ form_widget(form.cancelDate.display, { attr: { class: 'input input-bordered w-full bg-slate-950/50 border-slate-700', 'data-imperial-date-prev-icon': '«', 'data-imperial-date-next-icon': '»'} }) }}
+                        {{ form_widget(form.cancelDate.year) }}
+                        {{ form_widget(form.cancelDate.day) }}
+                        {{ form_errors(form.cancelDate.display) }}
+                    </div>
+                    <div class="p-4 rounded-lg bg-red-500/5 border border-red-500/10 text-[10px] text-red-400/70 font-rajdhani tracking-widest uppercase">
+                        Protocol: Fill only if the contract was canceled. This date closes its validity window permanently.
                     </div>
                 </div>
             </fieldset>
         {% endif %}
 
-        <button type="submit"
-                class="btn btn-outline btn-primary mt-4 mb-4 mr-4"
-                {% if not (income.id ? can_edit : can_create) %} disabled {% endif %}
-        >
-            Save
-        </button>
-        <a href="{{ path('app_income_index') }}" role="button" class="btn btn-outline btn-default mt-4 mb-4 mr-4">Cancel</a>
+        <div class="flex items-center justify-end gap-3 mb-10">
+            <a href="{{ path('app_income_index') }}" class="btn btn-ghost font-orbitron uppercase text-[10px] tracking-widest text-slate-500 hover:text-slate-300 font-bold">Abort Session</a>
+            <button type="submit"
+                    class="btn btn-primary px-8 font-orbitron uppercase text-[10px] tracking-widest font-bold shadow-lg shadow-cyan-500/10"
+                    {% if not (income.id ? can_edit : can_create) %} disabled {% endif %}
+            >
+                Confirm Entry // Commit to Log
+            </button>
+        </div>
 
         {{ form_end(form, { render_rest: false }) }}
-
-    </div>
 
 {% endblock %}

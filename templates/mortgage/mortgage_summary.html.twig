@@ -1,75 +1,70 @@
 {% set locale = app.request.locale ?? 'en' %}
 
-<div class="w-full">
-    <label class="block text-slate-300">
-        <span class="label-text">
-            Mortgage Payment Informations
+<div class="w-full space-y-4">
+    <label class="block">
+        <span class="text-[10px] font-bold font-rajdhani tracking-widest text-slate-400 uppercase">
+            Mortgage Payment Information // Fiscal Registry
         </span>
     </label>
 
-    <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 m-1">
-        <table class="table border-separate border-spacing-0 inner-bordered-table">
+    <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950/40 shadow-inner">
+        <table class="table table-xs w-full border-separate border-spacing-0">
             <thead>
-                <tr>
-                    <th>Mortgage Monthly(Cr)</th>
-                    <th>Mortgage Annual(Cr)</th>
-                    <th>Insurance Monthly(Cr)</th>
-                    <th>Insurance Annual(Cr)</th>
+                <tr class="border-b border-slate-800">
+                    <th class="font-rajdhani uppercase tracking-widest text-[11px] text-slate-400 bg-slate-900/50 text-right">Mortgage Monthly</th>
+                    <th class="font-rajdhani uppercase tracking-widest text-[11px] text-slate-400 bg-slate-900/50 text-right">Mortgage Annual</th>
+                    <th class="font-rajdhani uppercase tracking-widest text-[11px] text-slate-400 bg-slate-900/50 text-right">Insurance Monthly</th>
+                    <th class="font-rajdhani uppercase tracking-widest text-[11px] text-slate-400 bg-slate-900/50 text-right">Insurance Annual</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td class="text-right">{{ summary.mortgage_monthly|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', locale) }}</td>
-                    <td class="text-right">{{ summary.mortgage_annual|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', locale) }}</td>
-                    <td class="text-right">{{ summary.insurance_monthly|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', locale) }}</td>
-                    <td class="text-right">{{ summary.insurance_annual|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', locale) }}</td>
+                <tr class="text-slate-300">
+                    <td class="text-right p-2 font-mono text-xs">{{ summary.mortgage_monthly|format_number({ min_fraction_digit: 2, max_fraction_digit: 2 }, 'decimal', 'default', locale) }}</td>
+                    <td class="text-right p-2 font-mono text-xs">{{ summary.mortgage_annual|format_number({ min_fraction_digit: 2, max_fraction_digit: 2 }, 'decimal', 'default', locale) }}</td>
+                    <td class="text-right p-2 font-mono text-xs">{{ summary.insurance_monthly|format_number({ min_fraction_digit: 2, max_fraction_digit: 2 }, 'decimal', 'default', locale) }}</td>
+                    <td class="text-right p-2 font-mono text-xs">{{ summary.insurance_annual|format_number({ min_fraction_digit: 2, max_fraction_digit: 2 }, 'decimal', 'default', locale) }}</td>
                 </tr>
             </tbody>
         </table>
     </div>
 
-    <div class="flex">
-        <div class="flex-auto overflow-x-auto rounded-box border border-base-content/5 bg-base-100 m-1 mt-2">
-            <table class="table border-separate border-spacing-0 inner-bordered-table">
+    <div class="flex items-start gap-4">
+        <div class="flex-1 overflow-x-auto rounded-xl border border-slate-800 bg-slate-950/40 shadow-inner">
+            <table class="table table-xs w-full border-separate border-spacing-0">
                 <thead>
-                    <tr>
-                        <th>Ship Cost(Cr)</th>
-                        <th>Total Mortgage(Cr)</th>
-                        <th>Monthly Payment(Cr)</th>
-                        <th>Annual Payment(Cr)</th>
-                        <th>Installments Paid</th>
-                        <th>Last Payment</th>
-                        <th>Total Paid(Cr)</th>
+                    <tr class="border-b border-slate-800">
+                        <th class="font-rajdhani uppercase tracking-widest text-[11px] text-slate-400 bg-slate-900/50 text-right">Ship Cost</th>
+                        <th class="font-rajdhani uppercase tracking-widest text-[11px] text-white bg-slate-900/50 font-bold text-right">Total Mortgage</th>
+                        <th class="font-rajdhani uppercase tracking-widest text-[11px] text-slate-400 bg-slate-900/50 text-right">Monthly Payment</th>
+                        <th class="font-rajdhani uppercase tracking-widest text-[11px] text-slate-400 bg-slate-900/50 text-right">Annual Payment</th>
+                        <th class="font-rajdhani uppercase tracking-widest text-[11px] text-slate-400 bg-slate-900/50 text-right">Paid</th>
+                        <th class="font-rajdhani uppercase tracking-widest text-[11px] text-slate-400 bg-slate-900/50 text-right">Last Pmt</th>
+                        <th class="font-rajdhani uppercase tracking-widest text-[11px] text-emerald-400 bg-slate-900/50 font-bold text-right">Total Paid</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td class="text-right">{{ summary.ship_cost|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', locale) }}</td>
-                        <td class="text-right">{{ summary.total_mortgage|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', locale) }}</td>
-                        <td class="text-right">{{ summary.total_monthly_payment|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', locale) }}</td>
-                        <td class="text-right">{{ summary.total_annual_payment|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', locale) }}</td>
-                        <td class="text-right">{{ summary.installments_paid }}</td>
-                        <td class="text-right">
+                <tbody class="divide-y divide-slate-800/50">
+                    <tr class="text-slate-300">
+                        <td class="text-right p-2 font-mono text-xs">{{ summary.ship_cost|format_number({ min_fraction_digit: 2, max_fraction_digit: 2 }, 'decimal', 'default', locale) }}</td>
+                        <td class="text-right p-2 font-mono text-xs text-white font-bold">{{ summary.total_mortgage|format_number({ min_fraction_digit: 2, max_fraction_digit: 2 }, 'decimal', 'default', locale) }}</td>
+                        <td class="text-right p-2 font-mono text-xs">{{ summary.total_monthly_payment|format_number({ min_fraction_digit: 2, max_fraction_digit: 2 }, 'decimal', 'default', locale) }}</td>
+                        <td class="text-right p-2 font-mono text-xs">{{ summary.total_annual_payment|format_number({ min_fraction_digit: 2, max_fraction_digit: 2 }, 'decimal', 'default', locale) }}</td>
+                        <td class="text-right p-2 font-mono text-xs">{{ summary.installments_paid }}</td>
+                        <td class="text-right p-2 font-mono text-xs">
                             {% if last_payment %}
                                 {{ (last_payment.paymentDay is not null and last_payment.paymentYear is not null) ? (last_payment.paymentDay|imperial_date(last_payment.paymentYear)) : '—' }}
-                            {% endif %}
+                            {% else %}—{% endif %}
                         </td>
-                        <td class="text-right">{{ summary.total_mortgage_paid|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', locale) }}</td>
+                        <td class="text-right p-2 font-mono text-xs text-emerald-400 font-bold">{{ summary.total_mortgage_paid|format_number({ min_fraction_digit: 2, max_fraction_digit: 2 }, 'decimal', 'default', locale) }}</td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
-        <div>
-            <button
-                type="button"
-                name="action" value="save"
-                class="btn btn-outline btn-primary mt-3 mb-4 mr-4 ml-4"
-                onclick="pay_installment_modal.showModal()"
-                {% if not can_pay %} disabled {% endif %}
-            >Pay</button>
-        </div>
-
+        <button
+            type="button"
+            class="btn btn-outline btn-primary btn-sm px-6 font-orbitron uppercase text-[10px] tracking-widest font-bold shadow-lg shadow-cyan-500/10"
+            onclick="pay_installment_modal.showModal()"
+            {% if not can_pay %} disabled {% endif %}
+        >Pay Installment</button>
     </div>
-
 </div>

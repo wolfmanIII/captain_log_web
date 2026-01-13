@@ -4,37 +4,37 @@
     data-controller="single-select-table"
     class="w-full"
 >
-    <label class="block text-slate-300">
-        <span class="label-text flex items-center gap-1">
+    <label class="block mb-2">
+        <span class="text-[10px] font-bold font-rajdhani tracking-widest text-slate-400 uppercase flex items-center gap-2">
             {{ form.interestRate.vars.label ?? 'Interest Rate' }}
-            <button type="button" class="btn badge badge-sm badge-outline badge-info ml-2" onclick="interest_rate_modal.showModal()">?</button>
+            <button type="button" class="text-[9px] cursor-pointer text-cyan-500/50 hover:text-cyan-400 transition-colors uppercase font-bold tracking-widest" onclick="interest_rate_modal.showModal()">[info]</button>
         </span>
     </label>
 
-    <div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 m-1">
-        <table class="table w-full border-separate border-spacing-0 inner-bordered-table">
+    <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950/40 shadow-inner">
+        <table class="table table-xs w-full border-separate border-spacing-0">
             <thead>
-                <tr>
-                    <th class="w-10"></th>
-                    <th>Duration (years)</th>
-                    <th>Cost Multiplier</th>
-                    <th>Cost Divider</th>
-                    <th>Interest Rate (%)</th>
+                <tr class="border-b border-slate-800">
+                    <th class="w-8 bg-slate-900/50"></th>
+                    <th class="font-rajdhani uppercase tracking-widest text-[11px] text-slate-400 bg-slate-900/50 text-right">Duration</th>
+                    <th class="font-rajdhani uppercase tracking-widest text-[11px] text-slate-400 bg-slate-900/50 text-right">Multiplier</th>
+                    <th class="font-rajdhani uppercase tracking-widest text-[11px] text-slate-400 bg-slate-900/50 text-right">Divider</th>
+                    <th class="font-rajdhani uppercase tracking-widest text-[11px] text-slate-400 bg-slate-900/50 text-right">Rate (%)</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="divide-y divide-slate-800/50">
             {% for choice in form.interestRate.vars.choices %}
                 {% set rate = choice.data %}
                 {% set isSelected = (form.interestRate.vars.value == choice.value) %}
                 <tr
                     data-single-select-table-target="row"
-                    class="{% if isSelected %}bg-gradient-to-r from-emerald-900 via-emerald-800 to-emerald-700 text-emerald-50{% endif %}"
+                    class="hover:bg-cyan-500/5 transition-colors {% if isSelected %}bg-emerald-500/10 text-emerald-400{% else %}text-slate-300{% endif %}"
                 >
-                    <td>
+                    <td class="text-center p-2">
                         <input
                             type="radio"
-                            class="radio radio-sm"
-                            name="interestRate_radio"  {# nome “finto”, solo per il gruppo #}
+                            class="radio radio-xs radio-primary"
+                            name="interestRate_radio"
                             data-single-select-table-target="radio"
                             data-action="change->single-select-table#select"
                             data-value="{{ choice.value }}"
@@ -42,10 +42,10 @@
                             {% if mortgage.signed %} disabled {% endif %}
                         >
                     </td>
-                    <td class="text-right">{{ rate.duration }}</td>
-                    <td class="text-right">{{ rate.priceMultiplier|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', locale) }}</td>
-                    <td class="text-right">{{ rate.priceDivider }}</td>
-                    <td class="text-right">{{ rate.annualInterestRate|format_number({ min_fraction_digit: 2, max_fraction_digit: 2, grouping_used: true }, 'decimal', 'default', locale) }}</td>
+                    <td class="text-right p-2 font-mono text-xs">{{ rate.duration }}y</td>
+                    <td class="text-right p-2 font-mono text-xs">{{ rate.priceMultiplier|format_number({ min_fraction_digit: 2, max_fraction_digit: 2 }, 'decimal', 'default', locale) }}</td>
+                    <td class="text-right p-2 font-mono text-xs">{{ rate.priceDivider }}</td>
+                    <td class="text-right p-2 font-mono text-xs font-bold">{{ rate.annualInterestRate|format_number({ min_fraction_digit: 2, max_fraction_digit: 2 }, 'decimal', 'default', locale) }}</td>
                 </tr>
             {% endfor %}
             </tbody>
